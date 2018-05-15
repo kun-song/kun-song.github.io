@@ -298,6 +298,150 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-case-use-cases/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/15/scala-case-use-cases/" itemprop="url">
+                  Scala case 关键字的 4 种用法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-15 22:44:37 / 修改时间：22:52:21" itemprop="dateCreated datePublished" datetime="2018-05-15T22:44:37+08:00">2018-05-15</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在 Scala 中 <code>case</code> 关键字主要有 4 种使用场景，分别是：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/15/scala-case-use-cases/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/expression-oriented-programming/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -344,7 +488,7 @@
                 
               
 
-              <time title="创建时间：2018-05-15 08:35:13 / 修改时间：09:04:21" itemprop="dateCreated datePublished" datetime="2018-05-15T08:35:13+08:00">2018-05-15</time>
+              <time title="创建时间：2018-05-15 08:35:13 / 修改时间：22:48:43" itemprop="dateCreated datePublished" datetime="2018-05-15T08:35:13+08:00">2018-05-15</time>
             
 
             
@@ -383,43 +527,15 @@
 
       
         
-          
-            <p>维基百科有对 <a href="https://en.wikipedia.org/wiki/Expression-oriented_programming_language" target="_blank" rel="noopener">面向表达式编程语言</a> 的介绍，而面向表达式编程（expression oriented programming）也由此而来。</p>
+          <p>维基百科有对 <a href="https://en.wikipedia.org/wiki/Expression-oriented_programming_language" target="_blank" rel="noopener">面向表达式编程语言</a> 的介绍，而面向表达式编程（expression oriented programming）也由此而来。</p>
 <p>EOP 语言褒贬不一，我们不做评价，而了解面向表达式编程对理解函数式编程大有裨益，因为 <strong>所有</strong> 函数式语言都是 <strong>面向表达式</strong> 的。</p>
-<h2 id="语句-vs-表达式"><a href="#语句-vs-表达式" class="headerlink" title="语句 vs 表达式"></a>语句 vs 表达式</h2><p>语句（statement）、表达式（expression）是编程语言中常见的概念，两者区别如下：</p>
-<ul>
-<li>语句<ol>
-<li>无返回值</li>
-<li>仅使用其 <strong>副作用</strong></li>
-</ol>
-</li>
-<li>表达式<ol>
-<li>必有返回值</li>
-<li>一般无副作用</li>
-</ol>
-</li>
-</ul>
-<p>在 OOP 语言中，常常见到如下代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">order.calculateTaxes()</span><br><span class="line">order.updatePrices()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>典型的 <strong>语句</strong>，因为没有使用它们的返回值（它们返回值毫无意义），仅通过其副作用来影响程序。</li>
-</ul>
-<p>相对而言，EOP 风格的代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val tax = calculateTax(order)</span><br><span class="line">val price = calculatePrice(order)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>仅使用返回值，无副作用</li>
-</ul>
-<p>使用纯函数式编程语言时，我们会写很多表达式，用表达式组成纯函数，这既是 FP 风格（函数式编程风格），又是 EOP 风格（面向表达式风格）。</p>
-<h2 id="Scala-是面向表达式的"><a href="#Scala-是面向表达式的" class="headerlink" title="Scala 是面向表达式的"></a>Scala 是面向表达式的</h2><p>作为函数式编程语言，Scala 推崇使用面向表达式编程，时刻将 EOP 记在心里，有助于写出地道的 Scala 代码。</p>
-<p><code>if</code> 语句是表达式：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> max = <span class="keyword">if</span> (a &gt; b) a <span class="keyword">else</span> b</span><br></pre></td></tr></table></figure>
-<p>模式匹配也是表达式：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> evenOrOdd = i <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> i <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">1</span>  =&gt; <span class="string">"odd"</span></span><br><span class="line">    <span class="keyword">case</span> i <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>  =&gt; <span class="string">"even"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>try-catch 也是表达式：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">toInt</span></span>(s: <span class="type">String</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        s.toInt</span><br><span class="line">    &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> _ : <span class="type">Throwable</span> =&gt; <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>总之一句话，Scala 中几乎所有东西都是表达式。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/15/expression-oriented-programming/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -517,7 +633,7 @@
                 
               
 
-              <time title="创建时间：2018-05-15 00:39:34 / 修改时间：08:28:22" itemprop="dateCreated datePublished" datetime="2018-05-15T00:39:34+08:00">2018-05-15</time>
+              <time title="创建时间：2018-05-15 00:39:34 / 修改时间：22:49:17" itemprop="dateCreated datePublished" datetime="2018-05-15T00:39:34+08:00">2018-05-15</time>
             
 
             
@@ -574,84 +690,16 @@
 
       
         
-          
-            <p>Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。</p>
+          <p>Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。</p>
 <p>Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 <strong>参数多态</strong> 遇上 <strong>类继承</strong> 时，出现了一个有趣的问题：</p>
 <p>若类型 <code>S</code> 是 <code>T</code> 的子类，那么 <code>List[S]</code> 与 <code>List[T]</code> 是什么关系呢？（<code>List</code> 泛指泛型容器）</p>
-<p>Scala 类型系统必须能够解释该问题，在回答之前，我们先要搞清楚类继承到底有什么意义，其意义可以用 <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle" target="_blank" rel="noopener">里式替换原理</a> 说明：</p>
-<blockquote>
-<p>If S is a subtype of T, then objects of type T may be replaced with objects of type S.</p>
-</blockquote>
-<p>通过 subtype 还可以实现 <a href="https://en.wikipedia.org/wiki/Subtyping" target="_blank" rel="noopener">subtype polymorphism</a>，当然这扯的有点远了。</p>
-<p>回到前面的问题，<code>List[S]</code> 和 <code>List[T]</code> 到底是不是父子类关系呢？如果是，则根据里式替换原理，使用它们更加灵活。</p>
-<p>为解决该问题，Scala 提供了 3 种型变标记，以表达 <code>List[S]</code> 与 <code>List[T]</code> 之间的关系：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">meaning</th>
-<th style="text-align:center">notion</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">invariant</td>
-<td style="text-align:center"><code>List[S]</code> 与 <code>List[T]</code> 无任何关系</td>
-<td style="text-align:center"><code>[T]</code></td>
-</tr>
-<tr>
-<td style="text-align:center">covariant</td>
-<td style="text-align:center"><code>List[S]</code> 是 <code>List[T]</code> 的子类</td>
-<td style="text-align:center"><code>[+T]</code></td>
-</tr>
-<tr>
-<td style="text-align:center">contravariant</td>
-<td style="text-align:center"><code>List[T]</code> 与 <code>List[S]</code> 的子类</td>
-<td style="text-align:center"><code>[-T]</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="协变"><a href="#协变" class="headerlink" title="协变"></a>协变</h2><p>Scala 的不可变集合，基本都定义为协变，例如 <code>List</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">List</span>[+<span class="type">A</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> </span>::[<span class="type">B</span> &gt;: <span class="type">A</span>] (x:<span class="type">B</span>) : <span class="type">List</span>[<span class="type">B</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用场景：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span>(<span class="params">name: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Bird</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span>(<span class="params">name</span>)</span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Duck</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span>(<span class="params">name</span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">val</span> <span class="title">birds</span> </span>= <span class="keyword">new</span> <span class="type">Bird</span>(<span class="string">"A"</span>) :: <span class="keyword">new</span> <span class="type">Bird</span>(<span class="string">"B"</span>) :: <span class="type">Nil</span></span><br><span class="line"><span class="keyword">val</span> ducks = <span class="keyword">new</span> <span class="type">Duck</span>(<span class="string">"a"</span>) :: <span class="keyword">new</span> <span class="type">Duck</span>(<span class="string">"b"</span>) :: <span class="type">Nil</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>(animals: <span class="type">List</span>[<span class="type">Animal</span>]): <span class="type">Unit</span> = println(animals.map(_.toString).mkString(<span class="string">", "</span>))</span><br><span class="line"></span><br><span class="line">toString(birds)</span><br><span class="line">toString(ducks)</span><br></pre></td></tr></table></figure>
-<p><code>toString</code> 参数为 <code>List[Animal]</code>，而：</p>
-<ul>
-<li><code>Duck</code> 和 <code>Bird</code> 是 <code>Animal</code> 的子类，<code>List</code> 是协变容器</li>
-<li>因此 <code>List[Bird]</code> 和 <code>List[Duck]</code> 是 <code>List[Animal]</code> 的子类</li>
-</ul>
-<p>所以 <code>List[Bird]</code> 和 <code>List[Duck]</code> 都可以调用 <code>toString</code> 函数（里式替换原理）。</p>
-<h2 id="逆变"><a href="#逆变" class="headerlink" title="逆变"></a>逆变</h2><p>协变比较容易理解，但逆变有点反直觉，其实函数定义就用到了逆变：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">PartialFunction</span>[-<span class="type">A</span>, +<span class="type">B</span>] <span class="keyword">extends</span> (<span class="params"><span class="type">A</span> =&gt; <span class="type">B</span></span>)</span></span><br></pre></td></tr></table></figure>
-<p>暂时忽略协变的返回类型，<code>PartialFunction</code> 的入参是逆变的，这有什么意义呢？</p>
-<p>假设有如下类定义：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span>(<span class="params">val name: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">Bird</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span>(<span class="params">name</span>)</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">Duck</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Bird</span>(<span class="params">name</span>)</span></span><br></pre></td></tr></table></figure>
-<p>假设现在需要实现一个函数，以获取 <code>Bird</code> 的名字：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> getBirdName: <span class="type">Bird</span> ⇒ <span class="type">String</span> = ???</span><br></pre></td></tr></table></figure>
-<p>但 <code>Animal</code> 标准库中已经有获取名字的函数了：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> getName: <span class="type">Animal</span> ⇒ <span class="type">String</span> = _.name</span><br></pre></td></tr></table></figure>
-<p><code>getName</code> 类型为 <code>Animal =&gt; String</code>，即 <code>Function[Animal, String]</code>，<code>getBirdName</code> 类型为 <code>Function[Bird, String]</code>，因为：</p>
-<ul>
-<li><code>Function[-A, +B]</code> 入参是逆变的；</li>
-<li><code>Bird</code> 是 <code>Animal</code> 的子类；</li>
-</ul>
-<p>因此 <code>Function[Animal, String]</code> 是 <code>Function[Bird, String]</code> 的子类，即 <code>getName</code> 是 <code>getBirdName</code> 的子类，所以可以用 <code>getName</code> 替换 <code>getBirdName</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> getBirdName: <span class="type">Bird</span> ⇒ <span class="type">String</span> = getName</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><code>Function1[-A, +B]</code> 入参为协变是否合理？</p>
-<p>非常合理，假如第一个参数是协变，即 <code>Function1[+A, +B]</code>，则：</p>
-<ul>
-<li><code>Bird =&gt; String</code> 是 <code>Animal =&gt; String</code> 的子类</li>
-</ul>
-<p>因此可以用 <code>getBirdName</code> 替换 <code>getName</code>，<strong>但是</strong> <code>getName</code> 可以用于任意 <code>Animal</code>，虽然语法上 <code>getBirdName</code> 替换掉了 <code>getName</code>，但是 <code>getBirdName</code> 并不能用于任意 <code>Animal</code>，因此早晚会报错：</p>
-<p>若有 <code>Human extends Animal</code>，则 <code>getBirdName</code> 无法用于 <code>Human</code> 实例。</p>
-</blockquote>
-<p><code>Function1</code> 的返回类型为协变，这也非常合理，假设 <code>f</code> 返回类型为 <code>Bird</code>，<code>g</code> 返回类型为 <code>Duck</code>，自然可以用 <code>g</code> 替换 <code>f</code>，毕竟 <code>Duck</code> 可以替换 <code>Bird</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> f: () =&gt; <span class="type">Bird</span> = () =&gt; <span class="keyword">new</span> <span class="type">Duck</span>(<span class="string">"duck"</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="不变"><a href="#不变" class="headerlink" title="不变"></a>不变</h2><p>如果既没有 <code>+</code> 也没有 <code>-</code>，则默认为不变，即 <code>List[S]</code> 和 <code>List[T]</code> 没有任何关系。</p>
-<h2 id="Java-？"><a href="#Java-？" class="headerlink" title="Java ？"></a>Java ？</h2><p>Java 也支持 parametric polymorphism，因此也存在同样的问题，Java 也有自己的一套解决方式，留待另一篇博文解释。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/15/scala-variance/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -766,7 +814,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-15 00:30:56" itemprop="dateModified" datetime="2018-05-15T00:30:56+08:00">2018-05-15</time>
+                <time title="修改时间：2018-05-15 22:50:23" itemprop="dateModified" datetime="2018-05-15T22:50:23+08:00">2018-05-15</time>
               
             
           </span>
@@ -818,49 +866,16 @@
 
       
         
-          
-            <h2 id="String-源码剖析"><a href="#String-源码剖析" class="headerlink" title="String 源码剖析"></a><code>String</code> 源码剖析</h2><p>Scala 中的 <code>String</code> 其实仅仅是 <code>java.lang.String</code> 的别名，在 <code>scala.Predef</code> 中可以找到其定义：</p>
+          <h2 id="String-源码剖析"><a href="#String-源码剖析" class="headerlink" title="String 源码剖析"></a><code>String</code> 源码剖析</h2><p>Scala 中的 <code>String</code> 其实仅仅是 <code>java.lang.String</code> 的别名，在 <code>scala.Predef</code> 中可以找到其定义：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">type</span> <span class="title">String</span> </span>= java.lang.<span class="type">String</span></span><br></pre></td></tr></table></figure>
 <p>明明 Scala 的字符串有很多非常有用的函数啊，难道都是错觉？</p>
-<p>实际上 <code>scala.Predef</code> 中还有一个与 <code>String</code> 关系重大的隐式函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@inline</span> <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">augmentString</span></span>(x: <span class="type">String</span>): <span class="type">StringOps</span> = <span class="keyword">new</span> <span class="type">StringOps</span>(x)</span><br></pre></td></tr></table></figure>
-<p>该函数将 <code>String</code> 值隐式转换为 <code>StringOps</code> 值，<code>StringOps</code> 源码如下：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">StringOps</span>(<span class="params">override val repr: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">AnyVal</span> <span class="keyword">with</span> <span class="title">StringLike</span>[<span class="type">String</span>] </span>&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(index: <span class="type">Int</span>): <span class="type">Char</span> = repr charAt index</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">slice</span></span>(from: <span class="type">Int</span>, until: <span class="type">Int</span>): <span class="type">String</span> = ???</span><br></pre></td></tr></table></figure>
-<p>除了 <code>slice</code> 函数以外，其余函数我们也没怎么用过，还得继续深入一层，看下 <code>StringLike</code> 的源码：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">StringLike</span>[+<span class="type">Repr</span>] <span class="keyword">extends</span> <span class="title">Any</span> <span class="keyword">with</span> <span class="title">scala</span>.<span class="title">collection</span>.<span class="title">IndexedSeqOptimized</span>[<span class="type">Char</span>, <span class="type">Repr</span>] <span class="keyword">with</span> <span class="title">Ordered</span>[<span class="type">String</span>] </span>&#123;</span><br><span class="line">self =&gt;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">mkString</span> </span>= toString</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">slice</span></span>(from: <span class="type">Int</span>, until: <span class="type">Int</span>): e</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">*</span> </span>(n: <span class="type">Int</span>): <span class="type">String</span> = </span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">stripLineEnd</span></span>: <span class="type">String</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">linesWithSeparators</span></span>: <span class="type">Iterator</span>[<span class="type">String</span>]</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">capitalize</span></span>: <span class="type">String</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">stripPrefix</span></span>(prefix: <span class="type">String</span>)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">stripSuffix</span></span>(suffix: <span class="type">String</span>)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">replaceAllLiterally</span></span>(literal: <span class="type">String</span>, replacement: <span class="type">String</span>): <span class="type">String</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">stripMargin</span></span>(marginChar: <span class="type">Char</span>): <span class="type">String</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">stripMargin</span></span>: <span class="type">String</span> = stripMargin('|')</span><br><span class="line">  </span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>卧槽，我们平时常用的函数都在这里啊，原来如此！</p>
-<p>其实这是 Scala 的一种常见设计模式，即 Type Class 模式（源于 Haskell），通过 <code>implicit</code> 转换函数，在不修改第三方库源码（<code>java.lang.String</code>）的条件下，实现对第三方库功能增强，用在 <code>String</code> 这里非常适合。</p>
-<h2 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h2><p>下面是一些 Scala <code>String</code> 的常用函数，非常方便。</p>
-<h3 id="多行字符串"><a href="#多行字符串" class="headerlink" title="多行字符串"></a>多行字符串</h3><p>使用 <code>&quot;&quot;&quot;</code> 包裹即可实现多行字符串，比 Java 方便太多：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> s =</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    This is</span></span><br><span class="line"><span class="string">    a scala</span></span><br><span class="line"><span class="string">    line</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span></span><br></pre></td></tr></table></figure>
-<p>输出如下：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">s: <span class="type">String</span> = </span><br><span class="line">    <span class="type">This</span> is</span><br><span class="line">    a scala</span><br><span class="line">    line</span><br></pre></td></tr></table></figure>
-<p>若想要 <strong>去掉</strong> 每行开头的空字符串，可以用 <code>stripMargin</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a =</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |This is  // 使用默认分割符 |</span></span><br><span class="line"><span class="string">    |a scala</span></span><br><span class="line"><span class="string">    |line</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin</span><br></pre></td></tr></table></figure>
-<p>输出如下：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a: <span class="type">String</span> = </span><br><span class="line"><span class="type">This</span> is</span><br><span class="line">a scala</span><br><span class="line">line</span><br></pre></td></tr></table></figure>
-<p><code>stripMargin</code> 函数实现如下：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** For every line in this string:</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  *  Strip a leading prefix consisting of blanks or control characters</span></span><br><span class="line"><span class="comment">  *  followed by `|` from the line.</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stripMargin</span></span>: <span class="type">String</span> = stripMargin('|')</span><br></pre></td></tr></table></figure>
-<p>因此，不必非要用 <code>|</code> 分割符，可以使用自定义的分隔符：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> b =</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    #This is</span></span><br><span class="line"><span class="string">    #a scala</span></span><br><span class="line"><span class="string">    #line</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin('#')</span><br></pre></td></tr></table></figure>
-<p>输出与使用 <code>|</code> 完全相同：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b: <span class="type">String</span> = </span><br><span class="line"><span class="type">This</span> is</span><br><span class="line">a scala</span><br><span class="line">line</span><br></pre></td></tr></table></figure>
-<h3 id="字符串插值"><a href="#字符串插值" class="headerlink" title="字符串插值"></a>字符串插值</h3><h4 id="1-s-插值"><a href="#1-s-插值" class="headerlink" title="1. s 插值"></a>1. s 插值</h4><p>在任意字符串前面加 <code>s</code> 后，就可以在该字符串中使用 <strong>变量</strong> 和 <strong>表达式</strong> 了：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="number">111</span></span><br><span class="line"><span class="keyword">val</span> b = <span class="number">6</span></span><br><span class="line"><span class="keyword">val</span> c = <span class="string">s"a + b = <span class="subst">$&#123;a + b&#125;</span>"</span></span><br></pre></td></tr></table></figure>
-<h4 id="2-f-插值"><a href="#2-f-插值" class="headerlink" title="2. f 插值"></a>2. f 插值</h4><p>在字符串前面加 <code>f</code>，以简单格式化字符串：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="number">111.111111</span></span><br><span class="line"><span class="keyword">val</span> b = <span class="number">6</span></span><br><span class="line"><span class="keyword">val</span> c = <span class="string">f"a * b = <span class="subst">$&#123;a * b&#125;</span>%2.2f"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>%2.2f</code> 指定格式</li>
-</ul>
-<h4 id="3-raw-插值"><a href="#3-raw-插值" class="headerlink" title="3. raw 插值"></a>3. raw 插值</h4><p>对字符串中的字符 <strong>不做编码</strong>，其他与 s 插值相同。</p>
-<p>若有 s 插值如下：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="number">111</span></span><br><span class="line"><span class="keyword">val</span> b = <span class="string">s"b = \n<span class="subst">$a</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line">a: <span class="type">Int</span> = <span class="number">111</span></span><br><span class="line">b: <span class="type">String</span> = b = </span><br><span class="line"><span class="number">111</span></span><br></pre></td></tr></table></figure>
-<p>若不想对 <code>\n</code> 转义，则可用 raw 插值：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="number">111</span></span><br><span class="line"><span class="keyword">val</span> b = <span class="string">raw"b = \n<span class="subst">$a</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line">a: <span class="type">Int</span> = <span class="number">111</span></span><br><span class="line">b: <span class="type">String</span> = b = \n111</span><br></pre></td></tr></table></figure>
-<h3 id="strip"><a href="#strip" class="headerlink" title="strip"></a>strip</h3><p>去掉字符串前后缀：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">". Hello ."</span>.stripPrefix(<span class="string">"."</span>).stripSuffix(<span class="string">"."</span>).trim</span><br></pre></td></tr></table></figure>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/14/scala-string-ops/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -975,7 +990,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-15 08:36:37" itemprop="dateModified" datetime="2018-05-15T08:36:37+08:00">2018-05-15</time>
+                <time title="修改时间：2018-05-15 22:49:10" itemprop="dateModified" datetime="2018-05-15T22:49:10+08:00">2018-05-15</time>
               
             
           </span>
@@ -1027,65 +1042,18 @@
 
       
         
-          
-            <h2 id="闭包定义"><a href="#闭包定义" class="headerlink" title="闭包定义"></a>闭包定义</h2><h3 id="维基百科"><a href="#维基百科" class="headerlink" title="维基百科"></a>维基百科</h3><p>首先建议阅读维基百科对闭包的定义，原文比较长，我试着逐句理解下：</p>
+          <h2 id="闭包定义"><a href="#闭包定义" class="headerlink" title="闭包定义"></a>闭包定义</h2><h3 id="维基百科"><a href="#维基百科" class="headerlink" title="维基百科"></a>维基百科</h3><p>首先建议阅读维基百科对闭包的定义，原文比较长，我试着逐句理解下：</p>
 <blockquote>
 <p>In programming languages, a closure (also lexical closure or function closure) is a technique for implementing <strong>lexically scoped name binding</strong> in a language with first-class functions.</p>
 </blockquote>
 <p>从概念角度看，在具备 first-class functions 的编程语言中，闭包是一种实现 <strong>词法作用域级别的名字绑定</strong> 的技术。</p>
-<blockquote>
-<p>Operationally, a closure is a record storing a function together with an <strong>environment</strong>.</p>
-</blockquote>
-<p>从实现角度看，闭包是保存 <strong>函数</strong> + <strong>上下文环境</strong> 的记录。</p>
-<p>到此为止，从概念、实现上解释了闭包是什么，剩下的是对上下文环境的解释：</p>
-<blockquote>
-<p>The environment is a mapping associating each <strong>free variable</strong> of the function (variables that are used locally, but defined in an enclosing scope) with the <strong>value or reference</strong> to which the name was bound when the closure was <strong>created</strong>.</p>
-</blockquote>
-<p>（上下文）环境是 <strong>自动变量名字</strong> 与该名字的 <strong>值/引用</strong> 的映射（name -&gt; value），注意变量的值、引用是闭包 <strong>创建</strong> 时确定的。</p>
-<p>自由变量：</p>
-<ul>
-<li>在函数的 enclosing scope 中定义，但在函数内部使用的变量；</li>
-<li>既不在函数参数列表中，也不是函数局部变量的变量；</li>
-</ul>
-<blockquote>
-<p>A closure—unlike a plain function—allows the function to access those <strong>captured variables</strong> through the closure’s <strong>copies</strong> of their values or references, even when the function is invoked outside their scope.</p>
-</blockquote>
-<p>被捕获变量：即闭包使用的自由变量，闭包中一旦引用自由变量，则称该变量被闭包捕获。</p>
-<p>若语言不支持 first-class functions，则闭包与普通函数并无区别，若支持 first-class function 则两者区别巨大：</p>
-<ul>
-<li>闭包的上下文环境会保存被捕获的自由变量值、引用的 <strong>副本</strong>；</li>
-<li>闭包作为函数返回值返回后，调用闭包，闭包中依然保存其 <strong>定义时</strong> 的自由变量的值；</li>
-</ul>
-<h4 id="总结如下："><a href="#总结如下：" class="headerlink" title="总结如下："></a>总结如下：</h4><ul>
-<li>闭包 = 函数 + 上下文环境</li>
-<li>上下文环境 = 自由变量名字 -&gt; 值/引用（key -&gt; value）</li>
-<li>自由变量 = 在函数的 enclosing scope 定义，在函数内部引用的变量</li>
-<li>上下文环境中保存的 value/reference 是闭包 <strong>定义</strong> 时的 <strong>副本</strong></li>
-<li>不同场景中，自由变量的值可以不同，进而闭包也可以不同</li>
-</ul>
-<h3 id="我的理解"><a href="#我的理解" class="headerlink" title="我的理解"></a>我的理解</h3><p>闭包英文是 closure，更精确一点，闭包是 “first-class function with lexical scope”，即具备词法作用域的第一等函数，要理解这句话，首先要明白两个概念：</p>
-<ul>
-<li>词法作用域</li>
-<li>第一等函数</li>
-</ul>
-<p>稍微有点 FP 基础的同学肯定了解第一等函数，即在编程语言中，函数是第一等公民，与普通值没有任何区别，因此：</p>
-<ul>
-<li>函数可以用作 <strong>函数参数</strong></li>
-<li>也可以用作 <strong>函数返回值</strong></li>
-</ul>
-<p>而词法作用域（lexical scope）可以参考这篇博文 <a href=""></a>。</p>
-<h2 id="闭包示例"><a href="#闭包示例" class="headerlink" title="闭包示例"></a>闭包示例</h2><p>不同语言中的闭包略有不同，本文分别演示 Scala、Standard ML 和 Racket 中的闭包。</p>
-<h3 id="Standard-ML"><a href="#Standard-ML" class="headerlink" title="Standard ML"></a>Standard ML</h3><figure class="highlight ml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="Scala"><a href="#Scala" class="headerlink" title="Scala"></a>Scala</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = a + x</span><br><span class="line"></span><br><span class="line">f(<span class="number">10</span>) <span class="comment">// 20</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = a + x</span><br><span class="line"></span><br><span class="line">a = <span class="number">1</span></span><br><span class="line">f(<span class="number">10</span>) <span class="comment">// 11</span></span><br></pre></td></tr></table></figure>
-<h3 id="Racket"><a href="#Racket" class="headerlink" title="Racket"></a>Racket</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(define a 10)</span><br><span class="line">(define (f x) (+ a x))</span><br><span class="line"></span><br><span class="line">(f 10) ; 20</span><br></pre></td></tr></table></figure>
-<p><code>f</code> 是闭包，其函数体内引用了自由变量 <code>a</code>，当计算 <code>(f 10)</code> 时，会计算函数体 <code>(+ a 10)</code>，解释器在 <code>f</code> 的 environment 中查找 <code>a</code> 的绑定，找到了 10，因此最后结果为 20。</p>
-<p>Racket 并非纯函数式编程语言，可以用 <code>set!</code> 修改绑定：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(define a 10)</span><br><span class="line">(define (f x) (+ a x))</span><br><span class="line"></span><br><span class="line">(set! a 1)</span><br><span class="line">(f 10) ; 11</span><br></pre></td></tr></table></figure>
-<p>在计算 <code>(f 10)</code> 之前，<code>a</code> 被重新绑定到 1，因此计算函数体 <code>(+ a 10)</code> 时查找到的 <code>a</code> 为 1，最后结果为 11。</p>
-<h2 id="闭包应用"><a href="#闭包应用" class="headerlink" title="闭包应用"></a>闭包应用</h2><h3 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h3><p>柯里化并非什么高深的语言特性，简单讲，柯里化不过是闭包的一种 <strong>惯用法</strong> 而已，从来就没有过魔法。</p>
-<h3 id="部分应用函数"><a href="#部分应用函数" class="headerlink" title="部分应用函数"></a>部分应用函数</h3>
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/11/scala-closure-1/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1200,7 +1168,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-14 22:30:20" itemprop="dateModified" datetime="2018-05-14T22:30:20+08:00">2018-05-14</time>
+                <time title="修改时间：2018-05-15 22:48:59" itemprop="dateModified" datetime="2018-05-15T22:48:59+08:00">2018-05-15</time>
               
             
           </span>
@@ -1252,79 +1220,14 @@
 
       
         
-          
-            <p>本文是我对过去一年学习 Scala 的总结，既是总结经验教训，也希望对初学者有所帮助。</p>
-<h2 id="初次接触"><a href="#初次接触" class="headerlink" title="初次接触"></a>初次接触</h2><p>说来有趣，大约一年以前，我转到一个新的项目组，晨会上了解到有同事正在调研 Scala，每天该同事都汇报调研进度（虽然一般是还没开始、下周开始云云），我那时候刚转正，想着既然以后可能用到，那我得提前学习，毕竟机遇总是留给有准备的人，于是我开始在业余时间学习 Scala。</p>
-<h2 id="难以入门"><a href="#难以入门" class="headerlink" title="难以入门"></a>难以入门</h2><p>当时在知乎搜索了很多如何学习 Scala 的文章，看到很多人推荐《Scala 函数式编程》（著名的小红书），我当然知道这书很难，但当时蜜汁自信，认为看书就要看最经典、最难的，虽然进度慢，但收获也大不是吗？</p>
-<p>开始看书以后，我发现除了第一章读起来比较顺畅，从第二章开始就很吃力了。苦苦挣扎了几个周，加上上半年加班非常多，导致学习效果很不好。</p>
-<p>而此时同事对 Scala 的调研早已结束，连个结论都没给出，Scala 毕竟偏向后端，让前端同事去调研，结果可想而知。</p>
-<p>这段时间的学习让我熟悉了很多函数式编程的术语，自己对函数式编程也越来越好奇，遗憾的是 Scala 始终没有入门，而且 Scala 给我留下了难以学习的印象。</p>
-<h2 id="初窥门径"><a href="#初窥门径" class="headerlink" title="初窥门径"></a>初窥门径</h2><p>时间一晃到了去年的 7 月份，这时项目加班终于少了一些，而我按捺不住对 Scala 的好奇心，又一次尝试学习，这次我决定从知乎神课 <a href="https://www.coursera.org/learn/programming-languages/home/welcome" target="_blank" rel="noopener">Programming Languanges</a> 入门，关于该课程的评价建议可参考很多知乎回答，一句话总结：函数式编程入门不二之选，对学习 Scala 也大有裨益。</p>
-<p>不得不说，这门课真的是物超所值，我那段时间只跟了 Part A，使用 Standard ML 讲述函数式编程的基本概念，例如：</p>
-<ul>
-<li>list 组合子（map, filter, fold 等）</li>
-<li>first-class function, high order function, closure, currying, partially applied function …</li>
-</ul>
-<p>这些概念今天来看非常基础，但对毫无函数式编程基础的同学来说却并不容易，非常建议大家学习下这门课，对于入门 Scala 非常有用，因为 Scala 的函数式编程与 Standard ML 非常类似（当然与 Haskell 更类似），公开课最大的优点是有练习题目，有实际编程机会，这对初学者帮助很大。</p>
-<p>后来我又跟了 Scala 之父 Martin Odersky 的一门课：<a href="https://www.coursera.org/learn/progfun1/home/welcome" target="_blank" rel="noopener">Functional Programming Principles in Scala</a>，这门课主要讲述 Scala 的函数式编程，对面向对象几乎只字未提，习题稍微有点难度。</p>
-<p>实事求是的讲，这门课比 Programming Languages 还是略逊一筹，课程内容不是很连贯，我认为最好先学下 Programming Languages Part A，然后在跟这门课，事半功倍。</p>
-<p>跟完这两门公开课我对 Scala，或更广义的函数式编程基本入门了，接下来需要实践。</p>
-<h2 id="渐入佳境"><a href="#渐入佳境" class="headerlink" title="渐入佳境"></a>渐入佳境</h2><p>前面说过，项目组对 Scala 的调研虎头蛇尾，不了了之，公司里没有实践机会了。那时的我手握锤子，到处找钉子，尝试过写自己的业余项目，但苦于没有好点子，只能作罢。</p>
-<p>没有实际项目做那就继续学习呗，于是我开始重新学习 《Scala 函数式编程》。</p>
-<p>有了公开课打下的基础，这本书也没有那么难理解了，我一口气读完了 1-6 章，这几章都是基础，主要讲了函数式数据结构（list/tree）、函数式 error-handling、stream、纯函数式状态等，其中很多内容在公开课中已经接触过，例如：</p>
-<ul>
-<li>list 在 Programming Languages Part A 中讲过</li>
-<li>stream 则在 Programming Languages Par B 中讲过</li>
-<li>纯函数式状态在 Martin Odersky 的课中讲过</li>
-</ul>
-<p>公开课的优点是容易入门，缺点是不够深入，小红书完美补足了公开课的缺点，足够深入，而且最赞的是小红书有大量的练习题目，引导读者实现了很多 Scala 标准库以及 Cats 中的数据结构，非常过瘾。</p>
-<blockquote>
-<p>我把小红书的练习代码放在了 <a href="https://github.com/satansk/learning-fpinscala" target="_blank" rel="noopener">github</a> 上，大家可以参考下。</p>
-</blockquote>
-<p>学习过程中我得到一个教训：如果某本书、某个知识点你完全不懂，那么你肯定缺少相关基础，此时不要继续死磕，应该换个思路，去补下基础，基础补完后再重新回来。</p>
-<p>读到第 7 章的时候我又几乎不懂了，哈哈，但有了前面的教训，我没有继续死磕第 7 章，我明白应该暂时放下书，在合适的时候再重新开始。</p>
-<p>我那时认为自己已经有足够的 Scala 知识，是时候做点真实的项目了，我决定参与开源社区。</p>
-<p>其实早在学校的时候，我就想参与开源，但一直苦于没有机会，于是暗下决心，这次一定要破门而入。我在知乎搜索了很多 Scala 相关的问题，不夸张的说，95% 的相关内容我都看过，我总结了 Scala 的主要项目有：</p>
-<ul>
-<li>Spark/Flink 等大数据相关应用；</li>
-<li>Akka/Akka HTTP</li>
-<li>Twitter 开源的很多框架</li>
-<li>Cats/Scalaz</li>
-<li>Kafka</li>
-</ul>
-<p>最后我选择了 Akka/Akka HTTP，因为它们主要涉及分布式应用开发，而且有很多先进理念（例如反应式编程），更重要的是社区非常活跃，对新人非常友好。</p>
-<p>要贡献代码，首先要阅读 CONTRIBUTING.md，巧的是阅读过程中就发现了一个小问题，赶紧提 PR，Akka 团队响应非常快，马上就合入了。</p>
-<p>这个小小的 PR 给了我很大鼓励，原来开源社区并非高不可攀，于是周末在家也有事情干了，从 2017 9 2 日到今天，Akka/Akka HTTP 一共接受了我 19 个PR：</p>
-<p><img src="/images/akka-pr-20180514.png" alt="Akka PR 统计" style="width: 400px;"></p>
-<p><img src="/images/akka-http-pr-20180514.png" alt="Akka HTTP PR 统计" style="width: 400px;"></p>
-<p>虽然贡献的代码不多，但收获却不少，实践出真知的确并非虚言，有高手 review 你的代码，确实成长的更快。</p>
-<p>期间我把小红书第 7-12 章读完了，中间还读了两本书，是 typelevel 的 <a href="https://underscore.io/books/essential-scala/" target="_blank" rel="noopener">Essential Scala</a> 和 <a href="https://underscore.io/books/scala-with-cats/" target="_blank" rel="noopener">Scala with Cats</a>，读完这些书后，我对 type class 有了基本理解。</p>
-<p>我也发现实际项目中 Cats/Scalaz 使用确实不多，毕竟并非每个人都是 Scala 函数式编程熟手，芸芸众生才是主体。当然如果组内同事都是 fp 粉，用下也未尝不可。</p>
-<p>Scala 是一门很难精通的语言，知识点很多，但按我的理解，要享受 Scala 带来的方便之处，并不需要精通语言的方方面面，而是需要取舍，选择最合适的语言特性，至于如何取舍则需要高手把关。</p>
-<h2 id="展望未来"><a href="#展望未来" class="headerlink" title="展望未来"></a>展望未来</h2><p>到目前为止，我对 Scala 也只是堪堪入门，但已经足够我写一些有趣的项目了，总体来说，学习 Scala 是很开心的，写 Scala 代码也是很开心的，希望未来能继续坚持下去，至于能不能用 Scala 吃饭并不重要。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结一些对 Scala 学习有用的资料：</p>
-<ul>
-<li>公开课<ul>
-<li><a href="https://www.coursera.org/learn/programming-languages/home/welcome" target="_blank" rel="noopener">Programming Languanges</a></li>
-<li><a href="https://www.coursera.org/learn/progfun1/home/welcome" target="_blank" rel="noopener">Functional Programming Principles in Scala</a></li>
-</ul>
-</li>
-<li>书<ul>
-<li><a href="https://book.douban.com/subject/26790779/" target="_blank" rel="noopener">Programming in Scala, Third Edition</a></li>
-<li><a href="https://book.douban.com/subject/26772149/" target="_blank" rel="noopener">Scala 函数式编程</a></li>
-<li><a href="https://underscore.io/books/essential-scala/" target="_blank" rel="noopener">Essential Scala</a></li>
-<li><a href="https://underscore.io/books/scala-with-cats/" target="_blank" rel="noopener">Scala with Cats</a></li>
-</ul>
-</li>
-<li>网络资料<ul>
-<li><a href="https://twitter.github.io/scala_school/" target="_blank" rel="noopener">Twitter Scala School</a></li>
-<li><a href="http://hongjiang.info/" target="_blank" rel="noopener">王宏江博客</a></li>
-</ul>
-</li>
-</ul>
-<p>前面没有提 Programming in Scala 和 Twitter Scala School，并非它们不够好，而是因为每个 Scala 学习者都应该读过它们 :)</p>
-
-          
+          <p>本文是我对过去一年学习 Scala 的总结，既是总结经验教训，也希望对初学者有所帮助。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/09/how-to-learn-scala/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1404,7 +1307,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

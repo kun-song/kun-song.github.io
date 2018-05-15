@@ -100,25 +100,25 @@
 
 
 
-  <meta name="description" content="维基百科有对 面向表达式编程语言 的介绍，而面向表达式编程（expression oriented programming）也由此而来。 EOP 语言褒贬不一，我们不做评价，而了解面向表达式编程对理解函数式编程大有裨益，因为 所有 函数式语言都是 面向表达式 的。">
-<meta name="keywords" content="fp">
+  <meta name="description" content="在 Scala 中 case 关键字主要有 4 种使用场景，分别是：">
+<meta name="keywords" content="Scala">
 <meta property="og:type" content="article">
-<meta property="og:title" content="面向表达式编程">
-<meta property="og:url" content="http://songkun.me/2018/05/15/expression-oriented-programming/index.html">
+<meta property="og:title" content="Scala case 关键字的 4 种用法">
+<meta property="og:url" content="http://songkun.me/2018/05/15/scala-case-use-cases/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="维基百科有对 面向表达式编程语言 的介绍，而面向表达式编程（expression oriented programming）也由此而来。 EOP 语言褒贬不一，我们不做评价，而了解面向表达式编程对理解函数式编程大有裨益，因为 所有 函数式语言都是 面向表达式 的。">
+<meta property="og:description" content="在 Scala 中 case 关键字主要有 4 种使用场景，分别是：">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-15T14:48:43.000Z">
+<meta property="og:updated_time" content="2018-05-15T14:52:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="面向表达式编程">
-<meta name="twitter:description" content="维基百科有对 面向表达式编程语言 的介绍，而面向表达式编程（expression oriented programming）也由此而来。 EOP 语言褒贬不一，我们不做评价，而了解面向表达式编程对理解函数式编程大有裨益，因为 所有 函数式语言都是 面向表达式 的。">
+<meta name="twitter:title" content="Scala case 关键字的 4 种用法">
+<meta name="twitter:description" content="在 Scala 中 case 关键字主要有 4 种使用场景，分别是：">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/15/expression-oriented-programming/"/>
+  <link rel="canonical" href="http://songkun.me/2018/05/15/scala-case-use-cases/"/>
 
 
 
@@ -128,7 +128,7 @@
   };
 </script>
 
-  <title>面向表达式编程 | 随便写写</title>
+  <title>Scala case 关键字的 4 种用法 | 随便写写</title>
   
 
 
@@ -302,7 +302,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/expression-oriented-programming/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-case-use-cases/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -319,7 +319,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">面向表达式编程
+          <h1 class="post-title" itemprop="name headline">Scala case 关键字的 4 种用法
               
             
           </h1>
@@ -344,7 +344,7 @@
                 
               
 
-              <time title="创建时间：2018-05-15 08:35:13 / 修改时间：22:48:43" itemprop="dateCreated datePublished" datetime="2018-05-15T08:35:13+08:00">2018-05-15</time>
+              <time title="创建时间：2018-05-15 22:44:37 / 修改时间：22:52:21" itemprop="dateCreated datePublished" datetime="2018-05-15T22:44:37+08:00">2018-05-15</time>
             
 
             
@@ -382,42 +382,21 @@
       
 
       
-        <p>维基百科有对 <a href="https://en.wikipedia.org/wiki/Expression-oriented_programming_language" target="_blank" rel="noopener">面向表达式编程语言</a> 的介绍，而面向表达式编程（expression oriented programming）也由此而来。</p>
-<p>EOP 语言褒贬不一，我们不做评价，而了解面向表达式编程对理解函数式编程大有裨益，因为 <strong>所有</strong> 函数式语言都是 <strong>面向表达式</strong> 的。</p>
+        <p>在 Scala 中 <code>case</code> 关键字主要有 4 种使用场景，分别是：</p>
 <a id="more"></a>
-<h2 id="语句-vs-表达式"><a href="#语句-vs-表达式" class="headerlink" title="语句 vs 表达式"></a>语句 vs 表达式</h2><p>语句（statement）、表达式（expression）是编程语言中常见的概念，两者区别如下：</p>
-<ul>
-<li>语句<ol>
-<li>无返回值</li>
-<li>仅使用其 <strong>副作用</strong></li>
-</ol>
-</li>
-<li>表达式<ol>
-<li>必有返回值</li>
-<li>一般无副作用</li>
-</ol>
-</li>
-</ul>
-<p>在 OOP 语言中，常常见到如下代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">order.calculateTaxes()</span><br><span class="line">order.updatePrices()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>典型的 <strong>语句</strong>，因为没有使用它们的返回值（它们返回值毫无意义），仅通过其副作用来影响程序。</li>
-</ul>
-<p>相对而言，EOP 风格的代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val tax = calculateTax(order)</span><br><span class="line">val price = calculatePrice(order)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>仅使用返回值，无副作用</li>
-</ul>
-<p>使用纯函数式编程语言时，我们会写很多表达式，用表达式组成纯函数，这既是 FP 风格（函数式编程风格），又是 EOP 风格（面向表达式风格）。</p>
-<h2 id="Scala-是面向表达式的"><a href="#Scala-是面向表达式的" class="headerlink" title="Scala 是面向表达式的"></a>Scala 是面向表达式的</h2><p>作为函数式编程语言，Scala 推崇使用面向表达式编程，时刻将 EOP 记在心里，有助于写出地道的 Scala 代码。</p>
-<p><code>if</code> 语句是表达式：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> max = <span class="keyword">if</span> (a &gt; b) a <span class="keyword">else</span> b</span><br></pre></td></tr></table></figure>
-<p>模式匹配也是表达式：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> evenOrOdd = i <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> i <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">1</span>  =&gt; <span class="string">"odd"</span></span><br><span class="line">    <span class="keyword">case</span> i <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>  =&gt; <span class="string">"even"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>try-catch 也是表达式：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">toInt</span></span>(s: <span class="type">String</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        s.toInt</span><br><span class="line">    &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> _ : <span class="type">Throwable</span> =&gt; <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>总之一句话，Scala 中几乎所有东西都是表达式。</p>
-
+<h2 id="模式匹配"><a href="#模式匹配" class="headerlink" title="模式匹配"></a>模式匹配</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10</span> <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> n <span class="keyword">if</span> n % <span class="number">2</span> == <span class="number">0</span> ⇒ <span class="string">"even"</span></span><br><span class="line">  <span class="keyword">case</span> n <span class="keyword">if</span> n % <span class="number">2</span> != <span class="number">1</span> ⇒ <span class="string">"odd"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="case-类"><a href="#case-类" class="headerlink" title="case 类"></a><code>case</code> 类</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Number</span>(<span class="params">value: <span class="type">Int</span></span>)</span></span><br></pre></td></tr></table></figure>
+<h2 id="try-catch"><a href="#try-catch" class="headerlink" title="try-catch"></a><code>try-catch</code></h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">toInt</span></span>(s: <span class="type">String</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    s.toInt</span><br><span class="line">  &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> _: <span class="type">Throwable</span> ⇒ <span class="number">0</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="偏函数字面值"><a href="#偏函数字面值" class="headerlink" title="偏函数字面值"></a>偏函数字面值</h2><p><code>case</code> 关键字可用于创建 <code>PartialFunction</code> 类型的函数字面值（匿名函数）：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> xs = <span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">xs.filter &#123;</span><br><span class="line">  <span class="keyword">case</span> n ⇒ n % <span class="number">2</span> == <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>事实上，<code>case</code> 关键字是 <strong>最常用</strong> 的创建 <code>PartialFunction</code> 的方式，若不用 <code>case</code>，则只能手动创建 <code>PartialFunction</code> 实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> fraction = <span class="keyword">new</span> <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(d: <span class="type">Int</span>) = <span class="number">42</span> / d</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isDefinedAt</span></span>(d: <span class="type">Int</span>) = d != <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>case</code> 明显更加紧凑：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> fraction: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">Int</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> d: <span class="type">Int</span> <span class="keyword">if</span> d != <span class="number">0</span> ⇒ <span class="number">42</span> / d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，必须手动指定 <code>fraction</code> 的类型为 <code>PartialFunction</code>，否则 Scala 编译器会报错：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> fraction = &#123;</span><br><span class="line">  <span class="keyword">case</span> d: <span class="type">Int</span> <span class="keyword">if</span> d != <span class="number">0</span> ⇒ <span class="number">42</span> / d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以将 <code>fraction</code> 类型指定为普通函数，但这样就失去了偏函数的魔力：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> fraction: <span class="type">Function</span>[<span class="type">Int</span>, <span class="type">Int</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> d: <span class="type">Int</span> <span class="keyword">if</span> d != <span class="number">0</span> ⇒ <span class="number">42</span> / d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -437,7 +416,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/fp/" rel="tag"># fp</a>
+            <a href="/tags/Scala/" rel="tag"># Scala</a>
           
         </div>
       
@@ -450,8 +429,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/15/scala-variance/" rel="next" title="Scala 中的型变">
-                <i class="fa fa-chevron-left"></i> Scala 中的型变
+              <a href="/2018/05/15/expression-oriented-programming/" rel="next" title="面向表达式编程">
+                <i class="fa fa-chevron-left"></i> 面向表达式编程
               </a>
             
           </div>
@@ -459,10 +438,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/15/scala-case-use-cases/" rel="prev" title="Scala case 关键字的 4 种用法">
-                Scala case 关键字的 4 种用法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -624,7 +599,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语句-vs-表达式"><span class="nav-number">1.</span> <span class="nav-text">语句 vs 表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala-是面向表达式的"><span class="nav-number">2.</span> <span class="nav-text">Scala 是面向表达式的</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模式匹配"><span class="nav-number">1.</span> <span class="nav-text">模式匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case-类"><span class="nav-number">2.</span> <span class="nav-text">case 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#try-catch"><span class="nav-number">3.</span> <span class="nav-text">try-catch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#偏函数字面值"><span class="nav-number">4.</span> <span class="nav-text">偏函数字面值</span></a></li></ol></div>
             
 
           </div>

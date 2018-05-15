@@ -100,18 +100,18 @@
 
 
 
-  <meta name="description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器） Scala 类型系统必须能够解释该问题，在回答之前，我们先要搞清楚类继承到底有">
+  <meta name="description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器）">
 <meta name="keywords" content="Scala,类型系统">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Scala 中的型变">
 <meta property="og:url" content="http://songkun.me/2018/05/15/scala-variance/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器） Scala 类型系统必须能够解释该问题，在回答之前，我们先要搞清楚类继承到底有">
+<meta property="og:description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器）">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-15T00:28:22.000Z">
+<meta property="og:updated_time" content="2018-05-15T14:49:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala 中的型变">
-<meta name="twitter:description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器） Scala 类型系统必须能够解释该问题，在回答之前，我们先要搞清楚类继承到底有">
+<meta name="twitter:description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器）">
 
 
 
@@ -344,7 +344,7 @@
                 
               
 
-              <time title="创建时间：2018-05-15 00:39:34 / 修改时间：08:28:22" itemprop="dateCreated datePublished" datetime="2018-05-15T00:39:34+08:00">2018-05-15</time>
+              <time title="创建时间：2018-05-15 00:39:34 / 修改时间：22:49:17" itemprop="dateCreated datePublished" datetime="2018-05-15T00:39:34+08:00">2018-05-15</time>
             
 
             
@@ -403,6 +403,7 @@
         <p>Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。</p>
 <p>Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 <strong>参数多态</strong> 遇上 <strong>类继承</strong> 时，出现了一个有趣的问题：</p>
 <p>若类型 <code>S</code> 是 <code>T</code> 的子类，那么 <code>List[S]</code> 与 <code>List[T]</code> 是什么关系呢？（<code>List</code> 泛指泛型容器）</p>
+<a id="more"></a>
 <p>Scala 类型系统必须能够解释该问题，在回答之前，我们先要搞清楚类继承到底有什么意义，其意义可以用 <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle" target="_blank" rel="noopener">里式替换原理</a> 说明：</p>
 <blockquote>
 <p>If S is a subtype of T, then objects of type T may be replaced with objects of type S.</p>
@@ -596,7 +597,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
