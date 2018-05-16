@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="三者的英文名字分别为：  偏函数：partial function 部分应用函数：partially applied function 柯里化：currying  其中偏函数、部分应用函数容易被混淆，部分应用函数、柯里化也容易被混淆，本文先介绍他们各自的概念，然后解释它们之间的区别。">
+  <meta name="description" content="若在某编程语言中：  函数可以作为 函数参数 函数可以作为 函数返回值 可以将函数 赋值 给变量 可以将函数 存储 在数据结构（List Map 等）中 支持匿名函数/函数字面值（部分编程语言专家这样认为）  则称该语言具有头等函数（first-class function），具备头等函数的语言中，函数值与 普通值（如 Int String 值）无任何区别，它们仅仅是函数类型（在 Scala 中，">
 <meta name="keywords" content="Scala,fp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="偏函数 vs 部分应用函数 vs 柯里化">
-<meta property="og:url" content="http://songkun.me/2018/05/16/scala-partialfunction-partially-applied-function-currying/index.html">
+<meta property="og:title" content="头等函数">
+<meta property="og:url" content="http://songkun.me/2018/05/16/2018-05-16-first-class-function/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="三者的英文名字分别为：  偏函数：partial function 部分应用函数：partially applied function 柯里化：currying  其中偏函数、部分应用函数容易被混淆，部分应用函数、柯里化也容易被混淆，本文先介绍他们各自的概念，然后解释它们之间的区别。">
+<meta property="og:description" content="若在某编程语言中：  函数可以作为 函数参数 函数可以作为 函数返回值 可以将函数 赋值 给变量 可以将函数 存储 在数据结构（List Map 等）中 支持匿名函数/函数字面值（部分编程语言专家这样认为）  则称该语言具有头等函数（first-class function），具备头等函数的语言中，函数值与 普通值（如 Int String 值）无任何区别，它们仅仅是函数类型（在 Scala 中，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-16T00:36:14.000Z">
+<meta property="og:updated_time" content="2018-05-16T14:36:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="偏函数 vs 部分应用函数 vs 柯里化">
-<meta name="twitter:description" content="三者的英文名字分别为：  偏函数：partial function 部分应用函数：partially applied function 柯里化：currying  其中偏函数、部分应用函数容易被混淆，部分应用函数、柯里化也容易被混淆，本文先介绍他们各自的概念，然后解释它们之间的区别。">
+<meta name="twitter:title" content="头等函数">
+<meta name="twitter:description" content="若在某编程语言中：  函数可以作为 函数参数 函数可以作为 函数返回值 可以将函数 赋值 给变量 可以将函数 存储 在数据结构（List Map 等）中 支持匿名函数/函数字面值（部分编程语言专家这样认为）  则称该语言具有头等函数（first-class function），具备头等函数的语言中，函数值与 普通值（如 Int String 值）无任何区别，它们仅仅是函数类型（在 Scala 中，">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/16/scala-partialfunction-partially-applied-function-currying/"/>
+  <link rel="canonical" href="http://songkun.me/2018/05/16/2018-05-16-first-class-function/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>偏函数 vs 部分应用函数 vs 柯里化 | 随便写写</title>
+  <title>头等函数 | 随便写写</title>
   
 
 
@@ -321,7 +321,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/16/scala-partialfunction-partially-applied-function-currying/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/16/2018-05-16-first-class-function/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -338,7 +338,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">偏函数 vs 部分应用函数 vs 柯里化
+          <h1 class="post-title" itemprop="name headline">头等函数
               
             
           </h1>
@@ -363,7 +363,7 @@
                 
               
 
-              <time title="创建时间：2018-05-16 00:19:56 / 修改时间：08:36:14" itemprop="dateCreated datePublished" datetime="2018-05-16T00:19:56+08:00">2018-05-16</time>
+              <time title="创建时间：2018-05-16 20:38:12 / 修改时间：22:36:42" itemprop="dateCreated datePublished" datetime="2018-05-16T20:38:12+08:00">2018-05-16</time>
             
 
             
@@ -419,71 +419,67 @@
       
 
       
-        <p>三者的英文名字分别为：</p>
+        <p>若在某编程语言中：</p>
 <ul>
-<li>偏函数：partial function</li>
-<li>部分应用函数：partially applied function</li>
-<li>柯里化：currying</li>
+<li>函数可以作为 <strong>函数参数</strong></li>
+<li>函数可以作为 <strong>函数返回值</strong></li>
+<li>可以将函数 <strong>赋值</strong> 给变量</li>
+<li>可以将函数 <strong>存储</strong> 在数据结构（<code>List</code> <code>Map</code> 等）中</li>
+<li>支持匿名函数/函数字面值（部分编程语言专家这样认为）</li>
 </ul>
-<p>其中偏函数、部分应用函数容易被混淆，部分应用函数、柯里化也容易被混淆，本文先介绍他们各自的概念，然后解释它们之间的区别。</p>
+<p>则称该语言具有头等函数（first-class function），具备头等函数的语言中，函数值与 <strong>普通值</strong>（如 <code>Int</code> <code>String</code> 值）无任何区别，它们仅仅是函数类型（在 Scala 中，函数类型为 <code>FunctionN</code>）的值而已。</p>
 <a id="more"></a>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="偏函数"><a href="#偏函数" class="headerlink" title="偏函数"></a>偏函数</h3><p><code>PartialFunction</code> 是数学上的概念，即定义在输入参数 <strong>子集</strong> 上的函数，例如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> squareRoot: <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> n <span class="keyword">if</span> n &gt;= <span class="number">0</span> ⇒ <span class="type">Math</span>.sqrt(n)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>squareRoot</code> 参数类型为 <code>Double</code>，但只有 <code>Double</code> 的非负数子集才能调用 <code>squareRoot</code>。</p>
-<h3 id="部分应用函数"><a href="#部分应用函数" class="headerlink" title="部分应用函数"></a>部分应用函数</h3><p>首先明确下术语，在函数式编程中，函数调用（a call to function that has parameters）的另一种叫法是：</p>
+<h2 id="头等函数实现难点"><a href="#头等函数实现难点" class="headerlink" title="头等函数实现难点"></a>头等函数实现难点</h2><p>对函数式编程语言而言，头等函数是必须品，因为函数式编程风格大量使用高阶函数，若不支持 first-class function，则高阶函数就无从说起了。</p>
+<p>但实现头等函数并不容易，历史上把实现头等函数遇到的难题称为 <a href="https://en.wikipedia.org/wiki/Funarg_problem" target="_blank" rel="noopener">Funarg problem</a>（funarg 即 function argument），即：</p>
 <blockquote>
-<p><strong>applying</strong> the function to the parameters.</p>
+<p><strong>嵌套函数</strong> 或 <strong>匿名函数</strong> 中可以 <strong>直接引用</strong>（即不是通过参数传递方式引用）该函数 <strong>定义时</strong> 上下文环境中的标识符，但该标识符可能不在该函数 <strong>调用时</strong> 的上下文环境中，如何处理该场景？</p>
 </blockquote>
-<p>因此：</p>
+<p>通俗地讲，即函数 <code>f</code> 在函数 <code>g</code> 的函数体内定义，且 <code>f</code> 引用了自己局部变量以外的自由变量，之后 <code>f</code> 作为 <code>g</code> 的返回值返回，然后调用 <code>f</code>，此时 <code>f</code> 已经脱离了定义它的上下文环境，如何处理它引用的自由变量呢？</p>
+<p>早期的命令式编程语言通过袋鼠策略绕过了该问题：</p>
 <ul>
-<li>When a function is called with <strong>all</strong> the required parameters, it has <strong>fully applied</strong> the function to all of the parameters.</li>
-<li>But when only a <strong>subset</strong> of the parameters to the function is passed, the <strong>result of the expression</strong> is a partially applied function.</li>
+<li>不支持函数作为返回值（Algol），或</li>
+<li>禁止嵌套函数，进而消除非局部变量引用（C 语言）</li>
 </ul>
-<p>在 Scala 中，当函数调用的参数不足时，编译器不会报错，而是先 <strong>应用</strong> 已提供的参数，并返回一个 <strong>新函数</strong>，该函数接受原函数剩余未提供的参数作为自己的参数，称该函数为部分应用函数。</p>
-<p>例如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> divide: (<span class="type">Double</span>, <span class="type">Double</span>) ⇒ <span class="type">Double</span> = (x, y) ⇒ x / y</span><br></pre></td></tr></table></figure>
-<p>若想要计算给定数值的一半，则可以部分应用第二个参数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> halfOf = divide(_: <span class="type">Double</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">halfOf(<span class="number">10</span>)  <span class="comment">// 5.0</span></span><br></pre></td></tr></table></figure>
+<p>早期的函数式编程语言 Lisp 通过 <a href="https://en.wikipedia.org/wiki/Dynamic_scoping" target="_blank" rel="noopener">动态作用域</a> 解决该问题：</p>
 <ul>
-<li>未提供的参数用 <code>_</code> 占位符表示；</li>
-<li>注意，需要指明 <code>_</code> 的类型，要么在函数类型里指明，要么在参数类型里；</li>
+<li>在函数 <strong>调用时</strong>（而非定义时）的上下文环境中查找自由变量的值</li>
 </ul>
-<p><code>halfOf</code> 为部分应用函数，其函数体类似：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> halfOf: <span class="type">Double</span> ⇒ <span class="type">Double</span> = x ⇒ x / <span class="number">2</span></span><br></pre></td></tr></table></figure>
-<h3 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h3><p>柯里化在部分应用函数基础上更进一步：</p>
-<blockquote>
-<p>Currying is the process of decomposing a function that takes <strong>multiple</strong> arguments into a sequence of functions, each with a <strong>single</strong> argument.</p>
-</blockquote>
-<p>柯里化将多参函数分解为一系列的单参函数，例如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> divide: (<span class="type">Double</span>, <span class="type">Double</span>) ⇒ <span class="type">Double</span> = (x, y) ⇒ x / y</span><br><span class="line"></span><br><span class="line"><span class="comment">// Double ⇒ (Double ⇒ Double)</span></span><br><span class="line"><span class="keyword">val</span> curriedDivide = divide.curried</span><br></pre></td></tr></table></figure>
-<p><code>divide</code> 有两个参数，柯里化后得到 <code>curriedDivide</code>，该函数类型为 <code>Double ⇒ Double ⇒ Double</code>，其内部实现将 <code>divide</code> 分解为 <strong>两个函数</strong>：</p>
-<ol>
-<li><code>curriedDivide(10)</code> 调用第 1 个调用，并返回第 2 个函数；</li>
-<li><code>curriedDivide(10)(2)</code>，先后调用两个函数；</li>
-</ol>
-<p>柯里化函数也是函数，因此可以对其部分应用：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> halfOf = curriedDivide(_: <span class="type">Double</span>)(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">halfOf(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>了解各自的概念后，它们之间的区别已经一目了然了。</p>
-<h3 id="偏函数-vs-部分应用函数"><a href="#偏函数-vs-部分应用函数" class="headerlink" title="偏函数 vs 部分应用函数"></a>偏函数 vs 部分应用函数</h3><p>虽然偏函数（partial function）、部分应用函数（partially applied function）的英文名字非常接近，但它们却是风马牛不相及的两个概念：</p>
+<p>动态作用域是设计败笔，因此 Scheme 最早引入 <a href="https://en.wikipedia.org/wiki/Lexically_scoped" target="_blank" rel="noopener">词法作用域</a> 解决该问题：</p>
 <ul>
-<li>偏函数是仅能处理入参类型 <strong>子集</strong> 的函数，是数学概念；</li>
-<li>部分应用函数是函数调用的结果，只不过该函数调用只提供了 <strong>部分参数</strong>；</li>
+<li>将函数引用视为 <strong>闭包</strong>，而非简单的 <strong>函数指针</strong>，闭包中保存两部分内容：<ul>
+<li>函数 <strong>定义时</strong> 的自由变量</li>
+<li>函数代码</li>
 </ul>
-<h3 id="部分应用函数-vs-柯里化"><a href="#部分应用函数-vs-柯里化" class="headerlink" title="部分应用函数 vs 柯里化"></a>部分应用函数 vs 柯里化</h3><p>与前面一组不同，该两者并非由于名字接近而容易被混淆，部分应用函数和柯里化都可以用于 <strong>减少函数参数</strong>，但两者依然存在明显区别：</p>
+</li>
+</ul>
+<h2 id="不同语言对头等函数的支持程度"><a href="#不同语言对头等函数的支持程度" class="headerlink" title="不同语言对头等函数的支持程度"></a>不同语言对头等函数的支持程度</h2><p>头等函数并非函数式编程语言专属，各编程语言家族或多或少都支持一些头等函数特性，例如：</p>
 <ul>
-<li>部分应用函数：应用已提供的参数，返回 <strong>一个</strong> 新函数，该函数接受剩余参数为参数；</li>
-<li>柯里化：分解函数，将多参函数分解为 <strong>一系列</strong> 的单参函数；</li>
+<li>函数式语言<ul>
+<li>Scheme ML Haskell F# Scala 等支持 first-class function 的所有特性</li>
+<li>Lisp 由于动态作用域的错误设计，并没有正确理解 first-class function 的正确行为</li>
 </ul>
-<p>部分应用函数仅产生一个函数，柯里化实际上可以产生多个函数。</p>
-<p>若有函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> add: (<span class="type">Double</span>, <span class="type">Double</span>, <span class="type">Double</span>) =&gt; <span class="type">Double</span> = (x, y, z) =&gt; z + y + z</span><br></pre></td></tr></table></figure>
-<p>可以部分应用 0 个参数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// (Double, Double, Double) =&gt; Double</span></span><br><span class="line"><span class="keyword">val</span> partialAdd = add(_: <span class="type">Double</span>, _: <span class="type">Double</span>, _: <span class="type">Double</span>)</span><br></pre></td></tr></table></figure>
-<p>也可以将其柯里化：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Double =&gt; (Double =&gt; (Double =&gt; Double))</span></span><br><span class="line"><span class="keyword">val</span> curriedAdd = add.curried</span><br></pre></td></tr></table></figure>
-<p>部分应用函数的类型为 <code>(Double, Double, Double) =&gt; Double</code>，而柯里化后的类型为 <code>Double =&gt; (Double =&gt; (Double =&gt; Double))</code>，两者存在明显区别，一个是单个普通函数，一个是一系列单参函数。</p>
-<p>通过多次部分应用，虽然繁琐一点，但可以达到与柯里化类似的效果：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// (Double, Double) =&gt; Double</span></span><br><span class="line"><span class="keyword">val</span> partialAdd20 = partialAdd(_:<span class="type">Double</span>, _: <span class="type">Double</span>, <span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Double =&gt; (Double =&gt; Double)</span></span><br><span class="line"><span class="keyword">val</span> curriedAdd20 = curriedAdd(<span class="number">20</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li>脚本语言<ul>
+<li>如 Perl Python Lua JavaScript</li>
+</ul>
+</li>
+<li>命令式语言（Funarg 问题由返回嵌套定义的函数引起，命令式语言通过不同方式绕过该问题）：<ul>
+<li>C 语言家族支持函数作为参数、返回值，但禁止嵌套函数，以避免 Funarg problem</li>
+<li>Algol 支持函数作为参数、嵌套函数，但不支持函数作为返回值，同样是为了避免 Funarg problem</li>
+</ul>
+</li>
+</ul>
+<p>通常认为头等函数的价值在于：</p>
+<ul>
+<li>返回值返回嵌套定义的、捕获了非局部变量的函数</li>
+</ul>
+<p>对命令式语言而言，它们或不支持函数返回值（Algol），或不支持嵌套函数（C 语言），因此一般不认为其具有头等函数。</p>
+<hr>
+<p>参考：</p>
+<ul>
+<li>维基百科 <a href="https://en.wikipedia.org/wiki/First-class_function" target="_blank" rel="noopener">First-class function</a></li>
+<li>维基百科 <a href="https://en.wikipedia.org/wiki/Funarg_problem" target="_blank" rel="noopener">Gunarg problem</a></li>
+</ul>
 
       
     </div>
@@ -519,8 +515,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/15/scala-partialfunction-1/" rel="next" title="Scala 偏函数">
-                <i class="fa fa-chevron-left"></i> Scala 偏函数
+              <a href="/2018/05/16/scala-anonymous-function/" rel="next" title="匿名函数">
+                <i class="fa fa-chevron-left"></i> 匿名函数
               </a>
             
           </div>
@@ -528,10 +524,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/16/scala-anonymous-function/" rel="prev" title="匿名函数">
-                匿名函数 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -693,7 +685,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#偏函数"><span class="nav-number">1.1.</span> <span class="nav-text">偏函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部分应用函数"><span class="nav-number">1.2.</span> <span class="nav-text">部分应用函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#柯里化"><span class="nav-number">1.3.</span> <span class="nav-text">柯里化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#区别"><span class="nav-number">2.</span> <span class="nav-text">区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#偏函数-vs-部分应用函数"><span class="nav-number">2.1.</span> <span class="nav-text">偏函数 vs 部分应用函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部分应用函数-vs-柯里化"><span class="nav-number">2.2.</span> <span class="nav-text">部分应用函数 vs 柯里化</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#头等函数实现难点"><span class="nav-number">1.</span> <span class="nav-text">头等函数实现难点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同语言对头等函数的支持程度"><span class="nav-number">2.</span> <span class="nav-text">不同语言对头等函数的支持程度</span></a></li></ol></div>
             
 
           </div>

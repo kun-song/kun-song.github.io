@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="匿名函数（anonymous function），也称函数字面值（function literal），顾名思义，就是没有名字的函数值。 字面值在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常的概念却并一定清楚。 维基百科对字面值（literal）解释如下：  In computer science, a liter">
+  <meta name="description" content="匿名函数（anonymous function），也称函数字面值（function literal）、lambda 抽象、lambda 表达式，顾名思义，就是没有名字的函数值。 本文主要讲解 Scala 中的匿名函数，最后简单介绍 Java 对匿名函数的支持。 字面值在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常">
 <meta name="keywords" content="Scala,fp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala 匿名函数">
+<meta property="og:title" content="匿名函数">
 <meta property="og:url" content="http://songkun.me/2018/05/16/scala-anonymous-function/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="匿名函数（anonymous function），也称函数字面值（function literal），顾名思义，就是没有名字的函数值。 字面值在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常的概念却并一定清楚。 维基百科对字面值（literal）解释如下：  In computer science, a liter">
+<meta property="og:description" content="匿名函数（anonymous function），也称函数字面值（function literal）、lambda 抽象、lambda 表达式，顾名思义，就是没有名字的函数值。 本文主要讲解 Scala 中的匿名函数，最后简单介绍 Java 对匿名函数的支持。 字面值在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-16T12:31:03.000Z">
+<meta property="og:updated_time" content="2018-05-16T14:52:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala 匿名函数">
-<meta name="twitter:description" content="匿名函数（anonymous function），也称函数字面值（function literal），顾名思义，就是没有名字的函数值。 字面值在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常的概念却并一定清楚。 维基百科对字面值（literal）解释如下：  In computer science, a liter">
+<meta name="twitter:title" content="匿名函数">
+<meta name="twitter:description" content="匿名函数（anonymous function），也称函数字面值（function literal）、lambda 抽象、lambda 表达式，顾名思义，就是没有名字的函数值。 本文主要讲解 Scala 中的匿名函数，最后简单介绍 Java 对匿名函数的支持。 字面值在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常">
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>Scala 匿名函数 | 随便写写</title>
+  <title>匿名函数 | 随便写写</title>
   
 
 
@@ -338,7 +338,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Scala 匿名函数
+          <h1 class="post-title" itemprop="name headline">匿名函数
               
             
           </h1>
@@ -363,7 +363,7 @@
                 
               
 
-              <time title="创建时间：2018-05-16 08:42:18 / 修改时间：20:31:03" itemprop="dateCreated datePublished" datetime="2018-05-16T08:42:18+08:00">2018-05-16</time>
+              <time title="创建时间：2018-05-16 08:42:18 / 修改时间：22:52:52" itemprop="dateCreated datePublished" datetime="2018-05-16T08:42:18+08:00">2018-05-16</time>
             
 
             
@@ -419,8 +419,10 @@
       
 
       
-        <p>匿名函数（anonymous function），也称函数字面值（function literal），顾名思义，就是没有名字的函数值。</p>
+        <p>匿名函数（anonymous function），也称函数字面值（function literal）、lambda 抽象、lambda 表达式，顾名思义，就是没有名字的函数值。</p>
+<p>本文主要讲解 Scala 中的匿名函数，最后简单介绍 Java 对匿名函数的支持。</p>
 <h2 id="字面值"><a href="#字面值" class="headerlink" title="字面值"></a>字面值</h2><p>在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常的概念却并一定清楚。</p>
+<a id="more"></a>
 <p>维基百科对字面值（literal）解释如下：</p>
 <blockquote>
 <p>In computer science, a literal is a notation for representing a <strong>fixed value</strong> in source code. Almost all programming languages have notations for atomic values such as integers, floating-point numbers, and strings, and usually for booleans and characters; some also have notations for elements of enumerated types and compound values such as arrays, records, and objects. An anonymous function is a literal for the function type.</p>
@@ -439,7 +441,7 @@
 <p>若字面值不能用作匿名值，则上述代码只能写作：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> one: <span class="type">Int</span> = <span class="number">1</span></span><br><span class="line"><span class="keyword">val</span> two: <span class="type">Int</span> = <span class="number">2</span></span><br><span class="line"><span class="keyword">val</span> three: <span class="type">Int</span> = <span class="number">3</span></span><br><span class="line"><span class="keyword">val</span> greaterThan2: (<span class="type">Int</span> ⇒ <span class="type">Int</span>) = (x: <span class="type">Int</span>) ⇒ x &gt; two</span><br><span class="line"><span class="type">List</span>(one, two, three).filter(greaterThan2)</span><br></pre></td></tr></table></figure>
 <p>这个例子似乎有点荒诞，毕竟谁会这样写代码啊！事实上，如果没有字面值，你就得这么写。因为字面值太常见了，大家都已经习以为常了，所以这里帮大家重温一下基本概念。</p>
-<h2 id="匿名函数"><a href="#匿名函数" class="headerlink" title="匿名函数"></a>匿名函数</h2><p>Scala 提供了非常轻量级的匿名函数创建语法，例如：</p>
+<h2 id="Scala-匿名函数"><a href="#Scala-匿名函数" class="headerlink" title="Scala 匿名函数"></a>Scala 匿名函数</h2><p>Scala 提供了非常轻量级的匿名函数创建语法，例如：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Int ⇒ Int</span></span><br><span class="line">(x: <span class="type">Int</span>) ⇒ x + <span class="number">1</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>匿名函数的创建语法，仅仅是创建 <code>FunctionN</code> 类型实例的语法糖，上面的匿名函数等价于：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="type">Function1</span>[<span class="type">Int</span>, <span class="type">Int</span>] &#123;  </span><br><span class="line"> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(x:<span class="type">Int</span>): <span class="type">Int</span> = x + <span class="number">1</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -448,9 +450,9 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> addOne = (x: <span class="type">Int</span>) ⇒ x + <span class="number">1</span></span><br></pre></td></tr></table></figure>
 <p>匿名函数 <strong>最常见</strong> 的用法是作为高阶函数的参数（高阶函数 + 匿名函数，焦不离孟）：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> xs = <span class="type">List</span>.range(<span class="number">0</span>, <span class="number">10</span>)</span><br><span class="line">xs filter ((n: <span class="type">Int</span>) ⇒ n % <span class="number">2</span> == <span class="number">0</span>)  <span class="comment">// List(0, 2, 4, 6, 8)</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><code>(n: Int) ⇒ n % 2 == 0</code> 函数用完就扔，因此不需要名字，匿名函数正合适。</p>
-</blockquote>
+<ul>
+<li><code>(n: Int) ⇒ n % 2 == 0</code> 函数用完就扔，因此不需要名字，匿名函数正合适。</li>
+</ul>
 <p>因为 <code>(n: Int) ⇒ n % 2 == 0</code> 只有一个入参，因此可以简化为：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xs filter (_ % <span class="number">2</span> == <span class="number">0</span>)  <span class="comment">// List(0, 2, 4, 6, 8)</span></span><br></pre></td></tr></table></figure>
 <p>除了创建普通函数（<code>FunctionN</code>）的字面值以外，还可以创建 <code>PartialFunction</code> 类型的字面值：</p>
@@ -458,6 +460,19 @@
 <blockquote>
 <p>注：这种说法不确实是否准确，Twitter Scala School 中认为 <code>case</code> 语句是 <code>PartialFunction</code> 的子类。</p>
 </blockquote>
+<h2 id="Java-匿名函数（lambda-表达式）"><a href="#Java-匿名函数（lambda-表达式）" class="headerlink" title="Java 匿名函数（lambda 表达式）"></a>Java 匿名函数（lambda 表达式）</h2><p>Java 8 通过 lambda 表达式提供对匿名函数的支持，用法与 Scala 匿名函数非常类似：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">long</span> id, String name) -&gt; <span class="string">"id: "</span> + id + <span class="string">", name:"</span> + name</span><br></pre></td></tr></table></figure>
+<ul>
+<li>lambda 表达式会被转化为 <strong>函数接口</strong></li>
+</ul>
+<p>还可以通过 <strong>方法引用</strong> 创建 lambda 表达式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IntBinaryOperator sum = Integer::sum;</span><br></pre></td></tr></table></figure>
+<p>Java 8 lambda 表达式有两个缺点：</p>
+<ol>
+<li>lambda 表达式可以抛出 checked exception，且若抛出 checked exception 则不能用于 <code>filter</code> <code>map</code> 等集合 API</li>
+<li>lambda 表达式只能使用 effectively final 非局部变量（自由变量）</li>
+</ol>
+<p>以上限制看似微不足道，实际上大大削弱了 lambda 表达式的灵活性，而 Scala 匿名函数则无类似缺点。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li>匿名函数（函数字面值）之于 <code>FunctionN</code>，如同 <code>5</code> 之于 <code>Int</code></li>
 <li>匿名函数一般用作：<ul>
@@ -466,6 +481,11 @@
 </ul>
 </li>
 <li>匿名函数是创建 <code>FunctionN</code> 实例的语法糖</li>
+</ul>
+<hr>
+<p>参考：</p>
+<ul>
+<li>维基百科 <a href="https://en.wikipedia.org/wiki/Anonymous_function" target="_blank" rel="noopener">Anonymout function</a></li>
 </ul>
 
       
@@ -511,6 +531,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/16/2018-05-16-first-class-function/" rel="prev" title="头等函数">
+                头等函数 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -584,7 +608,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -672,7 +696,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字面值"><span class="nav-number">1.</span> <span class="nav-text">字面值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匿名函数"><span class="nav-number">2.</span> <span class="nav-text">匿名函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字面值"><span class="nav-number">1.</span> <span class="nav-text">字面值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala-匿名函数"><span class="nav-number">2.</span> <span class="nav-text">Scala 匿名函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-匿名函数（lambda-表达式）"><span class="nav-number">3.</span> <span class="nav-text">Java 匿名函数（lambda 表达式）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
