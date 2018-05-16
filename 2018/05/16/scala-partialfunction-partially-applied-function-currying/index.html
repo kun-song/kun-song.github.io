@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="在 Scala 中 case 关键字主要有 4 种使用场景，分别是：">
-<meta name="keywords" content="Scala">
+  <meta name="description" content="三者的英文名字分别为：  偏函数：partial function 部分应用函数：partially applied function 柯里化：currying  其中偏函数、部分应用函数容易被混淆，部分应用函数、柯里化也容易被混淆，本文先介绍他们各自的概念，然后解释它们之间的区别。">
+<meta name="keywords" content="Scala,fp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala case 关键字的 4 种用法">
-<meta property="og:url" content="http://songkun.me/2018/05/15/scala-case-use-cases/index.html">
+<meta property="og:title" content="偏函数 vs 部分应用函数 vs 柯里化">
+<meta property="og:url" content="http://songkun.me/2018/05/16/scala-partialfunction-partially-applied-function-currying/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="在 Scala 中 case 关键字主要有 4 种使用场景，分别是：">
+<meta property="og:description" content="三者的英文名字分别为：  偏函数：partial function 部分应用函数：partially applied function 柯里化：currying  其中偏函数、部分应用函数容易被混淆，部分应用函数、柯里化也容易被混淆，本文先介绍他们各自的概念，然后解释它们之间的区别。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-15T14:55:22.000Z">
+<meta property="og:updated_time" content="2018-05-16T00:36:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala case 关键字的 4 种用法">
-<meta name="twitter:description" content="在 Scala 中 case 关键字主要有 4 种使用场景，分别是：">
+<meta name="twitter:title" content="偏函数 vs 部分应用函数 vs 柯里化">
+<meta name="twitter:description" content="三者的英文名字分别为：  偏函数：partial function 部分应用函数：partially applied function 柯里化：currying  其中偏函数、部分应用函数容易被混淆，部分应用函数、柯里化也容易被混淆，本文先介绍他们各自的概念，然后解释它们之间的区别。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/15/scala-case-use-cases/"/>
+  <link rel="canonical" href="http://songkun.me/2018/05/16/scala-partialfunction-partially-applied-function-currying/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>Scala case 关键字的 4 种用法 | 随便写写</title>
+  <title>偏函数 vs 部分应用函数 vs 柯里化 | 随便写写</title>
   
 
 
@@ -321,7 +321,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-case-use-cases/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/16/scala-partialfunction-partially-applied-function-currying/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -338,7 +338,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Scala case 关键字的 4 种用法
+          <h1 class="post-title" itemprop="name headline">偏函数 vs 部分应用函数 vs 柯里化
               
             
           </h1>
@@ -363,7 +363,7 @@
                 
               
 
-              <time title="创建时间：2018-05-15 22:44:37 / 修改时间：22:55:22" itemprop="dateCreated datePublished" datetime="2018-05-15T22:44:37+08:00">2018-05-15</time>
+              <time title="创建时间：2018-05-16 00:19:56 / 修改时间：08:36:14" itemprop="dateCreated datePublished" datetime="2018-05-16T00:19:56+08:00">2018-05-16</time>
             
 
             
@@ -419,21 +419,72 @@
       
 
       
-        <p>在 Scala 中 <code>case</code> 关键字主要有 4 种使用场景，分别是：</p>
+        <p>三者的英文名字分别为：</p>
+<ul>
+<li>偏函数：partial function</li>
+<li>部分应用函数：partially applied function</li>
+<li>柯里化：currying</li>
+</ul>
+<p>其中偏函数、部分应用函数容易被混淆，部分应用函数、柯里化也容易被混淆，本文先介绍他们各自的概念，然后解释它们之间的区别。</p>
 <a id="more"></a>
-<h2 id="模式匹配"><a href="#模式匹配" class="headerlink" title="模式匹配"></a>模式匹配</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10</span> <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> n <span class="keyword">if</span> n % <span class="number">2</span> == <span class="number">0</span> ⇒ <span class="string">"even"</span></span><br><span class="line">  <span class="keyword">case</span> n <span class="keyword">if</span> n % <span class="number">2</span> != <span class="number">1</span> ⇒ <span class="string">"odd"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="case-类"><a href="#case-类" class="headerlink" title="case 类"></a><code>case</code> 类</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Number</span>(<span class="params">value: <span class="type">Int</span></span>)</span></span><br></pre></td></tr></table></figure>
-<h2 id="try-catch"><a href="#try-catch" class="headerlink" title="try-catch"></a><code>try-catch</code></h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">toInt</span></span>(s: <span class="type">String</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    s.toInt</span><br><span class="line">  &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> _: <span class="type">Throwable</span> ⇒ <span class="number">0</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="偏函数字面值"><a href="#偏函数字面值" class="headerlink" title="偏函数字面值"></a>偏函数字面值</h2><p><code>case</code> 关键字可用于创建 <code>PartialFunction</code> 类型的函数字面值（匿名函数）：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> xs = <span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">xs.filter &#123;</span><br><span class="line">  <span class="keyword">case</span> n ⇒ n % <span class="number">2</span> == <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>事实上，<code>case</code> 关键字是 <strong>最常用</strong> 的创建 <code>PartialFunction</code> 的方式，若不用 <code>case</code>，则只能手动创建 <code>PartialFunction</code> 实例：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> fraction = <span class="keyword">new</span> <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(d: <span class="type">Int</span>) = <span class="number">42</span> / d</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isDefinedAt</span></span>(d: <span class="type">Int</span>) = d != <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用 <code>case</code> 明显更加紧凑：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> fraction: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">Int</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> d: <span class="type">Int</span> <span class="keyword">if</span> d != <span class="number">0</span> ⇒ <span class="number">42</span> / d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意，必须手动指定 <code>fraction</code> 的类型为 <code>PartialFunction</code>，否则 Scala 编译器会报错：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> fraction = &#123;</span><br><span class="line">  <span class="keyword">case</span> d: <span class="type">Int</span> <span class="keyword">if</span> d != <span class="number">0</span> ⇒ <span class="number">42</span> / d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>也可以将 <code>fraction</code> 类型指定为普通函数，但这样就失去了偏函数的魔力：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> fraction: <span class="type">Function</span>[<span class="type">Int</span>, <span class="type">Int</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> d: <span class="type">Int</span> <span class="keyword">if</span> d != <span class="number">0</span> ⇒ <span class="number">42</span> / d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="偏函数"><a href="#偏函数" class="headerlink" title="偏函数"></a>偏函数</h3><p><code>PartialFunction</code> 是数学上的概念，即定义在输入参数 <strong>子集</strong> 上的函数，例如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> squareRoot: <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> n <span class="keyword">if</span> n &gt;= <span class="number">0</span> ⇒ <span class="type">Math</span>.sqrt(n)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>squareRoot</code> 参数类型为 <code>Double</code>，但只有 <code>Double</code> 的非负数子集才能调用 <code>squareRoot</code>。</p>
+<h3 id="部分应用函数"><a href="#部分应用函数" class="headerlink" title="部分应用函数"></a>部分应用函数</h3><p>首先明确下术语，在函数式编程中，函数调用（a call to function that has parameters）的另一种叫法是：</p>
+<blockquote>
+<p><strong>applying</strong> the function to the parameters.</p>
+</blockquote>
+<p>因此：</p>
+<ul>
+<li>When a function is called with <strong>all</strong> the required parameters, it has <strong>fully applied</strong> the function to all of the parameters.</li>
+<li>But when only a <strong>subset</strong> of the parameters to the function is passed, the <strong>result of the expression</strong> is a partially applied function.</li>
+</ul>
+<p>在 Scala 中，当函数调用的参数不足时，编译器不会报错，而是先 <strong>应用</strong> 已提供的参数，并返回一个 <strong>新函数</strong>，该函数接受原函数剩余未提供的参数作为自己的参数，称该函数为部分应用函数。</p>
+<p>例如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> divide: (<span class="type">Double</span>, <span class="type">Double</span>) ⇒ <span class="type">Double</span> = (x, y) ⇒ x / y</span><br></pre></td></tr></table></figure>
+<p>若想要计算给定数值的一半，则可以部分应用第二个参数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> halfOf = divide(_: <span class="type">Double</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">halfOf(<span class="number">10</span>)  <span class="comment">// 5.0</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>未提供的参数用 <code>_</code> 占位符表示；</li>
+<li>注意，需要指明 <code>_</code> 的类型，要么在函数类型里指明，要么在参数类型里；</li>
+</ul>
+<p><code>halfOf</code> 为部分应用函数，其函数体类似：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> halfOf: <span class="type">Double</span> ⇒ <span class="type">Double</span> = x ⇒ x / <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h3 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h3><p>柯里化在部分应用函数基础上更进一步：</p>
+<blockquote>
+<p>Currying is the process of decomposing a function that takes <strong>multiple</strong> arguments into a sequence of functions, each with a <strong>single</strong> argument.</p>
+</blockquote>
+<p>柯里化将多参函数分解为一系列的单参函数，例如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> divide: (<span class="type">Double</span>, <span class="type">Double</span>) ⇒ <span class="type">Double</span> = (x, y) ⇒ x / y</span><br><span class="line"></span><br><span class="line"><span class="comment">// Double ⇒ (Double ⇒ Double)</span></span><br><span class="line"><span class="keyword">val</span> curriedDivide = divide.curried</span><br></pre></td></tr></table></figure>
+<p><code>divide</code> 有两个参数，柯里化后得到 <code>curriedDivide</code>，该函数类型为 <code>Double ⇒ Double ⇒ Double</code>，其内部实现将 <code>divide</code> 分解为 <strong>两个函数</strong>：</p>
+<ol>
+<li><code>curriedDivide(10)</code> 调用第 1 个调用，并返回第 2 个函数；</li>
+<li><code>curriedDivide(10)(2)</code>，先后调用两个函数；</li>
+</ol>
+<p>柯里化函数也是函数，因此可以对其部分应用：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> halfOf = curriedDivide(_: <span class="type">Double</span>)(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">halfOf(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>了解各自的概念后，它们之间的区别已经一目了然了。</p>
+<h3 id="偏函数-vs-部分应用函数"><a href="#偏函数-vs-部分应用函数" class="headerlink" title="偏函数 vs 部分应用函数"></a>偏函数 vs 部分应用函数</h3><p>虽然偏函数（partial function）、部分应用函数（partially applied function）的英文名字非常接近，但它们却是风马牛不相及的两个概念：</p>
+<ul>
+<li>偏函数是仅能处理入参类型 <strong>子集</strong> 的函数，是数学概念；</li>
+<li>部分应用函数是函数调用的结果，只不过该函数调用只提供了 <strong>部分参数</strong>；</li>
+</ul>
+<h3 id="部分应用函数-vs-柯里化"><a href="#部分应用函数-vs-柯里化" class="headerlink" title="部分应用函数 vs 柯里化"></a>部分应用函数 vs 柯里化</h3><p>与前面一组不同，该两者并非由于名字接近而容易被混淆，部分应用函数和柯里化都可以用于 <strong>减少函数参数</strong>，但两者依然存在明显区别：</p>
+<ul>
+<li>部分应用函数：应用已提供的参数，返回 <strong>一个</strong> 新函数，该函数接受剩余参数为参数；</li>
+<li>柯里化：分解函数，将多参函数分解为 <strong>一系列</strong> 的单参函数；</li>
+</ul>
+<p>部分应用函数仅产生一个函数，柯里化实际上可以产生多个函数。</p>
+<p>若有函数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> add: (<span class="type">Double</span>, <span class="type">Double</span>, <span class="type">Double</span>) =&gt; <span class="type">Double</span> = (x, y, z) =&gt; z + y + z</span><br></pre></td></tr></table></figure>
+<p>可以部分应用 0 个参数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// (Double, Double, Double) =&gt; Double</span></span><br><span class="line"><span class="keyword">val</span> partialAdd = add(_: <span class="type">Double</span>, _: <span class="type">Double</span>, _: <span class="type">Double</span>)</span><br></pre></td></tr></table></figure>
+<p>也可以将其柯里化：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Double =&gt; (Double =&gt; (Double =&gt; Double))</span></span><br><span class="line"><span class="keyword">val</span> curriedAdd = add.curried</span><br></pre></td></tr></table></figure>
+<p>部分应用函数的类型为 <code>(Double, Double, Double) =&gt; Double</code>，而柯里化后的类型为 <code>Double =&gt; (Double =&gt; (Double =&gt; Double))</code>，两者存在明显区别，一个是单个普通函数，一个是一系列单参函数。</p>
+<p>通过多次部分应用，虽然繁琐一点，但可以达到与柯里化类似的效果：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// (Double, Double) =&gt; Double</span></span><br><span class="line"><span class="keyword">val</span> partialAdd20 = partialAdd(_:<span class="type">Double</span>, _: <span class="type">Double</span>, <span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Double =&gt; (Double =&gt; Double)</span></span><br><span class="line"><span class="keyword">val</span> curriedAdd20 = curriedAdd(<span class="number">20</span>)</span><br></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -455,6 +506,8 @@
           
             <a href="/tags/Scala/" rel="tag"># Scala</a>
           
+            <a href="/tags/fp/" rel="tag"># fp</a>
+          
         </div>
       
 
@@ -466,8 +519,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/15/expression-oriented-programming/" rel="next" title="面向表达式编程">
-                <i class="fa fa-chevron-left"></i> 面向表达式编程
+              <a href="/2018/05/15/scala-partialfunction-1/" rel="next" title="Scala 偏函数">
+                <i class="fa fa-chevron-left"></i> Scala 偏函数
               </a>
             
           </div>
@@ -475,10 +528,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/15/scala-partialfunction-1/" rel="prev" title="Scala 偏函数">
-                Scala 偏函数 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -640,7 +689,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模式匹配"><span class="nav-number">1.</span> <span class="nav-text">模式匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case-类"><span class="nav-number">2.</span> <span class="nav-text">case 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#try-catch"><span class="nav-number">3.</span> <span class="nav-text">try-catch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#偏函数字面值"><span class="nav-number">4.</span> <span class="nav-text">偏函数字面值</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#偏函数"><span class="nav-number">1.1.</span> <span class="nav-text">偏函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部分应用函数"><span class="nav-number">1.2.</span> <span class="nav-text">部分应用函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#柯里化"><span class="nav-number">1.3.</span> <span class="nav-text">柯里化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#区别"><span class="nav-number">2.</span> <span class="nav-text">区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#偏函数-vs-部分应用函数"><span class="nav-number">2.1.</span> <span class="nav-text">偏函数 vs 部分应用函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部分应用函数-vs-柯里化"><span class="nav-number">2.2.</span> <span class="nav-text">部分应用函数 vs 柯里化</span></a></li></ol></li></ol></div>
             
 
           </div>
