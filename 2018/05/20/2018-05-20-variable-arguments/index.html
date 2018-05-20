@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器）">
-<meta name="keywords" content="Scala,类型系统">
+  <meta name="description" content="变长参数是很常见的语言特性，Java 和 Scala 都支持，使用非常简单，本文介绍其在 Java 和 Scala 中的基本用法。">
+<meta name="keywords" content="Scala,Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala 中的型变">
-<meta property="og:url" content="http://songkun.me/2018/05/15/scala-variance/index.html">
+<meta property="og:title" content="变长参数">
+<meta property="og:url" content="http://songkun.me/2018/05/20/2018-05-20-variable-arguments/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器）">
+<meta property="og:description" content="变长参数是很常见的语言特性，Java 和 Scala 都支持，使用非常简单，本文介绍其在 Java 和 Scala 中的基本用法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-15T14:49:17.000Z">
+<meta property="og:updated_time" content="2018-05-20T14:32:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala 中的型变">
-<meta name="twitter:description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器）">
+<meta name="twitter:title" content="变长参数">
+<meta name="twitter:description" content="变长参数是很常见的语言特性，Java 和 Scala 都支持，使用非常简单，本文介绍其在 Java 和 Scala 中的基本用法。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/15/scala-variance/"/>
+  <link rel="canonical" href="http://songkun.me/2018/05/20/2018-05-20-variable-arguments/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>Scala 中的型变 | 随便写写</title>
+  <title>变长参数 | 随便写写</title>
   
 
 
@@ -331,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-variance/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/20/2018-05-20-variable-arguments/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Scala 中的型变
+          <h1 class="post-title" itemprop="name headline">变长参数
               
             
           </h1>
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2018-05-15 00:39:34 / 修改时间：22:49:17" itemprop="dateCreated datePublished" datetime="2018-05-15T00:39:34+08:00">2018-05-15</time>
+              <time title="创建时间：2018-05-20 22:27:44 / 修改时间：22:32:40" itemprop="dateCreated datePublished" datetime="2018-05-20T22:27:44+08:00">2018-05-20</time>
             
 
             
@@ -410,9 +410,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/15/scala-variance/#comments" itemprop="discussionUrl">
+                <a href="/2018/05/20/2018-05-20-variable-arguments/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/15/scala-variance/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/05/20/2018-05-20-variable-arguments/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -440,82 +440,40 @@
       
 
       
-        <p>Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。</p>
-<p>Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 <strong>参数多态</strong> 遇上 <strong>类继承</strong> 时，出现了一个有趣的问题：</p>
-<p>若类型 <code>S</code> 是 <code>T</code> 的子类，那么 <code>List[S]</code> 与 <code>List[T]</code> 是什么关系呢？（<code>List</code> 泛指泛型容器）</p>
+        <p>变长参数是很常见的语言特性，Java 和 Scala 都支持，使用非常简单，本文介绍其在 Java 和 Scala 中的基本用法。</p>
 <a id="more"></a>
-<p>Scala 类型系统必须能够解释该问题，在回答之前，我们先要搞清楚类继承到底有什么意义，其意义可以用 <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle" target="_blank" rel="noopener">里式替换原理</a> 说明：</p>
-<blockquote>
-<p>If S is a subtype of T, then objects of type T may be replaced with objects of type S.</p>
-</blockquote>
-<p>通过 subtype 还可以实现 <a href="https://en.wikipedia.org/wiki/Subtyping" target="_blank" rel="noopener">subtype polymorphism</a>，当然这扯的有点远了。</p>
-<p>回到前面的问题，<code>List[S]</code> 和 <code>List[T]</code> 到底是不是父子类关系呢？如果是，则根据里式替换原理，使用它们更加灵活。</p>
-<p>为解决该问题，Scala 提供了 3 种型变标记，以表达 <code>List[S]</code> 与 <code>List[T]</code> 之间的关系：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">meaning</th>
-<th style="text-align:center">notion</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">invariant</td>
-<td style="text-align:center"><code>List[S]</code> 与 <code>List[T]</code> 无任何关系</td>
-<td style="text-align:center"><code>[T]</code></td>
-</tr>
-<tr>
-<td style="text-align:center">covariant</td>
-<td style="text-align:center"><code>List[S]</code> 是 <code>List[T]</code> 的子类</td>
-<td style="text-align:center"><code>[+T]</code></td>
-</tr>
-<tr>
-<td style="text-align:center">contravariant</td>
-<td style="text-align:center"><code>List[T]</code> 与 <code>List[S]</code> 的子类</td>
-<td style="text-align:center"><code>[-T]</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="协变"><a href="#协变" class="headerlink" title="协变"></a>协变</h2><p>Scala 的不可变集合，基本都定义为协变，例如 <code>List</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">List</span>[+<span class="type">A</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> </span>::[<span class="type">B</span> &gt;: <span class="type">A</span>] (x:<span class="type">B</span>) : <span class="type">List</span>[<span class="type">B</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用场景：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span>(<span class="params">name: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Bird</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span>(<span class="params">name</span>)</span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Duck</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span>(<span class="params">name</span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">val</span> <span class="title">birds</span> </span>= <span class="keyword">new</span> <span class="type">Bird</span>(<span class="string">"A"</span>) :: <span class="keyword">new</span> <span class="type">Bird</span>(<span class="string">"B"</span>) :: <span class="type">Nil</span></span><br><span class="line"><span class="keyword">val</span> ducks = <span class="keyword">new</span> <span class="type">Duck</span>(<span class="string">"a"</span>) :: <span class="keyword">new</span> <span class="type">Duck</span>(<span class="string">"b"</span>) :: <span class="type">Nil</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>(animals: <span class="type">List</span>[<span class="type">Animal</span>]): <span class="type">Unit</span> = println(animals.map(_.toString).mkString(<span class="string">", "</span>))</span><br><span class="line"></span><br><span class="line">toString(birds)</span><br><span class="line">toString(ducks)</span><br></pre></td></tr></table></figure>
-<p><code>toString</code> 参数为 <code>List[Animal]</code>，而：</p>
+<h2 id="Java-变长参数"><a href="#Java-变长参数" class="headerlink" title="Java 变长参数"></a>Java 变长参数</h2><p>Java 5 引入对变长参数的支持，并规定变长参数必须满足：</p>
+<ol>
+<li>最多只能有一个变长参数</li>
+<li>必须是参数列表中的 <strong>最后一个</strong> 参数</li>
+</ol>
+<p>变长参数只是数组参数的语法糖，更加方便而已：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(String... args)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(String[] args)</span></span>;</span><br></pre></td></tr></table></figure>
 <ul>
-<li><code>Duck</code> 和 <code>Bird</code> 是 <code>Animal</code> 的子类，<code>List</code> 是协变容器</li>
-<li>因此 <code>List[Bird]</code> 和 <code>List[Duck]</code> 是 <code>List[Animal]</code> 的子类</li>
+<li>两个 <code>foo</code> 定义完全相同，不能作为重载函数同时存在！</li>
 </ul>
-<p>所以 <code>List[Bird]</code> 和 <code>List[Duck]</code> 都可以调用 <code>toString</code> 函数（里式替换原理）。</p>
-<h2 id="逆变"><a href="#逆变" class="headerlink" title="逆变"></a>逆变</h2><p>协变比较容易理解，但逆变有点反直觉，其实函数定义就用到了逆变：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">PartialFunction</span>[-<span class="type">A</span>, +<span class="type">B</span>] <span class="keyword">extends</span> (<span class="params"><span class="type">A</span> =&gt; <span class="type">B</span></span>)</span></span><br></pre></td></tr></table></figure>
-<p>暂时忽略协变的返回类型，<code>PartialFunction</code> 的入参是逆变的，这有什么意义呢？</p>
-<p>假设有如下类定义：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span>(<span class="params">val name: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">Bird</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span>(<span class="params">name</span>)</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">Duck</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Bird</span>(<span class="params">name</span>)</span></span><br></pre></td></tr></table></figure>
-<p>假设现在需要实现一个函数，以获取 <code>Bird</code> 的名字：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> getBirdName: <span class="type">Bird</span> ⇒ <span class="type">String</span> = ???</span><br></pre></td></tr></table></figure>
-<p>但 <code>Animal</code> 标准库中已经有获取名字的函数了：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> getName: <span class="type">Animal</span> ⇒ <span class="type">String</span> = _.name</span><br></pre></td></tr></table></figure>
-<p><code>getName</code> 类型为 <code>Animal =&gt; String</code>，即 <code>Function[Animal, String]</code>，<code>getBirdName</code> 类型为 <code>Function[Bird, String]</code>，因为：</p>
+<p>例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> ... xs)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i : xs) &#123;</span><br><span class="line">    result += i;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以使用数组调用 <code>sum</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] xs = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;;</span><br><span class="line">sum(xs);</span><br></pre></td></tr></table></figure>
+<h2 id="Scala-变长参数"><a href="#Scala-变长参数" class="headerlink" title="Scala 变长参数"></a>Scala 变长参数</h2><p>Scala 同样支持变长参数，也必须满足同样的两个条件：</p>
+<ol>
+<li>最多一个</li>
+<li>只能是参数列表中最后一个</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(xs: <span class="type">Int</span>*): <span class="type">Int</span> = xs.sum</span><br></pre></td></tr></table></figure>
 <ul>
-<li><code>Function[-A, +B]</code> 入参是逆变的；</li>
-<li><code>Bird</code> 是 <code>Animal</code> 的子类；</li>
+<li>Scala 将 <code>xs</code> 作为 <code>Array[Int]</code> 处理</li>
 </ul>
-<p>因此 <code>Function[Animal, String]</code> 是 <code>Function[Bird, String]</code> 的子类，即 <code>getName</code> 是 <code>getBirdName</code> 的子类，所以可以用 <code>getName</code> 替换 <code>getBirdName</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> getBirdName: <span class="type">Bird</span> ⇒ <span class="type">String</span> = getName</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><code>Function1[-A, +B]</code> 入参为协变是否合理？</p>
-<p>非常合理，假如第一个参数是协变，即 <code>Function1[+A, +B]</code>，则：</p>
+<p>与 Java 类似，Scala 将变长参数作为序列（可变 <code>Array</code> ）来处理；与 Java 不同的是，虽然 <code>sum</code> 内部将 <code>xs</code> 作为序列处理，但却无法直接使用序列调用 <code>sum</code> 函数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))  <span class="comment">// 编译报错</span></span><br></pre></td></tr></table></figure>
+<p>使用 <code>_:*</code> 标识可以使用序列（<code>List</code> <code>Vector</code> <code>Seq</code> <code>Array</code>）来调用 <code>sum</code> 函数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sum(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br><span class="line">sum(<span class="type">Vector</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br><span class="line">sum(<span class="type">Array</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br><span class="line">sum(<span class="type">Seq</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br></pre></td></tr></table></figure>
 <ul>
-<li><code>Bird =&gt; String</code> 是 <code>Animal =&gt; String</code> 的子类</li>
+<li><code>_:*</code> 告诉编译器，将序列分解为 <strong>离散元素</strong></li>
 </ul>
-<p>因此可以用 <code>getBirdName</code> 替换 <code>getName</code>，<strong>但是</strong> <code>getName</code> 可以用于任意 <code>Animal</code>，虽然语法上 <code>getBirdName</code> 替换掉了 <code>getName</code>，但是 <code>getBirdName</code> 并不能用于任意 <code>Animal</code>，因此早晚会报错：</p>
-<p>若有 <code>Human extends Animal</code>，则 <code>getBirdName</code> 无法用于 <code>Human</code> 实例。</p>
-</blockquote>
-<p><code>Function1</code> 的返回类型为协变，这也非常合理，假设 <code>f</code> 返回类型为 <code>Bird</code>，<code>g</code> 返回类型为 <code>Duck</code>，自然可以用 <code>g</code> 替换 <code>f</code>，毕竟 <code>Duck</code> 可以替换 <code>Bird</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> f: () =&gt; <span class="type">Bird</span> = () =&gt; <span class="keyword">new</span> <span class="type">Duck</span>(<span class="string">"duck"</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="不变"><a href="#不变" class="headerlink" title="不变"></a>不变</h2><p>如果既没有 <code>+</code> 也没有 <code>-</code>，则默认为不变，即 <code>List[S]</code> 和 <code>List[T]</code> 没有任何关系。</p>
-<h2 id="Java-？"><a href="#Java-？" class="headerlink" title="Java ？"></a>Java ？</h2><p>Java 也支持 parametric polymorphism，因此也存在同样的问题，Java 也有自己的一套解决方式，留待另一篇博文解释。</p>
+<p>很多集合类的构造函数都使用了变长参数，例如 <code>List</code> <code>Map</code> 等。</p>
 
       
     </div>
@@ -538,7 +496,7 @@
           
             <a href="/tags/Scala/" rel="tag"># Scala</a>
           
-            <a href="/tags/类型系统/" rel="tag"># 类型系统</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
         </div>
       
@@ -551,8 +509,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/14/scala-string-ops/" rel="next" title="Scala 字符串揭秘">
-                <i class="fa fa-chevron-left"></i> Scala 字符串揭秘
+              <a href="/2018/05/20/2018-05-20-why-option/" rel="next" title="我们为什么需要 Option ？">
+                <i class="fa fa-chevron-left"></i> 我们为什么需要 Option ？
               </a>
             
           </div>
@@ -560,10 +518,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/15/expression-oriented-programming/" rel="prev" title="面向表达式编程">
-                面向表达式编程 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -737,7 +691,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#协变"><span class="nav-number">1.</span> <span class="nav-text">协变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逆变"><span class="nav-number">2.</span> <span class="nav-text">逆变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不变"><span class="nav-number">3.</span> <span class="nav-text">不变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-？"><span class="nav-number">4.</span> <span class="nav-text">Java ？</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-变长参数"><span class="nav-number">1.</span> <span class="nav-text">Java 变长参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala-变长参数"><span class="nav-number">2.</span> <span class="nav-text">Scala 变长参数</span></a></li></ol></div>
             
 
           </div>
@@ -911,9 +865,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/05/15/scala-variance/';
-        this.page.identifier = '2018/05/15/scala-variance/';
-        this.page.title = 'Scala 中的型变';
+        this.page.url = 'http://songkun.me/2018/05/20/2018-05-20-variable-arguments/';
+        this.page.identifier = '2018/05/20/2018-05-20-variable-arguments/';
+        this.page.title = '变长参数';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
