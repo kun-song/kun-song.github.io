@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="case 类适合对 不可变数据（immutable data）建模，主要用于模式匹配。 例如 JSON： 12345678abstract class JSONcase class JSeq(elements: List[JSON])           extends JSONcase class JObject(mappings: Map[String, JSON]) extends JSON">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-19T14:03:21.000Z">
+<meta property="og:updated_time" content="2018-05-20T01:48:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala case 类">
 <meta name="twitter:description" content="case 类适合对 不可变数据（immutable data）建模，主要用于模式匹配。 例如 JSON： 12345678abstract class JSONcase class JSeq(elements: List[JSON])           extends JSONcase class JObject(mappings: Map[String, JSON]) extends JSON">
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-19 22:03:21" itemprop="dateModified" datetime="2018-05-19T22:03:21+08:00">2018-05-19</time>
+                <time title="修改时间：2018-05-20 09:48:38" itemprop="dateModified" datetime="2018-05-20T09:48:38+08:00">2018-05-20</time>
               
             
           </span>
@@ -478,15 +478,10 @@
 <h2 id="构造器参数-→-隐式-val"><a href="#构造器参数-→-隐式-val" class="headerlink" title="构造器参数 → 隐式 val"></a>构造器参数 → 隐式 <code>val</code></h2><p>case 类构造器的参数被隐式声明为 <code>val</code>，因此将自动变成类中的 <strong><code>public</code> 字段</strong>：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> mappings = json.mappings</span><br></pre></td></tr></table></figure>
 <h2 id="toString-amp-equals-amp-hashCode"><a href="#toString-amp-equals-amp-hashCode" class="headerlink" title="toString &amp; equals &amp; hashCode"></a><code>toString</code> &amp; <code>equals</code> &amp; <code>hashCode</code></h2><p>自动生成这些方法并不稀奇，但 Scala 编译器生成的这些方法开箱即用：</p>
-<p><code>toString</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// json: JObject = JObject(Map(name -&gt; JString(Mike), age -&gt; JNumber(20.0)))</span></span><br><span class="line"><span class="keyword">val</span> json = <span class="type">JObject</span>(<span class="type">Map</span>(<span class="string">"name"</span> → <span class="type">JString</span>(<span class="string">"Mike"</span>), <span class="string">"age"</span> → <span class="type">JNumber</span>(<span class="number">20</span>)))</span><br></pre></td></tr></table></figure>
-<p><code>equals</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// true</span></span><br><span class="line">json == <span class="type">JObject</span>(<span class="type">Map</span>(<span class="string">"name"</span> → <span class="type">JString</span>(<span class="string">"Mike"</span>), <span class="string">"age"</span> → <span class="type">JNumber</span>(<span class="number">20</span>)))</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// json: JObject = JObject(Map(name -&gt; JString(Mike), age -&gt; JNumber(20.0)))</span></span><br><span class="line"><span class="keyword">val</span> json = <span class="type">JObject</span>(<span class="type">Map</span>(<span class="string">"name"</span> → <span class="type">JString</span>(<span class="string">"Mike"</span>), <span class="string">"age"</span> → <span class="type">JNumber</span>(<span class="number">20</span>)))</span><br><span class="line"></span><br><span class="line"><span class="comment">// true</span></span><br><span class="line">json == <span class="type">JObject</span>(<span class="type">Map</span>(<span class="string">"name"</span> → <span class="type">JString</span>(<span class="string">"Mike"</span>), <span class="string">"age"</span> → <span class="type">JNumber</span>(<span class="number">20</span>)))</span><br></pre></td></tr></table></figure>
 <ul>
 <li>Scala 自动将 <code>==</code> 代理给 <code>equals</code></li>
 </ul>
-<p><code>hashCode</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h2 id="copy-方法"><a href="#copy-方法" class="headerlink" title="copy 方法"></a><code>copy</code> 方法</h2><p><code>copy</code> 方法用于创建与现有实例（大部分）<strong>属性值相同</strong> 的新实例：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// list1: Cons[Int] = Cons(1,Cons(2,Nil))</span></span><br><span class="line"><span class="keyword">val</span> list1 = <span class="type">Cons</span>(<span class="number">1</span>, <span class="type">Cons</span>(<span class="number">2</span>, <span class="type">Nil</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// list2: Cons[Int] = Cons(1000,Cons(2,Nil))</span></span><br><span class="line"><span class="keyword">val</span> list2 = list1.copy(head = <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
 <ul>
@@ -553,6 +548,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/19/2018-05-19-scala-pattern-matching/" rel="prev" title="Scala 模式匹配">
+                Scala 模式匹配 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -636,7 +635,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
