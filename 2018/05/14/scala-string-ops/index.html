@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="String 源码剖析Scala 中的 String 其实仅仅是 java.lang.String 的别名，在 scala.Predef 中可以找到其定义： 1type String = java.lang.String 明明 Scala 的字符串有很多非常有用的函数啊，难道都是错觉？">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-15T14:50:23.000Z">
+<meta property="og:updated_time" content="2018-05-20T14:21:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala 字符串揭秘">
 <meta name="twitter:description" content="String 源码剖析Scala 中的 String 其实仅仅是 java.lang.String 的别名，在 scala.Predef 中可以找到其定义： 1type String = java.lang.String 明明 Scala 的字符串有很多非常有用的函数啊，难道都是错觉？">
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-15 22:50:23" itemprop="dateModified" datetime="2018-05-15T22:50:23+08:00">2018-05-15</time>
+                <time title="修改时间：2018-05-20 22:21:27" itemprop="dateModified" datetime="2018-05-20T22:21:27+08:00">2018-05-20</time>
               
             
           </span>
@@ -479,7 +479,10 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> b =</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    #This is</span></span><br><span class="line"><span class="string">    #a scala</span></span><br><span class="line"><span class="string">    #line</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin('#')</span><br></pre></td></tr></table></figure>
 <p>输出与使用 <code>|</code> 完全相同：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b: <span class="type">String</span> = </span><br><span class="line"><span class="type">This</span> is</span><br><span class="line">a scala</span><br><span class="line">line</span><br></pre></td></tr></table></figure>
-<h3 id="字符串插值"><a href="#字符串插值" class="headerlink" title="字符串插值"></a>字符串插值</h3><h4 id="1-s-插值"><a href="#1-s-插值" class="headerlink" title="1. s 插值"></a>1. s 插值</h4><p>在任意字符串前面加 <code>s</code> 后，就可以在该字符串中使用 <strong>变量</strong> 和 <strong>表达式</strong> 了：</p>
+<h3 id="字符串插值"><a href="#字符串插值" class="headerlink" title="字符串插值"></a>字符串插值</h3><blockquote>
+<p>字符串插值是通过将 <code>String</code> 隐式转换为 <code>StringContext</code> 实现的，Scala 允许我们自定义字符串插值器。</p>
+</blockquote>
+<h4 id="1-s-插值"><a href="#1-s-插值" class="headerlink" title="1. s 插值"></a>1. s 插值</h4><p>在任意字符串前面加 <code>s</code> 后，就可以在该字符串中使用 <strong>变量</strong> 和 <strong>表达式</strong> 了：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="number">111</span></span><br><span class="line"><span class="keyword">val</span> b = <span class="number">6</span></span><br><span class="line"><span class="keyword">val</span> c = <span class="string">s"a + b = <span class="subst">$&#123;a + b&#125;</span>"</span></span><br></pre></td></tr></table></figure>
 <h4 id="2-f-插值"><a href="#2-f-插值" class="headerlink" title="2. f 插值"></a>2. f 插值</h4><p>在字符串前面加 <code>f</code>，以简单格式化字符串：</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> a = <span class="number">111.111111</span></span><br><span class="line"><span class="keyword">val</span> b = <span class="number">6</span></span><br><span class="line"><span class="keyword">val</span> c = <span class="string">f"a * b = <span class="subst">$&#123;a * b&#125;</span>%2.2f"</span></span><br></pre></td></tr></table></figure>

@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="Java 代码中，若方法无法返回有意义的值，有时贪图方便，会直接返回 null，并期待调用者自行对返回值判空。 这样做存在两个弊端：  调用者无从得知方法是否会返回 null Java 不强制 null 检查 空指针检查是样板代码，增加代码噪声  因此线上运行时，经常出现空指针异常，而遇到之后也不过头疼医头脚痛医脚，在出现问题的地方加个检查完事。 为避免空指针异常，Effective Java 建">
+  <meta name="description" content="Java 代码中，若方法无法返回有意义的值，有时贪图方便，会直接返回 null，并期待调用者自行对返回值判空。 这样做存在两个弊端：  调用者无从得知方法是否会返回 null Java 不强制 null 检查 空指针检查是样板代码，会增加代码噪声">
 <meta name="keywords" content="Scala,fp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="我们为什么需要 Option ？">
 <meta property="og:url" content="http://songkun.me/2018/05/20/2018-05-20-why-option/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="Java 代码中，若方法无法返回有意义的值，有时贪图方便，会直接返回 null，并期待调用者自行对返回值判空。 这样做存在两个弊端：  调用者无从得知方法是否会返回 null Java 不强制 null 检查 空指针检查是样板代码，增加代码噪声  因此线上运行时，经常出现空指针异常，而遇到之后也不过头疼医头脚痛医脚，在出现问题的地方加个检查完事。 为避免空指针异常，Effective Java 建">
+<meta property="og:description" content="Java 代码中，若方法无法返回有意义的值，有时贪图方便，会直接返回 null，并期待调用者自行对返回值判空。 这样做存在两个弊端：  调用者无从得知方法是否会返回 null Java 不强制 null 检查 空指针检查是样板代码，会增加代码噪声">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-20T14:10:58.000Z">
+<meta property="og:updated_time" content="2018-05-20T14:17:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我们为什么需要 Option ？">
-<meta name="twitter:description" content="Java 代码中，若方法无法返回有意义的值，有时贪图方便，会直接返回 null，并期待调用者自行对返回值判空。 这样做存在两个弊端：  调用者无从得知方法是否会返回 null Java 不强制 null 检查 空指针检查是样板代码，增加代码噪声  因此线上运行时，经常出现空指针异常，而遇到之后也不过头疼医头脚痛医脚，在出现问题的地方加个检查完事。 为避免空指针异常，Effective Java 建">
+<meta name="twitter:description" content="Java 代码中，若方法无法返回有意义的值，有时贪图方便，会直接返回 null，并期待调用者自行对返回值判空。 这样做存在两个弊端：  调用者无从得知方法是否会返回 null Java 不强制 null 检查 空指针检查是样板代码，会增加代码噪声">
 
 
 
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2018-05-20 21:43:42 / 修改时间：22:10:58" itemprop="dateCreated datePublished" datetime="2018-05-20T21:43:42+08:00">2018-05-20</time>
+              <time title="创建时间：2018-05-20 21:43:42 / 修改时间：22:17:24" itemprop="dateCreated datePublished" datetime="2018-05-20T21:43:42+08:00">2018-05-20</time>
             
 
             
@@ -445,8 +445,9 @@
 <ol>
 <li>调用者无从得知方法是否会返回 <code>null</code></li>
 <li>Java 不强制 <code>null</code> 检查</li>
-<li>空指针检查是样板代码，增加代码噪声</li>
+<li>空指针检查是样板代码，会增加代码噪声</li>
 </ol>
+<a id="more"></a>
 <p>因此线上运行时，经常出现空指针异常，而遇到之后也不过头疼医头脚痛医脚，在出现问题的地方加个检查完事。</p>
 <p>为避免空指针异常，Effective Java 建议若方法返回类型为 <strong>集合</strong>，则通过返回空集合以避免 <code>NullPointerException</code>。</p>
 <p>若返回类型不是集合呢？又该用什么方式避免空指针呢？</p>
