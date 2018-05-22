@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="模式匹配是一种将值（value）与模式（pattern）进行匹配的机制，匹配成功还可以对值进行 析构，非常强大。 模式匹配在函数式编程语言中广泛存在，例如 Haskell、ML、OCaml、Erlang 和 Elixir 等，Scala 也不例外。">
+<meta name="keywords" content="Scala,fp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scala | 模式匹配">
+<meta property="og:url" content="http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="模式匹配是一种将值（value）与模式（pattern）进行匹配的机制，匹配成功还可以对值进行 析构，非常强大。 模式匹配在函数式编程语言中广泛存在，例如 Haskell、ML、OCaml、Erlang 和 Elixir 等，Scala 也不例外。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T14:37:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scala | 模式匹配">
+<meta name="twitter:description" content="模式匹配是一种将值（value）与模式（pattern）进行匹配的机制，匹配成功还可以对值进行 析构，非常强大。 模式匹配在函数式编程语言中广泛存在，例如 Haskell、ML、OCaml、Erlang 和 Elixir 等，Scala 也不例外。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Scala | 模式匹配 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Scala | 模式匹配
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-19 22:16:37" itemprop="dateCreated datePublished" datetime="2018-05-19T22:16:37+08:00">2018-05-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-22 22:37:36" itemprop="dateModified" datetime="2018-05-22T22:37:36+08:00">2018-05-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/19/2018-05-19-scala-pattern-matching/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/19/2018-05-19-scala-pattern-matching/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>模式匹配是一种将值（value）与模式（pattern）进行匹配的机制，匹配成功还可以对值进行 <strong>析构</strong>，非常强大。</p>
+<p>模式匹配在函数式编程语言中广泛存在，例如 Haskell、ML、OCaml、Erlang 和 Elixir 等，Scala 也不例外。</p>
+<a id="more"></a>
+<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><p>模式匹配由 3 部分组成：</p>
+<ol>
+<li>被配置的值（或表达式）</li>
+<li><code>match</code> 关键字</li>
+<li><code>case</code> 子句（也称 alternatives）</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">translate</span></span>(x: <span class="type">Int</span>): <span class="type">String</span> = x <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">0</span> ⇒ <span class="string">"zero"</span></span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span> ⇒ <span class="string">"one"</span></span><br><span class="line">  <span class="keyword">case</span> <span class="number">2</span> ⇒ <span class="string">"two"</span></span><br><span class="line">  <span class="keyword">case</span> _ ⇒ <span class="string">"many"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>模式匹配是表达式，因此也有值</li>
+</ul>
+<p>case 子句格式为：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">模式 ⇒ 表达式</span><br></pre></td></tr></table></figure>
+<p>Scala 提供了多种匹配模式，下面一一介绍。</p>
+<h2 id="字面值（常量）模式"><a href="#字面值（常量）模式" class="headerlink" title="字面值（常量）模式"></a>字面值（常量）模式</h2><p>匹配 <code>Int</code> 字面值：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">translate</span></span>(n: <span class="type">Int</span>): <span class="type">String</span> = n <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span> ⇒ <span class="string">"one"</span></span><br><span class="line">  <span class="keyword">case</span> <span class="number">2</span> ⇒ <span class="string">"two"</span></span><br><span class="line">  <span class="keyword">case</span> <span class="number">3</span> ⇒ <span class="string">"three"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="通配符模式"><a href="#通配符模式" class="headerlink" title="通配符模式"></a>通配符模式</h2><p><code>translate</code> 只能处理 1-3 的整数，<code>translate(4)</code> 会抛出 <code>MatchError</code> 错误，可用通配符解决：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">translate</span></span>(n: <span class="type">Int</span>): <span class="type">String</span> = n <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span> ⇒ <span class="string">"one"</span></span><br><span class="line">  <span class="keyword">case</span> <span class="number">2</span> ⇒ <span class="string">"two"</span></span><br><span class="line">  <span class="keyword">case</span> <span class="number">3</span> ⇒ <span class="string">"three"</span></span><br><span class="line">  <span class="keyword">case</span> _ ⇒ <span class="string">"many"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通配符 <code>_</code> 将匹配除 1 2 3 以外的所有整数</li>
+</ul>
+<h2 id="类型模式"><a href="#类型模式" class="headerlink" title="类型模式"></a>类型模式</h2><p>根据值的类型进行匹配：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recover</span></span>(cause: <span class="type">Throwable</span>): <span class="type">String</span> = cause <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> _: <span class="type">IllegalArgumentException</span> ⇒ <span class="string">"recover from IllegalArgumentException"</span></span><br><span class="line">  <span class="keyword">case</span> _: <span class="type">NullPointerException</span>     ⇒ <span class="string">"recover from NullPointerException"</span></span><br><span class="line">  <span class="keyword">case</span> _: <span class="type">ArithmeticException</span>      ⇒ <span class="string">"recover from ArithmeticException"</span></span><br><span class="line">  <span class="keyword">case</span> e                           ⇒ <span class="string">s"sorry, I can't recover from <span class="subst">$e</span>"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// recover from IllegalArgumentException</span></span><br><span class="line">recover(<span class="keyword">new</span> <span class="type">IllegalArgumentException</span>)</span><br><span class="line"><span class="comment">// sorry, I can't recover from java.lang.RuntimeException</span></span><br><span class="line">recover(<span class="keyword">new</span> <span class="type">RuntimeException</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="元组模式"><a href="#元组模式" class="headerlink" title="元组模式"></a>元组模式</h2><p>元组：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span></span>(info: (<span class="type">String</span>, <span class="type">Int</span>)): <span class="type">Boolean</span> = info <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> (name, _) ⇒ !name.isEmpty</span><br><span class="line">  <span class="keyword">case</span> (_, age)  ⇒ age &gt;= <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="序列模式"><a href="#序列模式" class="headerlink" title="序列模式"></a>序列模式</h2><p>列表：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(xs: <span class="type">List</span>[<span class="type">Int</span>]): <span class="type">Int</span> = xs <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="type">Nil</span>      ⇒ <span class="number">0</span></span><br><span class="line">  <span class="keyword">case</span> hd :: tl ⇒ hd + sum(tl)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="守卫"><a href="#守卫" class="headerlink" title="守卫"></a>守卫</h2><p>可通过守卫进一步 <strong>约束</strong> 模式匹配：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span></span>(hostAndPort: (<span class="type">String</span>, <span class="type">Int</span>)): <span class="type">String</span> = hostAndPort <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> (_, port) <span class="keyword">if</span> port == <span class="number">0</span> ⇒ <span class="string">"Use a random port"</span></span><br><span class="line">  <span class="keyword">case</span> (host, port)           ⇒ <span class="string">s"Use <span class="subst">$host</span>:<span class="subst">$port</span>"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">check((<span class="string">"localhost"</span>, <span class="number">0</span>))</span><br><span class="line">check((<span class="string">"127.0.0.1"</span>, <span class="number">27017</span>))</span><br></pre></td></tr></table></figure>
+<h2 id="构造器模式"><a href="#构造器模式" class="headerlink" title="构造器模式"></a>构造器模式</h2><p>构造器模式专用于 case 类：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Student</span>(<span class="params">name: <span class="type">String</span>, age: <span class="type">Int</span></span>) <span class="keyword">extends</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Worker</span>(<span class="params">name: <span class="type">String</span>, age: <span class="type">Int</span></span>) <span class="keyword">extends</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">def</span> <span class="title">f</span>(<span class="params">person: <span class="type">Person</span></span>)</span>: <span class="type">String</span> = person <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="type">Student</span>(name, age) ⇒ <span class="string">s"<span class="subst">$name</span> is a <span class="subst">$age</span> years old student!"</span></span><br><span class="line">  <span class="keyword">case</span> <span class="type">Worker</span>(name, age)  ⇒ <span class="string">s"<span class="subst">$name</span> is a <span class="subst">$age</span> years old worker!"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>首先匹配 case 类的类型，然后匹配参数</li>
+</ul>
+<h2 id="变量绑定"><a href="#变量绑定" class="headerlink" title="变量绑定"></a>变量绑定</h2><p>// TODO</p>
+<h2 id="提取器"><a href="#提取器" class="headerlink" title="提取器"></a>提取器</h2><p>// TODO</p>
+<h2 id="模式匹配中的变量、常量"><a href="#模式匹配中的变量、常量" class="headerlink" title="模式匹配中的变量、常量"></a>模式匹配中的变量、常量</h2><p>// TODO</p>
+<h2 id="与-switch-语句区别"><a href="#与-switch-语句区别" class="headerlink" title="与 switch 语句区别"></a>与 switch 语句区别</h2><p>对于 Java 背景的读者而言，模式匹配可以视为加强版的 switch 语句，但有如下区别：</p>
+<ul>
+<li>模式匹配中的 <code>match</code> 语句是表达式，有计算结果</li>
+<li>模式匹配中的 case 子句无需手动 break</li>
+<li>配合封闭类，Scala 编译器可以保证模式匹配 <strong>无遗漏分支</strong></li>
+</ul>
+<blockquote>
+<p>实际上，模式匹配仅仅是恰好能完成 switch 的功能而已，二者概念上并无太大关系。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Scala/" rel="tag"># Scala</a>
+          
+            <a href="/tags/fp/" rel="tag"># fp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/18/2018-05-18-scala-case-class/" rel="next" title="Scala | case 类">
+                <i class="fa fa-chevron-left"></i> Scala | case 类
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/20/2018-05-20-why-option/" rel="prev" title="我们为什么需要 Option ？">
+                我们为什么需要 Option ？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本语法"><span class="nav-number">1.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字面值（常量）模式"><span class="nav-number">2.</span> <span class="nav-text">字面值（常量）模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通配符模式"><span class="nav-number">3.</span> <span class="nav-text">通配符模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型模式"><span class="nav-number">4.</span> <span class="nav-text">类型模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#元组模式"><span class="nav-number">5.</span> <span class="nav-text">元组模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列模式"><span class="nav-number">6.</span> <span class="nav-text">序列模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#守卫"><span class="nav-number">7.</span> <span class="nav-text">守卫</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造器模式"><span class="nav-number">8.</span> <span class="nav-text">构造器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量绑定"><span class="nav-number">9.</span> <span class="nav-text">变量绑定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提取器"><span class="nav-number">10.</span> <span class="nav-text">提取器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模式匹配中的变量、常量"><span class="nav-number">11.</span> <span class="nav-text">模式匹配中的变量、常量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与-switch-语句区别"><span class="nav-number">12.</span> <span class="nav-text">与 switch 语句区别</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/';
+        this.page.identifier = '2018/05/19/2018-05-19-scala-pattern-matching/';
+        this.page.title = 'Scala | 模式匹配';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

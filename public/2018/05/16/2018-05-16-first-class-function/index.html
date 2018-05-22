@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="若在某编程语言中：  函数可以作为 函数参数 函数可以作为 函数返回值 可以将函数 赋值 给变量 可以将函数 存储 在数据结构（List Map 等）中 支持匿名函数/函数字面值（部分编程语言专家这样认为）  则称该语言具有头等函数（first-class function），具备头等函数的语言中，函数值与 普通值（如 Int String 值）无任何区别，它们仅仅是函数类型（在 Scala 中，">
+<meta name="keywords" content="Scala,fp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="头等函数">
+<meta property="og:url" content="http://songkun.me/2018/05/16/2018-05-16-first-class-function/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="若在某编程语言中：  函数可以作为 函数参数 函数可以作为 函数返回值 可以将函数 赋值 给变量 可以将函数 存储 在数据结构（List Map 等）中 支持匿名函数/函数字面值（部分编程语言专家这样认为）  则称该语言具有头等函数（first-class function），具备头等函数的语言中，函数值与 普通值（如 Int String 值）无任何区别，它们仅仅是函数类型（在 Scala 中，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T14:37:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="头等函数">
+<meta name="twitter:description" content="若在某编程语言中：  函数可以作为 函数参数 函数可以作为 函数返回值 可以将函数 赋值 给变量 可以将函数 存储 在数据结构（List Map 等）中 支持匿名函数/函数字面值（部分编程语言专家这样认为）  则称该语言具有头等函数（first-class function），具备头等函数的语言中，函数值与 普通值（如 Int String 值）无任何区别，它们仅仅是函数类型（在 Scala 中，">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/05/16/2018-05-16-first-class-function/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>头等函数 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/16/2018-05-16-first-class-function/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">头等函数
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-16 20:38:12" itemprop="dateCreated datePublished" datetime="2018-05-16T20:38:12+08:00">2018-05-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-22 22:37:36" itemprop="dateModified" datetime="2018-05-22T22:37:36+08:00">2018-05-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/16/2018-05-16-first-class-function/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/16/2018-05-16-first-class-function/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>若在某编程语言中：</p>
+<ul>
+<li>函数可以作为 <strong>函数参数</strong></li>
+<li>函数可以作为 <strong>函数返回值</strong></li>
+<li>可以将函数 <strong>赋值</strong> 给变量</li>
+<li>可以将函数 <strong>存储</strong> 在数据结构（<code>List</code> <code>Map</code> 等）中</li>
+<li>支持匿名函数/函数字面值（部分编程语言专家这样认为）</li>
+</ul>
+<p>则称该语言具有头等函数（first-class function），具备头等函数的语言中，函数值与 <strong>普通值</strong>（如 <code>Int</code> <code>String</code> 值）无任何区别，它们仅仅是函数类型（在 Scala 中，函数类型为 <code>FunctionN</code>）的值而已。</p>
+<a id="more"></a>
+<h2 id="头等函数实现难点"><a href="#头等函数实现难点" class="headerlink" title="头等函数实现难点"></a>头等函数实现难点</h2><p>对函数式编程语言而言，头等函数是必须品，因为函数式编程风格大量使用高阶函数，若不支持 first-class function，则高阶函数就无从说起了。</p>
+<p>但实现头等函数并不容易，历史上把实现头等函数遇到的难题称为 <a href="https://en.wikipedia.org/wiki/Funarg_problem" target="_blank" rel="noopener">Funarg problem</a>（funarg 即 function argument），即：</p>
+<blockquote>
+<p><strong>嵌套函数</strong> 或 <strong>匿名函数</strong> 中可以 <strong>直接引用</strong>（即不是通过参数传递方式引用）该函数 <strong>定义时</strong> 上下文环境中的标识符，但该标识符可能不在该函数 <strong>调用时</strong> 的上下文环境中，如何处理该场景？</p>
+</blockquote>
+<p>通俗地讲，即函数 <code>f</code> 在函数 <code>g</code> 的函数体内定义，且 <code>f</code> 引用了自己局部变量以外的自由变量，之后 <code>f</code> 作为 <code>g</code> 的返回值返回，然后调用 <code>f</code>，此时 <code>f</code> 已经脱离了定义它的上下文环境，如何处理它引用的自由变量呢？</p>
+<p>早期的命令式编程语言通过袋鼠策略绕过了该问题：</p>
+<ul>
+<li>不支持函数作为返回值（Algol），或</li>
+<li>禁止嵌套函数，进而消除非局部变量引用（C 语言）</li>
+</ul>
+<p>早期的函数式编程语言 Lisp 通过 <a href="https://en.wikipedia.org/wiki/Dynamic_scoping" target="_blank" rel="noopener">动态作用域</a> 解决该问题：</p>
+<ul>
+<li>在函数 <strong>调用时</strong>（而非定义时）的上下文环境中查找自由变量的值</li>
+</ul>
+<p>动态作用域是设计败笔，因此 Scheme 最早引入 <a href="https://en.wikipedia.org/wiki/Lexically_scoped" target="_blank" rel="noopener">词法作用域</a> 解决该问题：</p>
+<ul>
+<li>将函数引用视为 <strong>闭包</strong>，而非简单的 <strong>函数指针</strong>，闭包中保存两部分内容：<ul>
+<li>函数 <strong>定义时</strong> 的自由变量</li>
+<li>函数代码</li>
+</ul>
+</li>
+</ul>
+<h2 id="不同语言对头等函数的支持程度"><a href="#不同语言对头等函数的支持程度" class="headerlink" title="不同语言对头等函数的支持程度"></a>不同语言对头等函数的支持程度</h2><p>头等函数并非函数式编程语言专属，各编程语言家族或多或少都支持一些头等函数特性，例如：</p>
+<ul>
+<li>函数式语言<ul>
+<li>Scheme ML Haskell F# Scala 等支持 first-class function 的所有特性</li>
+<li>Lisp 由于动态作用域的错误设计，并没有正确理解 first-class function 的正确行为</li>
+</ul>
+</li>
+<li>脚本语言<ul>
+<li>如 Perl Python Lua JavaScript</li>
+</ul>
+</li>
+<li>命令式语言（Funarg 问题由返回嵌套定义的函数引起，命令式语言通过不同方式绕过该问题）：<ul>
+<li>C 语言家族支持函数作为参数、返回值，但禁止嵌套函数，以避免 Funarg problem</li>
+<li>Algol 支持函数作为参数、嵌套函数，但不支持函数作为返回值，同样是为了避免 Funarg problem</li>
+</ul>
+</li>
+</ul>
+<p>通常认为头等函数的价值在于：</p>
+<ul>
+<li>返回值返回嵌套定义的、捕获了非局部变量的函数</li>
+</ul>
+<p>对命令式语言而言，它们或不支持函数返回值（Algol），或不支持嵌套函数（C 语言），因此一般不认为其具有头等函数。</p>
+<hr>
+<p>参考：</p>
+<ul>
+<li>维基百科 <a href="https://en.wikipedia.org/wiki/First-class_function" target="_blank" rel="noopener">First-class function</a></li>
+<li>维基百科 <a href="https://en.wikipedia.org/wiki/Funarg_problem" target="_blank" rel="noopener">Gunarg problem</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Scala/" rel="tag"># Scala</a>
+          
+            <a href="/tags/fp/" rel="tag"># fp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/16/scala-anonymous-function/" rel="next" title="匿名函数">
+                <i class="fa fa-chevron-left"></i> 匿名函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/16/2018-05-16-tail-recursion/" rel="prev" title="尾递归">
+                尾递归 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#头等函数实现难点"><span class="nav-number">1.</span> <span class="nav-text">头等函数实现难点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同语言对头等函数的支持程度"><span class="nav-number">2.</span> <span class="nav-text">不同语言对头等函数的支持程度</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/05/16/2018-05-16-first-class-function/';
+        this.page.identifier = '2018/05/16/2018-05-16-first-class-function/';
+        this.page.title = '头等函数';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
