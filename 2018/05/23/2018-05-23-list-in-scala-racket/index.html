@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="几乎所有编程语言都有 List 数据结构，尤其在函数式编程语言中，List 更是举足轻重，Lisp 甚至只用 List 就能一力降十会，可见其威力之无穷。 函数式编程语言中的 List 用法大同小异，本文比较 Racket 和 Scala 中 List 的惯用法，欣赏一下 List 的优美之处。 Racket 是动态函数式语言，Scala 是静态函数式语言，两者语言特性差别很大，但核心思想惊人的一">
+  <meta name="description" content="几乎所有编程语言都有 List 数据结构，尤其在函数式编程语言中，List 更是举足轻重，Lisp 甚至只用 List 就能一力降十会，可见其威力之无穷。 函数式编程语言中的 List 用法大同小异，本文简单对比 Racket 和 Scala 中 List 的使用，同时欣赏一下 List 的优美之处。 Racket 是动态函数式语言，Scala 是静态函数式语言，两者语言特性差别很大，但核心思想惊">
 <meta name="keywords" content="Scala,fp,Racket">
 <meta property="og:type" content="article">
 <meta property="og:title" content="天下 List 是一家">
 <meta property="og:url" content="http://songkun.me/2018/05/23/2018-05-23-list-in-scala-racket/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="几乎所有编程语言都有 List 数据结构，尤其在函数式编程语言中，List 更是举足轻重，Lisp 甚至只用 List 就能一力降十会，可见其威力之无穷。 函数式编程语言中的 List 用法大同小异，本文比较 Racket 和 Scala 中 List 的惯用法，欣赏一下 List 的优美之处。 Racket 是动态函数式语言，Scala 是静态函数式语言，两者语言特性差别很大，但核心思想惊人的一">
+<meta property="og:description" content="几乎所有编程语言都有 List 数据结构，尤其在函数式编程语言中，List 更是举足轻重，Lisp 甚至只用 List 就能一力降十会，可见其威力之无穷。 函数式编程语言中的 List 用法大同小异，本文简单对比 Racket 和 Scala 中 List 的使用，同时欣赏一下 List 的优美之处。 Racket 是动态函数式语言，Scala 是静态函数式语言，两者语言特性差别很大，但核心思想惊">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-23T14:16:08.000Z">
+<meta property="og:updated_time" content="2018-05-23T15:02:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="天下 List 是一家">
-<meta name="twitter:description" content="几乎所有编程语言都有 List 数据结构，尤其在函数式编程语言中，List 更是举足轻重，Lisp 甚至只用 List 就能一力降十会，可见其威力之无穷。 函数式编程语言中的 List 用法大同小异，本文比较 Racket 和 Scala 中 List 的惯用法，欣赏一下 List 的优美之处。 Racket 是动态函数式语言，Scala 是静态函数式语言，两者语言特性差别很大，但核心思想惊人的一">
+<meta name="twitter:description" content="几乎所有编程语言都有 List 数据结构，尤其在函数式编程语言中，List 更是举足轻重，Lisp 甚至只用 List 就能一力降十会，可见其威力之无穷。 函数式编程语言中的 List 用法大同小异，本文简单对比 Racket 和 Scala 中 List 的使用，同时欣赏一下 List 的优美之处。 Racket 是动态函数式语言，Scala 是静态函数式语言，两者语言特性差别很大，但核心思想惊">
 
 
 
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2018-05-23 21:12:07 / 修改时间：22:16:08" itemprop="dateCreated datePublished" datetime="2018-05-23T21:12:07+08:00">2018-05-23</time>
+              <time title="创建时间：2018-05-23 21:12:07 / 修改时间：23:02:52" itemprop="dateCreated datePublished" datetime="2018-05-23T21:12:07+08:00">2018-05-23</time>
             
 
             
@@ -441,7 +441,7 @@
 
       
         <p>几乎所有编程语言都有 <code>List</code> 数据结构，尤其在函数式编程语言中，<code>List</code> 更是举足轻重，Lisp 甚至只用 <code>List</code> 就能一力降十会，可见其威力之无穷。</p>
-<p>函数式编程语言中的 <code>List</code> 用法大同小异，本文比较 Racket 和 Scala 中 <code>List</code> 的惯用法，欣赏一下 <code>List</code> 的优美之处。</p>
+<p>函数式编程语言中的 <code>List</code> 用法大同小异，本文简单对比 Racket 和 Scala 中 <code>List</code> 的使用，同时欣赏一下 <code>List</code> 的优美之处。</p>
 <p>Racket 是动态函数式语言，Scala 是静态函数式语言，两者语言特性差别很大，但核心思想惊人的一致。</p>
 <a id="more"></a>
 <h2 id="构造"><a href="#构造" class="headerlink" title="构造"></a>构造</h2><blockquote>
@@ -544,6 +544,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/05/24/2018-05-24-java-volatile-1/" rel="prev" title="volatile 初探">
+                volatile 初探 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -626,7 +630,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -670,7 +674,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="变长参数是很常见的语言特性，Java 和 Scala 都支持，使用很简单，本文介绍其在 Java 和 Scala 中的基本用法。">
-<meta name="keywords" content="Scala,Java">
+  <meta name="description" content="并发编程中的 同步机制 可以实现：  对共享状态的排他访问 内存可见性  Java 保证 共享变量 一致性的方式有：  synchronized（监视器锁） volatile 变量 CAS（如 AtomicInteger） 并发包中的高级抽象">
+<meta name="keywords" content="Java,并发,JVM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="变长参数">
-<meta property="og:url" content="http://songkun.me/2018/05/20/2018-05-20-variable-arguments/index.html">
+<meta property="og:title" content="volatile 初探">
+<meta property="og:url" content="http://songkun.me/2018/05/24/2018-05-24-java-volatile-1/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="变长参数是很常见的语言特性，Java 和 Scala 都支持，使用很简单，本文介绍其在 Java 和 Scala 中的基本用法。">
+<meta property="og:description" content="并发编程中的 同步机制 可以实现：  对共享状态的排他访问 内存可见性  Java 保证 共享变量 一致性的方式有：  synchronized（监视器锁） volatile 变量 CAS（如 AtomicInteger） 并发包中的高级抽象">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-22T15:06:49.000Z">
+<meta property="og:updated_time" content="2018-05-24T14:45:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="变长参数">
-<meta name="twitter:description" content="变长参数是很常见的语言特性，Java 和 Scala 都支持，使用很简单，本文介绍其在 Java 和 Scala 中的基本用法。">
+<meta name="twitter:title" content="volatile 初探">
+<meta name="twitter:description" content="并发编程中的 同步机制 可以实现：  对共享状态的排他访问 内存可见性  Java 保证 共享变量 一致性的方式有：  synchronized（监视器锁） volatile 变量 CAS（如 AtomicInteger） 并发包中的高级抽象">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/20/2018-05-20-variable-arguments/"/>
+  <link rel="canonical" href="http://songkun.me/2018/05/24/2018-05-24-java-volatile-1/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>变长参数 | 随便写写</title>
+  <title>volatile 初探 | 随便写写</title>
   
 
 
@@ -331,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/20/2018-05-20-variable-arguments/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/24/2018-05-24-java-volatile-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">变长参数
+          <h1 class="post-title" itemprop="name headline">volatile 初探
               
             
           </h1>
@@ -373,24 +373,12 @@
                 
               
 
-              <time title="创建时间：2018-05-20 22:27:44" itemprop="dateCreated datePublished" datetime="2018-05-20T22:27:44+08:00">2018-05-20</time>
+              <time title="创建时间：2018-05-24 21:41:45 / 修改时间：22:45:47" itemprop="dateCreated datePublished" datetime="2018-05-24T21:41:45+08:00">2018-05-24</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-05-22 23:06:49" itemprop="dateModified" datetime="2018-05-22T23:06:49+08:00">2018-05-22</time>
               
             
           </span>
@@ -422,9 +410,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/20/2018-05-20-variable-arguments/#comments" itemprop="discussionUrl">
+                <a href="/2018/05/24/2018-05-24-java-volatile-1/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/20/2018-05-20-variable-arguments/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/05/24/2018-05-24-java-volatile-1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -452,48 +440,99 @@
       
 
       
-        <p>变长参数是很常见的语言特性，Java 和 Scala 都支持，使用很简单，本文介绍其在 Java 和 Scala 中的基本用法。</p>
+        <p>并发编程中的 <strong>同步机制</strong> 可以实现：</p>
+<ol>
+<li>对共享状态的排他访问</li>
+<li>内存可见性</li>
+</ol>
+<p>Java 保证 <strong>共享变量</strong> 一致性的方式有：</p>
+<ul>
+<li><code>synchronized</code>（监视器锁）</li>
+<li><code>volatile</code> 变量</li>
+<li>CAS（如 <code>AtomicInteger</code>）</li>
+<li>并发包中的高级抽象</li>
+</ul>
 <a id="more"></a>
-<h2 id="Java-变长参数"><a href="#Java-变长参数" class="headerlink" title="Java 变长参数"></a>Java 变长参数</h2><p>Java 5 引入对变长参数的支持，并规定变长参数必须满足：</p>
+<h2 id="synchronized-的劣势"><a href="#synchronized-的劣势" class="headerlink" title="synchronized 的劣势"></a><code>synchronized</code> 的劣势</h2><p><code>synchronized</code> 是最古老的同步机制，通过监视器锁获取对共享变量的 <strong>排他</strong> 访问，肯定能保证一致性性，但有如下缺点：</p>
+<ul>
+<li>上下文切换开销很大，若使用锁的时间比上下文切换短的多，则得不偿失</li>
+<li>线程调度<ul>
+<li>多线程竞争锁时，只有一个线程会成功获取锁，其余线程将 <strong>挂起</strong> 等待</li>
+<li>挂起的线程恢复执行时，又必须等待其他线程执行完自己的 <strong>时间片</strong> 后，才能被调度执行</li>
+<li>挂起线程、恢复线程开销很大，且中间存在较长时间的中断</li>
+<li>线程挂起、等待执行时，不能做任何其他事情</li>
+</ul>
+</li>
+</ul>
+<p><code>volatile</code> 是非常轻量级的 <code>synchronized</code>，因为使用 <code>volatile</code> 变量时不会发生 <strong>上下文切换</strong> 和 <strong>线程调度</strong>，从内存可见性角度看：</p>
+<ul>
+<li>写入 <code>volatile</code> 变量相当于 <strong>退出</strong> 同步代码块</li>
+<li>读取 <code>volatile</code> 变量相当于 <strong>进入</strong> 同步代码块</li>
+</ul>
+<blockquote>
+<p><code>synchronized</code> 既可以保证可见性，又可以保证原子性；<code>volatile</code> 变量只能保证可见性。</p>
+</blockquote>
+<p><code>volatile</code> 可以保证 <strong>共享变量</strong> 的内存可见性，即多线程访问共享变量时，一个线程修改了该变量，其他线程读取的都是修改后的 <strong>最新值</strong>。</p>
+<p>Java 语言规范对 <code>volatile</code> 定义如下：</p>
+<blockquote>
+<p>The Java programming language allows threads to access <strong>shared variables</strong>. As a rule, to ensure that shared variables are <strong>consistently</strong> and <strong>reliably</strong> updated, a thread should ensure that it has exclusive use of such variables by obtaining a lock that, conventionally, enforces mutual exclusion for those shared variables.</p>
+<p>The Java programming language provides a second mechanism, volatile fields, that is more convenient than locking for some purposes.</p>
+<p>A field may be declared volatile, in which case the Java Memory Model ensures that all threads see a consistent value for the variable.</p>
+</blockquote>
+<p>简单讲，多线程共享可变状态时，为确保共享状态被 <strong>准确</strong>、<strong>一致</strong> 地的更新，线程应该通过 <strong>排他锁</strong> 获取该变量。</p>
+<p>若不用锁，也可用 <code>volatile</code> 字段，Java 内存模型将保证 <strong>所有线程</strong> 间 <code>volatile</code> 变量视图的一致性。</p>
+<p>虽然 <code>volatile</code> 比 <code>synchronized</code> 开销小，但 <code>volatile</code> 有自己的局限性：</p>
+<ul>
+<li><code>volatile</code> 可以实现与 <code>synchronized</code> 类似的可见性，但无法构建 <strong>原子的复合操作</strong></li>
+</ul>
+<p>因此，若一个变量依赖于其他变量，或变量的新值依赖于旧值时，就无法使用 <code>volatile</code>。</p>
+<h2 id="volatile-保证可见性"><a href="#volatile-保证可见性" class="headerlink" title="volatile 保证可见性"></a><code>volatile</code> 保证可见性</h2><p>简单回顾下出现内存可见性问题的原因，现代计算机架构中，每个 CPU 有专属缓存，多个 CPU 会 <strong>共享内存</strong>，读写操作经历多个步骤：</p>
 <ol>
-<li>最多只能有一个变长参数</li>
-<li>必须是参数列表中的 <strong>最后一个</strong> 参数</li>
+<li>读取数据时，数据从内存达到缓存，又从缓存到达 CPU 寄存器</li>
+<li>写入数据时，CPU 将数据写入 CPU 专属缓存，再未来某一时刻，将缓存数据刷新的内存</li>
 </ol>
-<p>变长参数只是数组参数的语法糖，更加方便而已：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(String... args)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(String[] args)</span></span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>两个 <code>foo</code> 定义完全相同，不能作为重载函数同时存在！</li>
-</ul>
-<p>例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> ... xs)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i : xs) &#123;</span><br><span class="line">    result += i;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以使用数组调用 <code>sum</code>：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] xs = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;;</span><br><span class="line">sum(xs);</span><br></pre></td></tr></table></figure>
-<h2 id="Scala-变长参数"><a href="#Scala-变长参数" class="headerlink" title="Scala 变长参数"></a>Scala 变长参数</h2><p>Scala 同样支持变长参数，也必须满足同样的两个条件：</p>
+<p>因此多个 CPU 处理同一个变量（共享变量）时：</p>
 <ol>
-<li>最多一个</li>
-<li>只能是参数列表中最后一个</li>
+<li>读取的可能是缓存中的值，导致每个 CPU 读到的值都可能不同</li>
+<li>写入时仅写入缓存，导致其他 CPU 短时间根本看不到这次修改的内容</li>
 </ol>
-<p>例如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(xs: <span class="type">Int</span>*): <span class="type">Int</span> = xs.sum</span><br></pre></td></tr></table></figure>
+<p>通过 CPU 提供的 <code>Lock</code> 指令，<code>volatile</code> 修饰的共享变量，在执行 <strong>写操作</strong> 时，会：</p>
+<ol>
+<li>将本 CPU 缓存中的数据回写到 <strong>内存</strong></li>
+<li>第 1 条的缓存回写导致，使其他 CPU <strong>缓存</strong> 中的该变量数据失效</li>
+</ol>
+<p>结果多线程访问 <code>volatile</code> 变量时，各个线程总是能获取到 <code>volatile</code> 变量的 <strong>最新值</strong>，从而保证内存可见性。</p>
+<h2 id="volatile-不保证原子性"><a href="#volatile-不保证原子性" class="headerlink" title="volatile 不保证原子性"></a><code>volatile</code> 不保证原子性</h2><p><code>volatile</code> 只能保证可见性，不能保证 <strong>原子性</strong>，例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Counter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">increment</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            TimeUnit.MILLISECONDS.sleep(<span class="number">500</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        count++;  <span class="comment">// or count = count + 1</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当多线程共享 <code>Counter</code> 实例时：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Counter counter = <span class="keyword">new</span> Counter();</span><br><span class="line">CountDownLatch latch = <span class="keyword">new</span> CountDownLatch(<span class="number">10000</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">  Thread t = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">    latch.countDown();</span><br><span class="line">    counter.increment();</span><br><span class="line">  &#125;);</span><br><span class="line">  t.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">latch.await();</span><br><span class="line"></span><br><span class="line">System.out.println(counter.getCount());</span><br></pre></td></tr></table></figure>
+<p>最后 <code>Counter.getCount()</code> 值几乎不可能是 10000，因为 <code>count = count + 1</code> 或 <code>count++</code> 都不是原子操作，它们实际上由 3 个原子操作组成：</p>
+<ol>
+<li>读取 <code>count</code> 的值</li>
+<li>执行 + 1 运算</li>
+<li>将 <code>count</code> 的值写回内存</li>
+</ol>
+<p>当 <code>count</code> 不是 <code>volatile</code> 变量，则执行完 <code>count++</code> 后，结果写入 CPU 缓存，并在未来某时刻刷新到内存，因此其他线程不保证马上看到 <code>count++</code> 后 <code>count</code> 的最新值，即无法保证内存可见性。</p>
+<p>当 <code>count</code> 是 <code>volatile</code> 变量时，执行完 <code>count++</code>，结果马上写入内存，并使其他 CPU 的缓存失效，其他 CPU 读取 <code>count</code> 时只能去内存中读取，因此必然能看到 <code>count</code> 的最新值。</p>
+<p>但是 <code>volatile</code> 无法保证 1、2、3 步整体是原子操作，线程 <code>A</code> 执行 1、2、3 时，其他线程也可以执行 1、2、3，因此某一时刻完全可能有多个线程 <strong>同时</strong> 执行步骤 1，然后两个线程计算结果相同：</p>
 <ul>
-<li>Scala 将 <code>xs</code> 作为 <code>Array[Int]</code> 处理</li>
+<li>线程 A 读取 <code>count</code> 值，获得 100，计算得到 101，将 101 写回内存</li>
+<li>线程 B 读取 <code>count</code> 值，获取 100，计算得到 101，将 101 写回内存</li>
 </ul>
-<p>与 Java 类似，Scala 将变长参数作为序列（可变 <code>Array</code> ）来处理；与 Java 不同的是，虽然 <code>sum</code> 内部将 <code>xs</code> 作为序列处理，但却无法直接使用序列调用 <code>sum</code> 函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))  <span class="comment">// 编译报错</span></span><br></pre></td></tr></table></figure>
-<p>使用 <code>_:*</code> 标识可以使用序列（<code>List</code> <code>Vector</code> <code>Seq</code> <code>Array</code>）来调用 <code>sum</code> 函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sum(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br><span class="line">sum(<span class="type">Vector</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br><span class="line">sum(<span class="type">Array</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br><span class="line">sum(<span class="type">Seq</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br></pre></td></tr></table></figure>
+<p>该场景下只能用锁，或 <code>AtomicInteger</code> 之类的原子类，而不能用 <code>volatile</code>。</p>
+<h2 id="什么时候使用-volatile-？"><a href="#什么时候使用-volatile-？" class="headerlink" title="什么时候使用 volatile ？"></a>什么时候使用 <code>volatile</code> ？</h2><p><code>volatile</code> 变量一般用作某操作完成、中断的 <strong>标志</strong>，或者状态的 <strong>标志</strong>。</p>
+<p>因为 <code>volatile</code> 无法保证原子性，所以使用必须非常消息，仅当满足以下所有条件时，才可以用 <code>volatile</code> 变量：</p>
+<ol>
+<li>对变量的写入操作不依赖于其当前值，或确保只有 <strong>一个</strong> 线程可以更新变量的值；</li>
+<li>该变量不会与其他状态变量一起纳入不变性条件；</li>
+<li>访问该变量时不需要加锁；</li>
+</ol>
+<hr>
+<p>参考：</p>
 <ul>
-<li><code>_:*</code> 告诉编译器，将序列分解为 <strong>离散元素</strong></li>
+<li>《Java 并发编程实战》</li>
+<li>《Java 并发编程的一书》</li>
 </ul>
-<p>很多集合类的构造函数都使用了变长参数，例如 <code>List</code> <code>Map</code> 等。</p>
-<h2 id="Java、Scala-互操作"><a href="#Java、Scala-互操作" class="headerlink" title="Java、Scala 互操作"></a>Java、Scala 互操作</h2><p>默认情况下，Java 无法使用 Scala 定义的具备变长参数的方法，除非为其添加 <code>scala.annotation.varargs</code> 注解。</p>
-<p><code>@varargs</code> 注解使 Scala 编译器生成 <strong>两个方法</strong>：</p>
-<ul>
-<li>一个给 Scala 使用（字节码参数是一个 Seq）</li>
-<li>一个给 Java 使用（字节码参数是一个数组）</li>
-</ul>
-<p>例如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@scala</span>.annotation.varargs</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">select</span></span>(exprs: <span class="type">Expression</span>*): <span class="type">DataFrame</span> = &#123; ... &#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -514,9 +553,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Scala/" rel="tag"># Scala</a>
-          
             <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/并发/" rel="tag"># 并发</a>
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
           
         </div>
       
@@ -529,8 +570,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/20/2018-05-20-why-option/" rel="next" title="我们为什么需要 Option ？">
-                <i class="fa fa-chevron-left"></i> 我们为什么需要 Option ？
+              <a href="/2018/05/23/2018-05-23-list-in-scala-racket/" rel="next" title="天下 List 是一家">
+                <i class="fa fa-chevron-left"></i> 天下 List 是一家
               </a>
             
           </div>
@@ -538,10 +579,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/20/2018-05-20-java7-objects/" rel="prev" title="Objects 工具类">
-                Objects 工具类 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -723,7 +760,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-变长参数"><span class="nav-number">1.</span> <span class="nav-text">Java 变长参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala-变长参数"><span class="nav-number">2.</span> <span class="nav-text">Scala 变长参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java、Scala-互操作"><span class="nav-number">3.</span> <span class="nav-text">Java、Scala 互操作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized-的劣势"><span class="nav-number">1.</span> <span class="nav-text">synchronized 的劣势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile-保证可见性"><span class="nav-number">2.</span> <span class="nav-text">volatile 保证可见性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile-不保证原子性"><span class="nav-number">3.</span> <span class="nav-text">volatile 不保证原子性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么时候使用-volatile-？"><span class="nav-number">4.</span> <span class="nav-text">什么时候使用 volatile ？</span></a></li></ol></div>
             
 
           </div>
@@ -897,9 +934,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/05/20/2018-05-20-variable-arguments/';
-        this.page.identifier = '2018/05/20/2018-05-20-variable-arguments/';
-        this.page.title = '变长参数';
+        this.page.url = 'http://songkun.me/2018/05/24/2018-05-24-java-volatile-1/';
+        this.page.identifier = '2018/05/24/2018-05-24-java-volatile-1/';
+        this.page.title = 'volatile 初探';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
