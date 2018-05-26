@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="并发编程中的 同步机制 可以实现：  对共享状态的排他访问 内存可见性  Java 保证 共享变量 一致性的方式有：  synchronized（监视器锁） volatile 变量 CAS（如 AtomicInteger） 并发包中的高级抽象">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-24T14:45:47.000Z">
+<meta property="og:updated_time" content="2018-05-25T12:35:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="volatile 初探">
 <meta name="twitter:description" content="并发编程中的 同步机制 可以实现：  对共享状态的排他访问 内存可见性  Java 保证 共享变量 一致性的方式有：  synchronized（监视器锁） volatile 变量 CAS（如 AtomicInteger） 并发包中的高级抽象">
@@ -373,12 +373,24 @@
                 
               
 
-              <time title="创建时间：2018-05-24 21:41:45 / 修改时间：22:45:47" itemprop="dateCreated datePublished" datetime="2018-05-24T21:41:45+08:00">2018-05-24</time>
+              <time title="创建时间：2018-05-24 21:41:45" itemprop="dateCreated datePublished" datetime="2018-05-24T21:41:45+08:00">2018-05-24</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-05-25 20:35:56" itemprop="dateModified" datetime="2018-05-25T20:35:56+08:00">2018-05-25</time>
               
             
           </span>
@@ -527,11 +539,18 @@
 <li>该变量不会与其他状态变量一起纳入不变性条件；</li>
 <li>访问该变量时不需要加锁；</li>
 </ol>
+<p>注意 <code>volatile</code> 标识符只允许两个操作：</p>
+<ul>
+<li>读取</li>
+<li>单纯的写入</li>
+</ul>
+<p>标志符的写操作不能 <strong>依赖</strong> 旧值（想想 <code>Counter</code> 的例子），若能保证这点，则使用 <code>volatile</code> 非常合适，当然也可以使用 <code>synchronized</code>，但锁会带来上下文切换、线程调度等开销，比 <code>volatile</code> 重了不少。</p>
 <hr>
 <p>参考：</p>
 <ul>
 <li>《Java 并发编程实战》</li>
 <li>《Java 并发编程的一书》</li>
+<li><a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.3.1.4" target="_blank" rel="noopener">Java 语言规范之 volatile</a></li>
 </ul>
 
       
@@ -666,7 +685,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -714,7 +733,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">9</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

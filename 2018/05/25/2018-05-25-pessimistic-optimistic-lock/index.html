@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="Scala 存在两个列表拼接函数：::: 和 ++，初学者很容易迷惑，本文简单介绍下两者的来历。 如果读者有其他函数式编程语言基础（例如 Standard ML），肯定对用于创建 List 的 :: 函数非常熟悉： 1val xs = 1 :: 2 :: Nil">
-<meta name="keywords" content="Scala,fp">
+  <meta name="description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，从而让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
+<meta name="keywords" content="Java,并发,乐观锁,悲观锁,锁">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala | List 拼接考古">
-<meta property="og:url" content="http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/index.html">
+<meta property="og:title" content="基本概念 | 乐观锁、悲观锁">
+<meta property="og:url" content="http://songkun.me/2018/05/25/2018-05-25-pessimistic-optimistic-lock/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="Scala 存在两个列表拼接函数：::: 和 ++，初学者很容易迷惑，本文简单介绍下两者的来历。 如果读者有其他函数式编程语言基础（例如 Standard ML），肯定对用于创建 List 的 :: 函数非常熟悉： 1val xs = 1 :: 2 :: Nil">
+<meta property="og:description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，从而让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-22T15:06:49.000Z">
+<meta property="og:updated_time" content="2018-05-26T00:51:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala | List 拼接考古">
-<meta name="twitter:description" content="Scala 存在两个列表拼接函数：::: 和 ++，初学者很容易迷惑，本文简单介绍下两者的来历。 如果读者有其他函数式编程语言基础（例如 Standard ML），肯定对用于创建 List 的 :: 函数非常熟悉： 1val xs = 1 :: 2 :: Nil">
+<meta name="twitter:title" content="基本概念 | 乐观锁、悲观锁">
+<meta name="twitter:description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，从而让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/"/>
+  <link rel="canonical" href="http://songkun.me/2018/05/25/2018-05-25-pessimistic-optimistic-lock/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>Scala | List 拼接考古 | 随便写写</title>
+  <title>基本概念 | 乐观锁、悲观锁 | 随便写写</title>
   
 
 
@@ -331,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/25/2018-05-25-pessimistic-optimistic-lock/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Scala | List 拼接考古
+          <h1 class="post-title" itemprop="name headline">基本概念 | 乐观锁、悲观锁
               
             
           </h1>
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2018-05-21 23:42:24" itemprop="dateCreated datePublished" datetime="2018-05-21T23:42:24+08:00">2018-05-21</time>
+              <time title="创建时间：2018-05-25 20:39:49" itemprop="dateCreated datePublished" datetime="2018-05-25T20:39:49+08:00">2018-05-25</time>
             
 
             
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-22 23:06:49" itemprop="dateModified" datetime="2018-05-22T23:06:49+08:00">2018-05-22</time>
+                <time title="修改时间：2018-05-26 08:51:00" itemprop="dateModified" datetime="2018-05-26T08:51:00+08:00">2018-05-26</time>
               
             
           </span>
@@ -422,9 +422,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/21/2018-05-21-scala-list-concatenation/#comments" itemprop="discussionUrl">
+                <a href="/2018/05/25/2018-05-25-pessimistic-optimistic-lock/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/21/2018-05-21-scala-list-concatenation/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/05/25/2018-05-25-pessimistic-optimistic-lock/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -452,36 +452,90 @@
       
 
       
-        <p>Scala 存在两个列表拼接函数：<code>:::</code> 和 <code>++</code>，初学者很容易迷惑，本文简单介绍下两者的来历。</p>
-<p>如果读者有其他函数式编程语言基础（例如 Standard ML），肯定对用于创建 <code>List</code> 的 <code>::</code> 函数非常熟悉：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> xs = <span class="number">1</span> :: <span class="number">2</span> :: <span class="type">Nil</span></span><br></pre></td></tr></table></figure>
+        <p>乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，从而让人忽略它们的本质。</p>
+<p>本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。</p>
 <a id="more"></a>
+<h2 id="背景篇"><a href="#背景篇" class="headerlink" title="背景篇"></a>背景篇</h2><p>在计算机科学，特别是程序设计、操作系统、多处理机、数据库领域中，并发控制（concurrency control）是一种保证并发操作（concurrent operations）能产生 <strong>正确</strong> 结果的机制。</p>
+<p>无论软件还是硬件，都由不同模块或组件组成：</p>
 <ul>
-<li><code>::</code> 是定义在 <code>List</code> 上的 <strong>前缀操作符</strong>，因此 <code>1 :: Nil</code> 实际是函数调用 <code>Nil.::(1)</code></li>
-<li>而且 <code>::</code> 是右结合的，因此 <code>1 :: 2 :: Nil</code> 实际是 <code>Nil.::(2).::(1)</code>。</li>
+<li>通过遵从特定的一致性规则（consistency rules），每个组件都可以正确运行。</li>
+<li>当组件并发运行，并通过消息、共享数据（内存或磁盘）交互时，单个组件的一致性可能被其他组件 <strong>破坏</strong></li>
 </ul>
-<p>Scala 设计之初，为保持一致的函数式命名，就把 <code>List</code> 拼接函数命名为 <code>:::</code>，这样 <code>::</code> 和 <code>:::</code> 就对应起来了：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> xs = <span class="number">1</span> :: <span class="number">2</span> :: <span class="number">3</span> :: <span class="type">Nil</span></span><br><span class="line"><span class="keyword">val</span> ys = <span class="number">4</span> :: <span class="number">5</span> :: <span class="type">Nil</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> zs = xs ::: ys</span><br></pre></td></tr></table></figure>
-<p>与 <code>::</code> 类似，<code>:::</code> 也是定义在 <code>List</code> 中的前缀操作符，并且也是右结合。</p>
-<p>但时代在进步，Scala 也在发展，Scala 2.8 重新设计了其集合框架，提供 <code>++</code> 拼接两个任意 <strong>集合</strong>，自然也能用来拼接 <code>List</code>。</p>
-<p><code>:::</code> 作为 <code>List</code> 拼接的经典函数，被保留下来了，因此现在 <code>List</code> 拼接既可以用 <code>:::</code> 也可以用 <code>++</code>。</p>
-<blockquote>
-<p><code>::</code> 和 <code>:::</code> 更符合 <code>List</code> 的惯用法，而 <code>++</code> 在 Scala 中更加通用。</p>
+<p>广义上的并发控制提通过提供规则、方法、设计方法学、理论等，以维护并发运行、互相交互的多个组件的一致性，进而保证整个系统的一致性和正确性。</p>
+<p>并发控制可以得到一致、正确的系统，但有如下代价：</p>
+<ul>
+<li>并发控制会对系统施加操作约束（operation constraints），这些约束通常会在合理范围内降低系统 <strong>性能</strong></li>
+<li>并发控制需要非常复杂的并发算法，而串行算法一般很简单</li>
+</ul>
+<p>并发控制机制有如下几类：</p>
+<ul>
+<li>乐观并发控制（optimistic concurrency control - OCC），又称乐观锁</li>
+<li>悲观并发控制（pessimistic concurrency control - PCC），又称悲观锁</li>
+<li>锁（two-phase locking - 2PL）</li>
+<li>时间戳</li>
+</ul>
+<h2 id="概念篇"><a href="#概念篇" class="headerlink" title="概念篇"></a>概念篇</h2><p>了解乐观锁、悲观锁的背景后，下面介绍两者的基本概念。</p>
+<h3 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h3><p>乐观锁中的乐观，是指对 <strong>并发更新</strong> 很乐观，即认为并发冲突是小概率事件，很少发生，如果发生并发冲突，乐观锁采用 <strong>失败重试</strong> 的策略恢复。</p>
+<p>乐观锁特点：</p>
+<ul>
+<li>在数据竞争少，冲突少的场景中，即使发生并发冲突，并导致失败重试，重试成本往往 <strong>低于</strong> 最开始完全锁定数据，因此乐观锁比悲观锁 <strong>吞吐量</strong> 大；</li>
+<li>乐观锁响应速度更快，无论失败还是成功，都能立即获取结果；</li>
+</ul>
+<p>如果并发更新频繁，又不恰当地使用了乐观锁，则无论吞吐量还是响应速度，都远远不如悲观锁。</p>
+<h3 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h3><p>与乐观锁类似，悲观是指对 <strong>并发更新</strong> 很悲观，认为并发冲突是大概率事件，会频繁发生，此时失败重试成本太高，所以采用排队等待更新的方式，消除并发更新。</p>
+<p>悲观锁的特点：</p>
+<ul>
+<li>悲观锁一般借助系统提供的 <strong>排他锁</strong>（数据库锁、<code>synchronized</code> 等）实现，可能导致死锁；</li>
+<li>排他锁会阻塞 <strong>只读</strong> 操作，会降低响应速度；</li>
+</ul>
+<p>在竞争激烈的环境中，排队更新的成本要低于失败重试。</p>
+<h2 id="应用篇"><a href="#应用篇" class="headerlink" title="应用篇"></a>应用篇</h2><p>下面介绍乐观锁、悲观锁在数据库和 Java 并发编程中的实际应用。</p>
+<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><h4 id="乐观锁-1"><a href="#乐观锁-1" class="headerlink" title="乐观锁"></a>乐观锁</h4><blockquote>
+<p>乐观锁不使用数据库锁。</p>
 </blockquote>
-<p>对于 <code>List</code> 拼接而言，推荐使用 <code>:::</code> 而非 <code>++</code>，因为 <code>:::</code>：</p>
+<p>在数据库中实现乐观锁有两种常见的方式：</p>
 <ul>
-<li>效率更高</li>
-<li>类型安全</li>
+<li>版本号</li>
+<li>时间戳</li>
 </ul>
-<h4 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h4><p>编译器若发现 <code>++</code> 两边的参数是 <code>List</code>，会自动代理给 <code>:::</code>。</p>
-<p><code>x ++ y</code> 与 <code>x ::: y</code> 是没有区别的，但若是多个列表拼接，如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x ++ y ++ z</span><br></pre></td></tr></table></figure>
-<p>因为 <code>++</code> 是左结合，因此编译器转换后变成：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x ::: y) ::: z</span><br></pre></td></tr></table></figure>
-<p>又因为 <code>:::</code> 是右结合的，所以上述代码要比 <code>x ::: y ::: z</code> 多执行 <code>O(x)</code> 步，<code>x</code> 为 <code>x</code> 列表的长度。</p>
-<h4 id="类型安全"><a href="#类型安全" class="headerlink" title="类型安全"></a>类型安全</h4><p><code>:::</code> 两边参数必须都是 <code>List</code>，而 <code>++</code> 可用于任意集合，因此可用于 <code>List</code> 与其他集合类型拼接：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List(1, 2, 3, a, b, c)</span></span><br><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) ++ <span class="string">"abc"</span></span><br></pre></td></tr></table></figure>
-<p>所以，如果确定是两个 <code>List</code> 拼接，最好用 <code>:::</code>。</p>
+<p>两者原理类似，下面以版本号为例介绍，其基本流程如下：</p>
+<ol>
+<li>每个表都需要添加 <strong>版本号</strong> 字段；</li>
+<li>读取数据时获取版本号，并处理业务逻辑；</li>
+<li>更新表时，验证数据库中该记录的 <strong>当前版本号</strong> 与第 2 步读取到的版本号是否一致：<ul>
+<li>若一致则更新，并将版本号 + 1</li>
+<li>若不一致，则不更新</li>
+</ul>
+</li>
+</ol>
+<p>一个简单例子：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 查询出商品信息</span><br><span class="line"><span class="keyword">select</span> (<span class="keyword">status</span>,<span class="keyword">version</span>) <span class="keyword">from</span> goods <span class="keyword">where</span> <span class="keyword">id</span>=#&#123;<span class="keyword">id</span>&#125;</span><br><span class="line">// 生成订单，修改商品<span class="keyword">status</span>为<span class="number">2</span></span><br><span class="line"><span class="keyword">update</span> goods </span><br><span class="line"><span class="keyword">set</span> <span class="keyword">status</span>=<span class="number">2</span>,<span class="keyword">version</span>=<span class="keyword">version</span>+<span class="number">1</span>  // 版本号 + <span class="number">1</span></span><br><span class="line"><span class="keyword">where</span> <span class="keyword">id</span>=#&#123;<span class="keyword">id</span>&#125; <span class="keyword">and</span> <span class="keyword">version</span>=#&#123;<span class="keyword">version</span>&#125;;  // 校验版本号</span><br></pre></td></tr></table></figure>
+<p>使用时间戳只要将版本号替换为时间戳即可，其他步骤一致。</p>
+<h4 id="悲观锁-1"><a href="#悲观锁-1" class="headerlink" title="悲观锁"></a>悲观锁</h4><p>悲观锁利用数据库锁实现，达到对数据的 <strong>排他</strong> 访问。</p>
+<p>悲观锁处理流程：</p>
+<ol>
+<li>修改任意记录前，先为该记录加 <strong>排他锁</strong>；</li>
+<li>若加锁失败，说明该记录正在被占用，则由开发人员决定等待或抛出异常；</li>
+<li>若加锁成功，则修改记录并提交事务，完成本次处理；<ul>
+<li>期间若有其他修改该记录的请求，则参考第 2 步</li>
+</ul>
+</li>
+</ol>
+<p>以 MySQL 为例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//0.开始事务</span><br><span class="line"><span class="keyword">begin</span>;/<span class="keyword">begin</span> <span class="keyword">work</span>;/<span class="keyword">start</span> <span class="keyword">transaction</span>; (三者选一就可以)</span><br><span class="line">//1.查询出商品信息</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">status</span> <span class="keyword">from</span> goods <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br><span class="line">//2.根据商品信息生成订单</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t_orders (<span class="keyword">id</span>,goods_id) <span class="keyword">values</span> (<span class="literal">null</span>,<span class="number">1</span>);</span><br><span class="line">//3.修改商品status为2</span><br><span class="line"><span class="keyword">update</span> goods <span class="keyword">set</span> <span class="keyword">status</span>=<span class="number">2</span>;</span><br><span class="line">//4.提交事务</span><br><span class="line"><span class="keyword">commit</span>;/<span class="keyword">commit</span> <span class="keyword">work</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用悲观锁，需要关闭 MySQL 自动提交功能：<code>set autocommit = 0</code>；</li>
+<li><code>select ... for update</code> 开启排他锁；</li>
+<li>MySQL 默认使用行级锁，行锁基于索引，若 SQL 语句没有用到索引，则不会使用行级锁，而是使用表级锁；</li>
+</ul>
+<h3 id="Java-并发编程"><a href="#Java-并发编程" class="headerlink" title="Java 并发编程"></a>Java 并发编程</h3><hr>
+<p>参考：</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Concurrency_control" target="_blank" rel="noopener">并发控制</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E4%B9%90%E8%A7%82%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6" target="_blank" rel="noopener">乐观锁</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E6%82%B2%E8%A7%82%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6" target="_blank" rel="noopener">悲观锁</a></li>
+<li><a href="http://www.hollischuang.com/archives/934" target="_blank" rel="noopener">深入理解乐观锁与悲观锁</a></li>
+</ul>
 
       
     </div>
@@ -502,9 +556,15 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Scala/" rel="tag"># Scala</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/fp/" rel="tag"># fp</a>
+            <a href="/tags/并发/" rel="tag"># 并发</a>
+          
+            <a href="/tags/乐观锁/" rel="tag"># 乐观锁</a>
+          
+            <a href="/tags/悲观锁/" rel="tag"># 悲观锁</a>
+          
+            <a href="/tags/锁/" rel="tag"># 锁</a>
           
         </div>
       
@@ -517,8 +577,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/20/2018-05-20-java7-objects/" rel="next" title="Objects 工具类">
-                <i class="fa fa-chevron-left"></i> Objects 工具类
+              <a href="/2018/05/24/2018-05-24-java-happen-before-1/" rel="next" title="基本概念 | 重排序、内存可见性、happen-before 关系">
+                <i class="fa fa-chevron-left"></i> 基本概念 | 重排序、内存可见性、happen-before 关系
               </a>
             
           </div>
@@ -526,10 +586,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/22/2018-05-22-racket-lazy-evaluation/" rel="prev" title="Racket | 拨开延迟计算的迷雾">
-                Racket | 拨开延迟计算的迷雾 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -717,7 +773,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#效率"><span class="nav-number">1.</span> <span class="nav-text">效率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类型安全"><span class="nav-number">2.</span> <span class="nav-text">类型安全</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景篇"><span class="nav-number">1.</span> <span class="nav-text">背景篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概念篇"><span class="nav-number">2.</span> <span class="nav-text">概念篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#乐观锁"><span class="nav-number">2.1.</span> <span class="nav-text">乐观锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#悲观锁"><span class="nav-number">2.2.</span> <span class="nav-text">悲观锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用篇"><span class="nav-number">3.</span> <span class="nav-text">应用篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库"><span class="nav-number">3.1.</span> <span class="nav-text">数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#乐观锁-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">乐观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#悲观锁-1"><span class="nav-number">3.1.2.</span> <span class="nav-text">悲观锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-并发编程"><span class="nav-number">3.2.</span> <span class="nav-text">Java 并发编程</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -891,9 +947,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/';
-        this.page.identifier = '2018/05/21/2018-05-21-scala-list-concatenation/';
-        this.page.title = 'Scala | List 拼接考古';
+        this.page.url = 'http://songkun.me/2018/05/25/2018-05-25-pessimistic-optimistic-lock/';
+        this.page.identifier = '2018/05/25/2018-05-25-pessimistic-optimistic-lock/';
+        this.page.title = '基本概念 | 乐观锁、悲观锁';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
