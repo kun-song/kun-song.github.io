@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，从而让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
+  <meta name="description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，容易让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
 <meta name="keywords" content="Java,并发,乐观锁,悲观锁,锁">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基本概念 | 乐观锁、悲观锁">
 <meta property="og:url" content="http://songkun.me/2018/05/25/2018-05-25-pessimistic-optimistic-lock/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，从而让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
+<meta property="og:description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，容易让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-26T00:51:00.000Z">
+<meta property="og:updated_time" content="2018-05-26T13:00:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基本概念 | 乐观锁、悲观锁">
-<meta name="twitter:description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，从而让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
+<meta name="twitter:description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，容易让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
 
 
 
@@ -278,6 +278,14 @@
         
         
           
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
           <li class="menu-item menu-item-about">
     <a href="/about/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
@@ -390,7 +398,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-26 08:51:00" itemprop="dateModified" datetime="2018-05-26T08:51:00+08:00">2018-05-26</time>
+                <time title="修改时间：2018-05-26 21:00:30" itemprop="dateModified" datetime="2018-05-26T21:00:30+08:00">2018-05-26</time>
               
             
           </span>
@@ -452,7 +460,7 @@
       
 
       
-        <p>乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，从而让人忽略它们的本质。</p>
+        <p>乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，容易让人忽略它们的本质。</p>
 <p>本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。</p>
 <a id="more"></a>
 <h2 id="背景篇"><a href="#背景篇" class="headerlink" title="背景篇"></a>背景篇</h2><p>在计算机科学，特别是程序设计、操作系统、多处理机、数据库领域中，并发控制（concurrency control）是一种保证并发操作（concurrent operations）能产生 <strong>正确</strong> 结果的机制。</p>
@@ -461,7 +469,7 @@
 <li>通过遵从特定的一致性规则（consistency rules），每个组件都可以正确运行。</li>
 <li>当组件并发运行，并通过消息、共享数据（内存或磁盘）交互时，单个组件的一致性可能被其他组件 <strong>破坏</strong></li>
 </ul>
-<p>广义上的并发控制提通过提供规则、方法、设计方法学、理论等，以维护并发运行、互相交互的多个组件的一致性，进而保证整个系统的一致性和正确性。</p>
+<p>广义上的并发控制通过提供规则、方法、设计方法学、理论等，以维护并发运行、互相交互的多个组件的一致性，进而保证整个系统的一致性和正确性。</p>
 <p>并发控制可以得到一致、正确的系统，但有如下代价：</p>
 <ul>
 <li>并发控制会对系统施加操作约束（operation constraints），这些约束通常会在合理范围内降低系统 <strong>性能</strong></li>
@@ -517,7 +525,7 @@
 <li>修改任意记录前，先为该记录加 <strong>排他锁</strong>；</li>
 <li>若加锁失败，说明该记录正在被占用，则由开发人员决定等待或抛出异常；</li>
 <li>若加锁成功，则修改记录并提交事务，完成本次处理；<ul>
-<li>期间若有其他修改该记录的请求，则参考第 2 步</li>
+<li>期间若有其他修改该记录的请求，该请求将处于第 2 步</li>
 </ul>
 </li>
 </ol>
@@ -526,7 +534,7 @@
 <ul>
 <li>使用悲观锁，需要关闭 MySQL 自动提交功能：<code>set autocommit = 0</code>；</li>
 <li><code>select ... for update</code> 开启排他锁；</li>
-<li>MySQL 默认使用行级锁，行锁基于索引，若 SQL 语句没有用到索引，则不会使用行级锁，而是使用表级锁；</li>
+<li>MySQL 默认使用行级锁，行级锁基于索引，若 SQL 语句没有用到索引，则不会使用行级锁，而是使用表级锁；</li>
 </ul>
 <h3 id="Java-并发编程"><a href="#Java-并发编程" class="headerlink" title="Java 并发编程"></a>Java 并发编程</h3><hr>
 <p>参考：</p>
@@ -698,6 +706,10 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
+                    
+                      
                     
                       
                     
