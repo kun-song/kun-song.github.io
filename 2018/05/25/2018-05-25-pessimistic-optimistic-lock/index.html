@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，容易让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-27T03:18:22.000Z">
+<meta property="og:updated_time" content="2018-05-27T03:33:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基本概念 | 乐观锁、悲观锁">
 <meta name="twitter:description" content="乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，容易让人忽略它们的本质。 本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。">
@@ -398,7 +398,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-27 11:18:22" itemprop="dateModified" datetime="2018-05-27T11:18:22+08:00">2018-05-27</time>
+                <time title="修改时间：2018-05-27 11:33:37" itemprop="dateModified" datetime="2018-05-27T11:33:37+08:00">2018-05-27</time>
               
             
           </span>
@@ -567,7 +567,7 @@
 <p><code>volatile</code> 不够通用，而 <code>synchronized</code> 又太重，而 CAS 介于两者之间，足够轻量级，又支持原子的更新操作，是很好的折中选择。</p>
 <p>CAS（compare and swap）即比较并交换，是一种典型的乐观锁，并由 CPU 通过 CAS 指令直接支持。</p>
 <blockquote>
-<p>Java 5 之前不能直接使用 CPU 的 CAS 指令！</p>
+<p>Java 5 之前不能直接使用 CAS 指令，Java 5 通过 <code>Unsafe</code> 类公开了 <code>int</code>、<code>long</code> 和引用类型上的 CAS 操作。</p>
 </blockquote>
 <p>处理器会提供一些 <strong>特殊指令</strong>，用于管理 <strong>共享数据</strong> 的并发访问，例如：</p>
 <ul>
@@ -596,8 +596,9 @@
 <li>不做任何处理</li>
 </ul>
 <p>这比粗暴地挂起线程灵活很多，而且会减少锁相关的活跃性风险。</p>
+<p>J.U.C 的原子类（<code>AtomicInteger</code> 等）大量使用了 CAS 操作，而 J.U.C <strong>大多数</strong> 类的实现都直接或间接地使用了这些原子类，因此即使你没有直接使用过 CAS，但你的代码几乎 100% 是建立在 CAS 操作基础上的。</p>
 <blockquote>
-<p>CAS 并非完美无缺，可能出现 ABA 问题。</p>
+<p>CAS 并非完美无缺，例如可能出现 ABA 问题。</p>
 </blockquote>
 <hr>
 <p>参考：</p>
@@ -658,6 +659,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/27/2018-05-26-java8-completablefuture/" rel="prev" title="【译】CompletableFuture 入门">
+                【译】CompletableFuture 入门 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -741,7 +746,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -795,7 +800,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

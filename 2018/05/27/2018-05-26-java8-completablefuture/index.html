@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文翻译自 Guide To CompletableFuture。 Java 5 之前很难处理 异步计算，那时一般用回调函数处理异步计算的结果，业务逐渐复杂后，会遇到臭名昭著的 回调地狱。 Java 5 引入 Future 接口，用来代表异步计算的结果，摆脱了回调函数，但 Future 并没有提供任何 组合 Future 的方法，也无法处理异步计算中可能出现的错误。 Java 8 引入了大杀器 C">
+<meta name="keywords" content="并发,Java 8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】CompletableFuture 入门">
+<meta property="og:url" content="http://songkun.me/2018/05/27/2018-05-26-java8-completablefuture/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="本文翻译自 Guide To CompletableFuture。 Java 5 之前很难处理 异步计算，那时一般用回调函数处理异步计算的结果，业务逐渐复杂后，会遇到臭名昭著的 回调地狱。 Java 5 引入 Future 接口，用来代表异步计算的结果，摆脱了回调函数，但 Future 并没有提供任何 组合 Future 的方法，也无法处理异步计算中可能出现的错误。 Java 8 引入了大杀器 C">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-27T03:54:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】CompletableFuture 入门">
+<meta name="twitter:description" content="本文翻译自 Guide To CompletableFuture。 Java 5 之前很难处理 异步计算，那时一般用回调函数处理异步计算的结果，业务逐渐复杂后，会遇到臭名昭著的 回调地狱。 Java 5 引入 Future 接口，用来代表异步计算的结果，摆脱了回调函数，但 Future 并没有提供任何 组合 Future 的方法，也无法处理异步计算中可能出现的错误。 Java 8 引入了大杀器 C">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/05/27/2018-05-26-java8-completablefuture/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【译】CompletableFuture 入门 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/27/2018-05-26-java8-completablefuture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【译】CompletableFuture 入门
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-27 11:42:38 / 修改时间：11:54:08" itemprop="dateCreated datePublished" datetime="2018-05-27T11:42:38+08:00">2018-05-27</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/27/2018-05-26-java8-completablefuture/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/27/2018-05-26-java8-completablefuture/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文翻译自 <a href="http://www.baeldung.com/java-completablefuture" target="_blank" rel="noopener">Guide To CompletableFuture</a>。</p>
+<p>Java 5 之前很难处理 <strong>异步计算</strong>，那时一般用回调函数处理异步计算的结果，业务逐渐复杂后，会遇到臭名昭著的 <em>回调地狱</em>。</p>
+<p>Java 5 引入 <code>Future</code> 接口，用来代表异步计算的结果，摆脱了回调函数，但 <code>Future</code> 并没有提供任何 <strong>组合</strong> <code>Future</code> 的方法，也无法处理异步计算中可能出现的错误。</p>
+<p>Java 8 引入了大杀器 <code>CompletableFuture</code>，该类实现了 <code>Future</code> 接口和 <code>CompletionStage</code> 接口，<code>CompletionStage</code> 接口代表了异步计算中的 <strong>不同阶段</strong>，以及如何 <strong>组合</strong> 这些计算阶段。</p>
+<p><code>CompletableFuture</code> 接口中有 50 多个方法，可以对 <code>CompletableFuture</code> 进行组合、计算，方法看似很多，但可以按功能对其分类，大多数方法都有 3 种变体：</p>
+<ul>
+<li>不带 <code>Async</code> 版本：同步方法</li>
+<li>带 <code>Async</code>，只有一个参数：异步方法，使用默认的 <code>ForkJoinPool.commonPool()</code> 获取线程池，并使用</li>
+<li>带 <code>Async</code>，有两个参数：异步方法，且使用第二个参数指定的 <code>ExecutorService</code> 线程池</li>
+</ul>
+<h2 id="用作普通-Future"><a href="#用作普通-Future" class="headerlink" title="用作普通 Future"></a>用作普通 <code>Future</code></h2><h3 id="完成-Future"><a href="#完成-Future" class="headerlink" title="完成 Future"></a>完成 <code>Future</code></h3><p><code>CompletableFuture</code> 实现了 <code>Future</code> 接口，可以将其视为带有 <code>complete</code> 方法的 <code>Future</code>。</p>
+<p>例如，我们可以创建一个 <code>CompletableFuture</code> 实例，表示未来某个时间才能获取到的计算结果，并将其传递给消费者，消费者在任务完成后，调用 <code>CompletableFuture.complete</code> 方法完成任务：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Future&lt;String&gt; <span class="title">calculateAsync</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 异步计算结果</span></span><br><span class="line">        CompletableFuture&lt;String&gt; future = <span class="keyword">new</span> CompletableFuture&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        Executors.newCachedThreadPool().submit(() -&gt; &#123;</span><br><span class="line">            <span class="comment">// 模拟业务处理</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                TimeUnit.SECONDS.sleep(<span class="number">5</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 完成任务，将结果写入 CompletableFuture</span></span><br><span class="line">            future.complete(<span class="string">"hello"</span>);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> future;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>虽然 <code>calculateAsync</code> 方法内部使用的是 <code>CompletableFuture</code>，但其返回值类型为 <code>Future</code></li>
+<li><code>calculateAsync</code> 方法内部利用了 <code>Completable.complete</code> 方法，但外部仅暴露 <code>Future</code> 相关方法</li>
+<li><code>calculateAsync</code> 方法为异步方法，会立刻返回 <code>Future</code>，但是 <code>Future</code> 中真正的结果需要等任务实际完成后才能获取</li>
+</ul>
+<p>当 <code>caculateAsync</code> 的调用者若要获取其计算结果，需要做好 <strong>阻塞</strong> 的准备，因为 <code>Future</code> 暴露的方法无非阻塞版本：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line">        Future&lt;String&gt; f = calculateAsync();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 准备好阻塞线程，并处理异步计算结果</span></span><br><span class="line">        String result = f.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5s 后，输出 hello</span></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若异步计算结果已经明确，不需要计算，则可以直接使用 <code>CompletableFuture.completedFuture</code> 方法创建包含该值的 <code>CompletableFuture</code>，且此时 <code>Future.get()</code> 将不再阻塞，会马上返回：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line">        <span class="comment">// 结果已知，直接使用该值创建 CompletableFuture</span></span><br><span class="line">        Future&lt;String&gt; f = CompletableFuture.completedFuture(<span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 此时 Future.get 不再阻塞</span></span><br><span class="line">        String result = f.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 马上输出</span></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="取消-Future"><a href="#取消-Future" class="headerlink" title="取消 Future"></a>取消 <code>Future</code></h3><p>若根本无法得到计算结果，则取消异步计算是个不错的想法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Future&lt;String&gt; <span class="title">calculateAsync</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 异步计算结果</span></span><br><span class="line">        CompletableFuture&lt;String&gt; future = <span class="keyword">new</span> CompletableFuture&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        Executors.newCachedThreadPool().submit(() -&gt; &#123;</span><br><span class="line">            <span class="comment">// 模拟业务处理</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                TimeUnit.SECONDS.sleep(<span class="number">5</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 经过努力，无法完成任务，则需要取消 Future</span></span><br><span class="line">            <span class="comment">// Future.cancel(flag) 中的 flat 标志为对 CompletableFuture 毫无影响</span></span><br><span class="line">            future.cancel(<span class="keyword">false</span>);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> future;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line">        Future&lt;String&gt; f = calculateAsync();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 若 Future 被取消，则 Future.get 会抛出 CancellationException</span></span><br><span class="line">        String result = f.get();</span><br><span class="line"></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，若调用 <code>Future.get</code> 时，<code>Future</code> 已经被取消，则该方法抛出 <code>CancellationException</code> 异常。</p>
+<h2 id="封装计算"><a href="#封装计算" class="headerlink" title="封装计算"></a>封装计算</h2><p>从前面的例子可以看到，<code>CompletableFuture</code> 可以与现有的并发框架完美适配，但有时，我们想抛弃那些古老的并发有关的样板代码（比如创建线程池之类），直接异步地执行某些代码，这当然可以！</p>
+<p>静态方法 <code>runAsync</code> 和 <code>supplyAsync</code> 可以使用 <code>Runnable</code> 和 <code>Supplier</code> 类型创建 <code>CompletableFuture</code> 实例，而且 <code>Runnable</code> 和 <code>Supplier</code> 都是函数式的接口，它们的实例可以被当做 lambda 表达式使用。</p>
+<ul>
+<li><code>Runnable</code> 就是那个古老的 <code>Runnable</code> 接口，不能包含返回值</li>
+<li><code>Supplier</code> 是个新接口，包含一个不接受入参，且返回值类型可配置的函数</li>
+</ul>
+<p>因为 <code>Supplier</code> 实例为 lambda 表达式，所以可以将 lambda 表达式作为参数，调用 <code>supplyAsync</code> 函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// supplyAsync 接受 supplier 实例作为参数</span></span><br><span class="line">        CompletableFuture&lt;String&gt; f = CompletableFuture.supplyAsync(() -&gt; <span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">        String result = f.get();</span><br><span class="line"></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="处理异步计算的结果"><a href="#处理异步计算的结果" class="headerlink" title="处理异步计算的结果"></a>处理异步计算的结果</h2><blockquote>
+<p>thenXXX 都是阻塞方法，需要等待前面的 <code>Future</code> 执行完成。</p>
+</blockquote>
+<h3 id="接受上次的处理值，返回再次处理的值"><a href="#接受上次的处理值，返回再次处理的值" class="headerlink" title="接受上次的处理值，返回再次处理的值"></a>接受上次的处理值，返回再次处理的值</h3><p>异步计算完成后，一般会把结果传入某个函数继续处理，<code>thenApply</code> 方法正是为此而生：</p>
+<ol>
+<li>接受一个函数参数</li>
+<li>使用该函数处理 <code>CompletableFuture</code> 的计算结果，并将其计算结果包裹为新的 <code>CompletableFuture</code> 返回</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// supplyAsync 接受 supplier 实例作为参数</span></span><br><span class="line">        CompletableFuture&lt;String&gt; f = CompletableFuture.supplyAsync(() -&gt; <span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// thenApply 处理 f 的计算结果</span></span><br><span class="line">        CompletableFuture&lt;String&gt; f2 = f.thenApply(x -&gt; x + <span class="string">" world"</span>);</span><br><span class="line"></span><br><span class="line">        String result = f2.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 输出 hello world</span></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="接受上次处理的值，返回-Void"><a href="#接受上次处理的值，返回-Void" class="headerlink" title="接受上次处理的值，返回 Void"></a>接受上次处理的值，返回 <code>Void</code></h3><p>若不想将计算在 <code>Future</code> 链中传递下去，则可选择 <code>thenAccept</code> 取代 <code>thenApply</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// supplyAsync 接受 supplier 实例作为参数</span></span><br><span class="line">        CompletableFuture&lt;String&gt; f = CompletableFuture.supplyAsync(() -&gt; <span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// thenAccept 处理 f 的计算结果，但返回 Void</span></span><br><span class="line">        CompletableFuture&lt;Void&gt; f2 = f.thenAccept(x -&gt; System.out.println(<span class="string">"CompletableFuture stops here, result = "</span> + x));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Future.get 将返回 Void</span></span><br><span class="line">        Void result = f2.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 输出 null</span></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>CompletableFuture.thenAccept</code> 返回的 <code>Future</code> 上调用 <code>get</code> 将返回 <code>Void</code></li>
+</ul>
+<h3 id="不接受上次处理的值，返回-Void"><a href="#不接受上次处理的值，返回-Void" class="headerlink" title="不接受上次处理的值，返回 Void"></a>不接受上次处理的值，返回 <code>Void</code></h3><p>该场景使用 <code>thenRun</code> 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// supplyAsync 接受 supplier 实例作为参数</span></span><br><span class="line">        CompletableFuture&lt;String&gt; f = CompletableFuture.supplyAsync(() -&gt; <span class="string">"hello"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// thenAccept 处理 f 的计算结果，但返回 Void</span></span><br><span class="line">        CompletableFuture&lt;Void&gt; f2 = f.thenRun(() -&gt; System.out.println(<span class="string">"CompletableFuture stops here"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Future.get 返回 Void，并产生副作用：终端输出 CompletableFuture stops here</span></span><br><span class="line">        Void result = f2.get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>thenRun</code> 接受 <code>Runnable</code> 参数，唯一作用就是产生副作用</li>
+</ul>
+<h2 id="组合-Future"><a href="#组合-Future" class="headerlink" title="组合 Future"></a>组合 <code>Future</code></h2><h3 id="前后有依赖关系"><a href="#前后有依赖关系" class="headerlink" title="前后有依赖关系"></a>前后有依赖关系</h3><p><code>CompletableFuture</code> 最奇妙的是其可组合性，实际上 <code>CompletableFuture</code> 就是一个 <code>Monad</code> 实例，而 <code>thenCompose</code> 对应于 <code>flatMap</code>，这完全就是函数式的一套东西。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// thenCompose 用于组合两个 CompletableFuture，返回值也是 CompletableFuture，可用于进一步组合</span></span><br><span class="line">        CompletableFuture&lt;String&gt; f2 = CompletableFuture.supplyAsync(() -&gt; <span class="string">"hello"</span>)</span><br><span class="line">                .thenCompose(r -&gt; CompletableFuture.supplyAsync(() -&gt; r + <span class="string">" world"</span>));</span><br><span class="line"></span><br><span class="line">        String result = f2.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// hello world</span></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意 <code>thenApply</code> 与 <code>thenCompose</code> 是 <code>CompletableFuture</code> Monad 的核心 API，对应 Scala 中的 <code>map</code> 和 <code>flatMap</code>。</p>
+<h3 id="独立-Future"><a href="#独立-Future" class="headerlink" title="独立 Future"></a>独立 <code>Future</code></h3><p>如果要运行两个独立的 <code>Future</code>，且需要处理两者的计算结果，则使用 <code>thenCombine</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// thenCombine 用于组合两个独立的 CompletableFuture</span></span><br><span class="line">        CompletableFuture&lt;String&gt; f2 = CompletableFuture.supplyAsync(() -&gt; <span class="string">"hello"</span>)</span><br><span class="line">                .thenCombine(CompletableFuture.supplyAsync(() -&gt; <span class="string">" world"</span>), (a, b) -&gt; a + b);</span><br><span class="line"></span><br><span class="line">        String result = f2.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// hello world</span></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="独立-Future，无返回值"><a href="#独立-Future，无返回值" class="headerlink" title="独立 Future，无返回值"></a>独立 <code>Future</code>，无返回值</h3><p><code>thenCompose</code> 和 <code>thenCombine</code> 都返回计算结果，如果不需要结果，则使用 <code>thenAcceptBoth</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// thenAcceptBoth 用于组合两个独立的 CompletableFuture，无返回值，使用其副作用</span></span><br><span class="line">        CompletableFuture&lt;Void&gt; f2 = CompletableFuture.supplyAsync(() -&gt; <span class="string">"hello"</span>)</span><br><span class="line">                .thenAcceptBoth(CompletableFuture.supplyAsync(() -&gt; <span class="string">" world"</span>), (a, b) -&gt; System.out.println(a + b));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// get 副作用为输出 hello world</span></span><br><span class="line">        Void result = f2.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// null</span></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="并行处理-Future"><a href="#并行处理-Future" class="headerlink" title="并行处理 Future"></a>并行处理 <code>Future</code></h2><p>当并行处理多个 <code>Future</code> 时，一般需要等待所有 <code>Future</code> 执行结束，将它们的结果作为整体进行处理。</p>
+<p><code>CompletableFuture.allOf</code> 静态方法就是为此而生，它会等待所有参数 <code>Future</code>，直到它们都完成：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        CompletableFuture&lt;String&gt; f1 = CompletableFuture.supplyAsync(() -&gt; <span class="string">"hello"</span>);</span><br><span class="line">        CompletableFuture&lt;String&gt; f2 = CompletableFuture.supplyAsync(() -&gt; <span class="string">" beautiful"</span>);</span><br><span class="line">        CompletableFuture&lt;String&gt; f3 = CompletableFuture.supplyAsync(() -&gt; <span class="string">"world"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// allOf 等待所有 Future 执行结束，其返回值为 Void</span></span><br><span class="line">        CompletableFuture&lt;Void&gt; f = CompletableFuture.allOf(f1, f2, f3);</span><br><span class="line"></span><br><span class="line">        Void result = f.get();</span><br><span class="line"></span><br><span class="line">        System.out.println(f1.isDone());  <span class="comment">// true</span></span><br><span class="line">        System.out.println(f2.isDone());  <span class="comment">// true</span></span><br><span class="line">        System.out.println(f3.isDone());  <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>allOf</code> 返回值为 <code>Void</code>，并不能反映参数 <code>Future</code> 的执行结果</li>
+<li>各个 <code>Future</code> 的具体结果，需要各个查询</li>
+</ul>
+<p>幸运的是，使用 <code>CompletableFuture</code> 和 <code>Stream</code> 可以轻易获取各个 <code>Future</code> 的计算结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        CompletableFuture&lt;String&gt; f1 = CompletableFuture.supplyAsync(() -&gt; <span class="string">"hello"</span>);</span><br><span class="line">        CompletableFuture&lt;String&gt; f2 = CompletableFuture.supplyAsync(() -&gt; <span class="string">"beautiful"</span>);</span><br><span class="line">        CompletableFuture&lt;String&gt; f3 = CompletableFuture.supplyAsync(() -&gt; <span class="string">"world"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// allOf 等待所有 Future 执行结束，其返回值为 Void</span></span><br><span class="line">        CompletableFuture&lt;Void&gt; f = CompletableFuture.allOf(f1, f2, f3);</span><br><span class="line"></span><br><span class="line">        Void result = f.get();</span><br><span class="line"></span><br><span class="line">        System.out.println(f1.isDone());  <span class="comment">// true</span></span><br><span class="line">        System.out.println(f2.isDone());  <span class="comment">// true</span></span><br><span class="line">        System.out.println(f3.isDone());  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">        String re = Stream.of(f1, f2, f3)</span><br><span class="line">                .map(CompletableFuture::join)</span><br><span class="line">                .collect(Collectors.joining(<span class="string">" "</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// hello beautiful world</span></span><br><span class="line">        System.out.println(re);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>CompletableFuture.join</code> 类似 <code>Future.get</code> 方法，区别是，<code>join</code> 在无法正常完成任务时，抛出 unchecked exception，而 <code>get</code> 抛出 checked exception，从而使的 <code>join</code> 可以用于 <code>Stream</code></li>
+</ul>
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><h3 id="exceptionally"><a href="#exceptionally" class="headerlink" title="exceptionally"></a><code>exceptionally</code></h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * Returns a new CompletableFuture that is completed when this</span></span><br><span class="line"><span class="comment">  * CompletableFuture completes, with the result of the given</span></span><br><span class="line"><span class="comment">  * function of the exception triggering this CompletableFuture's</span></span><br><span class="line"><span class="comment">  * completion when it completes exceptionally; otherwise, if this</span></span><br><span class="line"><span class="comment">  * CompletableFuture completes normally, then the returned</span></span><br><span class="line"><span class="comment">  * CompletableFuture also completes normally with the same value.</span></span><br><span class="line"><span class="comment">  * Note: More flexible versions of this functionality are</span></span><br><span class="line"><span class="comment">  * available using methods &#123;@code whenComplete&#125; and &#123;@code handle&#125;.</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * @param fn the function to use to compute the value of the</span></span><br><span class="line"><span class="comment">  * returned CompletableFuture if this CompletableFuture completed</span></span><br><span class="line"><span class="comment">  * exceptionally</span></span><br><span class="line"><span class="comment">  * @return the new CompletableFuture</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">public <span class="type">CompletableFuture</span>&lt;<span class="type">T</span>&gt; exceptionally(</span><br><span class="line">  <span class="type">Function</span>&lt;<span class="type">Throwable</span>, ? <span class="keyword">extends</span> <span class="type">T</span>&gt; fn) &#123;</span><br><span class="line">  <span class="keyword">return</span> uniExceptionallyStage(fn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如下，<code>f</code> 函数可能抛出异常，但此处没有使用 <code>Try</code>，使用 <code>exceptionally</code> 方式处理可能出现的异常：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">CompletableFuture</span>&lt;<span class="type">File</span>&gt; f2 = <span class="type">CompletableFuture</span>.supplyAsync(() -&gt; f(<span class="literal">true</span>));</span><br><span class="line"></span><br><span class="line">f2.exceptionally(e -&gt; &#123;</span><br><span class="line">  <span class="type">System</span>.out.println(<span class="string">"f2 exception = "</span> + e);</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>f</code> 若抛出异常，则会调用 <code>exceptionally</code> 中指定的回调函数，该函数处理异常，并返回一个异常时的 <strong>默认值</strong>，以供以后的链式调用使用</li>
+<li>此处默认值为 <code>null</code></li>
+</ul>
+<h2 id="handle"><a href="#handle" class="headerlink" title="handle"></a><code>handle</code></h2><p><code>CompletableFuture</code> 链中，异常处理与 <code>try-catch</code> 略有不同，<code>CompletableFuture</code> 的错误是在 <code>handle</code> 方法中处理的，该方法接受一个函数作为参数，该函数的入参为 <code>(result, Exception)</code> 对，第一个是异步计算的结果（如果正常结束），第二个是异步结算抛出的异常（如果非正常结束）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CompletableFutureDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        String name = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        CompletableFuture&lt;String&gt; f = CompletableFuture.supplyAsync(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (name == <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"name can't be null"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"hello "</span> + name;</span><br><span class="line">        &#125;).handle((result, exception) -&gt; result == <span class="keyword">null</span> ? <span class="string">"hello stranger!"</span> : result);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// hello stranger!</span></span><br><span class="line">        String result = f.get();</span><br><span class="line"></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="completedException"><a href="#completedException" class="headerlink" title="completedException"></a><code>completedException</code></h3><h2 id="get-与-join-的区别"><a href="#get-与-join-的区别" class="headerlink" title="get 与 join 的区别"></a><code>get</code> 与 <code>join</code> 的区别</h2><p><code>get</code> 是 <code>Future</code> 定义的方法，<code>join</code> 是 <code>CompletableFuture</code> 新添加的方法，两者都可以从 <code>CompletableFuture</code> 中提取计算结果，它们 <strong>唯一</strong> 的区别是如何抛出异常。</p>
+<h3 id="get-抛出-checked-exception"><a href="#get-抛出-checked-exception" class="headerlink" title="get 抛出 checked exception"></a><code>get</code> 抛出 checked exception</h3><p><code>get</code> 方法签名如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException</span></span><br></pre></td></tr></table></figure>
+<p>它抛出的是 checked exception，必须用 <code>try-catch</code> 包裹。</p>
+<h3 id="join-抛出-unchecked-exception"><a href="#join-抛出-unchecked-exception" class="headerlink" title="join 抛出 unchecked exception"></a><code>join</code> 抛出 unchecked exception</h3><p><code>join</code> 签名如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * Returns the result value when complete, or throws an</span></span><br><span class="line"><span class="comment">  * (unchecked) exception if completed exceptionally. To better</span></span><br><span class="line"><span class="comment">  * conform with the use of common functional forms, if a</span></span><br><span class="line"><span class="comment">  * computation involved in the completion of this</span></span><br><span class="line"><span class="comment">  * CompletableFuture threw an exception, this method throws an</span></span><br><span class="line"><span class="comment">  * (unchecked) &#123;<span class="doctag">@link</span> CompletionException&#125; with the underlying</span></span><br><span class="line"><span class="comment">  * exception as its cause.</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@return</span> the result value</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@throws</span> CancellationException if the computation was cancelled</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@throws</span> CompletionException if this future completed</span></span><br><span class="line"><span class="comment">  * exceptionally or a completion computation threw an exception</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">join</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<p>可见，<code>join</code> 签名中未声明要抛出的异常，而是在注释中说明该方法在被取消，或者异常完成时，会分别抛出 <code>CancellationException</code> 和 <code>CompletionException</code>，它们都是 unchecked exception，不需要用 <code>try-catch</code> 包裹。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/并发/" rel="tag"># 并发</a>
+          
+            <a href="/tags/Java-8/" rel="tag"># Java 8</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/25/2018-05-25-pessimistic-optimistic-lock/" rel="next" title="基本概念 | 乐观锁、悲观锁">
+                <i class="fa fa-chevron-left"></i> 基本概念 | 乐观锁、悲观锁
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#用作普通-Future"><span class="nav-number">1.</span> <span class="nav-text">用作普通 Future</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#完成-Future"><span class="nav-number">1.1.</span> <span class="nav-text">完成 Future</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取消-Future"><span class="nav-number">1.2.</span> <span class="nav-text">取消 Future</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#封装计算"><span class="nav-number">2.</span> <span class="nav-text">封装计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理异步计算的结果"><span class="nav-number">3.</span> <span class="nav-text">处理异步计算的结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#接受上次的处理值，返回再次处理的值"><span class="nav-number">3.1.</span> <span class="nav-text">接受上次的处理值，返回再次处理的值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接受上次处理的值，返回-Void"><span class="nav-number">3.2.</span> <span class="nav-text">接受上次处理的值，返回 Void</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不接受上次处理的值，返回-Void"><span class="nav-number">3.3.</span> <span class="nav-text">不接受上次处理的值，返回 Void</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合-Future"><span class="nav-number">4.</span> <span class="nav-text">组合 Future</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前后有依赖关系"><span class="nav-number">4.1.</span> <span class="nav-text">前后有依赖关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#独立-Future"><span class="nav-number">4.2.</span> <span class="nav-text">独立 Future</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#独立-Future，无返回值"><span class="nav-number">4.3.</span> <span class="nav-text">独立 Future，无返回值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并行处理-Future"><span class="nav-number">5.</span> <span class="nav-text">并行处理 Future</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误处理"><span class="nav-number">6.</span> <span class="nav-text">错误处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exceptionally"><span class="nav-number">6.1.</span> <span class="nav-text">exceptionally</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#handle"><span class="nav-number">7.</span> <span class="nav-text">handle</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#completedException"><span class="nav-number">7.1.</span> <span class="nav-text">completedException</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get-与-join-的区别"><span class="nav-number">8.</span> <span class="nav-text">get 与 join 的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#get-抛出-checked-exception"><span class="nav-number">8.1.</span> <span class="nav-text">get 抛出 checked exception</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join-抛出-unchecked-exception"><span class="nav-number">8.2.</span> <span class="nav-text">join 抛出 unchecked exception</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/05/27/2018-05-26-java8-completablefuture/';
+        this.page.identifier = '2018/05/27/2018-05-26-java8-completablefuture/';
+        this.page.title = '【译】CompletableFuture 入门';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
