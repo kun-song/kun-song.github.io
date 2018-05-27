@@ -1,7 +1,7 @@
 # Site
 title: 随便写写
 subtitle:
-description:
+description: Java for living, Scala for fun!
 keywords:
 author: Song Kun
 language: zh-CN
@@ -76,3 +76,13 @@ deploy:
   type: git
   repo: https://github.com/satansk/satansk.github.io.git
   branch: master
+
+douban:
+  user: 46314286
+  book:
+    title: '豆瓣书单'
+    # quote: 'This is my book quote'
+  # movie:
+  #   title: 'This is my movie title'
+  #   quote: 'This is my movie quote'
+  timeout: 50000 #optional
