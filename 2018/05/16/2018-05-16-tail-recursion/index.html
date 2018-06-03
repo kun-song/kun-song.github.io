@@ -120,16 +120,16 @@
 
 
   <meta name="description" content="尾调用若函数 最后一步 操作为函数调用，则称之为尾调用（tail call）。 尾调用的关键是最后一步必须是“纯粹”的函数调用，不能有任何其他操作，例如： 123def sum(xs: List[Int]): Int =  if (xs.isEmpty) 0  else xs.head + sum(xs.tail)  sum 函数最后一步 xs.head + sum(xs.tail) 中除调用 s">
-<meta name="keywords" content="Scala,fp">
+<meta name="keywords" content="Scala,fp,尾递归">
 <meta property="og:type" content="article">
-<meta property="og:title" content="尾递归">
+<meta property="og:title" content="为什么需要尾递归？">
 <meta property="og:url" content="http://songkun.me/2018/05/16/2018-05-16-tail-recursion/index.html">
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="尾调用若函数 最后一步 操作为函数调用，则称之为尾调用（tail call）。 尾调用的关键是最后一步必须是“纯粹”的函数调用，不能有任何其他操作，例如： 123def sum(xs: List[Int]): Int =  if (xs.isEmpty) 0  else xs.head + sum(xs.tail)  sum 函数最后一步 xs.head + sum(xs.tail) 中除调用 s">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-22T15:06:49.000Z">
+<meta property="og:updated_time" content="2018-06-03T07:56:01.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="尾递归">
+<meta name="twitter:title" content="为什么需要尾递归？">
 <meta name="twitter:description" content="尾调用若函数 最后一步 操作为函数调用，则称之为尾调用（tail call）。 尾调用的关键是最后一步必须是“纯粹”的函数调用，不能有任何其他操作，例如： 123def sum(xs: List[Int]): Int =  if (xs.isEmpty) 0  else xs.head + sum(xs.tail)  sum 函数最后一步 xs.head + sum(xs.tail) 中除调用 s">
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>尾递归 | 随便写写</title>
+  <title>为什么需要尾递归？ | 随便写写</title>
   
 
 
@@ -356,7 +356,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">尾递归
+          <h1 class="post-title" itemprop="name headline">为什么需要尾递归？
               
             
           </h1>
@@ -398,7 +398,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-22 23:06:49" itemprop="dateModified" datetime="2018-05-22T23:06:49+08:00">2018-05-22</time>
+                <time title="修改时间：2018-06-03 15:56:01" itemprop="dateModified" datetime="2018-06-03T15:56:01+08:00">2018-06-03</time>
               
             
           </span>
@@ -536,6 +536,8 @@
           
             <a href="/tags/fp/" rel="tag"># fp</a>
           
+            <a href="/tags/尾递归/" rel="tag"># 尾递归</a>
+          
         </div>
       
 
@@ -643,7 +645,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -701,7 +703,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -927,7 +933,7 @@
       var disqus_config = function () {
         this.page.url = 'http://songkun.me/2018/05/16/2018-05-16-tail-recursion/';
         this.page.identifier = '2018/05/16/2018-05-16-tail-recursion/';
-        this.page.title = '尾递归';
+        this.page.title = '为什么需要尾递归？';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');

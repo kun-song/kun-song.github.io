@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="变长参数是很常见的语言特性，Java 和 Scala 都支持，使用很简单，本文介绍其在 Java 和 Scala 中的基本用法。">
-<meta name="keywords" content="Java,Scala">
+  <meta name="description" content="前几天我在 为什么需要尾递归？ 一文中介绍了尾递归的基本概念，以及 Scala 编译器对尾调用（递归）的优化。 不幸的是，由于 JVM 实现的局限性（参考知乎问题 为什么 JVM 下的语言尾递归优化似乎都不完美？），Scala 对尾调用的优化 非常有限：  只能优化直接尾调用（self-tail calls）  该缺陷导致 Scala 编译器无法优化 mutual recursion，大大降低了递">
+<meta name="keywords" content="Scala,fp,尾递归,蹦床">
 <meta property="og:type" content="article">
-<meta property="og:title" content="变长参数">
-<meta property="og:url" content="http://songkun.me/2018/05/20/2018-05-20-variable-arguments/index.html">
+<meta property="og:title" content="Scala 尾递归优化的局限性">
+<meta property="og:url" content="http://songkun.me/2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="变长参数是很常见的语言特性，Java 和 Scala 都支持，使用很简单，本文介绍其在 Java 和 Scala 中的基本用法。">
+<meta property="og:description" content="前几天我在 为什么需要尾递归？ 一文中介绍了尾递归的基本概念，以及 Scala 编译器对尾调用（递归）的优化。 不幸的是，由于 JVM 实现的局限性（参考知乎问题 为什么 JVM 下的语言尾递归优化似乎都不完美？），Scala 对尾调用的优化 非常有限：  只能优化直接尾调用（self-tail calls）  该缺陷导致 Scala 编译器无法优化 mutual recursion，大大降低了递">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-22T15:06:49.000Z">
+<meta property="og:updated_time" content="2018-06-03T13:29:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="变长参数">
-<meta name="twitter:description" content="变长参数是很常见的语言特性，Java 和 Scala 都支持，使用很简单，本文介绍其在 Java 和 Scala 中的基本用法。">
+<meta name="twitter:title" content="Scala 尾递归优化的局限性">
+<meta name="twitter:description" content="前几天我在 为什么需要尾递归？ 一文中介绍了尾递归的基本概念，以及 Scala 编译器对尾调用（递归）的优化。 不幸的是，由于 JVM 实现的局限性（参考知乎问题 为什么 JVM 下的语言尾递归优化似乎都不完美？），Scala 对尾调用的优化 非常有限：  只能优化直接尾调用（self-tail calls）  该缺陷导致 Scala 编译器无法优化 mutual recursion，大大降低了递">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/20/2018-05-20-variable-arguments/"/>
+  <link rel="canonical" href="http://songkun.me/2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>变长参数 | 随便写写</title>
+  <title>Scala 尾递归优化的局限性 | 随便写写</title>
   
 
 
@@ -339,7 +339,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/20/2018-05-20-variable-arguments/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -356,7 +356,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">变长参数
+          <h1 class="post-title" itemprop="name headline">Scala 尾递归优化的局限性
               
             
           </h1>
@@ -381,24 +381,12 @@
                 
               
 
-              <time title="创建时间：2018-05-20 22:27:44" itemprop="dateCreated datePublished" datetime="2018-05-20T22:27:44+08:00">2018-05-20</time>
+              <time title="创建时间：2018-06-03 15:50:26 / 修改时间：21:29:26" itemprop="dateCreated datePublished" datetime="2018-06-03T15:50:26+08:00">2018-06-03</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-05-22 23:06:49" itemprop="dateModified" datetime="2018-05-22T23:06:49+08:00">2018-05-22</time>
               
             
           </span>
@@ -430,9 +418,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/20/2018-05-20-variable-arguments/#comments" itemprop="discussionUrl">
+                <a href="/2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/20/2018-05-20-variable-arguments/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -460,48 +448,48 @@
       
 
       
-        <p>变长参数是很常见的语言特性，Java 和 Scala 都支持，使用很简单，本文介绍其在 Java 和 Scala 中的基本用法。</p>
+        <p>前几天我在 <a href="/2018/05/16/2018-05-16-tail-recursion/" title="为什么需要尾递归？">为什么需要尾递归？</a> 一文中介绍了尾递归的基本概念，以及 Scala 编译器对尾调用（递归）的优化。</p>
+<p>不幸的是，由于 JVM 实现的局限性（参考知乎问题 <a href="https://www.zhihu.com/question/22627957" target="_blank" rel="noopener">为什么 JVM 下的语言尾递归优化似乎都不完美？</a>），Scala 对尾调用的优化 <strong>非常有限</strong>：</p>
+<ul>
+<li>只能优化直接尾调用（self-tail calls）</li>
+</ul>
+<p>该缺陷导致 Scala 编译器无法优化 mutual recursion，大大降低了递归的实用性。</p>
 <a id="more"></a>
-<h2 id="Java-变长参数"><a href="#Java-变长参数" class="headerlink" title="Java 变长参数"></a>Java 变长参数</h2><p>Java 5 引入对变长参数的支持，并规定变长参数必须满足：</p>
-<ol>
-<li>最多只能有一个变长参数</li>
-<li>必须是参数列表中的 <strong>最后一个</strong> 参数</li>
-</ol>
-<p>变长参数只是数组参数的语法糖，更加方便而已：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(String... args)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(String[] args)</span></span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
 <ul>
-<li>两个 <code>foo</code> 定义完全相同，不能作为重载函数同时存在！</li>
+<li>mutual recursion 在 FP 中非常常见，在某些领域中 mutual recursion 是非常自然的解法（例如递归下降解析器）</li>
+<li>Haskell 并无该缺陷，可以优化 mutual recursion</li>
 </ul>
-<p>例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> ... xs)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i : xs) &#123;</span><br><span class="line">    result += i;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以使用数组调用 <code>sum</code>：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] xs = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;;</span><br><span class="line">sum(xs);</span><br></pre></td></tr></table></figure>
-<h2 id="Scala-变长参数"><a href="#Scala-变长参数" class="headerlink" title="Scala 变长参数"></a>Scala 变长参数</h2><p>Scala 同样支持变长参数，也必须满足同样的两个条件：</p>
-<ol>
-<li>最多一个</li>
-<li>只能是参数列表中最后一个</li>
-</ol>
-<p>例如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(xs: <span class="type">Int</span>*): <span class="type">Int</span> = xs.sum</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="互递归实例"><a href="#互递归实例" class="headerlink" title="互递归实例"></a>互递归实例</h2><p>首先看一个 mutual recursion 的例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isEven</span></span>(n: <span class="type">Int</span>): <span class="type">Boolean</span> =</span><br><span class="line">  <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="literal">true</span></span><br><span class="line">  <span class="keyword">else</span> isOdd(n - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isOdd</span></span>(n: <span class="type">Int</span>): <span class="type">Boolean</span> =</span><br><span class="line">  <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="literal">false</span></span><br><span class="line">  <span class="keyword">else</span> isEven(n - <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p><code>isEven</code> 和 <code>isOdd</code> 互相调用，组成 mutual recursion，Scala 编译器无法对其进行优化，<code>isEven(100000)</code> 即可造成栈溢出。</p>
+<h2 id="蹦床：优化互递归"><a href="#蹦床：优化互递归" class="headerlink" title="蹦床：优化互递归"></a>蹦床：优化互递归</h2><p>蹦床（trampoline call）可以避免 mutual recursion 栈溢出，但要承受一定的性能损耗，使用 <code>TailRec</code> 重写上面的例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.util.control.<span class="type">TailCalls</span>.<span class="type">TailRec</span></span><br><span class="line"><span class="keyword">import</span> scala.util.control.<span class="type">TailCalls</span>._</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isEven</span></span>(n: <span class="type">Int</span>): <span class="type">TailRec</span>[<span class="type">Boolean</span>] =</span><br><span class="line">  <span class="keyword">if</span> (n == <span class="number">0</span>) done(<span class="literal">true</span>)</span><br><span class="line">  <span class="keyword">else</span> tailcall(isOdd(n - <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isOdd</span></span>(n: <span class="type">Int</span>): <span class="type">TailRec</span>[<span class="type">Boolean</span>] =</span><br><span class="line">  <span class="keyword">if</span> (n == <span class="number">0</span>) done(<span class="literal">false</span>)</span><br><span class="line">  <span class="keyword">else</span> tailcall(isEven(n - <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>此时 <code>isEven(1000000000).result</code> 都不会发生栈溢出了，可以放心使用。</p>
+<h2 id="蹦床：优化普通递归"><a href="#蹦床：优化普通递归" class="headerlink" title="蹦床：优化普通递归"></a>蹦床：优化普通递归</h2><p>除尾递归外，普通递归也可用 <code>TailRec</code> 优化，例如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span>  <span class="title">fib</span></span>(n: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (n &lt; <span class="number">2</span>) n</span><br><span class="line">  <span class="keyword">else</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>Scala 将 <code>xs</code> 作为 <code>Array[Int]</code> 处理</li>
+<li>该解法既不是尾递归，也不是互递归</li>
 </ul>
-<p>与 Java 类似，Scala 将变长参数作为序列（可变 <code>Array</code> ）来处理；与 Java 不同的是，虽然 <code>sum</code> 内部将 <code>xs</code> 作为序列处理，但却无法直接使用序列调用 <code>sum</code> 函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))  <span class="comment">// 编译报错</span></span><br></pre></td></tr></table></figure>
-<p>使用 <code>_:*</code> 标识可以使用序列（<code>List</code> <code>Vector</code> <code>Seq</code> <code>Array</code>）来调用 <code>sum</code> 函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sum(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br><span class="line">sum(<span class="type">Vector</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br><span class="line">sum(<span class="type">Array</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br><span class="line">sum(<span class="type">Seq</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>): _*)</span><br></pre></td></tr></table></figure>
+<p>用蹦床优化 <code>fib</code> 后为：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span>  <span class="title">fib</span></span>(n: <span class="type">Int</span>): <span class="type">TailRec</span>[<span class="type">Int</span>] =</span><br><span class="line">  <span class="keyword">if</span> (n &lt; <span class="number">2</span>) done(n)</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">for</span> &#123;</span><br><span class="line">    x ← tailcall(fib(n - <span class="number">1</span>))</span><br><span class="line">    y ← tailcall(fib(n - <span class="number">2</span>))</span><br><span class="line">  &#125; <span class="keyword">yield</span> x + y</span><br></pre></td></tr></table></figure>
+<p>再也不会出现栈溢出了！</p>
+<h2 id="蹦床原理"><a href="#蹦床原理" class="headerlink" title="蹦床原理"></a>蹦床原理</h2><p>蹦床原理非常简单，即利用 thunk 实现延迟计算（更多关于延迟计算的内容，请参考 <a href="/2018/05/22/2018-05-22-racket-lazy-evaluation/" title="Racket | 拨开延迟计算的迷雾">Racket | 拨开延迟计算的迷雾</a>），一个非常简单的 <code>TailRec</code> 实现如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">TailRec</span>[<span class="type">A</span>]</span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Call</span>[<span class="type">A</span>](<span class="params">thunk: (</span>) <span class="title">⇒</span> <span class="title">TailRec</span>[<span class="type">A</span>]) <span class="keyword">extends</span> <span class="title">TailRec</span>[<span class="type">A</span>]</span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Done</span>[<span class="type">A</span>](<span class="params">result: <span class="type">A</span></span>)              <span class="keyword">extends</span> <span class="title">TailRec</span>[<span class="type">A</span>]</span></span><br></pre></td></tr></table></figure>
+<p>短短的 3 行代码就能解决 <code>isEven</code> 和 <code>isOdd</code> 互递归的栈溢出问题：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isEven</span></span>(n: <span class="type">Int</span>): <span class="type">TailRec</span>[<span class="type">Boolean</span>] =</span><br><span class="line">  <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="type">Done</span>(<span class="literal">true</span>)</span><br><span class="line">  <span class="keyword">else</span> <span class="type">Call</span>(() ⇒ isOdd(n - <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isOdd</span></span>(n: <span class="type">Int</span>): <span class="type">TailRec</span>[<span class="type">Boolean</span>] =</span><br><span class="line">  <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="type">Done</span>(<span class="literal">false</span>)</span><br><span class="line">  <span class="keyword">else</span> <span class="type">Call</span>(() ⇒ isEven(n - <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">trampoline(isEven(<span class="number">10000000</span>))</span><br></pre></td></tr></table></figure>
+<p><code>fib</code> 实现中使用了 for 表达式，for 表达式依赖 <code>map</code>、<code>flatMap</code> 等函数，为 <code>TailRec</code> 添加这些函数后即可将 <code>TailRec</code> 用于 for 表达式，该任务留待以后有时间完成吧。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Scala 选择 JVM 作为目标平台，既享受了 JVM 宇宙第一生态的优势，也得忍受 JVM 的种种不足，尾递归优化即为其中一个例子。</p>
+<p>当遇到 mutual recursion 时，要么改为迭代实现，要么使用蹦床，若用蹦床，需要确定可以忍受蹦床带来的性能损失。</p>
+<hr>
+<p>参考：</p>
 <ul>
-<li><code>_:*</code> 告诉编译器，将序列分解为 <strong>离散元素</strong></li>
+<li><a href="http://blog.richdougherty.com/2009/04/tail-calls-tailrec-and-trampolines.html" target="_blank" rel="noopener">Tail calls, @tailrec and trampolines</a></li>
+<li><a href="https://www.zhihu.com/question/22627957" target="_blank" rel="noopener">为什么 JVM 下的语言尾递归优化似乎都不完美？</a></li>
+<li>维基百科 <a href="https://en.wikipedia.org/wiki/Mutual_recursion" target="_blank" rel="noopener">Mutual recursion</a></li>
+<li><a href="https://www.fpcomplete.com/blog/2016/11/comparison-scala-and-haskell" target="_blank" rel="noopener">DO YOU LIKE SCALA? GIVE HASKELL A TRY!</a></li>
 </ul>
-<p>很多集合类的构造函数都使用了变长参数，例如 <code>List</code> <code>Map</code> 等。</p>
-<h2 id="Java、Scala-互操作"><a href="#Java、Scala-互操作" class="headerlink" title="Java、Scala 互操作"></a>Java、Scala 互操作</h2><p>默认情况下，Java 无法使用 Scala 定义的具备变长参数的方法，除非为其添加 <code>scala.annotation.varargs</code> 注解。</p>
-<p><code>@varargs</code> 注解使 Scala 编译器生成 <strong>两个方法</strong>：</p>
-<ul>
-<li>一个给 Scala 使用（字节码参数是一个 Seq）</li>
-<li>一个给 Java 使用（字节码参数是一个数组）</li>
-</ul>
-<p>例如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@scala</span>.annotation.varargs</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">select</span></span>(exprs: <span class="type">Expression</span>*): <span class="type">DataFrame</span> = &#123; ... &#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -522,9 +510,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java/" rel="tag"># Java</a>
-          
             <a href="/tags/Scala/" rel="tag"># Scala</a>
+          
+            <a href="/tags/fp/" rel="tag"># fp</a>
+          
+            <a href="/tags/尾递归/" rel="tag"># 尾递归</a>
+          
+            <a href="/tags/蹦床/" rel="tag"># 蹦床</a>
           
         </div>
       
@@ -537,8 +529,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/20/2018-05-20-why-option/" rel="next" title="我们为什么需要 Option ？">
-                <i class="fa fa-chevron-left"></i> 我们为什么需要 Option ？
+              <a href="/2018/06/03/2018-06-02-scala-3-polymorphism/" rel="next" title="多态知多少？">
+                <i class="fa fa-chevron-left"></i> 多态知多少？
               </a>
             
           </div>
@@ -546,10 +538,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/20/2018-05-20-java7-objects/" rel="prev" title="Objects 工具类">
-                Objects 工具类 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -745,7 +733,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-变长参数"><span class="nav-number">1.</span> <span class="nav-text">Java 变长参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala-变长参数"><span class="nav-number">2.</span> <span class="nav-text">Scala 变长参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java、Scala-互操作"><span class="nav-number">3.</span> <span class="nav-text">Java、Scala 互操作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#互递归实例"><span class="nav-number">1.</span> <span class="nav-text">互递归实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蹦床：优化互递归"><span class="nav-number">2.</span> <span class="nav-text">蹦床：优化互递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蹦床：优化普通递归"><span class="nav-number">3.</span> <span class="nav-text">蹦床：优化普通递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蹦床原理"><span class="nav-number">4.</span> <span class="nav-text">蹦床原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -919,9 +907,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/05/20/2018-05-20-variable-arguments/';
-        this.page.identifier = '2018/05/20/2018-05-20-variable-arguments/';
-        this.page.title = '变长参数';
+        this.page.url = 'http://songkun.me/2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/';
+        this.page.identifier = '2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/';
+        this.page.title = 'Scala 尾递归优化的局限性';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
