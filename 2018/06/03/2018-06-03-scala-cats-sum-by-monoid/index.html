@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在 基本概念 | 多态知多少？ 一文中我说过特设多态在 Scala 中非常常见，且 Scala 利用 type class 实现特设多态。   type class 源于 Haskell Scala 支持 type class 和函数重载两种方式实现特设多态   本文通过实现一个简洁、通用的 sum 函数，展示 type class 的强大之处。">
+<meta name="keywords" content="Scala,fp,Cats,Monoid,Foldable,Type Class">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Type Class | 基于 Monoid 和 Foldable 的 sum 函数">
+<meta property="og:url" content="http://songkun.me/2018/06/03/2018-06-03-scala-cats-sum-by-monoid/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="在 基本概念 | 多态知多少？ 一文中我说过特设多态在 Scala 中非常常见，且 Scala 利用 type class 实现特设多态。   type class 源于 Haskell Scala 支持 type class 和函数重载两种方式实现特设多态   本文通过实现一个简洁、通用的 sum 函数，展示 type class 的强大之处。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-04T15:15:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Type Class | 基于 Monoid 和 Foldable 的 sum 函数">
+<meta name="twitter:description" content="在 基本概念 | 多态知多少？ 一文中我说过特设多态在 Scala 中非常常见，且 Scala 利用 type class 实现特设多态。   type class 源于 Haskell Scala 支持 type class 和函数重载两种方式实现特设多态   本文通过实现一个简洁、通用的 sum 函数，展示 type class 的强大之处。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/06/03/2018-06-03-scala-cats-sum-by-monoid/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Type Class | 基于 Monoid 和 Foldable 的 sum 函数 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/06/03/2018-06-03-scala-cats-sum-by-monoid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Type Class | 基于 Monoid 和 Foldable 的 sum 函数
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-03 21:42:15" itemprop="dateCreated datePublished" datetime="2018-06-03T21:42:15+08:00">2018-06-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-04 23:15:38" itemprop="dateModified" datetime="2018-06-04T23:15:38+08:00">2018-06-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/03/2018-06-03-scala-cats-sum-by-monoid/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/03/2018-06-03-scala-cats-sum-by-monoid/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在 <a href="/2018/06/02/2018-06-02-scala-3-polymorphism/" title="基本概念 | 多态知多少？">基本概念 | 多态知多少？</a> 一文中我说过特设多态在 Scala 中非常常见，且 Scala 利用 type class 实现特设多态。</p>
+<blockquote>
+<ul>
+<li>type class 源于 Haskell</li>
+<li>Scala 支持 type class 和函数重载两种方式实现特设多态</li>
+</ul>
+</blockquote>
+<p>本文通过实现一个简洁、通用的 <code>sum</code> 函数，展示 type class 的强大之处。</p>
+<a id="more"></a>
+<h2 id="乞丐版"><a href="#乞丐版" class="headerlink" title="乞丐版"></a>乞丐版</h2><p>最简单的 <code>sum</code> 是对 <code>List[Int]</code> 求和，可用 <code>fold</code> 实现：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(xs: <span class="type">List</span>[<span class="type">Int</span>]): <span class="type">Int</span> = xs.foldLeft(<span class="number">0</span>)(_ + _)</span><br></pre></td></tr></table></figure>
+<p>若要对 <code>List[String]</code> 求和，需重新实现一个 <code>sum</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(list: <span class="type">List</span>[<span class="type">String</span>]): <span class="type">String</span> = list.foldRight(<span class="string">""</span>)(_ ++ _)</span><br></pre></td></tr></table></figure>
+<p>若要对 <code>List[Set]</code> 求和呢，不幸的是，还得重新实现 <code>sum</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">unionSets</span></span>[<span class="type">A</span>](list: <span class="type">List</span>[<span class="type">Set</span>[<span class="type">A</span>]]): <span class="type">Set</span>[<span class="type">A</span>] = list.foldRight(<span class="type">Set</span>.empty[<span class="type">A</span>])(_ union _)</span><br></pre></td></tr></table></figure>
+<h2 id="升级版"><a href="#升级版" class="headerlink" title="升级版"></a>升级版</h2><p>重复是程序员的大敌，遇到重复代码时，需要考虑抽取不同点，将相同点抽象为通用函数，具体到 <code>sum</code> 函数：</p>
+<ul>
+<li>相同点：都使用 <code>foldLeft</code> 实现</li>
+<li>不同点：<code>foldLeft</code> 的两个参数不同</li>
+</ul>
+<p>其实 <code>sum</code> 的不同点正好可以用 <code>Monoid</code> type class 表示，<code>Monoid</code> 由两部分组成：</p>
+<ul>
+<li>二元操作 <code>combine</code>，类型为 <code>(A, A) =&gt; A</code></li>
+<li>单位元 <code>empty</code>，类型为 <code>A</code></li>
+</ul>
+<blockquote>
+<p>更多关于 <code>Monoid</code> 的内容，参考我的 <a href="https://github.com/satansk/scala-with-cats/blob/master/chapter02/Definition_of_a_Monoid.md" target="_blank" rel="noopener">Scala with Cats 笔记</a></p>
+</blockquote>
+<p>可以很容易自定义一个 <code>Monoid</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Monoid</span>[<span class="type">A</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">combine</span></span>(x: <span class="type">A</span>, y: <span class="type">A</span>): <span class="type">A</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">empty</span></span>: <span class="type">A</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>Monoid</code> 重构 <code>sum</code> 函数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>[<span class="type">A</span>](xs: <span class="type">List</span>[<span class="type">A</span>])(m: <span class="type">Monoid</span>[<span class="type">A</span>]): <span class="type">A</span> =</span><br><span class="line">  xs.foldLeft(m.empty)(m.combine)</span><br></pre></td></tr></table></figure>
+<p>为方便使用，将 <code>Monoid</code> 定义为 <code>implicit</code> 参数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>[<span class="type">A</span>](xs: <span class="type">List</span>[<span class="type">A</span>])(<span class="keyword">implicit</span> m: <span class="type">Monoid</span>[<span class="type">A</span>]): <span class="type">A</span> =</span><br><span class="line">  xs.foldLeft(m.empty)(m.combine)</span><br></pre></td></tr></table></figure>
+<p>这样就可以省略 <code>Monoid</code> 参数了：<code>sum(List(1, 2, 3))</code>。</p>
+<p>Scala 专门为 type class 提供了 context bound 语法，用于简化 <code>implicit</code> 参数定义：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>[<span class="type">A</span>: <span class="type">Monoid</span>](xs: <span class="type">List</span>[<span class="type">A</span>]): <span class="type">A</span> = &#123;</span><br><span class="line">  <span class="keyword">val</span> m = implicitly[<span class="type">Monoid</span>[<span class="type">A</span>]]</span><br><span class="line">  xs.foldLeft(m.empty)(m.combine)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过 <code>implicitly</code> 函数获取隐式作用域中的值</li>
+</ul>
+<p>只要隐式作用域中存在 <code>Monoid[A]</code> 实例，就可以通过 <code>sum</code> 对 <code>List[A]</code> 求和，<code>sum</code> 已经非常通用了，但还不够。</p>
+<h2 id="终极版"><a href="#终极版" class="headerlink" title="终极版"></a>终极版</h2><p><code>sum</code> 目前只能对 <code>List</code> 求和，如果要对 <code>Option</code>、<code>Vector</code> 等求和怎么办呢，难道再重复实现一个 <code>sum</code>？</p>
+<p>仔细观察 <code>sum</code> 的实现，除 <code>foldLeft</code> 函数外，它并不依赖 <code>List</code> 的其他属性，那能不能把 <code>foldLeft</code> 抽象出来呢？</p>
+<p>当然可以！</p>
+<p><code>foldLeft</code> 并非 <code>List</code> 专有函数，Scala 世界中有无数类型具备 <code>foldLeft</code> 特性，因此完全可以把 <code>foldLeft</code> 抽象为 type class：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">FoldLeft</span>[<span class="type">F</span>[_]] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">foldLeft</span></span>[<span class="type">A</span>, <span class="type">B</span>](xs: <span class="type">F</span>[<span class="type">A</span>], zero: <span class="type">B</span>, f: (<span class="type">B</span>, <span class="type">A</span>) =&gt; <span class="type">B</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>FoldLeft</code> 特质即为 type class，表示所有具备 <code>foldLeft</code> 函数的类型，其中 <code>F</code> 是一个类型构造器（type constructor）。</p>
+<p>利用 <code>FoldLeft</code> 重构 <code>sum</code> 函数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>[<span class="type">A</span>: <span class="type">Monoid</span>, <span class="type">F</span>[_]: <span class="type">FoldLeft</span>](xs: <span class="type">F</span>[<span class="type">A</span>]): <span class="type">A</span> = &#123;</span><br><span class="line">  <span class="keyword">val</span> m = implicitly[<span class="type">Monoid</span>[<span class="type">A</span>]]</span><br><span class="line">  <span class="keyword">val</span> f = implicitly[<span class="type">FoldLeft</span>[<span class="type">F</span>]]</span><br><span class="line">  f.foldLeft(xs, m.empty, m.combine)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在 <code>sum</code> 没有任何写死的类型，<code>sum</code> 接受两个类型参数：<code>A</code> 和 <code>F[_]</code>，并通过两个 type class 限制必须存在 <code>Monoid[A]</code> 和 <code>FoldLeft[F]</code> 实例，并依赖 <code>FoldLeft</code> 和 <code>Monoid</code> 约束的行为实现 <code>sum</code> 函数。</p>
+<blockquote>
+<p>type class is a class/group of types，这组类型必须满足 type class 描述的行为，具体而言属于 <code>Monoid</code> 的类型必须具备 <code>combine</code> 和 <code>zero</code> 两个函数，且它们必须满足 <code>Monoid</code> 定律。</p>
+</blockquote>
+<h2 id="如何使用？"><a href="#如何使用？" class="headerlink" title="如何使用？"></a>如何使用？</h2><p>虽然我们已经拥有了近乎完美的 <code>sum</code> 函数，但要实际使用它还需提供对应的 <code>Monoid</code>、<code>FoldLeft</code> 实例，因为 type class 仅仅描述行为，实际实现由 type class instances 负责。</p>
+<p>例如若要对 <code>List[Int]</code> 求和，需要提供 <code>Monoid[Int]</code> 和 <code>FoldLeft[List]</code> 实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Monoid</span> </span>&#123;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> intMonoid: <span class="type">Monoid</span>[<span class="type">Int</span>] =</span><br><span class="line">    <span class="keyword">new</span> <span class="type">Monoid</span>[<span class="type">Int</span>] &#123;</span><br><span class="line">      <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">combine</span></span>(x: <span class="type">Int</span>, y: <span class="type">Int</span>): <span class="type">Int</span> = x + y</span><br><span class="line">      <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">empty</span></span>: <span class="type">Int</span> = <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">FoldLeft</span> </span>&#123;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> listFoldLeft: <span class="type">FoldLeft</span>[<span class="type">List</span>] =</span><br><span class="line">    <span class="keyword">new</span> <span class="type">FoldLeft</span>[<span class="type">List</span>] &#123;</span><br><span class="line">      <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">foldLeft</span></span>[<span class="type">A</span>, <span class="type">B</span>](xs: <span class="type">List</span>[<span class="type">A</span>], zero: <span class="type">B</span>, f: (<span class="type">B</span>, <span class="type">A</span>) ⇒ <span class="type">B</span>): <span class="type">B</span> =</span><br><span class="line">        xs.foldLeft(zero)(f)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分别将它们导入当前作用域：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="type">Monoid</span>._</span><br><span class="line"><span class="keyword">import</span> <span class="type">FoldLeft</span>._</span><br></pre></td></tr></table></figure>
+<p>之后即可对 <code>List[Int]</code> 求和：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))  <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+<p>若要对 <code>Vector[String]</code> 求和，则需提供 <code>Monoid[String]</code> 和 <code>FoldLeft[Vector]</code> 实例！</p>
+<p>等等，不是说好了消除重复代码吗，怎么还要写这么多 helper 代码？？？</p>
+<p>好吧，我从 3 个方面为这些 helper 代码做下辩解：</p>
+<p>首先，Scala 没有内置 type class 特性，我们是通过 <code>trait</code> + <code>implicit</code> 自己实现的 type class，完全从零开始，不可避免要写很多代码。</p>
+<p>其次，作为一个库设计者（好吧，<code>sum</code> 也算一个微小的库），我们通过实现上的复杂，换取到清晰、简洁的接口，这是一种设计权衡。</p>
+<p>最后，实际使用中，我们根本不需要、也不推荐自行实现 type class，一般使用 <a href="https://typelevel.org/cats/" target="_blank" rel="noopener">Cats</a>、<a href="https://github.com/scalaz/scalaz" target="_blank" rel="noopener">Scalaz</a> 等第三方库，它们包含常用类型的 type class instances 实现，直接导入即可使用。</p>
+<h2 id="Cats-版"><a href="#Cats-版" class="headerlink" title="Cats 版"></a>Cats 版</h2><p>为了证明 type class 实际使用并不繁琐，我们用 Cats 重构 <code>sum</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.language.higherKinds</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cats.<span class="type">Monoid</span></span><br><span class="line"><span class="keyword">import</span> cats.<span class="type">Foldable</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>[<span class="type">A</span>: <span class="type">Monoid</span>, <span class="type">F</span>[_]: <span class="type">Foldable</span>](xs: <span class="type">F</span>[<span class="type">A</span>]): <span class="type">A</span> = &#123;</span><br><span class="line">  <span class="keyword">val</span> m = <span class="type">Monoid</span>[<span class="type">A</span>]</span><br><span class="line">  <span class="keyword">val</span> f = <span class="type">Foldable</span>[<span class="type">F</span>]</span><br><span class="line">  f.foldLeft(xs, m.empty)(m.combine)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Cats 中每个 type class 的伴生对象都有一个 <code>apply</code> 函数，效果与 Scala 内置的 <code>implicitly</code> 函数等同。</p>
+</blockquote>
+<p>使用时，只需要 <code>import</code> 对应类型的 type class 实例即可，例如对 <code>List[Int]</code> 求和：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cats.instances.int._</span><br><span class="line"><span class="keyword">import</span> cats.instances.list._</span><br><span class="line"></span><br><span class="line">sum(<span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))  <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+<p>对 <code>Vector[String]</code> 求和：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cats.instances.vector._</span><br><span class="line"><span class="keyword">import</span> cats.instances.string._</span><br><span class="line"></span><br><span class="line">sum(<span class="type">Vector</span>(<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>))  <span class="comment">// ABC</span></span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>type class 源于 Haskell，最初为实现特设多态而引入，Scala 没有内置该特性，但允许用户通过 <code>trait</code> 和 <code>implicit</code> 参数自行实现。</p>
+<p><a href="https://book.douban.com/subject/26772149/" target="_blank" rel="noopener">Scala 函数式编程</a> 讲解了很多 type class 的实现细节，它们很多都可以在 Cats/Scalaz 中找到。</p>
+<p>type class 属于 Scala 中比较偏 FP 的特性，若非 FP 粉丝，实际项目中一般很少使用。</p>
+<hr>
+<p>参考：</p>
+<ul>
+<li><a href="https://typelevel.org/cats/typeclasses.html" target="_blank" rel="noopener">Cats 官方文档</a></li>
+<li><a href="http://eed3si9n.com/herding-cats/sum-function.html" target="_blank" rel="noopener">Herding Cats</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Scala/" rel="tag"># Scala</a>
+          
+            <a href="/tags/fp/" rel="tag"># fp</a>
+          
+            <a href="/tags/Cats/" rel="tag"># Cats</a>
+          
+            <a href="/tags/Monoid/" rel="tag"># Monoid</a>
+          
+            <a href="/tags/Foldable/" rel="tag"># Foldable</a>
+          
+            <a href="/tags/Type-Class/" rel="tag"># Type Class</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/" rel="next" title="Scala 尾递归优化的局限性">
+                <i class="fa fa-chevron-left"></i> Scala 尾递归优化的局限性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#乞丐版"><span class="nav-number">1.</span> <span class="nav-text">乞丐版</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#升级版"><span class="nav-number">2.</span> <span class="nav-text">升级版</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#终极版"><span class="nav-number">3.</span> <span class="nav-text">终极版</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用？"><span class="nav-number">4.</span> <span class="nav-text">如何使用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cats-版"><span class="nav-number">5.</span> <span class="nav-text">Cats 版</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/06/03/2018-06-03-scala-cats-sum-by-monoid/';
+        this.page.identifier = '2018/06/03/2018-06-03-scala-cats-sum-by-monoid/';
+        this.page.title = 'Type Class | 基于 Monoid 和 Foldable 的 sum 函数';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
