@@ -1,5 +1,5 @@
 ---
-title: Scala 尾递归优化的局限性
+title: Scala | 不完美的尾递归优化
 date: 2018-06-03 15:50:26
 tags:
   - Scala
