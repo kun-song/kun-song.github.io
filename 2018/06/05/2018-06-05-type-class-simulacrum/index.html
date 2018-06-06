@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文写的非常好，忍不住翻译一下，原文链接 在此。  Type class 是一个强大、灵活的概念，Scala 通过 type class 实现特设多态（ad-hoc polymorphism）。 在 Scala 中，type class 并非第一等公民，但仅通过一些 Scala 内置的语言特性就能实现它，这导致两个不那么美好的结果：  不太容易在代码中发现 type class 大家对如何“正确">
+<meta name="keywords" content="Scala,fp,Type Class,Simulacrum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】Type class in Scala">
+<meta property="og:url" content="http://songkun.me/2018/06/05/2018-06-05-type-class-simulacrum/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="本文写的非常好，忍不住翻译一下，原文链接 在此。  Type class 是一个强大、灵活的概念，Scala 通过 type class 实现特设多态（ad-hoc polymorphism）。 在 Scala 中，type class 并非第一等公民，但仅通过一些 Scala 内置的语言特性就能实现它，这导致两个不那么美好的结果：  不太容易在代码中发现 type class 大家对如何“正确">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-06T15:29:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】Type class in Scala">
+<meta name="twitter:description" content="本文写的非常好，忍不住翻译一下，原文链接 在此。  Type class 是一个强大、灵活的概念，Scala 通过 type class 实现特设多态（ad-hoc polymorphism）。 在 Scala 中，type class 并非第一等公民，但仅通过一些 Scala 内置的语言特性就能实现它，这导致两个不那么美好的结果：  不太容易在代码中发现 type class 大家对如何“正确">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/06/05/2018-06-05-type-class-simulacrum/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【译】Type class in Scala | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/06/05/2018-06-05-type-class-simulacrum/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【译】Type class in Scala
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-05 00:49:52" itemprop="dateCreated datePublished" datetime="2018-06-05T00:49:52+08:00">2018-06-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-06 23:29:33" itemprop="dateModified" datetime="2018-06-06T23:29:33+08:00">2018-06-06</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/05/2018-06-05-type-class-simulacrum/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/05/2018-06-05-type-class-simulacrum/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文写的非常好，忍不住翻译一下，原文链接 <a href="https://blog.scalac.io/2017/04/19/typeclasses-in-scala.html" target="_blank" rel="noopener">在此</a>。</p>
+</blockquote>
+<p>Type class 是一个强大、灵活的概念，Scala 通过 type class 实现特设多态（ad-hoc polymorphism）。</p>
+<p>在 Scala 中，type class 并非第一等公民，但仅通过一些 Scala 内置的语言特性就能实现它，这导致两个不那么美好的结果：</p>
+<ul>
+<li>不太容易在代码中发现 type class</li>
+<li>大家对如何“正确”地实现 type class 有点迷惑</li>
+</ul>
+<p>本文总结 type class 的概念、工作原理，以及如何在 Scala 中实现 type class。</p>
+<a id="more"></a>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>type class 最初（1988）是作为一种 <strong>新</strong> 的实现特设多态的方法由 Haskell 引入的（见论文 How to make ad-hoc polymorphism less ad hoc），Haskell 从语言层面支持 type class，将其作为 Hindley-Milner 类型系统的扩展。</p>
+<blockquote>
+<p>type class is a class(group) of types.</p>
+</blockquote>
+<p>这组类型必须满足：</p>
+<ul>
+<li>符合 <code>trait</code> 中定义的合约（contract）</li>
+<li>可以在 <strong>不修改代码</strong> 的条件下添加 type class 代表的功能（<code>trait</code> 及其实现）</li>
+</ul>
+<p>有人会说直接混入 <code>trait</code> 岂不是更简单？</p>
+<p>混入 <code>trait</code> 自然可满足第一条，但第二条无法满足。</p>
+<p>与 Haskell 不同，Scala 并未提供实现 type class 的特定语法，仅仅用 Scala 的普通语言特性即可实现它，因此菜鸟们不太容易发现代码中隐藏的 type class，典型的 type class 实现必然会使用一些语法糖，进一步提升了发现它们的难度。</p>
+<p>因此，让我们一步一步地实现一个 type class，并理解它的原理。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>接下来我们实现一个 type class，它可以获取给定类型的字符串表示，所有值都可以使用该 type class，类似 <code>toString</code>。</p>
+<h3 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h3><p>Scala 使用 <code>trait</code> 表示 type class 本身：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Show</span>[<span class="type">A</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">A</span>): <span class="type">String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们要添加的功能为 <code>show</code>，该功能可用于 <strong>所有类型</strong>，但却定义在任意类型 <strong>之外</strong> 的特质上。</p>
+<p>为 <code>Int</code> 实现 <code>show</code> 功能：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">  <span class="keyword">val</span> intShow: <span class="type">Show</span>[<span class="type">Int</span>] =</span><br><span class="line">    <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">Int</span>] &#123;</span><br><span class="line">      <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">Int</span>): <span class="type">String</span> = <span class="string">s"Int: <span class="subst">$a</span>"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>intShow</code> 是一个 <code>Show[Int]</code> 实例，根据惯例，我们把它放到 <code>Show</code> 伴生对象中。</p>
+<p>现在可以使用 <code>intShow</code> 了，虽然非常笨重：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="type">Show</span>._</span><br><span class="line"></span><br><span class="line">intShow.show(<span class="number">10</span>)  <span class="comment">// "Int: 10"</span></span><br></pre></td></tr></table></figure>
+<h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><p>为 <strong>避免</strong> 直接调用 <code>intShow</code>，我们在 <code>Show</code> 伴生对象中实现一个同名的 <code>show</code> 方法：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>[<span class="type">A</span>](a: <span class="type">A</span>)(<span class="keyword">implicit</span> sh: <span class="type">Show</span>[<span class="type">A</span>]): <span class="type">String</span> = sh.show(a)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> intShow: <span class="type">Show</span>[<span class="type">Int</span>] =</span><br><span class="line">    <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">Int</span>] &#123;</span><br><span class="line">      <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">Int</span>): <span class="type">String</span> = <span class="string">s"Int: <span class="subst">$a</span>"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>show</code> 方法第二个参数为 <code>implicit</code>，且 <code>Show</code> 对象中恰好有一个 <code>implicit Show[Int]</code> 实例，因此当有如下调用时，Scala 编译器可自动为 <code>show</code> 补全第二个参数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="type">Show</span>._</span><br><span class="line"></span><br><span class="line">show(<span class="number">10</span>)  <span class="comment">// 编译器自动补全为 show(10)(intShow)</span></span><br></pre></td></tr></table></figure>
+<p>到此为止，我们已经实现了一个 <strong>基本</strong> 的 type class，虽然还有很大的优化空间，但已经五脏俱全：</p>
+<ul>
+<li>type class 本身<ul>
+<li>特质 <code>Show</code></li>
+</ul>
+</li>
+<li>type class instaces<ul>
+<li>为 <code>Int</code> 实现了一个 type class 实例</li>
+</ul>
+</li>
+<li>对外接口<ul>
+<li>具备 <code>implicit</code> 参数的 <code>Show.show</code> 方法</li>
+<li>隐式的 type class instance</li>
+</ul>
+</li>
+</ul>
+<p>Scala 为 <code>implicit</code> 参数提供了 context bound 语法，更加便捷：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span></span>[<span class="type">A</span>: <span class="type">Show</span>](a: <span class="type">A</span>): <span class="type">String</span> = implicitly[<span class="type">Show</span>[<span class="type">A</span>]].show(a)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>context bound 主要就是用于 type class</li>
+<li>context bound + implicitly 形影不离</li>
+</ul>
+</blockquote>
+<p>type class 还有一个惯用法：一般不用 <code>implicitly</code> 函数，而是通过伴生对象中的 <code>apply</code> 方法获取同样效果。</p>
+<p>为 <code>Show</code> 定义 <code>apply</code> 方法，该方法仅有一个 <code>implicit</code> 参数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>[<span class="type">A</span>](<span class="keyword">implicit</span> sh: <span class="type">Show</span>[<span class="type">A</span>]): <span class="type">Show</span>[<span class="type">A</span>] = sh</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过编译器捕获到合适的参数后，<code>apply</code> 直接返回该参数</li>
+</ul>
+<p>将 <code>show</code> 方法中的 <code>implicitly</code> 替换为 <code>Show.apply</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span></span>[<span class="type">A</span>: <span class="type">Show</span>](a: <span class="type">A</span>): <span class="type">String</span> = <span class="type">Show</span>.apply[<span class="type">A</span>].show(a)</span><br></pre></td></tr></table></figure>
+<p><code>apply</code> 可以简化掉：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span></span>[<span class="type">A</span>: <span class="type">Show</span>](a: <span class="type">A</span>): <span class="type">String</span> = <span class="type">Show</span>[<span class="type">A</span>].show(a)</span><br></pre></td></tr></table></figure>
+<h3 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h3><p><code>show(10)</code> 固然不错，但若能 <code>10 show</code> 岂不是更好？</p>
+<p>我们通过隐式转换实现该特性：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">ShowOps</span>[<span class="type">A</span>: <span class="type">Show</span>](<span class="params">a: <span class="type">A</span></span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>: <span class="type">String</span> = <span class="type">Show</span>[<span class="type">A</span>].show(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>惯用法：该隐式转换类一般称为 TypeclassName + Ops</p>
+</blockquote>
+<p>有了 <code>Ops</code> 类，我们可以这样做：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10</span> show</span><br></pre></td></tr></table></figure>
+<p>为避免运行时开销，可以将 <code>ShowOps</code> 定义为值类型，并将 type class 约束放到 <code>show</code> 方法中：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">ShowOps</span>[<span class="type">A</span>](<span class="params">val a: <span class="type">A</span></span>) <span class="keyword">extends</span> <span class="title">AnyVal</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(<span class="keyword">implicit</span> sh: <span class="type">Show</span>[<span class="type">A</span>]): <span class="type">String</span> = sh.show(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>做了这么多工作，现在 <code>Show</code> 伴生对象内容如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>[<span class="type">A</span>](<span class="keyword">implicit</span> sh: <span class="type">Show</span>[<span class="type">A</span>]): <span class="type">Show</span>[<span class="type">A</span>] = sh</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>[<span class="type">A</span>: <span class="type">Show</span>](a: <span class="type">A</span>): <span class="type">String</span> = <span class="type">Show</span>[<span class="type">A</span>].show(a)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">ShowOps</span>[<span class="type">A</span>: <span class="type">Show</span>](<span class="params">a: <span class="type">A</span></span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>: <span class="type">String</span> = <span class="type">Show</span>[<span class="type">A</span>].show(a)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> intShow: <span class="type">Show</span>[<span class="type">Int</span>] =</span><br><span class="line">    <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">Int</span>] &#123;</span><br><span class="line">      <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">Int</span>): <span class="type">String</span> = <span class="string">s"Int: <span class="subst">$a</span>"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在为我们的 type class 再添加一个实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">implicit</span> <span class="keyword">val</span> stringShow: <span class="type">Show</span>[<span class="type">String</span>] =</span><br><span class="line">  <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">String</span>] &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">String</span>): <span class="type">String</span> = <span class="string">s"String: <span class="subst">$a</span>"</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p><code>stringShow</code> 实现与 <code>intShow</code> 非常类似，可以抽象出一个 type class instances 构造器：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">instance</span></span>[<span class="type">A</span>](f: <span class="type">A</span> ⇒ <span class="type">String</span>): <span class="type">Show</span>[<span class="type">A</span>] =</span><br><span class="line">  <span class="keyword">new</span> <span class="type">Show</span>[<span class="type">A</span>] &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">A</span>): <span class="type">String</span> = f(a)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">implicit</span> <span class="keyword">val</span> intShow: <span class="type">Show</span>[<span class="type">Int</span>] =</span><br><span class="line">  instance(int ⇒ <span class="string">s"Int: <span class="subst">$int</span>"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">implicit</span> <span class="keyword">val</span> stringShow: <span class="type">Show</span>[<span class="type">String</span>] =</span><br><span class="line">  instance(s ⇒ <span class="string">s"String: <span class="subst">$s</span>"</span>)</span><br></pre></td></tr></table></figure>
+<p>为 type class 添加 instance 辅助函数非常常见，但 Scala 2.12 以后可以直接使用 Single Abstract Method，更加简洁：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">implicit</span> <span class="keyword">val</span> intShow: <span class="type">Show</span>[<span class="type">Int</span>] =</span><br><span class="line">  int ⇒ <span class="string">s"Int: <span class="subst">$int</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">implicit</span> <span class="keyword">val</span> stringShow: <span class="type">Show</span>[<span class="type">String</span>] =</span><br><span class="line">  s ⇒ <span class="string">s"String: <span class="subst">$s</span>"</span></span><br></pre></td></tr></table></figure>
+<h3 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h3><p>到目前为止，我们实现一个简单的 type class，提供了两种 <code>show</code> 函数的调用方式（<code>show(10</code> 和 <code>10 show</code>)，并为 <code>Int</code> 和 <code>String</code> 两个类型实现了 type class instances，完整代码如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Show</span>[<span class="type">A</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">A</span>): <span class="type">String</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>[<span class="type">A</span>](<span class="keyword">implicit</span> sh: <span class="type">Show</span>[<span class="type">A</span>]): <span class="type">Show</span>[<span class="type">A</span>] = sh</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>[<span class="type">A</span>: <span class="type">Show</span>](a: <span class="type">A</span>): <span class="type">String</span> = <span class="type">Show</span>[<span class="type">A</span>].show(a)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">ShowOps</span>[<span class="type">A</span>: <span class="type">Show</span>](<span class="params">a: <span class="type">A</span></span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>: <span class="type">String</span> = <span class="type">Show</span>[<span class="type">A</span>].show(a)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> intShow: <span class="type">Show</span>[<span class="type">Int</span>] = int ⇒ <span class="string">s"Int: <span class="subst">$int</span>"</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> stringShow: <span class="type">Show</span>[<span class="type">String</span>] = s ⇒ <span class="string">s"String: <span class="subst">$s</span>"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若使用 <code>import Show._</code> 导入全部内容，则用户无法自己实现一些 type class instance，覆盖掉默认的实例，因为全部实例都被引入当前作用域了，再实现一个同类型的实例会引起歧义。</p>
+<p>因此可以将 <code>show</code> 方法与 <code>ShowOps</code> 放到另一个单独的对象 <code>ops</code> 中：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>[<span class="type">A</span>](<span class="keyword">implicit</span> sh: <span class="type">Show</span>[<span class="type">A</span>]): <span class="type">Show</span>[<span class="type">A</span>] = sh</span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">object</span> <span class="title">ops</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>[<span class="type">A</span>: <span class="type">Show</span>](a: <span class="type">A</span>): <span class="type">String</span> = <span class="type">Show</span>[<span class="type">A</span>].show(a)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">ShowOps</span>[<span class="type">A</span>: <span class="type">Show</span>](<span class="params">a: <span class="type">A</span></span>) </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>: <span class="type">String</span> = <span class="type">Show</span>[<span class="type">A</span>].show(a)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> intShow: <span class="type">Show</span>[<span class="type">Int</span>] = int ⇒ <span class="string">s"Int: <span class="subst">$int</span>"</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> stringShow: <span class="type">Show</span>[<span class="type">String</span>] = s ⇒ <span class="string">s"String: <span class="subst">$s</span>"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如此一来，若用户不想使用默认的 type class instances，可以只导入 type class 和对外接口：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> xx.<span class="type">Show</span></span><br><span class="line"><span class="keyword">import</span> xx.<span class="type">Show</span>.ops._</span><br></pre></td></tr></table></figure>
+<p>这样导入的结果是：</p>
+<ul>
+<li>用户可以在 category 1 implicits 中自定义 type class 实例</li>
+<li>默认实例在 category 2 implicits 中</li>
+</ul>
+<p>因此若用户提供了自定义的 type class 实例，则可以覆盖 category 2 implicits 中的默认实例，若没有提供自定义实例，则依旧可以使用 category 2 implicits 中的实例。</p>
+<p>到目前为止，我们的 type class 基本成型。</p>
+<h2 id="自定义类型"><a href="#自定义类型" class="headerlink" title="自定义类型"></a>自定义类型</h2><h3 id="自定义类型-1"><a href="#自定义类型-1" class="headerlink" title="自定义类型"></a>自定义类型</h3><p>type class 作者一般会为常见类型提供 type class instances，但我们的自定义类型一般无法直接使用 type class。</p>
+<p>当然，我们可以为自定义类型自行实现 type class 实例，可以在任意位置放置这些新实例，若有 type class 源码，放在其伴生对象中也是极好的。</p>
+<p>若有自定义类型 <code>Foo</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span>(<span class="params">foo: <span class="type">Int</span></span>)</span></span><br></pre></td></tr></table></figure>
+<p>我们可以为其实现 type class 实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> xx.<span class="type">Show</span></span><br><span class="line"><span class="keyword">import</span> xx.<span class="type">Show</span>.ops._</span><br><span class="line"></span><br><span class="line"><span class="keyword">implicit</span> <span class="keyword">val</span> fooShow: <span class="type">Show</span>[<span class="type">Foo</span>] =</span><br><span class="line">  foo ⇒ <span class="string">s"case class Foo(foo: <span class="subst">$&#123;foo.foo&#125;</span>)"</span></span><br><span class="line"></span><br><span class="line"><span class="type">Foo</span>(<span class="number">100</span>) show  <span class="comment">// case class Foo(foo: 100)</span></span><br></pre></td></tr></table></figure>
+<h3 id="Shapeless"><a href="#Shapeless" class="headerlink" title="Shapeless"></a>Shapeless</h3><p>本段有点偏题，但我（作者）认为值得一提。</p>
+<p>Scala 实现 type class 的方式（<code>implicit</code>）让我们可以借助 Shapeless 为自定义类型 <strong>自动</strong> 生成 type class 实例。</p>
+<p>例如我们可以为 <strong>所有</strong> <code>case</code> 类（实际上，是所有 product type）定义 <code>show</code> 方法。这需要我们为基本类型定义 type class 实例，以及确定如何为 product type 定义 <code>show</code> 方法，虽然不那么简单，但却省却为每个新类型定义实例的繁琐。</p>
+<h2 id="Simulacrum"><a href="#Simulacrum" class="headerlink" title="Simulacrum"></a>Simulacrum</h2><p><a href="https://github.com/mpilquist/simulacrum" target="_blank" rel="noopener">Simulacrum</a> 通过宏为 type class 添加便捷语法，是否使用取决于个人判断。</p>
+<p>若使用 Simulacrum，则可以一眼找出代码中所有的 type class，并且可省去很多样板代码。</p>
+<p>另一方面，使用 <code>@typeclass</code>（Simulacrum 主要注解）则意味着需要依赖 macro paradise 编译器插件。</p>
+<p>使用 Simulacrum 重写我们的 <code>Show</code> type class：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> simulacrum._</span><br><span class="line"></span><br><span class="line"><span class="meta">@typeclass</span> <span class="class"><span class="keyword">trait</span> <span class="title">Show</span>[<span class="type">A</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>(a: <span class="type">A</span>): <span class="type">String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了 Simulacrum，type class 定义变得非常简洁，我们在其伴生对象中添加 <code>Show[String]</code> 实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Show</span> </span>&#123;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> stringShow: <span class="type">Show</span>[<span class="type">String</span>] = s ⇒ <span class="string">s"String: <span class="subst">$s</span>"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用方式与之前完全一致：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> xx.<span class="type">Show</span>.ops._</span><br><span class="line"></span><br><span class="line"><span class="string">"Hello"</span> show</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Simulacrum 会为 <code>Show</code> 自动生成 <code>ops</code> 对象，与前面自定义的基本一致。</p>
+</blockquote>
+<h2 id="implicits"><a href="#implicits" class="headerlink" title="implicits"></a>implicits</h2><p>Scala 使用 implicits（隐式转换 + 隐式参数）实现 type class，因此 type class 既能享受 implicits 的优势，也必须承担 implicits 的代价。</p>
+<p>可以为类型 <code>A</code> 定义 <strong>多个</strong> type class 实例，Scala 编译器将按 <strong>优先级</strong> 进行 implicit 解析，找到与当前位置最接近的实例，而 Haskell 只允许定义 <strong>一个</strong> type class 实例。</p>
+<p>我们既可以依赖 Scala 编译器自动为 <code>implicit</code> 参数提供值，也可以手动传递 <code>implicit</code> 参数值，手动传递在某些场景中很有用。</p>
+<p>为支持手动传递 <code>implicit</code> 参数，我们需要为 <code>ShowOps</code> 类添加一个新方法 <code>showExp</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">implicit</span> <span class="class"><span class="keyword">class</span> <span class="title">ShowOps</span>[<span class="type">A</span>: <span class="type">Show</span>](<span class="params">a: <span class="type">A</span></span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">show</span></span>: <span class="type">String</span> = <span class="type">Show</span>[<span class="type">A</span>].show(a)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">showExp</span></span>(<span class="keyword">implicit</span> sh: <span class="type">Show</span>[<span class="type">A</span>]): <span class="type">String</span> = sh.show(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：<code>ShowOps.show</code> 是无参方法，当然无法手动传递参数。</p>
+</blockquote>
+<p><code>showExp</code> 支持两种调用方式：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> hipsterString: <span class="type">Show</span>[<span class="type">String</span>] =</span><br><span class="line">  s ⇒ <span class="string">s"hipsterString: <span class="subst">$s</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="string">"Hello"</span>.showExp  <span class="comment">// String: Hello</span></span><br><span class="line"><span class="string">"Hello"</span>.showExp(hipsterString)  <span class="comment">// hipsterString: Hello</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>&quot;Hello&quot;.showExp</code> 将使用 category 2 implicits 中定义的 <code>Show[String]</code> 实例（<code>stringShow</code>）做实参</li>
+<li><code>&quot;hello&quot;.showExp(hipsterString)</code> 强制使用 <code>hipsterString</code></li>
+</ul>
+<p>通过添加 <code>showExp</code> 可以支持两种不同调用方式，实际上更常见的做法是不添加 <code>showExp</code> 函数，而是在 category 1 implicit 中添加一个新的隐式 type class 实例，利用 implicit 优先级，覆盖 category 2 implicit 中默认 type class 实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"Hello"</span>.show  <span class="comment">// String: Hello</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">implicit</span> <span class="keyword">val</span> hipsterString: <span class="type">Show</span>[<span class="type">String</span>] =</span><br><span class="line">    s ⇒ <span class="string">s"hipsterString: <span class="subst">$s</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="string">"Hello"</span>.show <span class="comment">// hipsterString: Hello</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一个 <code>&quot;Hello&quot;.show</code> 将使用 <code>Show</code> 伴生对象定义的默认 type class 实例</li>
+<li>第二个 <code>&quot;Hello&quot;.show</code> 将使用 <code>hipsterString</code></li>
+</ul>
+<h2 id="implicit-弊端"><a href="#implicit-弊端" class="headerlink" title="implicit 弊端"></a>implicit 弊端</h2><p>使用 implicit 实现 type class 也会带来一些弊端。</p>
+<p>首先，不能为相同类型 <code>T</code> 定义 <strong>多个优先级相同</strong> 的 type class 实例。</p>
+<p>这听起来似乎没什么大不了的，但实践中会导致一些问题。例如当使用 Cats/Scalaz 时很容易出现关于歧义 implicit 的编译错误，该问题一般与 type class 的实现方式相关，可能出现多个不同 implicit 实例同时满足编译器的查找条件，更多讨论在 <a href="https://typelevel.org/blog/2016/09/30/subtype-typeclasses.html" target="_blank" rel="noopener">这里</a>。</p>
+<p>且错误提示信息容易误导，例如下面调用中，编译器根本不知道 <code>show</code> 是个 type class 定义的行为：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">true</span>.show</span><br></pre></td></tr></table></figure>
+<p>因此编译器只能提示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">value show is not a member of <span class="type">Boolean</span>.</span><br></pre></td></tr></table></figure>
+<h2 id="开源示例"><a href="#开源示例" class="headerlink" title="开源示例"></a>开源示例</h2><p>开源代码是学习 type class 的好去处，例如：</p>
+<ul>
+<li><a href="https://github.com/typelevel/cats" target="_blank" rel="noopener">Cats</a><ul>
+<li>Cats 以 type class 作为首要建模方式</li>
+<li>Cats 也使用了 simulacrum</li>
+</ul>
+</li>
+<li><a href="https://github.com/milessabin/shapeless" target="_blank" rel="noopener">Shapeless</a><ul>
+<li>Shapeless 也严重依赖 type class</li>
+<li><code>HList</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="type-class-展望"><a href="#type-class-展望" class="headerlink" title="type class 展望"></a>type class 展望</h2><p>有很多关于如何为 type class 添加语法的讨论：</p>
+<ul>
+<li><a href="https://github.com/lampepfl/dotty/issues/2029" target="_blank" rel="noopener">Think about type class/implicits encoding</a></li>
+<li><a href="https://github.com/mpilquist/simulacrum" target="_blank" rel="noopener">Simulacrum</a></li>
+<li><a href="https://github.com/maxaf/dandy" target="_blank" rel="noopener">Dandy</a></li>
+</ul>
+<p>也有一些关于 type class 一致性的讨论：</p>
+<ul>
+<li><a href="https://github.com/lampepfl/dotty/issues/2047" target="_blank" rel="noopener">Allow Typeclasses to Declare Thenselves Coherent</a></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从概念上讲，type class 非常简单；但实现时，却有很多 corner cases。</p>
+<p>type class 一般用于类库设计，业务应用中较少使用，但了解 type class 总是好的。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Scala/" rel="tag"># Scala</a>
+          
+            <a href="/tags/fp/" rel="tag"># fp</a>
+          
+            <a href="/tags/Type-Class/" rel="tag"># Type Class</a>
+          
+            <a href="/tags/Simulacrum/" rel="tag"># Simulacrum</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/03/2018-06-03-scala-cats-sum-by-monoid/" rel="next" title="Type Class | 基于 Monoid 和 Foldable 的 sum 函数">
+                <i class="fa fa-chevron-left"></i> Type Class | 基于 Monoid 和 Foldable 的 sum 函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步"><span class="nav-number">2.1.</span> <span class="nav-text">第一步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步"><span class="nav-number">2.2.</span> <span class="nav-text">第二步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步"><span class="nav-number">2.3.</span> <span class="nav-text">第三步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多"><span class="nav-number">2.4.</span> <span class="nav-text">更多</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义类型"><span class="nav-number">3.</span> <span class="nav-text">自定义类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义类型-1"><span class="nav-number">3.1.</span> <span class="nav-text">自定义类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shapeless"><span class="nav-number">3.2.</span> <span class="nav-text">Shapeless</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Simulacrum"><span class="nav-number">4.</span> <span class="nav-text">Simulacrum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#implicits"><span class="nav-number">5.</span> <span class="nav-text">implicits</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#implicit-弊端"><span class="nav-number">6.</span> <span class="nav-text">implicit 弊端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开源示例"><span class="nav-number">7.</span> <span class="nav-text">开源示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#type-class-展望"><span class="nav-number">8.</span> <span class="nav-text">type class 展望</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/06/05/2018-06-05-type-class-simulacrum/';
+        this.page.identifier = '2018/06/05/2018-06-05-type-class-simulacrum/';
+        this.page.title = '【译】Type class in Scala';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
