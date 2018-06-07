@@ -3,6 +3,7 @@ title: Scala | 型变
 tags:
   - Scala
   - 类型系统
+  - 型变
 categories: 技术
 abbrlink: 19302
 date: 2018-05-15 00:39:34
