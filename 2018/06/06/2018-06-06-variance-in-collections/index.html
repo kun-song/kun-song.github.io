@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="基本概念偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 Partial Function 条目。 简单地说，对于类型为 A =&amp;gt; B 的函数 f 而言：  若 f 能处理所有类型 A 的值，则 f 为 total function； 若 f 仅能处理类型为 A 的值的 子集，则 f 为 partial fun">
-<meta name="keywords" content="Scala,fp">
+  <meta name="description" content="在 Scala | 型变 一文中我简单介绍了 Scala 中的协变、逆变和不变，Scala 的集合类型一般是协变 or 不变，本文将简单介绍不同集合选择协变 or 不变的原因，进一步加深对 Scala 型变（variance）的理解。 一言以蔽之：  不可变集合（immutable collections）的类型应为协变（covariant） 可变集合（mutable collections）的类">
+<meta name="keywords" content="Scala,类型系统,型变">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala | 偏函数">
-<meta property="og:url" content="http://songkun.me/2018/05/15/scala-partialfunction-1/index.html">
+<meta property="og:title" content="Scala | 集合中的型变">
+<meta property="og:url" content="http://songkun.me/2018/06/06/2018-06-06-variance-in-collections/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="基本概念偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 Partial Function 条目。 简单地说，对于类型为 A =&amp;gt; B 的函数 f 而言：  若 f 能处理所有类型 A 的值，则 f 为 total function； 若 f 仅能处理类型为 A 的值的 子集，则 f 为 partial fun">
+<meta property="og:description" content="在 Scala | 型变 一文中我简单介绍了 Scala 中的协变、逆变和不变，Scala 的集合类型一般是协变 or 不变，本文将简单介绍不同集合选择协变 or 不变的原因，进一步加深对 Scala 型变（variance）的理解。 一言以蔽之：  不可变集合（immutable collections）的类型应为协变（covariant） 可变集合（mutable collections）的类">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-22T15:06:49.000Z">
+<meta property="og:updated_time" content="2018-06-07T00:59:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala | 偏函数">
-<meta name="twitter:description" content="基本概念偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 Partial Function 条目。 简单地说，对于类型为 A =&amp;gt; B 的函数 f 而言：  若 f 能处理所有类型 A 的值，则 f 为 total function； 若 f 仅能处理类型为 A 的值的 子集，则 f 为 partial fun">
+<meta name="twitter:title" content="Scala | 集合中的型变">
+<meta name="twitter:description" content="在 Scala | 型变 一文中我简单介绍了 Scala 中的协变、逆变和不变，Scala 的集合类型一般是协变 or 不变，本文将简单介绍不同集合选择协变 or 不变的原因，进一步加深对 Scala 型变（variance）的理解。 一言以蔽之：  不可变集合（immutable collections）的类型应为协变（covariant） 可变集合（mutable collections）的类">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/15/scala-partialfunction-1/"/>
+  <link rel="canonical" href="http://songkun.me/2018/06/06/2018-06-06-variance-in-collections/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>Scala | 偏函数 | 随便写写</title>
+  <title>Scala | 集合中的型变 | 随便写写</title>
   
 
 
@@ -331,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-partialfunction-1/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/06/06/2018-06-06-variance-in-collections/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Scala | 偏函数
+          <h1 class="post-title" itemprop="name headline">Scala | 集合中的型变
               
             
           </h1>
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2018-05-15 23:08:20" itemprop="dateCreated datePublished" datetime="2018-05-15T23:08:20+08:00">2018-05-15</time>
+              <time title="创建时间：2018-06-06 23:49:17" itemprop="dateCreated datePublished" datetime="2018-06-06T23:49:17+08:00">2018-06-06</time>
             
 
             
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-22 23:06:49" itemprop="dateModified" datetime="2018-05-22T23:06:49+08:00">2018-05-22</time>
+                <time title="修改时间：2018-06-07 08:59:52" itemprop="dateModified" datetime="2018-06-07T08:59:52+08:00">2018-06-07</time>
               
             
           </span>
@@ -422,9 +422,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/15/scala-partialfunction-1/#comments" itemprop="discussionUrl">
+                <a href="/2018/06/06/2018-06-06-variance-in-collections/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/15/scala-partialfunction-1/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/06/06/2018-06-06-variance-in-collections/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -452,49 +452,43 @@
       
 
       
-        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 <a href="https://en.wikipedia.org/wiki/Partial_function" target="_blank" rel="noopener">Partial Function</a> 条目。</p>
-<p>简单地说，对于类型为 <code>A =&gt; B</code> 的函数 <code>f</code> 而言：</p>
+        <p>在 <a href="/2018/05/15/scala-variance/" title="Scala | 型变">Scala | 型变</a> 一文中我简单介绍了 Scala 中的协变、逆变和不变，Scala 的集合类型一般是协变 or 不变，本文将简单介绍不同集合选择协变 or 不变的原因，进一步加深对 Scala 型变（variance）的理解。</p>
+<p>一言以蔽之：</p>
 <ul>
-<li>若 <code>f</code> 能处理所有类型 <code>A</code> 的值，则 <code>f</code> 为 total function；</li>
-<li>若 <code>f</code> 仅能处理类型为 <code>A</code> 的值的 <strong>子集</strong>，则 <code>f</code> 为 partial function；</li>
+<li>不可变集合（immutable collections）的类型应为协变（covariant）</li>
+<li>可变集合（mutable collections）的类型应为不变（invariant）</li>
 </ul>
+<p>下面介绍这样设计的原因。</p>
 <a id="more"></a>
-<p>看一个具体例子，假设有两个类型为 <code>Double ⇒ Double</code> 的函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> addOne: <span class="type">Double</span> ⇒ <span class="type">Double</span> = x ⇒ x + <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> sqrt: <span class="type">Double</span> ⇒ <span class="type">Double</span> = x ⇒ <span class="type">Math</span>.sqrt(x)</span><br></pre></td></tr></table></figure>
-<p>其中 <code>sqrt</code> 根本无法处理非正实数，因此 <code>sqrt</code> 是数学上的 partial function。</p>
-<h2 id="创建-PartialFunction"><a href="#创建-PartialFunction" class="headerlink" title="创建 PartialFunction"></a>创建 <code>PartialFunction</code></h2><p>Scala 使用 <code>PartialFunction</code> 类型表示偏函数，<code>sqrt</code> 可以实现为 <code>PartialFunction</code> 实例：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sqrt: <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] =</span><br><span class="line">  <span class="keyword">new</span> <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">isDefinedAt</span></span>(x: <span class="type">Double</span>) = x &gt;= <span class="number">0</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">Double</span>) = <span class="type">Math</span>.sqrt(v1)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>Scala 将函数视为第一等公民，可 <code>PartialFunction</code> 使用也太麻烦了吧？为了方便用户，Scala 允许通过 <code>case</code> 关键字创建 <code>PartialFunction</code> 函数的字面值</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sqrt: <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> x <span class="keyword">if</span> x &gt;= <span class="number">0</span> ⇒ <span class="type">Math</span>.sqrt(x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>是不是清爽了很多，虽然不如普通函数字面值简洁，但也相去不远了。</p>
-<blockquote>
-<p><code>case</code> 语句仅仅是语法糖而已，Scala 编译器会将其转换为前面的 <code>PartialFunction</code> 实例创建代码。</p>
-</blockquote>
-<h2 id="组合-PartialFunction"><a href="#组合-PartialFunction" class="headerlink" title="组合 PartialFunction"></a>组合 <code>PartialFunction</code></h2><p>可以用 <code>orElse</code> 组合偏函数，若有如下偏函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> one: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">String</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span>  ⇒ <span class="string">"one"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> two: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">String</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">2</span>  ⇒ <span class="string">"two"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> three: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">String</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">3</span>  ⇒ <span class="string">"three"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们想要一个能同时翻译 1, 2, 3 的函数，可以这样组合：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> all = one orElse two orElse three</span><br></pre></td></tr></table></figure>
-<p><code>all</code> 函数可以处理 1 2 3：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">all(<span class="number">1</span>)  <span class="comment">// one</span></span><br><span class="line">all(<span class="number">2</span>)  <span class="comment">// two</span></span><br><span class="line">all(<span class="number">3</span>)  <span class="comment">// three</span></span><br></pre></td></tr></table></figure>
-<h2 id="偏函数应用"><a href="#偏函数应用" class="headerlink" title="偏函数应用"></a>偏函数应用</h2><p>在 Scala 代码中，偏函数几乎随处可见，本文仅列举几个简单例子。</p>
-<h3 id="List-collect"><a href="#List-collect" class="headerlink" title="List.collect"></a><code>List.collect</code></h3><p>对列表中每个元素加 1，可以用 <code>map</code> 轻易实现：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) map &#123;</span><br><span class="line">  <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>但如果 <code>List</code> 中含有非数字类型，则 <code>map</code> 将抛出异常：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抛出异常</span></span><br><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">"Hi"</span>) map &#123;</span><br><span class="line">  <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>此时可以用 <code>collect</code> 函数取代 <code>map</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">"Hi"</span>) collect &#123;</span><br><span class="line">  <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>结果为 <code>List(2, 3, 4)</code>，跳过了字符串 <code>Hi</code>，原因是 <code>collect</code> 参数为 <code>PartialFunction</code>，其实现根据偏函数参数的定义域，自动跳过无定义的元素。</p>
-<h3 id="Akka-中的例子"><a href="#Akka-中的例子" class="headerlink" title="Akka 中的例子"></a>Akka 中的例子</h3><p>偏函数在 Akka 中使用非常普遍，例如前几天我提的这个 <a href="https://github.com/akka/akka/pull/25036/files" target="_blank" rel="noopener">PR</a> 中：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recoverWith</span></span>(clazz: <span class="type">Class</span>[_ &lt;: <span class="type">Throwable</span>], supplier: <span class="type">Supplier</span>[<span class="type">Graph</span>[<span class="type">SourceShape</span>[<span class="type">Out</span>], <span class="type">NotUsed</span>]]): javadsl.<span class="type">Flow</span>[<span class="type">In</span>, <span class="type">Out</span>, <span class="type">Mat</span>] =</span><br><span class="line">  recoverWith &#123;</span><br><span class="line">    <span class="keyword">case</span> elem <span class="keyword">if</span> clazz.isInstance(elem) ⇒ supplier.get()</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p><code>recoverWith</code> 参数是偏函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">PartialFunction</span>[<span class="type">Throwable</span>, <span class="type">Graph</span>[<span class="type">SourceShape</span>[<span class="type">Out</span>], <span class="type">NotUsed</span>]]</span><br></pre></td></tr></table></figure>
-<p>通过偏函数，清晰表明 <code>recoverWith</code> 并非能处理所有 <code>Throwable</code> 值，而是仅处理参数 <code>PartialFunction</code> 能处理的 <code>Throwable</code> 子集。</p>
-<p>有人可能会问，即使不用偏函数，我用 <code>Throwable ⇒ Option[Graph[SourceShape[Out], NotUsed]]</code> 一样能表达相同的语义啊？哈哈，原因很简单，偏函数也是函数，可组合性更好，更方便。</p>
-<hr>
-<p>参考</p>
+<h2 id="不可变集合"><a href="#不可变集合" class="headerlink" title="不可变集合"></a>不可变集合</h2><p>不可变集合的方法会返回一个 <strong>新集合</strong>，原来的集合不受任何影响，根据该特点，可将其定义为协变，以获取更加 <strong>符合直觉</strong> 的子类型关系（若 <code>A</code> 为 <code>B</code> 的子类，则 <code>List[A]</code> 是 <code>List[B]</code> 的子类）：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">List</span>[+<span class="type">T</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">add</span></span>[<span class="type">U</span> &gt;: <span class="type">T</span>](other: <span class="type">U</span>): <span class="type">List</span>[<span class="type">U</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>add</code> 接受元素类型的 <strong>父类</strong> 作为参数，并将返回的集合 <strong>降级</strong>，即将 <code>List[T]</code> 降低为 <code>List[U]</code>，结果是一个更加“宽泛”的集合。</p>
+<p>假设有如下类定义：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">name</span></span>: <span class="type">String</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Cat</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Dog</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span></span></span><br></pre></td></tr></table></figure>
+<p>以及方法：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printAnimalNames</span></span>(animals: <span class="type">List</span>[<span class="type">Animal</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">  animals.foreach &#123; animal =&gt;</span><br><span class="line">    println(animal.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为 <code>List</code> 为协变，所有 <code>List[Dog]</code> 和 <code>List[Cat]</code> 作为 <code>List[Animal]</code> 的子类都可以用于 <code>printAnimalNames</code> 方法，非常灵活：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> cats: <span class="type">List</span>[<span class="type">Cat</span>] = <span class="type">List</span>(<span class="type">Cat</span>(<span class="string">"Whiskers"</span>), <span class="type">Cat</span>(<span class="string">"Tom"</span>))</span><br><span class="line"><span class="keyword">val</span> dogs: <span class="type">List</span>[<span class="type">Dog</span>] = <span class="type">List</span>(<span class="type">Dog</span>(<span class="string">"Fido"</span>), <span class="type">Dog</span>(<span class="string">"Rex"</span>))</span><br><span class="line"></span><br><span class="line">printAnimalNames(cats)</span><br><span class="line">printAnimalNames(dogs)</span><br></pre></td></tr></table></figure>
+<h2 id="可变集合"><a href="#可变集合" class="headerlink" title="可变集合"></a>可变集合</h2><p>协变很有用，那是否可以把可变集合定义为协变呢？</p>
+<p>答案是否定的，因为协变会导致可变集合损失 <strong>类型安全</strong>，是 <strong>无效</strong> 的。</p>
+<p>假如把可变集合 <code>HashSet</code> 定义为协变：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">HashSet</span>[+<span class="type">T</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">add</span></span>[<span class="type">U</span> &gt;: <span class="type">T</span>](item: <span class="type">U</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
-<li><a href="http://twitter.github.io/effectivescala/#Functional%20programming-Partial%20functions" target="_blank" rel="noopener">Effective Scala</a></li>
-<li><a href="https://twitter.github.io/scala_school/zh_cn/pattern-matching-and-functional-composition.html" target="_blank" rel="noopener">Twitter Scala School</a></li>
+<li><code>add</code> 原地修改集合</li>
+</ul>
+<p>现在有一个 <code>HashSet[Dog]</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> dogs: <span class="type">HashSet</span>[<span class="type">Dog</span>]</span><br></pre></td></tr></table></figure>
+<p>因为我们把 <code>HashSet</code> 定义为协变，因此 <code>HashSet[Animal]</code> 是 <code>HashSet[Dog]</code> 的父类，因此可以把 <code>HashSet[Dog]</code> 视为 <code>HashSet[Animal]</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> animals: <span class="type">HashSet</span>[<span class="type">Animal</span>] = dogs</span><br></pre></td></tr></table></figure>
+<p>现在 <code>animals</code> 是 <code>HashSet[Animal]</code>，自然可以往里添加一个 <code>Cat</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mammals.add(<span class="type">Cat</span>(<span class="string">"Mike"</span>))</span><br></pre></td></tr></table></figure>
+<p>到此为止，一切都是合法的。</p>
+<p>问题是 <code>animals</code> 实际指向 <code>dogs</code>，而 <code>dogs</code> 实际类型依然是 <code>HashSet[Dog]</code>，将其视为 <code>HashSet[Animal]</code> 不过是一种假象而已（协变导致），但现状是 <code>dogs</code> 中包含了 <code>Cat</code>，明显失去了类型安全。</p>
+<p>因此，可变集合只能是不变。</p>
+<hr>
+<p>参考：</p>
+<ul>
+<li><a href="http://twitter.github.io/effectivescala/index-cn.html#%E7%B1%BB%E5%9E%8B%E5%92%8C%E6%B3%9B%E5%9E%8B-%E5%8F%98%E5%9E%8B" target="_blank" rel="noopener">Effective Scala</a></li>
 </ul>
 
       
@@ -518,7 +512,9 @@
           
             <a href="/tags/Scala/" rel="tag"># Scala</a>
           
-            <a href="/tags/fp/" rel="tag"># fp</a>
+            <a href="/tags/类型系统/" rel="tag"># 类型系统</a>
+          
+            <a href="/tags/型变/" rel="tag"># 型变</a>
           
         </div>
       
@@ -531,8 +527,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/15/scala-case-use-cases/" rel="next" title="Scala | case 关键字的 4 种用法">
-                <i class="fa fa-chevron-left"></i> Scala | case 关键字的 4 种用法
+              <a href="/2018/06/05/2018-06-05-type-class-simulacrum/" rel="next" title="【译】Type class in Scala">
+                <i class="fa fa-chevron-left"></i> 【译】Type class in Scala
               </a>
             
           </div>
@@ -540,10 +536,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/16/scala-partialfunction-partially-applied-function-currying/" rel="prev" title="偏函数 vs 部分应用函数 vs 柯里化">
-                偏函数 vs 部分应用函数 vs 柯里化 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -753,7 +745,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建-PartialFunction"><span class="nav-number">2.</span> <span class="nav-text">创建 PartialFunction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合-PartialFunction"><span class="nav-number">3.</span> <span class="nav-text">组合 PartialFunction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#偏函数应用"><span class="nav-number">4.</span> <span class="nav-text">偏函数应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#List-collect"><span class="nav-number">4.1.</span> <span class="nav-text">List.collect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Akka-中的例子"><span class="nav-number">4.2.</span> <span class="nav-text">Akka 中的例子</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#不可变集合"><span class="nav-number">1.</span> <span class="nav-text">不可变集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可变集合"><span class="nav-number">2.</span> <span class="nav-text">可变集合</span></a></li></ol></div>
             
 
           </div>
@@ -927,9 +919,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/05/15/scala-partialfunction-1/';
-        this.page.identifier = '2018/05/15/scala-partialfunction-1/';
-        this.page.title = 'Scala | 偏函数';
+        this.page.url = 'http://songkun.me/2018/06/06/2018-06-06-variance-in-collections/';
+        this.page.identifier = '2018/06/06/2018-06-06-variance-in-collections/';
+        this.page.title = 'Scala | 集合中的型变';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
