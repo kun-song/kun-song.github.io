@@ -119,23 +119,25 @@
 
 
 
-  <meta name="description" content="Java for living, Scala for fun!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="随便写写">
-<meta property="og:url" content="http://songkun.me/tags/Java-8/index.html">
+  <meta name="description" content="函数式编程中，函数（function）是指 纯函数，即无副作用（side effect）的函数，并且用过程（procedure）表示有副作用的具备参数的代码块。 本文将介绍引用透明、纯函数的概念，以及纯函数的优势。">
+<meta name="keywords" content="fp,引用透明,纯函数,代换模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基本概念 | 引用透明 &amp; 纯函数 &amp; 代换模型">
+<meta property="og:url" content="http://songkun.me/2018/06/08/2018-06-08-referentially-transparent/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="Java for living, Scala for fun!">
+<meta property="og:description" content="函数式编程中，函数（function）是指 纯函数，即无副作用（side effect）的函数，并且用过程（procedure）表示有副作用的具备参数的代码块。 本文将介绍引用透明、纯函数的概念，以及纯函数的优势。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-08T00:51:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="随便写写">
-<meta name="twitter:description" content="Java for living, Scala for fun!">
+<meta name="twitter:title" content="基本概念 | 引用透明 &amp; 纯函数 &amp; 代换模型">
+<meta name="twitter:description" content="函数式编程中，函数（function）是指 纯函数，即无副作用（side effect）的函数，并且用过程（procedure）表示有副作用的具备参数的代码块。 本文将介绍引用透明、纯函数的概念，以及纯函数的优势。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/tags/Java-8/"/>
+  <link rel="canonical" href="http://songkun.me/2018/06/08/2018-06-08-referentially-transparent/"/>
 
 
 
@@ -145,7 +147,7 @@
   };
 </script>
 
-  <title>标签: Java 8 | 随便写写</title>
+  <title>基本概念 | 引用透明 & 纯函数 & 代换模型 | 随便写写</title>
   
 
 
@@ -202,7 +204,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
@@ -260,7 +262,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
@@ -309,84 +311,256 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Java 8<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/06/08/2018-06-08-referentially-transparent/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/05/27/2018-05-26-java8-completablefuture/" itemprop="url">
-              
-                <span itemprop="name">【译】CompletableFuture 指南</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">基本概念 | 引用透明 & 纯函数 & 代换模型
+              
+            
+          </h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-05-27T11:42:38+08:00"
-              content="2018-05-27" >
-          05-27
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-08 00:03:27 / 修改时间：08:51:48" itemprop="dateCreated datePublished" datetime="2018-06-08T00:03:27+08:00">2018-06-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/08/2018-06-08-referentially-transparent/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/08/2018-06-08-referentially-transparent/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>函数式编程中，函数（function）是指 <strong>纯函数</strong>，即无副作用（side effect）的函数，并且用过程（procedure）表示有副作用的具备参数的代码块。</p>
+<p>本文将介绍引用透明、纯函数的概念，以及纯函数的优势。</p>
+<a id="more"></a>
+<h2 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h2><p>纯函数必须满足两点要求：</p>
+<ul>
+<li>相同参数值，则函数结果总是相同</li>
+<li>无副作用</li>
+</ul>
+<p>纯函数的计算结果只依赖参数值，不能依赖任何外部的可变状态，也不能产生任何副作用，常见的副作用有：</p>
+<ul>
+<li>修改变量</li>
+<li>抛出异常、错误</li>
+<li>IO 输入、输出</li>
+<li>文件读写</li>
+</ul>
+<p>使用自由变量（非参数，非局部变量）的函数极有可能不是纯函数，但 FP 语言一般通过闭包将自由变量的值 <strong>封闭</strong> 在函数中，因此大多数该类函数式纯函数。</p>
+<p>下面是几个常见的非纯函数：</p>
+<ul>
+<li>返回当前时间的函数：因此每次都返回不同结果（它依赖一个全局变量）</li>
+<li><code>random</code> 函数</li>
+<li><code>printf</code> 函数</li>
+</ul>
+<h2 id="引用透明"><a href="#引用透明" class="headerlink" title="引用透明"></a>引用透明</h2><p>我们可以用引用透明（）形式化的定义纯函数。</p>
+<p>根据维基百科，引用透明是表达式的某种属性：</p>
+<blockquote>
+<p>An expression is said to be referentially transparent if it can be replaced with its corresponding value without changing the program’s behavior.</p>
+</blockquote>
+<p>函数调用也是表达式，对相同参数纯函数的计算结果总是相同，因此纯函数也是引用透明的。</p>
+<h2 id="代换模型"><a href="#代换模型" class="headerlink" title="代换模型"></a>代换模型</h2><hr>
+<p>参考：</p>
+<ul>
+<li><a href="">Scala 函数式编程</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Referential_transparency" target="_blank" rel="noopener">Referential transparency</a></li>
+<li><a href="">Pure functions</a></li>
+</ul>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fp/" rel="tag"># fp</a>
+          
+            <a href="/tags/引用透明/" rel="tag"># 引用透明</a>
+          
+            <a href="/tags/纯函数/" rel="tag"># 纯函数</a>
+          
+            <a href="/tags/代换模型/" rel="tag"># 代换模型</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/07/2018-06-07-type-of-case-statement/" rel="next" title="Scala | case 语句究竟是什么类型？">
+                <i class="fa fa-chevron-left"></i> Scala | case 语句究竟是什么类型？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -407,8 +581,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -549,6 +732,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#纯函数"><span class="nav-number">1.</span> <span class="nav-text">纯函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用透明"><span class="nav-number">2.</span> <span class="nav-text">引用透明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代换模型"><span class="nav-number">3.</span> <span class="nav-text">代换模型</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -696,6 +895,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
 
   
 
@@ -710,6 +913,23 @@
     <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
   
 
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/06/08/2018-06-08-referentially-transparent/';
+        this.page.identifier = '2018/06/08/2018-06-08-referentially-transparent/';
+        this.page.title = '基本概念 | 引用透明 & 纯函数 & 代换模型';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
   
 
 
