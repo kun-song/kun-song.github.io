@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="函数式编程中，函数（function）是指 纯函数，即无副作用（side effect）的函数，并且用过程（procedure）表示有副作用的具备参数的代码块。 本文将介绍引用透明、纯函数的概念，以及纯函数的优势。">
+  <meta name="description" content="函数式编程不鼓励使用副作用，并通过名字区分函数是否具有副作用：  函数（function）一般就是指 纯函数，即无副作用（side effect）的函数 过程（procedure）表示有副作用的具备参数的代码块   Haskell 从语法上区分具有副作用的函数，比 Scala 更加严格。  本文将简单介绍引用透明、纯函数以及代换模型的概念。">
 <meta name="keywords" content="fp,引用透明,纯函数,代换模型">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基本概念 | 引用透明 &amp; 纯函数 &amp; 代换模型">
 <meta property="og:url" content="http://songkun.me/2018/06/08/2018-06-08-referentially-transparent/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="函数式编程中，函数（function）是指 纯函数，即无副作用（side effect）的函数，并且用过程（procedure）表示有副作用的具备参数的代码块。 本文将介绍引用透明、纯函数的概念，以及纯函数的优势。">
+<meta property="og:description" content="函数式编程不鼓励使用副作用，并通过名字区分函数是否具有副作用：  函数（function）一般就是指 纯函数，即无副作用（side effect）的函数 过程（procedure）表示有副作用的具备参数的代码块   Haskell 从语法上区分具有副作用的函数，比 Scala 更加严格。  本文将简单介绍引用透明、纯函数以及代换模型的概念。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-08T00:51:48.000Z">
+<meta property="og:updated_time" content="2018-06-10T05:01:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基本概念 | 引用透明 &amp; 纯函数 &amp; 代换模型">
-<meta name="twitter:description" content="函数式编程中，函数（function）是指 纯函数，即无副作用（side effect）的函数，并且用过程（procedure）表示有副作用的具备参数的代码块。 本文将介绍引用透明、纯函数的概念，以及纯函数的优势。">
+<meta name="twitter:description" content="函数式编程不鼓励使用副作用，并通过名字区分函数是否具有副作用：  函数（function）一般就是指 纯函数，即无副作用（side effect）的函数 过程（procedure）表示有副作用的具备参数的代码块   Haskell 从语法上区分具有副作用的函数，比 Scala 更加严格。  本文将简单介绍引用透明、纯函数以及代换模型的概念。">
 
 
 
@@ -373,12 +373,24 @@
                 
               
 
-              <time title="创建时间：2018-06-08 00:03:27 / 修改时间：08:51:48" itemprop="dateCreated datePublished" datetime="2018-06-08T00:03:27+08:00">2018-06-08</time>
+              <time title="创建时间：2018-06-08 00:03:27" itemprop="dateCreated datePublished" datetime="2018-06-08T00:03:27+08:00">2018-06-08</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-10 13:01:38" itemprop="dateModified" datetime="2018-06-10T13:01:38+08:00">2018-06-10</time>
               
             
           </span>
@@ -440,8 +452,15 @@
       
 
       
-        <p>函数式编程中，函数（function）是指 <strong>纯函数</strong>，即无副作用（side effect）的函数，并且用过程（procedure）表示有副作用的具备参数的代码块。</p>
-<p>本文将介绍引用透明、纯函数的概念，以及纯函数的优势。</p>
+        <p>函数式编程不鼓励使用副作用，并通过名字区分函数是否具有副作用：</p>
+<ul>
+<li>函数（function）一般就是指 <strong>纯函数</strong>，即无副作用（side effect）的函数</li>
+<li>过程（procedure）表示有副作用的具备参数的代码块</li>
+</ul>
+<blockquote>
+<p>Haskell 从语法上区分具有副作用的函数，比 Scala 更加严格。</p>
+</blockquote>
+<p>本文将简单介绍引用透明、纯函数以及代换模型的概念。</p>
 <a id="more"></a>
 <h2 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h2><p>纯函数必须满足两点要求：</p>
 <ul>
@@ -455,25 +474,47 @@
 <li>IO 输入、输出</li>
 <li>文件读写</li>
 </ul>
-<p>使用自由变量（非参数，非局部变量）的函数极有可能不是纯函数，但 FP 语言一般通过闭包将自由变量的值 <strong>封闭</strong> 在函数中，因此大多数该类函数式纯函数。</p>
+<p>使用自由变量（非参数，非局部变量）的函数 <strong>极有可能</strong> 不是纯函数，但 FP 语言一般通过闭包将自由变量的值 <strong>封闭</strong> 在函数中，因此大多数该类函数式纯函数。</p>
 <p>下面是几个常见的非纯函数：</p>
 <ul>
 <li>返回当前时间的函数：因此每次都返回不同结果（它依赖一个全局变量）</li>
 <li><code>random</code> 函数</li>
 <li><code>printf</code> 函数</li>
 </ul>
-<h2 id="引用透明"><a href="#引用透明" class="headerlink" title="引用透明"></a>引用透明</h2><p>我们可以用引用透明（）形式化的定义纯函数。</p>
+<h2 id="引用透明"><a href="#引用透明" class="headerlink" title="引用透明"></a>引用透明</h2><p>我们可以用引用透明（referentially transparent）形式化地定义纯函数。</p>
 <p>根据维基百科，引用透明是表达式的某种属性：</p>
 <blockquote>
 <p>An expression is said to be referentially transparent if it can be replaced with its corresponding value without changing the program’s behavior.</p>
 </blockquote>
-<p>函数调用也是表达式，对相同参数纯函数的计算结果总是相同，因此纯函数也是引用透明的。</p>
-<h2 id="代换模型"><a href="#代换模型" class="headerlink" title="代换模型"></a>代换模型</h2><hr>
+<p>函数可以视为 <strong>带参数的表达式</strong>，因此若：</p>
+<ul>
+<li>输入参数表达式是引用透明的，且</li>
+<li>函数体表达式也是引用透明的</li>
+</ul>
+<p>则该函数也是引用透明的，并称此类函数为纯函数。</p>
+<p>对于纯函数而言，计算结果仅仅取决于输入参数，因此相同参数总是获得相同的计算结果。</p>
+<h2 id="代换模型"><a href="#代换模型" class="headerlink" title="代换模型"></a>代换模型</h2><blockquote>
+<p>关于代换模型，在 <a href="https://book.douban.com/subject/1148282/" target="_blank" rel="noopener">计算机程序的构造与解释</a> 有详细解释。</p>
+</blockquote>
+<p>代换模型是一种简单、通用的求值模型：</p>
+<ul>
+<li>引用透明的表达式：可以将表达式本身 <strong>代换</strong> 为它的计算结果，而不改变程序的含义</li>
+<li>纯函数（引用透明）：可以将函数调用 <strong>代换</strong> 为函数的返回值，同样不改变程序的含义</li>
+</ul>
+<p>因此程序的求值过程转换为一系列的替换过程，这种求值模型被称为代换模型。</p>
+<p>每次代换过，程序的一部分（表达式 or 函数调用）被其 <strong>等价值</strong> 替换，整个程序最后被归约为最简单的形式。</p>
+<p>通过代换模型，可以对程序进行 <strong>推导</strong>（reason），这种推导能力本质是由 <strong>引用透明</strong> 赋予的。</p>
+<p>代换模型有什么优势呢？</p>
+<p>首先，并非只有代换模型可以推导，实际上所有求值模型都可以推导，但是代换模型 <strong>非常容易</strong> 推导。</p>
+<p>因为推导时无需考虑类似全局状态之类的状态更新，这种推导是 <strong>局部</strong> 的，不必追踪函数调用前后的 <strong>状态变化</strong>，极大减轻了推导时的心智负担。</p>
+<p>代换模型还有利于构建可复用的、模块化的组件，这类组件以纯函数的形式存在，由于纯函数分离了计算本身的逻辑，因此组件完全黑盒化，使用时完全不需要关心它们对上下文状态的影响（因为根本无影响），更容易组合、复用。</p>
+<hr>
 <p>参考：</p>
 <ul>
-<li><a href="">Scala 函数式编程</a></li>
+<li><a href="https://book.douban.com/subject/26772149/" target="_blank" rel="noopener">Scala 函数式编程</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Referential_transparency" target="_blank" rel="noopener">Referential transparency</a></li>
-<li><a href="">Pure functions</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Pure_function" target="_blank" rel="noopener">Pure functions</a></li>
+<li><a href="https://book.douban.com/subject/1148282/" target="_blank" rel="noopener">计算机程序的构造与解释</a></li>
 </ul>
 
       
@@ -627,7 +668,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">2</span>
+                      
+                    
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
