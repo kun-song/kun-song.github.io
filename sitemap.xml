@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2018/05/16/2018-05-16-tail-recursion/</loc>
+    
+    <lastmod>2018-06-10T14:50:36.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/10/2018-06-10-scala-square-root-newtons-method/</loc>
+    
+    <lastmod>2018-06-10T14:30:42.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/06/10/2018-06-10-scala-val-and-def/</loc>
     
     <lastmod>2018-06-10T13:13:32.000Z</lastmod>
@@ -79,13 +93,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/16/2018-05-16-tail-recursion/</loc>
-    
-    <lastmod>2018-06-03T07:56:01.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/27/2018-05-26-java8-completablefuture/</loc>
     
     <lastmod>2018-05-28T00:51:34.000Z</lastmod>
@@ -142,7 +149,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
+    <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -156,27 +163,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/tags/index.html</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -184,14 +170,21 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/09/how-to-learn-scala/</loc>
+    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -205,14 +198,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
+    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
+    <loc>http://songkun.me/2018/05/09/how-to-learn-scala/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -233,6 +226,34 @@
   </url>
   
   <url>
+    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/tags/index.html</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -240,21 +261,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/categories/index.html</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
