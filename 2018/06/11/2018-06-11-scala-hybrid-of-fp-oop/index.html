@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="基本概念偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 Partial Function 条目。 简单地说，对于类型为 A =&amp;gt; B 的函数 f 而言：  若 f 能处理所有类型 A 的值，则 f 为 total function； 若 f 仅能处理类型为 A 的值的 子集，则 f 为 partial fun">
-<meta name="keywords" content="Scala,fp">
+  <meta name="description" content="Scala 在其官网宣称：  Scala combines object-oriented and functional programming in one concise, high-level language.  融合 OO 和 FP 并非稀奇事，OCaml、F# 都这么做过，毕竟 OO 和 FP 非常正交，一点都不冲突（见 Are FP and OO orthogonal?）。 融合两者">
+<meta name="keywords" content="Scala,fp,oop">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala | 偏函数">
-<meta property="og:url" content="http://songkun.me/2018/05/15/scala-partialfunction-1/index.html">
+<meta property="og:title" content="Scala 是如何融合 OO 和 FP 两种编程范式的 ？">
+<meta property="og:url" content="http://songkun.me/2018/06/11/2018-06-11-scala-hybrid-of-fp-oop/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="基本概念偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 Partial Function 条目。 简单地说，对于类型为 A =&amp;gt; B 的函数 f 而言：  若 f 能处理所有类型 A 的值，则 f 为 total function； 若 f 仅能处理类型为 A 的值的 子集，则 f 为 partial fun">
+<meta property="og:description" content="Scala 在其官网宣称：  Scala combines object-oriented and functional programming in one concise, high-level language.  融合 OO 和 FP 并非稀奇事，OCaml、F# 都这么做过，毕竟 OO 和 FP 非常正交，一点都不冲突（见 Are FP and OO orthogonal?）。 融合两者">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-22T15:06:49.000Z">
+<meta property="og:updated_time" content="2018-06-11T14:46:27.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala | 偏函数">
-<meta name="twitter:description" content="基本概念偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 Partial Function 条目。 简单地说，对于类型为 A =&amp;gt; B 的函数 f 而言：  若 f 能处理所有类型 A 的值，则 f 为 total function； 若 f 仅能处理类型为 A 的值的 子集，则 f 为 partial fun">
+<meta name="twitter:title" content="Scala 是如何融合 OO 和 FP 两种编程范式的 ？">
+<meta name="twitter:description" content="Scala 在其官网宣称：  Scala combines object-oriented and functional programming in one concise, high-level language.  融合 OO 和 FP 并非稀奇事，OCaml、F# 都这么做过，毕竟 OO 和 FP 非常正交，一点都不冲突（见 Are FP and OO orthogonal?）。 融合两者">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/15/scala-partialfunction-1/"/>
+  <link rel="canonical" href="http://songkun.me/2018/06/11/2018-06-11-scala-hybrid-of-fp-oop/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>Scala | 偏函数 | 随便写写</title>
+  <title>Scala 是如何融合 OO 和 FP 两种编程范式的 ？ | 随便写写</title>
   
 
 
@@ -331,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-partialfunction-1/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/06/11/2018-06-11-scala-hybrid-of-fp-oop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Scala | 偏函数
+          <h1 class="post-title" itemprop="name headline">Scala 是如何融合 OO 和 FP 两种编程范式的 ？
               
             
           </h1>
@@ -373,24 +373,12 @@
                 
               
 
-              <time title="创建时间：2018-05-15 23:08:20" itemprop="dateCreated datePublished" datetime="2018-05-15T23:08:20+08:00">2018-05-15</time>
+              <time title="创建时间：2018-06-11 21:17:29 / 修改时间：22:46:27" itemprop="dateCreated datePublished" datetime="2018-06-11T21:17:29+08:00">2018-06-11</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-05-22 23:06:49" itemprop="dateModified" datetime="2018-05-22T23:06:49+08:00">2018-05-22</time>
               
             
           </span>
@@ -422,9 +410,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/15/scala-partialfunction-1/#comments" itemprop="discussionUrl">
+                <a href="/2018/06/11/2018-06-11-scala-hybrid-of-fp-oop/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/15/scala-partialfunction-1/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/06/11/2018-06-11-scala-hybrid-of-fp-oop/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -452,49 +440,74 @@
       
 
       
-        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 <a href="https://en.wikipedia.org/wiki/Partial_function" target="_blank" rel="noopener">Partial Function</a> 条目。</p>
-<p>简单地说，对于类型为 <code>A =&gt; B</code> 的函数 <code>f</code> 而言：</p>
-<ul>
-<li>若 <code>f</code> 能处理所有类型 <code>A</code> 的值，则 <code>f</code> 为 total function；</li>
-<li>若 <code>f</code> 仅能处理类型为 <code>A</code> 的值的 <strong>子集</strong>，则 <code>f</code> 为 partial function；</li>
-</ul>
-<a id="more"></a>
-<p>看一个具体例子，假设有两个类型为 <code>Double ⇒ Double</code> 的函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> addOne: <span class="type">Double</span> ⇒ <span class="type">Double</span> = x ⇒ x + <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> sqrt: <span class="type">Double</span> ⇒ <span class="type">Double</span> = x ⇒ <span class="type">Math</span>.sqrt(x)</span><br></pre></td></tr></table></figure>
-<p>其中 <code>sqrt</code> 根本无法处理非正实数，因此 <code>sqrt</code> 是数学上的 partial function。</p>
-<h2 id="创建-PartialFunction"><a href="#创建-PartialFunction" class="headerlink" title="创建 PartialFunction"></a>创建 <code>PartialFunction</code></h2><p>Scala 使用 <code>PartialFunction</code> 类型表示偏函数，<code>sqrt</code> 可以实现为 <code>PartialFunction</code> 实例：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sqrt: <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] =</span><br><span class="line">  <span class="keyword">new</span> <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">isDefinedAt</span></span>(x: <span class="type">Double</span>) = x &gt;= <span class="number">0</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">Double</span>) = <span class="type">Math</span>.sqrt(v1)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>Scala 将函数视为第一等公民，可 <code>PartialFunction</code> 使用也太麻烦了吧？为了方便用户，Scala 允许通过 <code>case</code> 关键字创建 <code>PartialFunction</code> 函数的字面值</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sqrt: <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> x <span class="keyword">if</span> x &gt;= <span class="number">0</span> ⇒ <span class="type">Math</span>.sqrt(x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>是不是清爽了很多，虽然不如普通函数字面值简洁，但也相去不远了。</p>
+        <p>Scala 在其官网宣称：</p>
 <blockquote>
-<p><code>case</code> 语句仅仅是语法糖而已，Scala 编译器会将其转换为前面的 <code>PartialFunction</code> 实例创建代码。</p>
+<p>Scala combines object-oriented and functional programming in one concise, high-level language.</p>
 </blockquote>
-<h2 id="组合-PartialFunction"><a href="#组合-PartialFunction" class="headerlink" title="组合 PartialFunction"></a>组合 <code>PartialFunction</code></h2><p>可以用 <code>orElse</code> 组合偏函数，若有如下偏函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> one: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">String</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span>  ⇒ <span class="string">"one"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> two: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">String</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">2</span>  ⇒ <span class="string">"two"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> three: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">String</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">3</span>  ⇒ <span class="string">"three"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们想要一个能同时翻译 1, 2, 3 的函数，可以这样组合：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> all = one orElse two orElse three</span><br></pre></td></tr></table></figure>
-<p><code>all</code> 函数可以处理 1 2 3：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">all(<span class="number">1</span>)  <span class="comment">// one</span></span><br><span class="line">all(<span class="number">2</span>)  <span class="comment">// two</span></span><br><span class="line">all(<span class="number">3</span>)  <span class="comment">// three</span></span><br></pre></td></tr></table></figure>
-<h2 id="偏函数应用"><a href="#偏函数应用" class="headerlink" title="偏函数应用"></a>偏函数应用</h2><p>在 Scala 代码中，偏函数几乎随处可见，本文仅列举几个简单例子。</p>
-<h3 id="List-collect"><a href="#List-collect" class="headerlink" title="List.collect"></a><code>List.collect</code></h3><p>对列表中每个元素加 1，可以用 <code>map</code> 轻易实现：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) map &#123;</span><br><span class="line">  <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>但如果 <code>List</code> 中含有非数字类型，则 <code>map</code> 将抛出异常：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抛出异常</span></span><br><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">"Hi"</span>) map &#123;</span><br><span class="line">  <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>此时可以用 <code>collect</code> 函数取代 <code>map</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">"Hi"</span>) collect &#123;</span><br><span class="line">  <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>结果为 <code>List(2, 3, 4)</code>，跳过了字符串 <code>Hi</code>，原因是 <code>collect</code> 参数为 <code>PartialFunction</code>，其实现根据偏函数参数的定义域，自动跳过无定义的元素。</p>
-<h3 id="Akka-中的例子"><a href="#Akka-中的例子" class="headerlink" title="Akka 中的例子"></a>Akka 中的例子</h3><p>偏函数在 Akka 中使用非常普遍，例如前几天我提的这个 <a href="https://github.com/akka/akka/pull/25036/files" target="_blank" rel="noopener">PR</a> 中：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recoverWith</span></span>(clazz: <span class="type">Class</span>[_ &lt;: <span class="type">Throwable</span>], supplier: <span class="type">Supplier</span>[<span class="type">Graph</span>[<span class="type">SourceShape</span>[<span class="type">Out</span>], <span class="type">NotUsed</span>]]): javadsl.<span class="type">Flow</span>[<span class="type">In</span>, <span class="type">Out</span>, <span class="type">Mat</span>] =</span><br><span class="line">  recoverWith &#123;</span><br><span class="line">    <span class="keyword">case</span> elem <span class="keyword">if</span> clazz.isInstance(elem) ⇒ supplier.get()</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p><code>recoverWith</code> 参数是偏函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">PartialFunction</span>[<span class="type">Throwable</span>, <span class="type">Graph</span>[<span class="type">SourceShape</span>[<span class="type">Out</span>], <span class="type">NotUsed</span>]]</span><br></pre></td></tr></table></figure>
-<p>通过偏函数，清晰表明 <code>recoverWith</code> 并非能处理所有 <code>Throwable</code> 值，而是仅处理参数 <code>PartialFunction</code> 能处理的 <code>Throwable</code> 子集。</p>
-<p>有人可能会问，即使不用偏函数，我用 <code>Throwable ⇒ Option[Graph[SourceShape[Out], NotUsed]]</code> 一样能表达相同的语义啊？哈哈，原因很简单，偏函数也是函数，可组合性更好，更方便。</p>
-<hr>
-<p>参考</p>
+<p>融合 OO 和 FP 并非稀奇事，OCaml、F# 都这么做过，毕竟 OO 和 FP 非常正交，一点都不冲突（见 <a href="https://stackoverflow.com/questions/3949618/are-fp-and-oo-orthogonal" target="_blank" rel="noopener">Are FP and OO orthogonal?</a>）。</p>
+<p>融合两者并非易事，做不好容易给人一种割裂感，好在 Scala 在这点做的非常自然，基本做到了取长补短。</p>
+<a id="more"></a>
+<h2 id="函数式-Scala"><a href="#函数式-Scala" class="headerlink" title="函数式 Scala"></a>函数式 Scala</h2><p>首先，作为 FP 语言，Scala 对函数支持非常完备：</p>
 <ul>
-<li><a href="http://twitter.github.io/effectivescala/#Functional%20programming-Partial%20functions" target="_blank" rel="noopener">Effective Scala</a></li>
-<li><a href="https://twitter.github.io/scala_school/zh_cn/pattern-matching-and-functional-composition.html" target="_blank" rel="noopener">Twitter Scala School</a></li>
+<li>便捷的匿名函数创建</li>
+<li>first class function、高阶函数</li>
+<li>函数组合</li>
+<li>闭包、柯里化、部分应用函数、偏函数</li>
+<li>type class</li>
+<li>模式匹配</li>
+<li>类型推断</li>
+<li>强大的类型系统</li>
+</ul>
+<p>在 FP 方面，Scala 不输各种老牌 FP 语言，例如 ML、OCaml、Scheme 等，虽然语法啰嗦一点。</p>
+<h2 id="面向对象-Scala"><a href="#面向对象-Scala" class="headerlink" title="面向对象 Scala"></a>面向对象 Scala</h2><p>其次，Scala 是一门 pure OO 语言，因为在 Scala 中一切皆对象，包括原始类型（如 <code>Int</code>、<code>Double</code> 等）。</p>
+<p>那么问题来了，既然一切皆对象，那么函数又是什么？</p>
+<p>出现该问题的根本原因是 Scala 对 OO 和 FP 的融合几乎天衣无缝、Scala 对 FP 支持如此自然，以致于大家产生这种疑问，毕竟函数看起来一点都不像对象！</p>
+<h2 id="函数式-vs-面向对象"><a href="#函数式-vs-面向对象" class="headerlink" title="函数式 vs 面向对象"></a>函数式 vs 面向对象</h2><p>然而事实是，函数也逃不出 OO 的手掌心：</p>
+<ol>
+<li>函数类型：为类</li>
+<li>函数值：为对象</li>
+</ol>
+<h3 id="函数类型：类"><a href="#函数类型：类" class="headerlink" title="函数类型：类"></a>函数类型：类</h3><p>函数类型 <code>A =&gt; B</code> 不过是特质 <code>scala.Function1[A, B]</code> 的简写而已，<code>Function1[A, B]</code> 定义如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Function1</span>[-<span class="type">A</span>, +<span class="type">B</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">A</span>): <span class="type">B</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Scala 支持 <code>Function1</code> 到 <code>Function22</code>。</p>
+</blockquote>
+<h3 id="函数值：对象"><a href="#函数值：对象" class="headerlink" title="函数值：对象"></a>函数值：对象</h3><p>而函数值仅仅是 <code>FunctionX</code> 类型的对象而已，更准确地说，函数值是具备 <code>apply</code> 方法的对象，只不过 <code>FunctionX</code> 恰好定义了 <code>apply</code> 而已。</p>
+<p>例如函数值：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x: <span class="type">Int</span>) =&gt; x * x</span><br></pre></td></tr></table></figure>
+<p>被编译器展开为：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">AnonFun</span> <span class="keyword">extends</span> <span class="title">Function1</span>[<span class="type">Int</span>, <span class="type">Int</span>] </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = x * x</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">new</span> <span class="type">AnonFunc</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者更简洁的：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="type">Function1</span>[<span class="type">Int</span>, <span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = x * x</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="函数调用"><a href="#函数调用" class="headerlink" title="函数调用"></a>函数调用</h3><p>好吧，函数值的确是对象，那函数调用呢，你怎么解释？？？</p>
+<p>不要急，听我慢慢道来。</p>
+<p>函数调用 <code>f(a, b)</code> 被编译器展开为 <code>f.apply(a, b)</code>（毕竟函数精华都在 <code>apply</code> 上）。</p>
+<p>看一个完整的例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> f = (x: <span class="type">Int</span>) =&gt; x * x</span><br><span class="line">f(<span class="number">11</span>)</span><br></pre></td></tr></table></figure>
+<p>被展开为：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> f = <span class="keyword">new</span> <span class="type">Function1</span>[<span class="type">Int</span>, <span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = x * x</span><br><span class="line">&#125;</span><br><span class="line">f.apply(<span class="number">11</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="eta-转换"><a href="#eta-转换" class="headerlink" title="eta 转换"></a>eta 转换</h2><p>细心的读者可能会问：你已经说服我函数（function）是对象了，那方法（method）呢，<code>apply</code> 方法是对象吗？</p>
+<p>假设 <code>apply</code> 方法也是对象，因此也是 <code>Function1[Int, Int]</code> 的实例，代表它实例自己也有 <code>apply</code> 方法，进而又是 <code>Function1[Int, Int]</code> 的实例 … 死循环了！</p>
+<p>因此 <code>apply</code> 方法不可能是对象。</p>
+<p>实际上，方法（使用 <code>def</code> 定义）本身 <strong>并非函数值</strong>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(n: <span class="type">Int</span>): <span class="type">Int</span></span><br></pre></td></tr></table></figure>
+<p>但是，若 <code>f</code> 出现在需要函数类型的上下文中，<code>f</code> 被自动转换为函数值：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x: <span class="type">Int</span>) =&gt; f(x)</span><br></pre></td></tr></table></figure>
+<p>或：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="type">Function1</span>[<span class="type">Int</span>, <span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = f(x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>将 method 转换为 function 的过程称为 eta 转换。</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>function value 是 object，而 function type 是 class</li>
+<li>函数不过是具备 <code>apply</code> 方法的对象而已</li>
+<li>方法不是函数，但可以转换为函数（eta 转换）</li>
+</ul>
+<hr>
+<p>参考：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/3949618/are-fp-and-oo-orthogonal" target="_blank" rel="noopener">Are FP and OO orthogonal?</a></li>
+<li><a href="https://www.coursera.org/learn/progfun1/home/week/4" target="_blank" rel="noopener">Functional Programming Principles in Scala week 4</a></li>
 </ul>
 
       
@@ -520,6 +533,8 @@
           
             <a href="/tags/fp/" rel="tag"># fp</a>
           
+            <a href="/tags/oop/" rel="tag"># oop</a>
+          
         </div>
       
 
@@ -531,8 +546,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/15/scala-case-use-cases/" rel="next" title="Scala | case 关键字的 4 种用法">
-                <i class="fa fa-chevron-left"></i> Scala | case 关键字的 4 种用法
+              <a href="/2018/06/10/2018-06-10-scala-square-root-newtons-method/" rel="next" title="牛顿法求平方根（Scala 版）">
+                <i class="fa fa-chevron-left"></i> 牛顿法求平方根（Scala 版）
               </a>
             
           </div>
@@ -540,10 +555,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/16/scala-partialfunction-partially-applied-function-currying/" rel="prev" title="偏函数 vs 部分应用函数 vs 柯里化">
-                偏函数 vs 部分应用函数 vs 柯里化 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -775,7 +786,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建-PartialFunction"><span class="nav-number">2.</span> <span class="nav-text">创建 PartialFunction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合-PartialFunction"><span class="nav-number">3.</span> <span class="nav-text">组合 PartialFunction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#偏函数应用"><span class="nav-number">4.</span> <span class="nav-text">偏函数应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#List-collect"><span class="nav-number">4.1.</span> <span class="nav-text">List.collect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Akka-中的例子"><span class="nav-number">4.2.</span> <span class="nav-text">Akka 中的例子</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数式-Scala"><span class="nav-number">1.</span> <span class="nav-text">函数式 Scala</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面向对象-Scala"><span class="nav-number">2.</span> <span class="nav-text">面向对象 Scala</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数式-vs-面向对象"><span class="nav-number">3.</span> <span class="nav-text">函数式 vs 面向对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数类型：类"><span class="nav-number">3.1.</span> <span class="nav-text">函数类型：类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数值：对象"><span class="nav-number">3.2.</span> <span class="nav-text">函数值：对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数调用"><span class="nav-number">3.3.</span> <span class="nav-text">函数调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#eta-转换"><span class="nav-number">4.</span> <span class="nav-text">eta 转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -949,9 +960,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/05/15/scala-partialfunction-1/';
-        this.page.identifier = '2018/05/15/scala-partialfunction-1/';
-        this.page.title = 'Scala | 偏函数';
+        this.page.url = 'http://songkun.me/2018/06/11/2018-06-11-scala-hybrid-of-fp-oop/';
+        this.page.identifier = '2018/06/11/2018-06-11-scala-hybrid-of-fp-oop/';
+        this.page.title = 'Scala 是如何融合 OO 和 FP 两种编程范式的 ？';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
