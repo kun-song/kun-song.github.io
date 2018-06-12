@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="首先，高阶函数是一种特殊的函数：  接受函数参数，or 返回函数  高阶函数非常便于 组合函数。 本文通过逐渐优化一个求和函数，展示高阶函数、匿名函数、柯里化、部分应用等多种函数式编程概念。">
+<meta name="keywords" content="Scala,fp,高阶函数,柯里化,部分应用函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scala | 一篇文章读懂高阶函数">
+<meta property="og:url" content="http://songkun.me/2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="首先，高阶函数是一种特殊的函数：  接受函数参数，or 返回函数  高阶函数非常便于 组合函数。 本文通过逐渐优化一个求和函数，展示高阶函数、匿名函数、柯里化、部分应用等多种函数式编程概念。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-12T15:08:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scala | 一篇文章读懂高阶函数">
+<meta name="twitter:description" content="首先，高阶函数是一种特殊的函数：  接受函数参数，or 返回函数  高阶函数非常便于 组合函数。 本文通过逐渐优化一个求和函数，展示高阶函数、匿名函数、柯里化、部分应用等多种函数式编程概念。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Scala | 一篇文章读懂高阶函数 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Scala | 一篇文章读懂高阶函数
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-12 21:02:39 / 修改时间：23:08:40" itemprop="dateCreated datePublished" datetime="2018-06-12T21:02:39+08:00">2018-06-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>首先，高阶函数是一种特殊的函数：</p>
+<ul>
+<li>接受函数参数，or</li>
+<li>返回函数</li>
+</ul>
+<p>高阶函数非常便于 <strong>组合函数</strong>。</p>
+<p>本文通过逐渐优化一个求和函数，展示高阶函数、匿名函数、柯里化、部分应用等多种函数式编程概念。</p>
+<a id="more"></a>
+<h2 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h2><p>实现一个计算 [from, to] 区间内整数之和的函数，这非常简单：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumInts</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (from &gt; to) <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span> from + sumInts(from + <span class="number">1</span>, to)</span><br></pre></td></tr></table></figure>
+<p>求 [from, to] 之间整数的立方和呢？也很简单：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cube</span></span>(n: <span class="type">Int</span>): <span class="type">Int</span> = n * n * n</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumCubes</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (from &gt; to) <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span> cube(from) + sumCubes(from + <span class="number">1</span>, to)</span><br></pre></td></tr></table></figure>
+<p>求 [from, to] 之间整数的阶乘之和呢？代码与 <code>sumInts</code> 和 <code>sumCubes</code> 非常类似：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fact</span></span>(n: <span class="type">Int</span>): <span class="type">Int</span> = <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="number">1</span> <span class="keyword">else</span> n * fact(n - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumFacts</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (from &gt; to) <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span> fact(from) + sumFacts(from + <span class="number">1</span>, to)</span><br></pre></td></tr></table></figure>
+<p><code>sumInts</code>、<code>sumCubes</code> 和 <code>sumFacts</code> 主体代码非常类似，能不能抽象出公共部分呢？</p>
+<h2 id="第一次优化：高阶函数"><a href="#第一次优化：高阶函数" class="headerlink" title="第一次优化：高阶函数"></a>第一次优化：高阶函数</h2><p>将 <code>sumInts</code>、<code>sumCubes</code> 和 <code>sumFacts</code> 的差异点抽象为函数，并作为参数传入：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>, from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (from &gt; to) <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span> f(from) + sum(f, from + <span class="number">1</span>, to)</span><br></pre></td></tr></table></figure>
+<p><code>sum</code> 接受一个类型为 <code>Int =&gt; Int</code> 的函数作为参数，因此是高阶函数。</p>
+<p>通过 <code>sum</code> 可以重新实现 <code>sumInts</code>、<code>sumCubes</code> 和 <code>sumFacts</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cube</span></span>(n: <span class="type">Int</span>): <span class="type">Int</span> = n * n * n</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fact</span></span>(n: <span class="type">Int</span>): <span class="type">Int</span> = <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="number">1</span> <span class="keyword">else</span> n * fact(n - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumInts</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> = sum(identity, from, to)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumCubes</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> = sum(cube, from, to)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumFacts</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> = sum(fact, from, to)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其中 <code>identity</code> 类似 <code>x =&gt; x</code> 这样的函数。</li>
+</ul>
+<p><strong>求和逻辑</strong> 被抽象在 <code>sum</code> 函数中，该逻辑在 <code>sumInts</code>、<code>sumCubes</code> 和 <code>sumFacts</code> 中获得复用。</p>
+<p>美中不足的是，<code>cube</code>、<code>fact</code> 只是辅助函数，用完即扔，现在还要费神单独定义它们。</p>
+<h2 id="第二次优化：函数字面值"><a href="#第二次优化：函数字面值" class="headerlink" title="第二次优化：函数字面值"></a>第二次优化：函数字面值</h2><p>实际上，高阶函数的存在不可避免导致定义大量的临时辅助函数，它们存在的 <strong>唯一作用</strong> 就是作为高阶函数的参数，因此一般 FP 语言都会提供函数字面值（匿名函数），以简化高阶函数的使用。</p>
+<blockquote>
+<ul>
+<li>类似 100 是 <code>Int</code> 类型的字面值，(x: Int) =&gt; x + 1 是函数类型 <code>Int =&gt; Int</code> 的字面值；</li>
+<li>函数字面值仅仅是函数定义的语法糖；</li>
+</ul>
+</blockquote>
+<p>利用函数字面值，可以简化 <code>sumInts</code> 等的定义，省去单独定义辅助函数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumInts</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> = sum(x ⇒ x, from, to)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumCubes</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> = sum(x ⇒ x * x * x, from, to)</span><br></pre></td></tr></table></figure>
+<p>而 <code>sumFacts</code> 的参数 <code>fact</code> 函数是递归函数，用匿名函数实现比较复杂，因此保持原状。</p>
+<h2 id="第三次优化：尾递归"><a href="#第三次优化：尾递归" class="headerlink" title="第三次优化：尾递归"></a>第三次优化：尾递归</h2><p>目前 <code>sum</code> 函数实现为线性递归，当递归层次过深时，很容易导致栈溢出，这会严重影响 <code>sumInts</code> 等函数的可用性，因此将其改写为尾递归：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.annotation.tailrec</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>, from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">  <span class="meta">@tailrec</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">aux</span></span>(acc: <span class="type">Int</span>, from: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">    <span class="keyword">if</span> (from &gt; to) acc</span><br><span class="line">    <span class="keyword">else</span> aux(acc + f(from), from + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">  aux(<span class="number">0</span>, from)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在 <code>sumInts</code>、<code>sumCubes</code> 等不会出现栈溢出了。</p>
+<h2 id="第四次优化：柯里化"><a href="#第四次优化：柯里化" class="headerlink" title="第四次优化：柯里化"></a>第四次优化：柯里化</h2><p>通过把求和逻辑抽象到 <code>sum</code> 中，<code>sumInts</code> 等函数定义已经很简洁了：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumInts</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> = sum(x ⇒ x, from, to)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumCubes</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> = sum(x ⇒ x * x * x, from, to)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumFacts</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> = sum(fact, from, to)</span><br></pre></td></tr></table></figure>
+<p>目前唯一的槽点是 <code>sumInts</code> 的参数 <code>from</code> 和 <code>to</code> 直接被传递给了 <code>sum</code>，毫无存在感，能把它们简化掉吗？</p>
+<p>Yes, we can!</p>
+<h3 id="1-柯里化函数定义：手动实现"><a href="#1-柯里化函数定义：手动实现" class="headerlink" title="1. 柯里化函数定义：手动实现"></a>1. 柯里化函数定义：手动实现</h3><p>重新定义 <code>sum</code>，新 <code>sum</code> 接受 <code>Int =&gt; Int</code> 函数作为参数，并返回 <code>(Int, Int) =&gt; Int</code> 函数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>): (<span class="type">Int</span>, <span class="type">Int</span>) ⇒ <span class="type">Int</span> = &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">sumF</span></span>(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">    <span class="keyword">if</span> (from &gt; to) <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span> f(from) + sumF(from + <span class="number">1</span>, to)</span><br><span class="line"></span><br><span class="line">  sumF</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>我们在 <code>sum</code> 内部定义了一个 <code>(Int, Int) =&gt; Int</code> 函数，并将其作为 <code>sum</code> 的返回值</li>
+<li><code>sumF</code> 是典型的闭包，引用外部变量 <code>f</code></li>
+</ul>
+<p>借助新 <code>sum</code>，我们重新定义 <code>sumInts</code> 等：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumInts</span> </span>= sum(x ⇒ x)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumCubes</span> </span>= sum(x ⇒ x * x * x)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumFacts</span> </span>= sum(fact)</span><br></pre></td></tr></table></figure>
+<p>是不是更简洁了，哈哈！</p>
+<p><code>sum(x =&gt; x)</code> 计算结果为函数，可以直接调用：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum(x =&gt; x)(<span class="number">0</span>, <span class="number">10</span>) == sumInts(<span class="number">0</span>, <span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从本例可看出，函数应用为左结合，即 <code>sum(x =&gt; x)(0, 10)</code> 为 <code>(sum(x =&gt; x))(0, 10)</code></li>
+</ul>
+<h3 id="2-柯里化函数定义：多参列表"><a href="#2-柯里化函数定义：多参列表" class="headerlink" title="2. 柯里化函数定义：多参列表"></a>2. 柯里化函数定义：多参列表</h3><p>高阶函数经常返回函数，因此 Scala 提供了响应的语法糖：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>)(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (from &gt; to) <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span> f(from) + sum(f)(from + <span class="number">1</span>, to)</span><br></pre></td></tr></table></figure>
+<p>通过定义时的多参列表，Scala 自动将其转换为柯里化函数，与手动返回 <code>sumF</code> 几乎完全相同，但用它定义 <code>sumInts</code> 时：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumInts</span> </span>= sum(x ⇒ x)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumCubes</span> </span>= sum(x ⇒ x * x * x)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumFacts</span> </span>= sum(fact)</span><br></pre></td></tr></table></figure>
+<p>将抛出异常：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Error</span>:(<span class="number">8</span>, <span class="number">19</span>) missing argument list <span class="keyword">for</span> method sum in <span class="class"><span class="keyword">class</span> <span class="title">A$A582</span></span></span><br><span class="line"><span class="class"><span class="title">Unapplied</span> <span class="title">methods</span> <span class="title">are</span> <span class="title">only</span> <span class="title">converted</span> <span class="title">to</span> <span class="title">functions</span> <span class="title">when</span> <span class="title">a</span> <span class="title">function</span> <span class="title">type</span> <span class="title">is</span> <span class="title">expected</span>.</span></span><br><span class="line"><span class="class"><span class="title">You</span> <span class="title">can</span> <span class="title">make</span> <span class="title">this</span> <span class="title">conversion</span> <span class="title">explicit</span> <span class="title">by</span> <span class="title">writing</span> `<span class="title">sum</span> <span class="title">_</span>` <span class="title">or</span> `<span class="title">sum</span>(<span class="params">_</span>)(<span class="params">_,_</span>)` <span class="title">instead</span> <span class="title">of</span> `<span class="title">sum</span>`.</span></span><br><span class="line"><span class="class"><span class="title">def</span> <span class="title">sumInts</span> </span>= sum(x ⇒ x)</span><br><span class="line">                 ^</span><br></pre></td></tr></table></figure>
+<p>根据提示，<code>sum</code> 并非函数，而是方法，只有编译器确定需要函数的地方，才会将方法转换为函数，这里 <code>sum(x =&gt; x)</code> 处于 <code>sumInts</code> 方法体中，编译器无法确定此处需要一个函数，因为 <code>sum(x =&gt; x)</code> 无论返回任何类型 <code>sumInts</code> 定义都是合法的。</p>
+<p>有两种解决方式，第一显式指定 <code>sumInts</code> 的返回类型，编译器将自动将 method 转换为 function：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumInts</span></span>: (<span class="type">Int</span>, <span class="type">Int</span>) ⇒ <span class="type">Int</span> = sum(x ⇒ x)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumCubes</span></span>: (<span class="type">Int</span>, <span class="type">Int</span>) ⇒ <span class="type">Int</span>  = sum(x ⇒ x * x * x)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumFacts</span></span>: (<span class="type">Int</span>, <span class="type">Int</span>) ⇒ <span class="type">Int</span>  = sum(fact)</span><br></pre></td></tr></table></figure>
+<p>第二，根据异常提示，显式使用 <code>_</code> 强制将 method 转换为 function：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumInts</span> </span>= sum(x ⇒ x) _</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumCubes</span> </span>= sum(x ⇒ x * x * x) _</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumFacts</span> </span>= sum(fact) _</span><br></pre></td></tr></table></figure>
+<h4 id="一点理论"><a href="#一点理论" class="headerlink" title="一点理论"></a>一点理论</h4><p>多参函数原理很简单，多参函数定义：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(args1)...(argsn) = <span class="type">E</span></span><br></pre></td></tr></table></figure>
+<p>等价于：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(args1)...(argsn<span class="number">-1</span>) = &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">g</span></span>(argsn) = <span class="type">E</span></span><br><span class="line">  g</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或更简洁的：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(args1)...(argsn<span class="number">-1</span>) = argsn =&gt; <span class="type">E</span></span><br></pre></td></tr></table></figure>
+<p>对剩余的 <code>(args1)...(argsn-1)</code> 重复应用该原理，最后结果为：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span> </span>= (args1 =&gt; (args2 ... =&gt; (argsn =&gt; <span class="type">E</span>)))</span><br></pre></td></tr></table></figure>
+<p>函数类型是 <strong>右结合</strong>，因此简化为：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span> </span>= args1 =&gt; args2 ... =&gt; argsn =&gt; <span class="type">E</span></span><br></pre></td></tr></table></figure>
+<p><code>f</code> 没有任何参数了！</p>
+<h2 id="引子-2"><a href="#引子-2" class="headerlink" title="引子 2"></a>引子 2</h2><p>实现一个对 [from, to] 区间整数求乘积的函数，加持所有从 <code>sum</code> 获取的经验，将其定义为：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">product</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>)(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (from &gt; to) <span class="number">1</span></span><br><span class="line">  <span class="keyword">else</span> f(from) * product(f)(from + <span class="number">1</span>, to)</span><br></pre></td></tr></table></figure>
+<p>借助 <code>product</code> 很容易定义 <code>fact</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fact</span></span>(n: <span class="type">Int</span>): <span class="type">Int</span> = product(x ⇒ x)(<span class="number">1</span>, n)</span><br></pre></td></tr></table></figure>
+<h2 id="第五次优化：抽象-sum-和-product"><a href="#第五次优化：抽象-sum-和-product" class="headerlink" title="第五次优化：抽象 sum 和 product"></a>第五次优化：抽象 sum 和 product</h2><p>看一下 <code>sum</code> 和 <code>product</code> 的定义：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>)(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (from &gt; to) <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span> f(from) + sum(f)(from + <span class="number">1</span>, to)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">product</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>)(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (from &gt; to) <span class="number">1</span></span><br><span class="line">  <span class="keyword">else</span> f(from) * product(f)(from + <span class="number">1</span>, to)</span><br></pre></td></tr></table></figure>
+<p>两者代码非常相似，不同点有两处：0 或 1，+ 或 *，将这两处差异抽离为参数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">combine</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>, op: (<span class="type">Int</span>, <span class="type">Int</span>) ⇒ <span class="type">Int</span>, zero: <span class="type">Int</span>)(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (from &gt; to) zero</span><br><span class="line">  <span class="keyword">else</span> op(f(from), combine(f, op, zero)(from + <span class="number">1</span>, to))</span><br></pre></td></tr></table></figure>
+<p>借助 <code>combine</code> 可以重新定义 <code>sum</code> 和 <code>product</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>)(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  combine(f, _ + _, <span class="number">0</span>)(from, to)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">product</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>)(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  combine(f, _ * _, <span class="number">1</span>)(from, to)</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>最后代码为：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">combine</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>, op: (<span class="type">Int</span>, <span class="type">Int</span>) ⇒ <span class="type">Int</span>, zero: <span class="type">Int</span>)(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (from &gt; to) zero</span><br><span class="line">  <span class="keyword">else</span> op(f(from), combine(f, op, zero)(from + <span class="number">1</span>, to))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>)(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  combine(f, _ + _, <span class="number">0</span>)(from, to)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">product</span></span>(f: <span class="type">Int</span> ⇒ <span class="type">Int</span>)(from: <span class="type">Int</span>, to: <span class="type">Int</span>): <span class="type">Int</span> =</span><br><span class="line">  combine(f, _ * _, <span class="number">1</span>)(from, to)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fact</span></span>(n: <span class="type">Int</span>): <span class="type">Int</span> = <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="number">1</span> <span class="keyword">else</span> n * fact(n - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumInts</span></span>: (<span class="type">Int</span>, <span class="type">Int</span>) ⇒ <span class="type">Int</span> = sum(x ⇒ x)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumCubes</span></span>: (<span class="type">Int</span>, <span class="type">Int</span>) ⇒ <span class="type">Int</span>  = sum(x ⇒ x * x * x)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sumFacts</span></span>: (<span class="type">Int</span>, <span class="type">Int</span>) ⇒ <span class="type">Int</span>  = sum(fact)</span><br></pre></td></tr></table></figure>
+<p>我们通过不断抽象，逐渐提升了函数的适用范围，函数越抽象，适用范围越大。</p>
+<p><code>combine</code> 没有任何代码适用了 <code>Int</code> 的特殊性质，因此实际上 <code>combine</code> 适用于任意 <code>Monoid</code>，加入 <code>Monoid</code>，并将区间改为 <code>List</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">combine</span></span>[<span class="type">A</span>: <span class="type">Monoid</span>](f: <span class="type">A</span> ⇒ <span class="type">A</span>, op: (<span class="type">A</span>, <span class="type">A</span>) ⇒ <span class="type">A</span>, zero: <span class="type">A</span>)(xs: <span class="type">List</span>[<span class="type">A</span>]): <span class="type">A</span> = &#123;</span><br><span class="line">  <span class="keyword">val</span> m = implicitly[<span class="type">Monoid</span>[<span class="type">A</span>]]</span><br><span class="line">  xs.foldLeft(m.zero)((b, a) ⇒ m.op(b, f(a)))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>借助 <code>Monoid</code> 等 type class 概念，可以获得更加抽象、更加通用的 <code>sum</code> 函数，更多内容可参考另一篇文章 <a href="/2018/06/03/2018-06-03-scala-cats-sum-by-monoid/" title="Type Class | 基于 Monoid 和 Foldable 的 sum 函数">Type Class | 基于 Monoid 和 Foldable 的 sum 函数</a>。</p>
+<hr>
+<p>参考：</p>
+<ul>
+<li><a href="https://www.coursera.org/learn/progfun1/lecture/xuM1M/lecture-2-1-higher-order-functions" target="_blank" rel="noopener">Functional Programming Principles in Scala week 2</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Scala/" rel="tag"># Scala</a>
+          
+            <a href="/tags/fp/" rel="tag"># fp</a>
+          
+            <a href="/tags/高阶函数/" rel="tag"># 高阶函数</a>
+          
+            <a href="/tags/柯里化/" rel="tag"># 柯里化</a>
+          
+            <a href="/tags/部分应用函数/" rel="tag"># 部分应用函数</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/11/2018-06-11-scala-hybrid-of-fp-oop/" rel="next" title="Scala 是如何融合 OO 和 FP 两种编程范式的 ？">
+                <i class="fa fa-chevron-left"></i> Scala 是如何融合 OO 和 FP 两种编程范式的 ？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引子"><span class="nav-number">1.</span> <span class="nav-text">引子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一次优化：高阶函数"><span class="nav-number">2.</span> <span class="nav-text">第一次优化：高阶函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二次优化：函数字面值"><span class="nav-number">3.</span> <span class="nav-text">第二次优化：函数字面值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三次优化：尾递归"><span class="nav-number">4.</span> <span class="nav-text">第三次优化：尾递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四次优化：柯里化"><span class="nav-number">5.</span> <span class="nav-text">第四次优化：柯里化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-柯里化函数定义：手动实现"><span class="nav-number">5.1.</span> <span class="nav-text">1. 柯里化函数定义：手动实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-柯里化函数定义：多参列表"><span class="nav-number">5.2.</span> <span class="nav-text">2. 柯里化函数定义：多参列表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一点理论"><span class="nav-number">5.2.1.</span> <span class="nav-text">一点理论</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引子-2"><span class="nav-number">6.</span> <span class="nav-text">引子 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第五次优化：抽象-sum-和-product"><span class="nav-number">7.</span> <span class="nav-text">第五次优化：抽象 sum 和 product</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/';
+        this.page.identifier = '2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/';
+        this.page.title = 'Scala | 一篇文章读懂高阶函数';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
