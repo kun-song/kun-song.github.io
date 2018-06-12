@@ -3,6 +3,9 @@ title: 偏函数 vs 部分应用函数 vs 柯里化
 tags:
   - Scala
   - fp
+  - 偏函数
+  - 部分应用函数
+  - 柯里化
 categories: 技术
 abbrlink: 17257
 date: 2018-05-16 00:19:56
