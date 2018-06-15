@@ -119,23 +119,25 @@
 
 
 
-  <meta name="description" content="Java for living, Scala for fun!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="随便写写">
-<meta property="og:url" content="http://songkun.me/tags/蹦床/index.html">
+  <meta name="description" content="Martin Odersky 曾经说过：  Scala is a gateway drug to Haskell.  虽是戏言，却一语成谶。 虽然 Scala 是一门不错的 FP 语言，但由于兼顾 OO，所以很多 FP 概念在 Scala 中显得不够清晰，即语法噪声很多。 我对真正的 FP 语言越来越好奇，想深入了解一门，以便破除 Scala 中的一些迷惑之处，这时我有几个选择：  Haskell">
+<meta name="keywords" content="fp,Haskell,公开课">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CIS 194 | 正式入坑 Haskell">
+<meta property="og:url" content="http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="Java for living, Scala for fun!">
+<meta property="og:description" content="Martin Odersky 曾经说过：  Scala is a gateway drug to Haskell.  虽是戏言，却一语成谶。 虽然 Scala 是一门不错的 FP 语言，但由于兼顾 OO，所以很多 FP 概念在 Scala 中显得不够清晰，即语法噪声很多。 我对真正的 FP 语言越来越好奇，想深入了解一门，以便破除 Scala 中的一些迷惑之处，这时我有几个选择：  Haskell">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-15T01:01:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="随便写写">
-<meta name="twitter:description" content="Java for living, Scala for fun!">
+<meta name="twitter:title" content="CIS 194 | 正式入坑 Haskell">
+<meta name="twitter:description" content="Martin Odersky 曾经说过：  Scala is a gateway drug to Haskell.  虽是戏言，却一语成谶。 虽然 Scala 是一门不错的 FP 语言，但由于兼顾 OO，所以很多 FP 概念在 Scala 中显得不够清晰，即语法噪声很多。 我对真正的 FP 语言越来越好奇，想深入了解一门，以便破除 Scala 中的一些迷惑之处，这时我有几个选择：  Haskell">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/tags/蹦床/"/>
+  <link rel="canonical" href="http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/"/>
 
 
 
@@ -145,7 +147,7 @@
   };
 </script>
 
-  <title>标签: 蹦床 | 随便写写</title>
+  <title>CIS 194 | 正式入坑 Haskell | 随便写写</title>
   
 
 
@@ -202,7 +204,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
@@ -260,7 +262,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
@@ -309,84 +311,244 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>蹦床<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/" itemprop="url">
-              
-                <span itemprop="name">Scala | 不完美的尾递归优化</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">CIS 194 | 正式入坑 Haskell
+              
+            
+          </h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-06-03T15:50:26+08:00"
-              content="2018-06-03" >
-          06-03
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-15 08:35:45 / 修改时间：09:01:59" itemprop="dateCreated datePublished" datetime="2018-06-15T08:35:45+08:00">2018-06-15</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/15/2018-06-15-haskell-begin-cis-194/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/15/2018-06-15-haskell-begin-cis-194/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Martin Odersky 曾经说过：</p>
+<blockquote>
+<p>Scala is a gateway drug to Haskell.</p>
+</blockquote>
+<p>虽是戏言，却一语成谶。</p>
+<p>虽然 Scala 是一门不错的 FP 语言，但由于兼顾 OO，所以很多 FP 概念在 Scala 中显得不够清晰，即语法噪声很多。</p>
+<p>我对真正的 FP 语言越来越好奇，想深入了解一门，以便破除 Scala 中的一些迷惑之处，这时我有几个选择：</p>
+<ul>
+<li>Haskell</li>
+<li>Standard ML</li>
+<li>Racket/Scheme</li>
+</ul>
+<a id="more"></a>
+<p>后面两个很早就接触了。</p>
+<p>首先 Racket/Scheme 语法简单，又有 SICP 加持，应该是很好的选择，但它有个致命“缺点”：动态语言，好吧，我知道动态语言很灵活，写起来很爽，但目前来说真的提不起兴趣 :(</p>
+<p>我个人非常喜欢 Standard ML，正统的函数式编程语言，<a href="https://book.douban.com/subject/1755557/" target="_blank" rel="noopener">Purely Functional Data Structures</a> 就是用的 Standard ML，但它也有一个缺点，资料都是比较古老的，新时代的人们都不用它，网上找到的 FP 博客很少用 Standard ML，sad…</p>
+<p>剩下的就只有 Haskell 了，虽然 Haskell 语法过于简洁，但有如下优点：</p>
+<ul>
+<li>网上关于 FP 的资料、博客大部分都是 Haskell 的</li>
+<li>Haskell 社区很活跃</li>
+<li>Haskell 可以加持 Scala</li>
+</ul>
+<p>虽然 Standard ML 也可以加持 Scala，但它没有 type class，而 Scala 的 type class 几乎就是 Haskell 的翻版。</p>
+<p>于是我决定入坑 Haskell 了。</p>
+<p>计划从宾大的 <a href="http://www.seas.upenn.edu/~cis194/fall16/index.html" target="_blank" rel="noopener">CIS 194</a> 开始，这门课资料齐全，完全可以自学，网上评价也不错，恩，就从它开始吧。</p>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fp/" rel="tag"># fp</a>
+          
+            <a href="/tags/Haskell/" rel="tag"># Haskell</a>
+          
+            <a href="/tags/公开课/" rel="tag"># 公开课</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/" rel="next" title="Scala | 一篇文章读懂高阶函数">
+                <i class="fa fa-chevron-left"></i> Scala | 一篇文章读懂高阶函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -718,6 +880,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
 
   
 
@@ -732,6 +898,23 @@
     <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
   
 
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/';
+        this.page.identifier = '2018/06/15/2018-06-15-haskell-begin-cis-194/';
+        this.page.title = 'CIS 194 | 正式入坑 Haskell';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
   
 
 

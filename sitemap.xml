@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/</loc>
+    
+    <lastmod>2018-06-15T01:01:59.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/</loc>
     
     <lastmod>2018-06-12T15:08:40.000Z</lastmod>
@@ -170,6 +177,13 @@
   </url>
   
   <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -177,21 +191,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/16/scala-anonymous-function/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -212,27 +219,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/16/scala-anonymous-function/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -240,7 +226,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/14/scala-string-ops/</loc>
+    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -261,7 +247,28 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
+    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/14/scala-string-ops/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
