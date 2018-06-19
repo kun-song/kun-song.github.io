@@ -120,14 +120,14 @@
 
 
   <meta name="description" content="Martin Odersky 曾经说过：  Scala is a gateway drug to Haskell.  虽是戏言，却一语成谶。 虽然 Scala 是一门不错的 FP 语言，但由于兼顾 OO，所以很多 FP 概念在 Scala 中显得不够清晰，即语法噪声很多。 我对真正的 FP 语言越来越好奇，想深入了解一门，以便破除 Scala 中的一些迷惑之处，这时我有几个选择：  Haskell">
-<meta name="keywords" content="fp,Haskell,公开课">
+<meta name="keywords" content="fp,Haskell,公开课,CIS 194">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CIS 194 | 正式入坑 Haskell">
 <meta property="og:url" content="http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/index.html">
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="Martin Odersky 曾经说过：  Scala is a gateway drug to Haskell.  虽是戏言，却一语成谶。 虽然 Scala 是一门不错的 FP 语言，但由于兼顾 OO，所以很多 FP 概念在 Scala 中显得不够清晰，即语法噪声很多。 我对真正的 FP 语言越来越好奇，想深入了解一门，以便破除 Scala 中的一些迷惑之处，这时我有几个选择：  Haskell">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-15T01:01:59.000Z">
+<meta property="og:updated_time" content="2018-06-16T02:36:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CIS 194 | 正式入坑 Haskell">
 <meta name="twitter:description" content="Martin Odersky 曾经说过：  Scala is a gateway drug to Haskell.  虽是戏言，却一语成谶。 虽然 Scala 是一门不错的 FP 语言，但由于兼顾 OO，所以很多 FP 概念在 Scala 中显得不够清晰，即语法噪声很多。 我对真正的 FP 语言越来越好奇，想深入了解一门，以便破除 Scala 中的一些迷惑之处，这时我有几个选择：  Haskell">
@@ -373,12 +373,24 @@
                 
               
 
-              <time title="创建时间：2018-06-15 08:35:45 / 修改时间：09:01:59" itemprop="dateCreated datePublished" datetime="2018-06-15T08:35:45+08:00">2018-06-15</time>
+              <time title="创建时间：2018-06-15 08:35:45" itemprop="dateCreated datePublished" datetime="2018-06-15T08:35:45+08:00">2018-06-15</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-06-16 10:36:35" itemprop="dateModified" datetime="2018-06-16T10:36:35+08:00">2018-06-16</time>
               
             
           </span>
@@ -455,10 +467,10 @@
 <a id="more"></a>
 <p>后面两个很早就接触了。</p>
 <p>首先 Racket/Scheme 语法简单，又有 SICP 加持，应该是很好的选择，但它有个致命“缺点”：动态语言，好吧，我知道动态语言很灵活，写起来很爽，但目前来说真的提不起兴趣 :(</p>
-<p>我个人非常喜欢 Standard ML，正统的函数式编程语言，<a href="https://book.douban.com/subject/1755557/" target="_blank" rel="noopener">Purely Functional Data Structures</a> 就是用的 Standard ML，但它也有一个缺点，资料都是比较古老的，新时代的人们都不用它，网上找到的 FP 博客很少用 Standard ML，sad…</p>
-<p>剩下的就只有 Haskell 了，虽然 Haskell 语法过于简洁，但有如下优点：</p>
+<p>我个人非常喜欢 Standard ML，正统的函数式编程语言，<a href="https://book.douban.com/subject/1755557/" target="_blank" rel="noopener">Purely Functional Data Structures</a> 的例子代码就是 Standard ML，它的缺点是，相关资料比较老，目前用的人比较少，网上的 FP 博客很少用 Standard ML，sad…</p>
+<p>剩下的就只有 Haskell 了，虽然 Haskell 过于简洁的语法让我不太适应，但它有如下优点：</p>
 <ul>
-<li>网上关于 FP 的资料、博客大部分都是 Haskell 的</li>
+<li>网上关于 FP 的资料、博客大部分以 Haskell 为例</li>
 <li>Haskell 社区很活跃</li>
 <li>Haskell 可以加持 Scala</li>
 </ul>
@@ -491,6 +503,8 @@
           
             <a href="/tags/公开课/" rel="tag"># 公开课</a>
           
+            <a href="/tags/CIS-194/" rel="tag"># CIS 194</a>
+          
         </div>
       
 
@@ -511,6 +525,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/19/2018-06-19-scala-training-in-huawei/" rel="prev" title="成研所 Scala 培训后记">
+                成研所 Scala 培训后记 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -585,7 +603,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">38</span>
+                    <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -693,7 +711,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">38</span>
+                      
+                    
+                    <span class="site-state-item-count">39</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
