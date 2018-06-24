@@ -5,6 +5,7 @@ tags:
   - Haskell
   - 递归
   - 算法
+  - CIS 194
 categories: 技术
 ---
 
