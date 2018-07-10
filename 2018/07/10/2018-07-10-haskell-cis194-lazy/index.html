@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="匿名函数（anonymous function），也称函数字面值（function literal）、lambda 抽象、lambda 表达式，顾名思义，就是没有名字的函数值。 本文主要讲解 Scala 中的匿名函数，最后简单介绍 Java 对匿名函数的支持。 字面值在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常">
-<meta name="keywords" content="Scala,fp">
+  <meta name="description" content="这里的 lazy 指 lazy evaluation，是一种编程语言的求值策略，与之对立的是 strict evaluation，更多关于求值策略的内容可以参考 传值调用 vs 传名调用。 不同语言采用了不同的求值策略：  大多数编程语言采用 strict 求值策略，如 Java； 部分语言同时提供 strict 和 lazy 两种求值策略，如 Scala； 少数语言更加极端，全面拥抱 lazy，">
+<meta name="keywords" content="fp,Haskell,CIS 194,lazy">
 <meta property="og:type" content="article">
-<meta property="og:title" content="匿名函数">
-<meta property="og:url" content="http://songkun.me/2018/05/16/scala-anonymous-function/index.html">
+<meta property="og:title" content="CIS 194 | Lazy">
+<meta property="og:url" content="http://songkun.me/2018/07/10/2018-07-10-haskell-cis194-lazy/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="匿名函数（anonymous function），也称函数字面值（function literal）、lambda 抽象、lambda 表达式，顾名思义，就是没有名字的函数值。 本文主要讲解 Scala 中的匿名函数，最后简单介绍 Java 对匿名函数的支持。 字面值在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常">
+<meta property="og:description" content="这里的 lazy 指 lazy evaluation，是一种编程语言的求值策略，与之对立的是 strict evaluation，更多关于求值策略的内容可以参考 传值调用 vs 传名调用。 不同语言采用了不同的求值策略：  大多数编程语言采用 strict 求值策略，如 Java； 部分语言同时提供 strict 和 lazy 两种求值策略，如 Scala； 少数语言更加极端，全面拥抱 lazy，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-22T15:06:49.000Z">
+<meta property="og:updated_time" content="2018-07-10T15:27:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="匿名函数">
-<meta name="twitter:description" content="匿名函数（anonymous function），也称函数字面值（function literal）、lambda 抽象、lambda 表达式，顾名思义，就是没有名字的函数值。 本文主要讲解 Scala 中的匿名函数，最后简单介绍 Java 对匿名函数的支持。 字面值在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常">
+<meta name="twitter:title" content="CIS 194 | Lazy">
+<meta name="twitter:description" content="这里的 lazy 指 lazy evaluation，是一种编程语言的求值策略，与之对立的是 strict evaluation，更多关于求值策略的内容可以参考 传值调用 vs 传名调用。 不同语言采用了不同的求值策略：  大多数编程语言采用 strict 求值策略，如 Java； 部分语言同时提供 strict 和 lazy 两种求值策略，如 Scala； 少数语言更加极端，全面拥抱 lazy，">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/16/scala-anonymous-function/"/>
+  <link rel="canonical" href="http://songkun.me/2018/07/10/2018-07-10-haskell-cis194-lazy/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>匿名函数 | 随便写写</title>
+  <title>CIS 194 | Lazy | 随便写写</title>
   
 
 
@@ -331,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/16/scala-anonymous-function/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/07/10/2018-07-10-haskell-cis194-lazy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">匿名函数
+          <h1 class="post-title" itemprop="name headline">CIS 194 | Lazy
               
             
           </h1>
@@ -373,24 +373,12 @@
                 
               
 
-              <time title="创建时间：2018-05-16 08:42:18" itemprop="dateCreated datePublished" datetime="2018-05-16T08:42:18+08:00">2018-05-16</time>
+              <time title="创建时间：2018-07-10 22:21:34 / 修改时间：23:27:38" itemprop="dateCreated datePublished" datetime="2018-07-10T22:21:34+08:00">2018-07-10</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-05-22 23:06:49" itemprop="dateModified" datetime="2018-05-22T23:06:49+08:00">2018-05-22</time>
               
             
           </span>
@@ -422,9 +410,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/16/scala-anonymous-function/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/10/2018-07-10-haskell-cis194-lazy/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/16/scala-anonymous-function/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/10/2018-07-10-haskell-cis194-lazy/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -452,74 +440,57 @@
       
 
       
-        <p>匿名函数（anonymous function），也称函数字面值（function literal）、lambda 抽象、lambda 表达式，顾名思义，就是没有名字的函数值。</p>
-<p>本文主要讲解 Scala 中的匿名函数，最后简单介绍 Java 对匿名函数的支持。</p>
-<h2 id="字面值"><a href="#字面值" class="headerlink" title="字面值"></a>字面值</h2><p>在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常的概念却并一定清楚。</p>
+        <p>这里的 lazy 指 lazy evaluation，是一种编程语言的求值策略，与之对立的是 strict evaluation，更多关于求值策略的内容可以参考 <a href="/2018/05/17/2018-05-17-call-by-value-call-by-name/" title="传值调用 vs 传名调用">传值调用 vs 传名调用</a>。</p>
+<p>不同语言采用了不同的求值策略：</p>
+<ul>
+<li>大多数编程语言采用 strict 求值策略，如 Java；</li>
+<li>部分语言同时提供 strict 和 lazy 两种求值策略，如 Scala；</li>
+<li>少数语言更加极端，全面拥抱 lazy，例如 Haskell、Miranda 和 Clean 等。</li>
+</ul>
+<p>Haskell 选择 lazy 只是一种语言设计上的决策而已，既有好处，也有缺点。</p>
 <a id="more"></a>
-<p>维基百科对字面值（literal）解释如下：</p>
+<p>大部分同学由于只接触过 strict 策略，所以对 lazy 这个语言特性带来的一些结果不甚了了，实际上借助 lazy 可以实现很多有意思的功能，例如：</p>
+<ul>
+<li>自定义控制结构（control structures）</li>
+<li>无限数据结构（infinite data stucture)</li>
+</ul>
 <blockquote>
-<p>In computer science, a literal is a notation for representing a <strong>fixed value</strong> in source code. Almost all programming languages have notations for atomic values such as integers, floating-point numbers, and strings, and usually for booleans and characters; some also have notations for elements of enumerated types and compound values such as arrays, records, and objects. An anonymous function is a literal for the function type.</p>
+<p>熟悉 Scala 的同学可以发现，Scala 可轻易实现类似功能，毕竟 Scala 也可以选择 lazy 求值策略。</p>
 </blockquote>
-<p>在编程语言中，某些类型被认为 <strong>很重要</strong>，为方便使用，语言会提供表示该类型的固定值的语法糖，例如 Scala 为 <code>Int</code>，<code>Float</code>，<code>String</code> 等类型提供了字面值：</p>
+<p>但全面采用 lazy 会导致代码的运行效率难以推断，只能一行一行研读代码之后，才能对 Haskell 的计算过程有所了解，在某些场景下这简直是噩梦。</p>
+<h2 id="自定义控制结构"><a href="#自定义控制结构" class="headerlink" title="自定义控制结构"></a>自定义控制结构</h2><p>在 Java 等语言中，<code>&amp;&amp;</code> 和 <code>||</code> 操作符是短路求值的，它们是语言 <strong>内置</strong> 特性，在 Haskell 中，可以用函数轻易实现 <code>&amp;&amp;</code>：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(&amp;&amp;) :: <span class="type">Bool</span> -&gt; <span class="type">Bool</span> -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="type">True</span> &amp;&amp; x  = x</span><br><span class="line"><span class="type">False</span> &amp;&amp; _ = <span class="type">False</span></span><br></pre></td></tr></table></figure>
+<p>上面定义的 <code>&amp;&amp;</code> 函数与 Java 中的内置 <code>&amp;&amp;</code> 操作符完全相同：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- False</span></span><br><span class="line"><span class="type">False</span> &amp;&amp;! (<span class="number">34</span>^<span class="number">9784346</span> &gt; <span class="number">34987345</span>)</span><br><span class="line"><span class="type">False</span> &amp;&amp;! (head [] == 'x')</span><br></pre></td></tr></table></figure>
+<p>作为对比，Scala 也能实现类似功能，不过要繁琐一些：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">def</span> and(x: <span class="type">Boolean</span>, y: =&gt; <span class="type">Boolean</span>): <span class="type">Boolean</span> =</span><br><span class="line">  <span class="keyword">if</span> (x) y <span class="keyword">else</span> false</span><br></pre></td></tr></table></figure>
+<p>再看一个例子，<code>if</code> 在 Java 中也是内置的，而 Haskell 也可以用函数轻易实现之：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">if'</span> :: <span class="type">Bool</span> -&gt; a -&gt; a -&gt; a</span><br><span class="line"><span class="title">if</span> <span class="type">True</span> x _  = x</span><br><span class="line"><span class="title">if</span> <span class="type">False</span> _ y = y</span><br></pre></td></tr></table></figure>
+<h2 id="无限数据结构"><a href="#无限数据结构" class="headerlink" title="无限数据结构"></a>无限数据结构</h2><p>无限数据结构在《Scala 函数式编程》第 5 章有非常好的讲解，这里仅仅列出一些 Haskell 代码片段。</p>
+<p>自然数列表：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">nats</span> :: [<span class="type">Integer</span>]</span><br><span class="line"><span class="title">nats</span> = <span class="number">0</span> : map (+ <span class="number">1</span>) nats</span><br></pre></td></tr></table></figure>
+<p>CIS 194 第 6 周作业实现了一个“显式”的无限列表（Haskell 中的 list 既可以是有限的，也可以是无限的）：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Stream</span> a = <span class="type">Cons</span> a (<span class="type">Stream</span> <span class="title">a</span>)</span></span><br></pre></td></tr></table></figure>
+<p>为其实现 <code>Functor</code> 实例：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Functor</span> <span class="type">Stream</span> <span class="keyword">where</span></span></span><br><span class="line">    fmap f (<span class="type">Cons</span> x s) = <span class="type">Cons</span> (f x) $ fmap f s</span><br></pre></td></tr></table></figure>
+<p>所以前面的 <code>nats</code> 也可以用 <code>Stream</code> 重新定义：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">nats</span> :: <span class="type">Stream</span> <span class="type">Integer</span></span><br><span class="line"><span class="title">nats</span> = <span class="type">Cons</span> <span class="number">0</span> $ (+ <span class="number">1</span>) &lt;$&gt; nats</span><br></pre></td></tr></table></figure>
+<p>还可以将 <code>Stream</code> 转换为普通 list：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">streamToList</span> :: <span class="type">Stream</span> a -&gt; [a]</span><br><span class="line"><span class="title">streamToList</span> (<span class="type">Cons</span> x s) = x : streamToList s</span><br></pre></td></tr></table></figure>
+<p>还有一些便捷函数：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sRepeat</span> :: a -&gt; <span class="type">Stream</span> a</span><br><span class="line"><span class="title">sRepeat</span> x = <span class="type">Cons</span> x $ sRepeat x</span><br><span class="line"></span><br><span class="line"><span class="title">sIterate</span> :: (a -&gt; a) -&gt; a -&gt; <span class="type">Stream</span> a</span><br><span class="line"><span class="title">sIterate</span> f x = <span class="type">Cons</span> x $ sIterate f $ f x</span><br><span class="line"></span><br><span class="line"><span class="title">sInterleave</span> :: <span class="type">Stream</span> a -&gt; <span class="type">Stream</span> a -&gt; <span class="type">Stream</span> a</span><br><span class="line"><span class="title">sInterleave</span> (<span class="type">Cons</span> x s1) s2 = <span class="type">Cons</span> x $ sInterleave s2 s1</span><br><span class="line"></span><br><span class="line"><span class="title">sTake</span> :: <span class="type">Int</span> -&gt; <span class="type">Stream</span> a -&gt; [a]</span><br><span class="line"><span class="title">sTake</span> n s = take n $ streamToList s</span><br></pre></td></tr></table></figure>
+<h2 id="求值时机"><a href="#求值时机" class="headerlink" title="求值时机"></a>求值时机</h2><p>即使 lazy 代码，早晚也得计算，那么 Haskell 何时对各个表达式求值呢？</p>
+<p>一句话解答：</p>
 <ul>
-<li><code>11</code> 是整数字面值，类型为 <code>Int</code>；</li>
-<li><code>&#39;a&#39;</code> 是字符字面值，类型为 <code>Char</code>；</li>
+<li>Expressons are only evaluated when pattern-matched</li>
+<li>… only as far as necessary for the match to <strong>proceed</strong>, and no further!</li>
 </ul>
-<p>Scala 认为函数（<code>FunctionN</code>）也是很重要的类型，因此提供了函数字面值：</p>
-<ul>
-<li><code>(x: Int) ⇒ x + 1</code> 是函数字面值，类型为 <code>Function1[Int, Int]</code>（<code>Int ⇒ Int</code>）；</li>
-</ul>
-<p>字面值一般用作匿名值（anonymous values），即不需要先将其绑定到变量就能使用，在不需要 <strong>复用</strong> 字面值的使用场景中，该特性使代码非常简洁：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).filter(x ⇒ x &gt; <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<p>若字面值不能用作匿名值，则上述代码只能写作：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> one: <span class="type">Int</span> = <span class="number">1</span></span><br><span class="line"><span class="keyword">val</span> two: <span class="type">Int</span> = <span class="number">2</span></span><br><span class="line"><span class="keyword">val</span> three: <span class="type">Int</span> = <span class="number">3</span></span><br><span class="line"><span class="keyword">val</span> greaterThan2: (<span class="type">Int</span> ⇒ <span class="type">Int</span>) = (x: <span class="type">Int</span>) ⇒ x &gt; two</span><br><span class="line"><span class="type">List</span>(one, two, three).filter(greaterThan2)</span><br></pre></td></tr></table></figure>
-<p>这个例子似乎有点荒诞，毕竟谁会这样写代码啊！事实上，如果没有字面值，你就得这么写。因为字面值太常见了，大家都已经习以为常了，所以这里帮大家重温一下基本概念。</p>
-<h2 id="Scala-匿名函数"><a href="#Scala-匿名函数" class="headerlink" title="Scala 匿名函数"></a>Scala 匿名函数</h2><p>Scala 提供了非常轻量级的匿名函数创建语法，例如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Int ⇒ Int</span></span><br><span class="line">(x: <span class="type">Int</span>) ⇒ x + <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>匿名函数的创建语法，仅仅是创建 <code>FunctionN</code> 类型实例的语法糖，上面的匿名函数等价于：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="type">Function1</span>[<span class="type">Int</span>, <span class="type">Int</span>] &#123;  </span><br><span class="line"> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(x:<span class="type">Int</span>): <span class="type">Int</span> = x + <span class="number">1</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p>可以将匿名函数绑定到名字：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> addOne = (x: <span class="type">Int</span>) ⇒ x + <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>匿名函数 <strong>最常见</strong> 的用法是作为高阶函数的参数（高阶函数 + 匿名函数，焦不离孟）：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> xs = <span class="type">List</span>.range(<span class="number">0</span>, <span class="number">10</span>)</span><br><span class="line">xs filter ((n: <span class="type">Int</span>) ⇒ n % <span class="number">2</span> == <span class="number">0</span>)  <span class="comment">// List(0, 2, 4, 6, 8)</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>(n: Int) ⇒ n % 2 == 0</code> 函数用完就扔，因此不需要名字，匿名函数正合适。</li>
-</ul>
-<p>因为 <code>(n: Int) ⇒ n % 2 == 0</code> 只有一个入参，因此可以简化为：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xs filter (_ % <span class="number">2</span> == <span class="number">0</span>)  <span class="comment">// List(0, 2, 4, 6, 8)</span></span><br></pre></td></tr></table></figure>
-<p>除了创建普通函数（<code>FunctionN</code>）的字面值以外，还可以创建 <code>PartialFunction</code> 类型的字面值：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sqrt: <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> x <span class="keyword">if</span> x &gt;= <span class="number">0</span> ⇒ <span class="type">Math</span>.sqrt(x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注：这种说法不确实是否准确，Twitter Scala School 中认为 <code>case</code> 语句是 <code>PartialFunction</code> 的子类。</p>
-</blockquote>
-<h2 id="Java-匿名函数（lambda-表达式）"><a href="#Java-匿名函数（lambda-表达式）" class="headerlink" title="Java 匿名函数（lambda 表达式）"></a>Java 匿名函数（lambda 表达式）</h2><p>Java 8 通过 lambda 表达式提供对匿名函数的支持，用法与 Scala 匿名函数非常类似：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">long</span> id, String name) -&gt; <span class="string">"id: "</span> + id + <span class="string">", name:"</span> + name</span><br></pre></td></tr></table></figure>
-<ul>
-<li>lambda 表达式会被转化为 <strong>函数接口</strong></li>
-</ul>
-<p>还可以通过 <strong>方法引用</strong> 创建 lambda 表达式：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IntBinaryOperator sum = Integer::sum;</span><br></pre></td></tr></table></figure>
-<p>Java 8 lambda 表达式有两个缺点：</p>
-<ol>
-<li>lambda 表达式可以抛出 checked exception，且若抛出 checked exception 则不能用于 <code>filter</code> <code>map</code> 等集合 API</li>
-<li>lambda 表达式只能使用 effectively final 非局部变量（自由变量）</li>
-</ol>
-<p>以上限制看似微不足道，实际上大大削弱了 lambda 表达式的灵活性，而 Scala 匿名函数则无类似缺点。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
-<li>匿名函数（函数字面值）之于 <code>FunctionN</code>，如同 <code>5</code> 之于 <code>Int</code></li>
-<li>匿名函数一般用作：<ul>
-<li>高阶函数的参数</li>
-<li>单行的辅助函数</li>
-</ul>
-</li>
-<li>匿名函数是创建 <code>FunctionN</code> 实例的语法糖</li>
-</ul>
-<hr>
-<p>参考：</p>
-<ul>
-<li>维基百科 <a href="https://en.wikipedia.org/wiki/Anonymous_function" target="_blank" rel="noopener">Anonymout function</a></li>
-</ul>
+<p>即表达式只有 <strong>被模式匹配</strong> 时才会被计算，而且只要满足模式匹配，就不再继续向前计算。</p>
+<p>例如：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">f1</span> :: <span class="type">Maybe</span> a -&gt; [<span class="type">Maybe</span> a]</span><br><span class="line"><span class="title">f1</span> m = [m, m]</span><br><span class="line"></span><br><span class="line"><span class="title">f2</span> :: <span class="type">Maybe</span> a -&gt; [a]</span><br><span class="line"><span class="title">f2</span> <span class="type">Nothing</span>  = []</span><br><span class="line"><span class="title">f2</span> (<span class="type">Just</span> x) = [x]</span><br></pre></td></tr></table></figure>
+<p>虽然 <code>f1</code> 函数体也用到了参数值，但无需了解任何 <code>m</code> 的性质即可完成计算（<code>f1 e</code> 不依赖 shape of e），因此 <code>f1</code> 不需要计算参数 <code>m</code>。</p>
+<p>相对而言，<code>f2</code> 必须了解参数的 <strong>结构</strong> 才能完成计算（<code>Nothing</code> or <code>Just a</code>），因此 <code>f2</code> 需要计算参数；</p>
+<p>但 <code>f2 (safeHead [3^100 + 10, 44])</code> 调用中，只需要计算 <code>safeHead [3^100 + 10, 44]</code> 得到 <code>Just 3^100 + 10</code>，不会继续计算 <code>3^100 + 10</code>，因为计算到这已经“足够”支持模式匹配的进行了。</p>
 
       
     </div>
@@ -540,9 +511,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Scala/" rel="tag"># Scala</a>
-          
             <a href="/tags/fp/" rel="tag"># fp</a>
+          
+            <a href="/tags/Haskell/" rel="tag"># Haskell</a>
+          
+            <a href="/tags/CIS-194/" rel="tag"># CIS 194</a>
+          
+            <a href="/tags/lazy/" rel="tag"># lazy</a>
           
         </div>
       
@@ -555,8 +530,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/16/scala-partialfunction-partially-applied-function-currying/" rel="next" title="偏函数 vs 部分应用函数 vs 柯里化">
-                <i class="fa fa-chevron-left"></i> 偏函数 vs 部分应用函数 vs 柯里化
+              <a href="/2018/07/08/2018-07-08-haskell-typeclass-a-shallow-look/" rel="next" title="CIS 194 | Typeclass 和 IO">
+                <i class="fa fa-chevron-left"></i> CIS 194 | Typeclass 和 IO
               </a>
             
           </div>
@@ -564,10 +539,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/16/2018-05-16-first-class-function/" rel="prev" title="头等函数">
-                头等函数 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -823,7 +794,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字面值"><span class="nav-number">1.</span> <span class="nav-text">字面值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala-匿名函数"><span class="nav-number">2.</span> <span class="nav-text">Scala 匿名函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-匿名函数（lambda-表达式）"><span class="nav-number">3.</span> <span class="nav-text">Java 匿名函数（lambda 表达式）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义控制结构"><span class="nav-number">1.</span> <span class="nav-text">自定义控制结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无限数据结构"><span class="nav-number">2.</span> <span class="nav-text">无限数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求值时机"><span class="nav-number">3.</span> <span class="nav-text">求值时机</span></a></li></ol></div>
             
 
           </div>
@@ -997,9 +968,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/05/16/scala-anonymous-function/';
-        this.page.identifier = '2018/05/16/scala-anonymous-function/';
-        this.page.title = '匿名函数';
+        this.page.url = 'http://songkun.me/2018/07/10/2018-07-10-haskell-cis194-lazy/';
+        this.page.identifier = '2018/07/10/2018-07-10-haskell-cis194-lazy/';
+        this.page.title = 'CIS 194 | Lazy';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
