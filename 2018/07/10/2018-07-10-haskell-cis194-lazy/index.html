@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="这里的 lazy 指 lazy evaluation，是一种编程语言的求值策略，与之对立的是 strict evaluation，更多关于求值策略的内容可以参考 传值调用 vs 传名调用。 不同语言采用了不同的求值策略：  大多数编程语言采用 strict 求值策略，如 Java； 部分语言同时提供 strict 和 lazy 两种求值策略，如 Scala； 少数语言更加极端，全面拥抱 lazy，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-10T15:27:38.000Z">
+<meta property="og:updated_time" content="2018-07-10T15:31:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CIS 194 | Lazy">
 <meta name="twitter:description" content="这里的 lazy 指 lazy evaluation，是一种编程语言的求值策略，与之对立的是 strict evaluation，更多关于求值策略的内容可以参考 传值调用 vs 传名调用。 不同语言采用了不同的求值策略：  大多数编程语言采用 strict 求值策略，如 Java； 部分语言同时提供 strict 和 lazy 两种求值策略，如 Scala； 少数语言更加极端，全面拥抱 lazy，">
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2018-07-10 22:21:34 / 修改时间：23:27:38" itemprop="dateCreated datePublished" datetime="2018-07-10T22:21:34+08:00">2018-07-10</time>
+              <time title="创建时间：2018-07-10 22:21:34 / 修改时间：23:31:56" itemprop="dateCreated datePublished" datetime="2018-07-10T22:21:34+08:00">2018-07-10</time>
             
 
             
@@ -465,12 +465,15 @@
 <p>作为对比，Scala 也能实现类似功能，不过要繁琐一些：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">def</span> and(x: <span class="type">Boolean</span>, y: =&gt; <span class="type">Boolean</span>): <span class="type">Boolean</span> =</span><br><span class="line">  <span class="keyword">if</span> (x) y <span class="keyword">else</span> false</span><br></pre></td></tr></table></figure>
 <p>再看一个例子，<code>if</code> 在 Java 中也是内置的，而 Haskell 也可以用函数轻易实现之：</p>
-<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">if'</span> :: <span class="type">Bool</span> -&gt; a -&gt; a -&gt; a</span><br><span class="line"><span class="title">if</span> <span class="type">True</span> x _  = x</span><br><span class="line"><span class="title">if</span> <span class="type">False</span> _ y = y</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">if</span> :: <span class="type">Bool</span> -&gt; a -&gt; a -&gt; a</span><br><span class="line"><span class="title">if</span> <span class="type">True</span> x _  = x</span><br><span class="line"><span class="title">if</span> <span class="type">False</span> _ y = y</span><br></pre></td></tr></table></figure>
 <h2 id="无限数据结构"><a href="#无限数据结构" class="headerlink" title="无限数据结构"></a>无限数据结构</h2><p>无限数据结构在《Scala 函数式编程》第 5 章有非常好的讲解，这里仅仅列出一些 Haskell 代码片段。</p>
 <p>自然数列表：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">nats</span> :: [<span class="type">Integer</span>]</span><br><span class="line"><span class="title">nats</span> = <span class="number">0</span> : map (+ <span class="number">1</span>) nats</span><br></pre></td></tr></table></figure>
-<p>CIS 194 第 6 周作业实现了一个“显式”的无限列表（Haskell 中的 list 既可以是有限的，也可以是无限的）：</p>
+<p>CIS 194 第 6 周作业实现了一个“显式”的无限列表：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Stream</span> a = <span class="type">Cons</span> a (<span class="type">Stream</span> <span class="title">a</span>)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>实际上，Haskell 中的 list 既可以是有限的，也可以是无限的，这里用 <code>Stream</code> 是为了“显式”表明它只能是无限列表</li>
+</ul>
 <p>为其实现 <code>Functor</code> 实例：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Functor</span> <span class="type">Stream</span> <span class="keyword">where</span></span></span><br><span class="line">    fmap f (<span class="type">Cons</span> x s) = <span class="type">Cons</span> (f x) $ fmap f s</span><br></pre></td></tr></table></figure>
 <p>所以前面的 <code>nats</code> 也可以用 <code>Stream</code> 重新定义：</p>
