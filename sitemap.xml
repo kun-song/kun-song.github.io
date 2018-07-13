@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2018/07/12/2018-07-12-adt-in-haskell-and-scala/</loc>
+    
+    <lastmod>2018-07-13T00:36:52.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/07/10/2018-07-10-haskell-cis194-lazy/</loc>
     
     <lastmod>2018-07-10T15:31:56.000Z</lastmod>
@@ -212,13 +219,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -226,7 +226,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -234,6 +234,13 @@
   
   <url>
     <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -268,13 +275,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -283,6 +283,13 @@
   
   <url>
     <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -303,7 +310,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     

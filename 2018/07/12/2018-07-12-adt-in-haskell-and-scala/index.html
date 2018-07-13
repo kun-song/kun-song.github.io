@@ -119,25 +119,24 @@
 
 
 
-  <meta name="description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器）">
-<meta name="keywords" content="Scala,类型系统,型变">
+  <meta name="description" content="函数式编程接触久了以后，我们会发现很多 FP 语言（这里指静态 FP 语言）具有不少类似的语言特性，这非常自然，因为语言特性就那么多，好用、实用的特性更少，这一方面造成了语言之间的同质化，另一方面也减轻了我们语言切换的成本，算是有利也有弊吧。 常见的静态函数式语言有 Haskell、Standard ML、OCaml、Scala 等，它们之间非常类似，共有的特性有：  first-class fu">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala | 型变">
-<meta property="og:url" content="http://songkun.me/2018/05/15/scala-variance/index.html">
+<meta property="og:title" content="Algebraic Data Type 及其在 Haskell 和 Scala 中的表现">
+<meta property="og:url" content="http://songkun.me/2018/07/12/2018-07-12-adt-in-haskell-and-scala/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器）">
+<meta property="og:description" content="函数式编程接触久了以后，我们会发现很多 FP 语言（这里指静态 FP 语言）具有不少类似的语言特性，这非常自然，因为语言特性就那么多，好用、实用的特性更少，这一方面造成了语言之间的同质化，另一方面也减轻了我们语言切换的成本，算是有利也有弊吧。 常见的静态函数式语言有 Haskell、Standard ML、OCaml、Scala 等，它们之间非常类似，共有的特性有：  first-class fu">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-06T15:50:11.000Z">
+<meta property="og:updated_time" content="2018-07-13T00:36:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala | 型变">
-<meta name="twitter:description" content="Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。 Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 参数多态 遇上 类继承 时，出现了一个有趣的问题： 若类型 S 是 T 的子类，那么 List[S] 与 List[T] 是什么关系呢？（List 泛指泛型容器）">
+<meta name="twitter:title" content="Algebraic Data Type 及其在 Haskell 和 Scala 中的表现">
+<meta name="twitter:description" content="函数式编程接触久了以后，我们会发现很多 FP 语言（这里指静态 FP 语言）具有不少类似的语言特性，这非常自然，因为语言特性就那么多，好用、实用的特性更少，这一方面造成了语言之间的同质化，另一方面也减轻了我们语言切换的成本，算是有利也有弊吧。 常见的静态函数式语言有 Haskell、Standard ML、OCaml、Scala 等，它们之间非常类似，共有的特性有：  first-class fu">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/15/scala-variance/"/>
+  <link rel="canonical" href="http://songkun.me/2018/07/12/2018-07-12-adt-in-haskell-and-scala/"/>
 
 
 
@@ -147,7 +146,7 @@
   };
 </script>
 
-  <title>Scala | 型变 | 随便写写</title>
+  <title>Algebraic Data Type 及其在 Haskell 和 Scala 中的表现 | 随便写写</title>
   
 
 
@@ -331,7 +330,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-variance/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/07/12/2018-07-12-adt-in-haskell-and-scala/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +347,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Scala | 型变
+          <h1 class="post-title" itemprop="name headline">Algebraic Data Type 及其在 Haskell 和 Scala 中的表现
               
             
           </h1>
@@ -373,7 +372,7 @@
                 
               
 
-              <time title="创建时间：2018-05-15 00:39:34" itemprop="dateCreated datePublished" datetime="2018-05-15T00:39:34+08:00">2018-05-15</time>
+              <time title="创建时间：2018-07-12 00:40:11" itemprop="dateCreated datePublished" datetime="2018-07-12T00:40:11+08:00">2018-07-12</time>
             
 
             
@@ -390,7 +389,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-06-06 23:50:11" itemprop="dateModified" datetime="2018-06-06T23:50:11+08:00">2018-06-06</time>
+                <time title="修改时间：2018-07-13 08:36:52" itemprop="dateModified" datetime="2018-07-13T08:36:52+08:00">2018-07-13</time>
               
             
           </span>
@@ -422,9 +421,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/15/scala-variance/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/12/2018-07-12-adt-in-haskell-and-scala/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/15/scala-variance/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/12/2018-07-12-adt-in-haskell-and-scala/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -452,82 +451,82 @@
       
 
       
-        <p>Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。</p>
-<p>Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 <strong>参数多态</strong> 遇上 <strong>类继承</strong> 时，出现了一个有趣的问题：</p>
-<p>若类型 <code>S</code> 是 <code>T</code> 的子类，那么 <code>List[S]</code> 与 <code>List[T]</code> 是什么关系呢？（<code>List</code> 泛指泛型容器）</p>
+        <p>函数式编程接触久了以后，我们会发现很多 FP 语言（这里指静态 FP 语言）具有不少类似的语言特性，这非常自然，因为语言特性就那么多，好用、实用的特性更少，这一方面造成了语言之间的同质化，另一方面也减轻了我们语言切换的成本，算是有利也有弊吧。</p>
+<p>常见的静态函数式语言有 Haskell、Standard ML、OCaml、Scala 等，它们之间非常类似，共有的特性有：</p>
+<ul>
+<li>first-class function（匿名函数、高阶函数、闭包、柯里化、部分应用函数…）</li>
+<li>algebraic data type</li>
+<li>模式匹配</li>
+<li>类型推断</li>
+</ul>
+<p>各个语言也有自己相对独特的特性，比如 Haskell 的 typeclass，Standard ML 和 OCaml 的模块，Scala 的私货就更多了，为了兼容 OO 和 FP 做了很多设计上的妥协，也引入了很多概念。</p>
 <a id="more"></a>
-<p>Scala 类型系统必须能够解释该问题，在回答之前，我们先要搞清楚类继承到底有什么意义，其意义可以用 <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle" target="_blank" rel="noopener">里式替换原理</a> 说明：</p>
 <blockquote>
-<p>If S is a subtype of T, then objects of type T may be replaced with objects of type S.</p>
+<p>函数式编程语言也有动态、静态之分，上面列举的都是静态语言，动态语言则以 Lisp 为代表，包括：Scheme、Racket、Clojure、Erlang、Elixir 等，由于动态类型的限制，它们没有 algebraic data type、类型推断等类型系统相关的特性。</p>
 </blockquote>
-<p>通过 subtype 还可以实现 <a href="https://en.wikipedia.org/wiki/Subtyping" target="_blank" rel="noopener">subtype polymorphism</a>，当然这扯的有点远了。</p>
-<p>回到前面的问题，<code>List[S]</code> 和 <code>List[T]</code> 到底是不是父子类关系呢？如果是，则根据里式替换原理，使用它们更加灵活。</p>
-<p>为解决该问题，Scala 提供了 3 种型变标记，以表达 <code>List[S]</code> 与 <code>List[T]</code> 之间的关系：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">meaning</th>
-<th style="text-align:center">notion</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">invariant</td>
-<td style="text-align:center"><code>List[S]</code> 与 <code>List[T]</code> 无任何关系</td>
-<td style="text-align:center"><code>[T]</code></td>
-</tr>
-<tr>
-<td style="text-align:center">covariant</td>
-<td style="text-align:center"><code>List[S]</code> 是 <code>List[T]</code> 的子类</td>
-<td style="text-align:center"><code>[+T]</code></td>
-</tr>
-<tr>
-<td style="text-align:center">contravariant</td>
-<td style="text-align:center"><code>List[T]</code> 与 <code>List[S]</code> 的子类</td>
-<td style="text-align:center"><code>[-T]</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="协变"><a href="#协变" class="headerlink" title="协变"></a>协变</h2><p>Scala 的不可变集合，基本都定义为协变，例如 <code>List</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">List</span>[+<span class="type">A</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> </span>::[<span class="type">B</span> &gt;: <span class="type">A</span>] (x:<span class="type">B</span>) : <span class="type">List</span>[<span class="type">B</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用场景：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span>(<span class="params">name: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Bird</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span>(<span class="params">name</span>)</span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Duck</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span>(<span class="params">name</span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">val</span> <span class="title">birds</span> </span>= <span class="keyword">new</span> <span class="type">Bird</span>(<span class="string">"A"</span>) :: <span class="keyword">new</span> <span class="type">Bird</span>(<span class="string">"B"</span>) :: <span class="type">Nil</span></span><br><span class="line"><span class="keyword">val</span> ducks = <span class="keyword">new</span> <span class="type">Duck</span>(<span class="string">"a"</span>) :: <span class="keyword">new</span> <span class="type">Duck</span>(<span class="string">"b"</span>) :: <span class="type">Nil</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">toString</span></span>(animals: <span class="type">List</span>[<span class="type">Animal</span>]): <span class="type">Unit</span> = println(animals.map(_.toString).mkString(<span class="string">", "</span>))</span><br><span class="line"></span><br><span class="line">toString(birds)</span><br><span class="line">toString(ducks)</span><br></pre></td></tr></table></figure>
-<p><code>toString</code> 参数为 <code>List[Animal]</code>，而：</p>
-<ul>
-<li><code>Duck</code> 和 <code>Bird</code> 是 <code>Animal</code> 的子类，<code>List</code> 是协变容器</li>
-<li>因此 <code>List[Bird]</code> 和 <code>List[Duck]</code> 是 <code>List[Animal]</code> 的子类</li>
-</ul>
-<p>所以 <code>List[Bird]</code> 和 <code>List[Duck]</code> 都可以调用 <code>toString</code> 函数（里式替换原理）。</p>
-<h2 id="逆变"><a href="#逆变" class="headerlink" title="逆变"></a>逆变</h2><p>协变比较容易理解，但逆变有点反直觉，其实函数定义就用到了逆变：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">PartialFunction</span>[-<span class="type">A</span>, +<span class="type">B</span>] <span class="keyword">extends</span> (<span class="params"><span class="type">A</span> =&gt; <span class="type">B</span></span>)</span></span><br></pre></td></tr></table></figure>
-<p>暂时忽略协变的返回类型，<code>PartialFunction</code> 的入参是逆变的，这有什么意义呢？</p>
-<p>假设有如下类定义：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span>(<span class="params">val name: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">Bird</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Animal</span>(<span class="params">name</span>)</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">Duck</span>(<span class="params">name: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Bird</span>(<span class="params">name</span>)</span></span><br></pre></td></tr></table></figure>
-<p>假设现在需要实现一个函数，以获取 <code>Bird</code> 的名字：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> getBirdName: <span class="type">Bird</span> ⇒ <span class="type">String</span> = ???</span><br></pre></td></tr></table></figure>
-<p>但 <code>Animal</code> 标准库中已经有获取名字的函数了：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> getName: <span class="type">Animal</span> ⇒ <span class="type">String</span> = _.name</span><br></pre></td></tr></table></figure>
-<p><code>getName</code> 类型为 <code>Animal =&gt; String</code>，即 <code>Function[Animal, String]</code>，<code>getBirdName</code> 类型为 <code>Function[Bird, String]</code>，因为：</p>
-<ul>
-<li><code>Function[-A, +B]</code> 入参是逆变的；</li>
-<li><code>Bird</code> 是 <code>Animal</code> 的子类；</li>
-</ul>
-<p>因此 <code>Function[Animal, String]</code> 是 <code>Function[Bird, String]</code> 的子类，即 <code>getName</code> 是 <code>getBirdName</code> 的子类，所以可以用 <code>getName</code> 替换 <code>getBirdName</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> getBirdName: <span class="type">Bird</span> ⇒ <span class="type">String</span> = getName</span><br></pre></td></tr></table></figure>
+<p>说了这么多，只是想告诉大家，ADT（algebraic data type）真真是 FP 语言中非常常见的概念，另外 ADT 与模式匹配可谓焦不离孟，孟不离焦，搭配起来威力强大。</p>
+<h2 id="什么是-ADT-？"><a href="#什么是-ADT-？" class="headerlink" title="什么是 ADT ？"></a>什么是 ADT ？</h2><p>说了这么多，到底什么是 ADT 呢？</p>
+<p>不要着急，我们知道编程语言会内置一些<a href="https://en.wikipedia.org/wiki/Primitive_data_type" target="_blank" rel="noopener">基本类型</a>，例如 <code>int</code>、<code>String</code> 等，基本类型只能表示非常简单的值，无法对复杂的现实世界建模，因此编程语言还会提供将基本类型 <strong>组合</strong> 成复杂类型机制，这些组合出来的类型被称为<a href="https://en.wikipedia.org/wiki/Composite_data_type" target="_blank" rel="noopener">组合类型</a>，维基百科对组合类型的定义为：</p>
+<p>In computer science, a composite data type or compound data type is any data type which can be constructed in a program using the programming language’s primitive data types and other composite types.</p>
 <blockquote>
-<p><code>Function1[-A, +B]</code> 入参为协变是否合理？</p>
-<p>非常合理，假如第一个参数是协变，即 <code>Function1[+A, +B]</code>，则：</p>
+<p>注：编程语言中的两种类型：</p>
 <ul>
-<li><code>Bird =&gt; String</code> 是 <code>Animal =&gt; String</code> 的子类</li>
+<li>基本类型</li>
+<li>组合类型</li>
 </ul>
-<p>因此可以用 <code>getBirdName</code> 替换 <code>getName</code>，<strong>但是</strong> <code>getName</code> 可以用于任意 <code>Animal</code>，虽然语法上 <code>getBirdName</code> 替换掉了 <code>getName</code>，但是 <code>getBirdName</code> 并不能用于任意 <code>Animal</code>，因此早晚会报错：</p>
-<p>若有 <code>Human extends Animal</code>，则 <code>getBirdName</code> 无法用于 <code>Human</code> 实例。</p>
 </blockquote>
-<p><code>Function1</code> 的返回类型为协变，这也非常合理，假设 <code>f</code> 返回类型为 <code>Bird</code>，<code>g</code> 返回类型为 <code>Duck</code>，自然可以用 <code>g</code> 替换 <code>f</code>，毕竟 <code>Duck</code> 可以替换 <code>Bird</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> f: () =&gt; <span class="type">Bird</span> = () =&gt; <span class="keyword">new</span> <span class="type">Duck</span>(<span class="string">"duck"</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="不变"><a href="#不变" class="headerlink" title="不变"></a>不变</h2><p>如果既没有 <code>+</code> 也没有 <code>-</code>，则默认为不变，即 <code>List[S]</code> 和 <code>List[T]</code> 没有任何关系。</p>
-<h2 id="Java-？"><a href="#Java-？" class="headerlink" title="Java ？"></a>Java ？</h2><p>Java 也支持 parametric polymorphism，因此也存在同样的问题，Java 也有自己的一套解决方式，留待另一篇博文解释。</p>
+<p>不同编程语言提供了不同的构建组合类型的机制，例如面向对象中的 class、struct 等，ADT 正是函数式编程语言构建组合类型的方式。</p>
+<p>为什么叫 algebraic data type 呢，难不成还跟代数有关系？？？</p>
+<p>Yes，还真和代数有关，根据 Haskell wiki：</p>
+<p>“Algebraic” refers to the property that an Algebraic Data Type is created by “algebraic” operations. The “algebra” here is “sums” and “products”:</p>
+<ul>
+<li>“sum” is alternation (A | B, meaning A or B but not both)</li>
+<li>“product” is combination (A B, meaning A and B <strong>together)</strong></li>
+</ul>
+<p>ADT 是通过 <strong>代数运算</strong> 构造的，常见的两种构造方式为：</p>
+<ul>
+<li>sum，即 a or b</li>
+<li>product，即 a and b</li>
+</ul>
+<p>例如 <code>Tuple</code> 是由 product（a and b） 操作产生的，而 <code>Option</code> <code>Either</code> <code>Try</code>  是由 sum（a or b） 操作产生的。</p>
+<h2 id="product-类型"><a href="#product-类型" class="headerlink" title="product 类型"></a>product 类型</h2><p>product 类型是最常见的组合类型，class 在某种程度上也是 product 类型。</p>
+<p>Scala 可以用 <code>case</code> 类构建 product 类型：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>(<span class="params">name: <span class="type">String</span>, age: <span class="type">Int</span></span>)</span></span><br></pre></td></tr></table></figure>
+<p>也可以用 <code>trait</code>：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">name</span></span>: <span class="type">String</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">age</span></span>: <span class="type">Int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而 Haskell 则用 record 语法构建：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Student</span> = <span class="type">Student</span> &#123; <span class="title">name</span>:: <span class="type">String</span>, <span class="title">age</span>:: <span class="type">Int</span> &#125;</span></span><br></pre></td></tr></table></figure>
+<p>product 类型非常常见，常见到我们几乎已经忽略掉它了，俗称灯下黑。。。</p>
+<h2 id="sum-类型"><a href="#sum-类型" class="headerlink" title="sum 类型"></a>sum 类型</h2><p>ADT 的强大之处更多体现在 sum 类型上，面向对象没有与之对应的特性（C/C++ 的 struct、Java 的 Enum 有点形似，但功能差太远）</p>
+<p>Scala 通过 <code>sealed trait</code> + case 类构建 sum 类型：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">Human</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">final</span> <span class="title">case</span> <span class="title">class</span> <span class="title">Worker</span>(<span class="params">name: <span class="type">String</span>, company: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Human</span></span></span><br><span class="line"><span class="class"><span class="title">final</span> <span class="title">case</span> <span class="title">class</span> <span class="title">Student</span>(<span class="params">name: <span class="type">String</span>, school: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Human</span></span></span><br></pre></td></tr></table></figure>
+<p>而 Haskell 则更加简洁：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Human</span> = <span class="type">Worker</span> <span class="type">String</span> <span class="type">String</span> | <span class="type">Student</span> <span class="type">String</span> <span class="type">String</span></span></span><br></pre></td></tr></table></figure>
+<p>两者语法有差异，但实际上非常神似：</p>
+<ul>
+<li>Haskell 中的 <code>Worker</code> 和 <code>Student</code> 都是 value constructor，则 Scala 中的 <code>Worker</code> 和 <code>Student</code> 也是 constuctor；</li>
+<li>Haskell 中定义的类型是 <code>Human</code>，而 Scala 虽然定义了 3 个不同类，但 <code>Worker</code> 和 <code>Student</code> 是 <code>Human</code> 的子类，因此可以认为仅定义了 <code>Human</code> 一个类型；</li>
+<li>Scala 通过 <code>sealed</code> 帮助编译器实现穷尽分析，而 Haskell 无需做任何额外工作，默认即获得穷尽分析的能力；</li>
+</ul>
+<h2 id="模式匹配"><a href="#模式匹配" class="headerlink" title="模式匹配"></a>模式匹配</h2><p>说到这里，大家肯定会想，ADT 也不过如此嘛，哪有什么神奇的地方？</p>
+<p>好吧，ADT 本身的确没什么特别，ADT 的威力需要借助模式匹配才能释放出来，ADT + 模式匹配，这可能是我见过的最具有表现力、最实用、最强的语言特性了，非常赞！</p>
+<p>模式匹配其实就做了两件事：</p>
+<ol>
+<li>匹配类型</li>
+<li>解构 ADT</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sum</span> :: [<span class="type">Int</span>] -&gt; <span class="type">Int</span></span><br><span class="line"><span class="title">sum</span> []       = <span class="number">0</span></span><br><span class="line"><span class="title">sum</span> (x : xs) = x + sum xs</span><br></pre></td></tr></table></figure>
+<p>借助 ADT 和模式匹配，可以非常容易做解析：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">desugar</span> :: <span class="type">Statement</span> -&gt; <span class="type">DietStatement</span></span><br><span class="line"><span class="title">desugar</span> (<span class="type">Incr</span> name)      = (<span class="type">DAssign</span> name (<span class="type">Op</span> (<span class="type">Var</span> name) <span class="type">Plus</span> (<span class="type">Val</span> <span class="number">1</span>)))</span><br><span class="line"><span class="title">desugar</span> (<span class="type">For</span> s1 e s2 s3) = (<span class="type">DSequence</span> (desugar s1) (<span class="type">DWhile</span> e (<span class="type">DSequence</span> (desugar s3) (desugar s2))))</span><br><span class="line"><span class="title">desugar</span> (<span class="type">Assign</span> name e)  = (<span class="type">DAssign</span> name e)</span><br><span class="line"><span class="title">desugar</span> (<span class="type">If</span> e s1 s2)     = (<span class="type">DIf</span> e (desugar s1) (desugar s2))</span><br><span class="line"><span class="title">desugar</span> (<span class="type">While</span> e s)      = (<span class="type">DWhile</span> e (desugar s))</span><br><span class="line"><span class="title">desugar</span> (<span class="type">Sequence</span> s1 s2) = (<span class="type">DSequence</span> (desugar s1) (desugar s2))</span><br><span class="line"><span class="title">desugar</span> <span class="type">Skip</span>             = <span class="type">DSkip</span></span><br></pre></td></tr></table></figure>
+<p>更多例子，可以参考 <a href="/2018/06/24/2018-06-24-haskell-a-tiny-interpreter/" title="A tiny interpreter in Haskell">A tiny interpreter in Haskell</a></p>
+<hr>
+<p>参考：</p>
+<ul>
+<li>网上一篇关于 Scala 中的 algebraic data type 的讲义：<a href="http://tpolecat.github.io/presentations/algebraic_types.html#17" target="_blank" rel="noopener">slides</a></li>
+<li>Haskell wiki <a href="https://wiki.haskell.org/Algebraic_data_type" target="_blank" rel="noopener">Algebraic data type</a></li>
+<li>本人笔记 <a href="https://github.com/satansk/learning-fpinscala/wiki/%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B" target="_blank" rel="noopener">数据模型</a></li>
+</ul>
 
       
     </div>
@@ -546,16 +545,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Scala/" rel="tag"># Scala</a>
-          
-            <a href="/tags/类型系统/" rel="tag"># 类型系统</a>
-          
-            <a href="/tags/型变/" rel="tag"># 型变</a>
-          
-        </div>
-      
 
       
       
@@ -565,8 +554,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/14/scala-string-ops/" rel="next" title="Scala | 字符串揭秘">
-                <i class="fa fa-chevron-left"></i> Scala | 字符串揭秘
+              <a href="/2018/07/10/2018-07-10-haskell-cis194-lazy/" rel="next" title="CIS 194 | Lazy">
+                <i class="fa fa-chevron-left"></i> CIS 194 | Lazy
               </a>
             
           </div>
@@ -574,10 +563,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/15/expression-oriented-programming/" rel="prev" title="面向表达式编程">
-                面向表达式编程 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -833,7 +818,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#协变"><span class="nav-number">1.</span> <span class="nav-text">协变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逆变"><span class="nav-number">2.</span> <span class="nav-text">逆变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不变"><span class="nav-number">3.</span> <span class="nav-text">不变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-？"><span class="nav-number">4.</span> <span class="nav-text">Java ？</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-ADT-？"><span class="nav-number">1.</span> <span class="nav-text">什么是 ADT ？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#product-类型"><span class="nav-number">2.</span> <span class="nav-text">product 类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sum-类型"><span class="nav-number">3.</span> <span class="nav-text">sum 类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模式匹配"><span class="nav-number">4.</span> <span class="nav-text">模式匹配</span></a></li></ol></div>
             
 
           </div>
@@ -1007,9 +992,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/05/15/scala-variance/';
-        this.page.identifier = '2018/05/15/scala-variance/';
-        this.page.title = 'Scala | 型变';
+        this.page.url = 'http://songkun.me/2018/07/12/2018-07-12-adt-in-haskell-and-scala/';
+        this.page.identifier = '2018/07/12/2018-07-12-adt-in-haskell-and-scala/';
+        this.page.title = 'Algebraic Data Type 及其在 Haskell 和 Scala 中的表现';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
