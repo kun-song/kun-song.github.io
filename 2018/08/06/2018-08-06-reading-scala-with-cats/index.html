@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="闭包定义维基百科首先建议阅读维基百科对闭包的定义，原文比较长，我试着逐句理解下：  In programming languages, a closure (also lexical closure or function closure) is a technique for implementing lexically scoped name binding in a language wit">
-<meta name="keywords" content="fp,闭包">
+  <meta name="description" content="看了小红书（Functional Programming in Scala）后，脑子里充斥了各种函数的实现，但这些 Monad 啊，Functor 啊到底有什么用呢？实际项目中怎么把这些高大上的概念用上呢？ 实际项目中当然不能手动实现各种 typeclass，因为 Cats 已经为我们提供了非常多有用的 type class 了（还有 Scalaz，二者很像）。">
+<meta name="keywords" content="Scala,Cats">
 <meta property="og:type" content="article">
-<meta property="og:title" content="闭包初探">
-<meta property="og:url" content="http://songkun.me/2018/05/11/scala-closure-1/index.html">
+<meta property="og:title" content="读书 | Scala with Cats">
+<meta property="og:url" content="http://songkun.me/2018/08/06/2018-08-06-reading-scala-with-cats/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="闭包定义维基百科首先建议阅读维基百科对闭包的定义，原文比较长，我试着逐句理解下：  In programming languages, a closure (also lexical closure or function closure) is a technique for implementing lexically scoped name binding in a language wit">
+<meta property="og:description" content="看了小红书（Functional Programming in Scala）后，脑子里充斥了各种函数的实现，但这些 Monad 啊，Functor 啊到底有什么用呢？实际项目中怎么把这些高大上的概念用上呢？ 实际项目中当然不能手动实现各种 typeclass，因为 Cats 已经为我们提供了非常多有用的 type class 了（还有 Scalaz，二者很像）。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-23T00:54:17.000Z">
+<meta property="og:updated_time" content="2018-08-06T15:08:05.634Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="闭包初探">
-<meta name="twitter:description" content="闭包定义维基百科首先建议阅读维基百科对闭包的定义，原文比较长，我试着逐句理解下：  In programming languages, a closure (also lexical closure or function closure) is a technique for implementing lexically scoped name binding in a language wit">
+<meta name="twitter:title" content="读书 | Scala with Cats">
+<meta name="twitter:description" content="看了小红书（Functional Programming in Scala）后，脑子里充斥了各种函数的实现，但这些 Monad 啊，Functor 啊到底有什么用呢？实际项目中怎么把这些高大上的概念用上呢？ 实际项目中当然不能手动实现各种 typeclass，因为 Cats 已经为我们提供了非常多有用的 type class 了（还有 Scalaz，二者很像）。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/11/scala-closure-1/"/>
+  <link rel="canonical" href="http://songkun.me/2018/08/06/2018-08-06-reading-scala-with-cats/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>闭包初探 | 随便写写</title>
+  <title>读书 | Scala with Cats | 随便写写</title>
   
 
 
@@ -331,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/11/scala-closure-1/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/08/06/2018-08-06-reading-scala-with-cats/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">闭包初探
+          <h1 class="post-title" itemprop="name headline">读书 | Scala with Cats
               
             
           </h1>
@@ -373,24 +373,12 @@
                 
               
 
-              <time title="创建时间：2018-05-11 08:20:01" itemprop="dateCreated datePublished" datetime="2018-05-11T08:20:01+08:00">2018-05-11</time>
+              <time title="创建时间：2018-08-06 23:03:00 / 修改时间：23:08:05" itemprop="dateCreated datePublished" datetime="2018-08-06T23:03:00+08:00">2018-08-06</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-05-23 08:54:17" itemprop="dateModified" datetime="2018-05-23T08:54:17+08:00">2018-05-23</time>
               
             
           </span>
@@ -407,7 +395,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/读书/" itemprop="url" rel="index"><span itemprop="name">读书</span></a></span>
 
                 
                 
@@ -422,9 +410,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/11/scala-closure-1/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/06/2018-08-06-reading-scala-with-cats/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/11/scala-closure-1/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/06/2018-08-06-reading-scala-with-cats/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -452,67 +440,15 @@
       
 
       
-        <h2 id="闭包定义"><a href="#闭包定义" class="headerlink" title="闭包定义"></a>闭包定义</h2><h3 id="维基百科"><a href="#维基百科" class="headerlink" title="维基百科"></a>维基百科</h3><p>首先建议阅读维基百科对闭包的定义，原文比较长，我试着逐句理解下：</p>
-<blockquote>
-<p>In programming languages, a closure (also lexical closure or function closure) is a technique for implementing <strong>lexically scoped name binding</strong> in a language with first-class functions.</p>
-</blockquote>
-<p>从概念角度看，在具备 first-class functions 的编程语言中，闭包是一种实现 <strong>词法作用域级别的名字绑定</strong> 的技术。</p>
+        <p>看了小红书（Functional Programming in Scala）后，脑子里充斥了各种函数的实现，但这些 Monad 啊，Functor 啊到底有什么用呢？实际项目中怎么把这些高大上的概念用上呢？</p>
+<p>实际项目中当然不能手动实现各种 typeclass，因为 Cats 已经为我们提供了非常多有用的 type class 了（还有 Scalaz，二者很像）。</p>
 <a id="more"></a>
-<blockquote>
-<p>Operationally, a closure is a record storing a function together with an <strong>environment</strong>.</p>
-</blockquote>
-<p>从实现角度看，闭包是保存 <strong>函数</strong> + <strong>上下文环境</strong> 的记录。</p>
-<p>到此为止，从概念、实现上解释了闭包是什么，剩下的是对上下文环境的解释：</p>
-<blockquote>
-<p>The environment is a mapping associating each <strong>free variable</strong> of the function (variables that are used locally, but defined in an enclosing scope) with the <strong>value or reference</strong> to which the name was bound when the closure was <strong>created</strong>.</p>
-</blockquote>
-<p>（上下文）环境是 <strong>自动变量名字</strong> 与该名字的 <strong>值/引用</strong> 的映射（name -&gt; value），注意变量的值、引用是闭包 <strong>创建</strong> 时确定的。</p>
-<p>自由变量：</p>
-<ul>
-<li>在函数的 enclosing scope 中定义，但在函数内部使用的变量；</li>
-<li>既不在函数参数列表中，也不是函数局部变量的变量；</li>
-</ul>
-<blockquote>
-<p>A closure—unlike a plain function—allows the function to access those <strong>captured variables</strong> through the closure’s <strong>copies</strong> of their values or references, even when the function is invoked outside their scope.</p>
-</blockquote>
-<p>被捕获变量：即闭包使用的自由变量，闭包中一旦引用自由变量，则称该变量被闭包捕获。</p>
-<p>若语言不支持 first-class functions，则闭包与普通函数并无区别，若支持 first-class function 则两者区别巨大：</p>
-<ul>
-<li>闭包的上下文环境会保存被捕获的自由变量值、引用的 <strong>副本</strong>；</li>
-<li>闭包作为函数返回值返回后，调用闭包，闭包中依然保存其 <strong>定义时</strong> 的自由变量的值；</li>
-</ul>
-<h4 id="总结如下："><a href="#总结如下：" class="headerlink" title="总结如下："></a>总结如下：</h4><ul>
-<li>闭包 = 函数 + 上下文环境</li>
-<li>上下文环境 = 自由变量名字 -&gt; 值/引用（key -&gt; value）</li>
-<li>自由变量 = 在函数的 enclosing scope 定义，在函数内部引用的变量</li>
-<li>上下文环境中保存的 value/reference 是闭包 <strong>定义</strong> 时的 <strong>副本</strong></li>
-<li>不同场景中，自由变量的值可以不同，进而闭包也可以不同</li>
-</ul>
-<h3 id="我的理解"><a href="#我的理解" class="headerlink" title="我的理解"></a>我的理解</h3><p>闭包英文是 closure，更精确一点，闭包是 “first-class function with lexical scope”，即具备词法作用域的第一等函数，要理解这句话，首先要明白两个概念：</p>
-<ul>
-<li>词法作用域</li>
-<li>第一等函数</li>
-</ul>
-<p>稍微有点 FP 基础的同学肯定了解第一等函数，即在编程语言中，函数是第一等公民，与普通值没有任何区别，因此：</p>
-<ul>
-<li>函数可以用作 <strong>函数参数</strong></li>
-<li>也可以用作 <strong>函数返回值</strong></li>
-</ul>
-<p>而词法作用域（lexical scope）可以参考这篇博文 <a href=""></a>。</p>
-<h2 id="闭包示例"><a href="#闭包示例" class="headerlink" title="闭包示例"></a>闭包示例</h2><p>不同语言中的闭包略有不同，虽然按照维基百科对闭包的定义，需要保存自由变量的 <strong>副本</strong>，实际上各个语言的闭包实现各不相同，本文分别演示 Scala、Standard ML 和 Racket 中的闭包。</p>
-<h3 id="Standard-ML"><a href="#Standard-ML" class="headerlink" title="Standard ML"></a>Standard ML</h3><figure class="highlight ml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="Scala"><a href="#Scala" class="headerlink" title="Scala"></a>Scala</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = a + x</span><br><span class="line"></span><br><span class="line">f(<span class="number">10</span>) <span class="comment">// 20</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span></span>(x: <span class="type">Int</span>): <span class="type">Int</span> = a + x</span><br><span class="line"></span><br><span class="line">a = <span class="number">1</span></span><br><span class="line">f(<span class="number">10</span>) <span class="comment">// 11</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>Scala 闭包不会复制自由变量的值，而是直接绑定到自由变量，因此闭包中对自由变量的修改，将反应在所有引用该变量的地方；</li>
-</ul>
-<h3 id="Racket"><a href="#Racket" class="headerlink" title="Racket"></a>Racket</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(define a 10)</span><br><span class="line">(define (f x) (+ a x))</span><br><span class="line"></span><br><span class="line">(f 10) ; 20</span><br></pre></td></tr></table></figure>
-<p><code>f</code> 是闭包，其函数体内引用了自由变量 <code>a</code>，当计算 <code>(f 10)</code> 时，会计算函数体 <code>(+ a 10)</code>，解释器在 <code>f</code> 的 environment 中查找 <code>a</code> 的绑定，找到了 10，因此最后结果为 20。</p>
-<p>Racket 并非纯函数式编程语言，可以用 <code>set!</code> 修改绑定：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(define a 10)</span><br><span class="line">(define (f x) (+ a x))</span><br><span class="line"></span><br><span class="line">(set! a 1)</span><br><span class="line">(f 10) ; 11</span><br></pre></td></tr></table></figure>
-<p>在计算 <code>(f 10)</code> 之前，<code>a</code> 被重新绑定到 1，因此计算函数体 <code>(+ a 10)</code> 时查找到的 <code>a</code> 为 1，最后结果为 11。</p>
-<h2 id="闭包应用"><a href="#闭包应用" class="headerlink" title="闭包应用"></a>闭包应用</h2><h3 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h3><p>柯里化并非什么高深的语言特性，简单讲，柯里化不过是闭包的一种 <strong>惯用法</strong> 而已，从来就没有过魔法。</p>
-<h3 id="部分应用函数"><a href="#部分应用函数" class="headerlink" title="部分应用函数"></a>部分应用函数</h3>
+<p>Scala with Cats 是 typelevel 提供的众多 Scala 电子书之一，免费可得，提供 html、epub、pdf 等多种格式，当然这都不是关键，关键是这本书写的非常好，我这么说当然没有说服力，大家可以看下 goodreads 上的评价，点我。</p>
+<p>这本书不但教会你函数式编程的基本理论，比如 <code>Monoid</code>, <code>Semigroup</code>, <code>Functor</code>, <code>Monad</code>, <code>Applicative</code> 等等，还会告诉你 Cats 是如何实现这些 typeclass 的，更赞的是每章都提供了习题，用于讲解怎么把 Cats 用于实际项目。</p>
+<p>看到这里会发现，Scala with Cats 与 Functional Programming in Scala 是有部分重合的，其中函数式理论两者都有涉及，typeclass 实现其实也有部分重合，因为 Cats 本身实现了很多 fpinscala 中的 typeclass。</p>
+<p>Scala with Cats 比小红书更贴近实战，更让你马上将 typeclass 用于实际项目。</p>
+<p>另外，本书的读书笔记放在 github 上了，包含本书的主要内容，以及习题思路解答等等，点我查看。</p>
+
       
     </div>
 
@@ -532,9 +468,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/fp/" rel="tag"># fp</a>
+            <a href="/tags/Scala/" rel="tag"># Scala</a>
           
-            <a href="/tags/闭包/" rel="tag"># 闭包</a>
+            <a href="/tags/Cats/" rel="tag"># Cats</a>
           
         </div>
       
@@ -547,8 +483,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/09/how-to-learn-scala/" rel="next" title="我的 Scala 学习之路">
-                <i class="fa fa-chevron-left"></i> 我的 Scala 学习之路
+              <a href="/2018/08/06/2018-08-06-reading-learn-you-a-haskell-for-great-good/" rel="next" title="读书 | Learn You a Haskell for Great Good">
+                <i class="fa fa-chevron-left"></i> 读书 | Learn You a Haskell for Great Good
               </a>
             
           </div>
@@ -556,10 +492,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/14/scala-string-ops/" rel="prev" title="Scala | 字符串揭秘">
-                Scala | 字符串揭秘 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -618,17 +550,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -814,22 +737,6 @@
       </section>
 
       
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包定义"><span class="nav-number">1.</span> <span class="nav-text">闭包定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#维基百科"><span class="nav-number">1.1.</span> <span class="nav-text">维基百科</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结如下："><span class="nav-number">1.1.1.</span> <span class="nav-text">总结如下：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#我的理解"><span class="nav-number">1.2.</span> <span class="nav-text">我的理解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包示例"><span class="nav-number">2.</span> <span class="nav-text">闭包示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Standard-ML"><span class="nav-number">2.1.</span> <span class="nav-text">Standard ML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scala"><span class="nav-number">2.2.</span> <span class="nav-text">Scala</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Racket"><span class="nav-number">2.3.</span> <span class="nav-text">Racket</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包应用"><span class="nav-number">3.</span> <span class="nav-text">闭包应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#柯里化"><span class="nav-number">3.1.</span> <span class="nav-text">柯里化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部分应用函数"><span class="nav-number">3.2.</span> <span class="nav-text">部分应用函数</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
 
       
 
@@ -997,9 +904,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/05/11/scala-closure-1/';
-        this.page.identifier = '2018/05/11/scala-closure-1/';
-        this.page.title = '闭包初探';
+        this.page.url = 'http://songkun.me/2018/08/06/2018-08-06-reading-scala-with-cats/';
+        this.page.identifier = '2018/08/06/2018-08-06-reading-scala-with-cats/';
+        this.page.title = '读书 | Scala with Cats';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
