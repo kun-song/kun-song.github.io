@@ -27,6 +27,8 @@ int[] intArray = new int[]{ 1, 2, 3, -1, -2, -3 };
 Arrays.sort(intArray);
 ```
 
+<!-- more -->
+
 还可以对数组 **部分元素** 排序：
 
 ```Java
@@ -82,7 +84,7 @@ default void sort(Comparator<? super E> c) {
 }
 ```
 
-## `Set` 和 `Map` 排序
+### `Set` 和 `Map` 排序
 
 对 `Set` 和 `Map` 中的元素排序，可以把元素先放到 `List` 后，然后对 `List` 排序，最后将元素插入新的 `Set` 和 `Map` 中，注意新 `Set` 和 `Map` 必须用可以保存插入顺序的实现，例如 `LinkedHashSet` 和 `LinkedHashMap`，具体操作可以参考 [这篇博客](https://www.baeldung.com/java-sorting)。
 
