@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="排序是一项非常基础、常见的功能，几乎所有应用都会涉及，本文介绍 Java 排序的基本知识。 基本类型排序首先排序发生在容器中，在 Java 中表现为数组、List、Set 和 Map。 数组排序 注意 Arrays.sort 是就地排序，会修改被排序的数组。  Arrays.sort 可以对基本数字类型的数组排序，例如 int、byte、char、double、float、short 和 long">
+<meta name="keywords" content="Java,Comparable,Comparator">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于 Java 排序的一切">
+<meta property="og:url" content="http://songkun.me/2018/08/09/2018-08-09-java-sorting/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="排序是一项非常基础、常见的功能，几乎所有应用都会涉及，本文介绍 Java 排序的基本知识。 基本类型排序首先排序发生在容器中，在 Java 中表现为数组、List、Set 和 Map。 数组排序 注意 Arrays.sort 是就地排序，会修改被排序的数组。  Arrays.sort 可以对基本数字类型的数组排序，例如 int、byte、char、double、float、short 和 long">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-09T15:16:20.912Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于 Java 排序的一切">
+<meta name="twitter:description" content="排序是一项非常基础、常见的功能，几乎所有应用都会涉及，本文介绍 Java 排序的基本知识。 基本类型排序首先排序发生在容器中，在 Java 中表现为数组、List、Set 和 Map。 数组排序 注意 Arrays.sort 是就地排序，会修改被排序的数组。  Arrays.sort 可以对基本数字类型的数组排序，例如 int、byte、char、double、float、short 和 long">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/08/09/2018-08-09-java-sorting/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>关于 Java 排序的一切 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/08/09/2018-08-09-java-sorting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于 Java 排序的一切
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-09 21:38:09 / 修改时间：23:16:20" itemprop="dateCreated datePublished" datetime="2018-08-09T21:38:09+08:00">2018-08-09</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/09/2018-08-09-java-sorting/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/08/09/2018-08-09-java-sorting/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>排序是一项非常基础、常见的功能，几乎所有应用都会涉及，本文介绍 Java 排序的基本知识。</p>
+<h2 id="基本类型排序"><a href="#基本类型排序" class="headerlink" title="基本类型排序"></a>基本类型排序</h2><p>首先排序发生在容器中，在 Java 中表现为数组、<code>List</code>、<code>Set</code> 和 <code>Map</code>。</p>
+<h3 id="数组排序"><a href="#数组排序" class="headerlink" title="数组排序"></a>数组排序</h3><blockquote>
+<p>注意 <code>Arrays.sort</code> 是就地排序，会修改被排序的数组。</p>
+</blockquote>
+<p><code>Arrays.sort</code> 可以对基本数字类型的数组排序，例如 <code>int</code>、<code>byte</code>、<code>char</code>、<code>double</code>、<code>float</code>、<code>short</code> 和 <code>long</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] intArray = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, -<span class="number">1</span>, -<span class="number">2</span>, -<span class="number">3</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -3, -2, -1, 1, 2, 3</span></span><br><span class="line">Arrays.sort(intArray);</span><br></pre></td></tr></table></figure>
+<p>还可以对数组 <strong>部分元素</strong> 排序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Arrays.sort(int[] a, int fromIndex, int toIndex)</span></span><br><span class="line"><span class="keyword">int</span>[] intArray = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, -<span class="number">1</span>, -<span class="number">2</span>, -<span class="number">3</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1, 2, 3, -2, -1, -3</span></span><br><span class="line">Arrays.sort(intArray, <span class="number">3</span>, <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>前开后闭区间</li>
+</ul>
+<p>若数组很大，可以并发排序（Java 8 引入）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] intArray = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, -<span class="number">1</span>, -<span class="number">2</span>, -<span class="number">3</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1, 2, 3, -2, -1, -3</span></span><br><span class="line">Arrays.parallelSort(intArray, <span class="number">3</span>, <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>除速度可能更快外，<code>parallelSort</code> 与 <code>sort</code> 其他行为一致；</li>
+</ul>
+<h3 id="List-排序"><a href="#List-排序" class="headerlink" title="List 排序"></a><code>List</code> 排序</h3><p>类似数组排序用 <code>Arrays.sort</code>，<code>List</code> 排序可以用 <code>Collections.sort</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; xs = Arrays.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, -<span class="number">1</span>, -<span class="number">2</span>, -<span class="number">3</span>);</span><br><span class="line"><span class="comment">// [-3, -2, -1, 1, 2, 3]</span></span><br><span class="line">Collections.sort(xs);</span><br></pre></td></tr></table></figure>
+<p><code>Collections.sort</code> 将排序任务委托为 <code>List.sort</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(List&lt;T&gt; list)</span> </span>&#123;</span><br><span class="line">  list.sort(<span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>List.sort</code> 底层通过 <code>Arrays.sort</code> 实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(Comparator&lt;? <span class="keyword">super</span> E&gt; c)</span> </span>&#123;</span><br><span class="line">  Object[] a = <span class="keyword">this</span>.toArray();</span><br><span class="line">  Arrays.sort(a, (Comparator) c);</span><br><span class="line">  ListIterator&lt;E&gt; i = <span class="keyword">this</span>.listIterator();</span><br><span class="line">  <span class="keyword">for</span> (Object e : a) &#123;</span><br><span class="line">    i.next();</span><br><span class="line">    i.set((E) e);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Set-和-Map-排序"><a href="#Set-和-Map-排序" class="headerlink" title="Set 和 Map 排序"></a><code>Set</code> 和 <code>Map</code> 排序</h2><p>对 <code>Set</code> 和 <code>Map</code> 中的元素排序，可以把元素先放到 <code>List</code> 后，然后对 <code>List</code> 排序，最后将元素插入新的 <code>Set</code> 和 <code>Map</code> 中，注意新 <code>Set</code> 和 <code>Map</code> 必须用可以保存插入顺序的实现，例如 <code>LinkedHashSet</code> 和 <code>LinkedHashMap</code>，具体操作可以参考 <a href="https://www.baeldung.com/java-sorting" target="_blank" rel="noopener">这篇博客</a>。</p>
+<h2 id="自定义对象排序"><a href="#自定义对象排序" class="headerlink" title="自定义对象排序"></a>自定义对象排序</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(<span class="keyword">int</span> id, <span class="keyword">int</span> age, String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Student&#123;"</span> + <span class="string">"id="</span> + id + <span class="string">", age="</span> + age + <span class="string">", name='"</span> + name + <span class="string">'\''</span> + <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Student mike = <span class="keyword">new</span> Student(<span class="number">1</span>, <span class="number">20</span>, <span class="string">"Mike"</span>);</span><br><span class="line">Student bob = <span class="keyword">new</span> Student(<span class="number">2</span>, <span class="number">18</span>, <span class="string">"Bob"</span>);</span><br><span class="line">Student lily = <span class="keyword">new</span> Student(<span class="number">3</span>, <span class="number">19</span>, <span class="string">"Lily"</span>);</span><br><span class="line"></span><br><span class="line">List&lt;Student&gt; studentList = Arrays.asList(mike, bob, lily);</span><br></pre></td></tr></table></figure>
+<p>与 <code>int</code>、<code>String</code> 等基本类型不同，自定义对象需要指定排序 <strong>顺序</strong>，有两种指定顺序的方式：</p>
+<ul>
+<li>自然顺序，通过 <code>Comparable</code> 接口指定；</li>
+<li>任意顺序，通过 <code>Comparator</code> 接口指定；</li>
+</ul>
+<p>更多关于对象顺序的内容，可以参考 <a href="https://docs.oracle.com/javase/tutorial/collections/interfaces/order.html" target="_blank" rel="noopener">官方文档</a></p>
+<h3 id="Comparable"><a href="#Comparable" class="headerlink" title="Comparable"></a><code>Comparable</code></h3><p>除基本类型外，可以用 <code>Collections.sort</code> 对 <code>List&lt;String&gt;</code> 排序，也可以对 <code>List&lt;Date&gt;</code> 排序，这是因为 <code>String</code> 实现了 <code>Comparable</code> 接口，从而为 <code>String</code> 提供了自然顺序，Java 中很多类型实现了 <code>Comparable</code> 接口，它们都可以用 <code>sort</code> 排序。</p>
+<p>如果想用 <code>Collections.sort</code> 对自定义对象的 <code>List</code> 排序，则该类必须实现 <code>Comparable</code> 接口，该接口非常简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparable</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(T o)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>compareTo</code> 返回值表示本对象与 <code>o</code> 的大小关系：</p>
+<ul>
+<li>正数：本对象大于 <code>o</code></li>
+<li>0：本对象等于 <code>o</code></li>
+<li>负数：本对象小于 <code>o</code></li>
+</ul>
+<p>让 <code>Student</code> 实现 <code>Comparable</code> 接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Student</span>&gt; </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Student o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> o.id - id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里按 <code>id</code> 逆序排序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [Student&#123;id=3, age=19, name='Lily'&#125;, Student&#123;id=2, age=18, name='Bob'&#125;, Student&#123;id=1, age=20, name='Mike'&#125;]</span></span><br><span class="line">Collections.sort(studentList);</span><br></pre></td></tr></table></figure>
+<p>还可以按 <code>name</code> 字段排序，重新将 <code>compareTo</code> 实现为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Student o)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.name.compareTo(o.name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>排序结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [Student&#123;id=2, age=18, name='Bob'&#125;, Student&#123;id=3, age=19, name='Lily'&#125;, Student&#123;id=1, age=20, name='Mike'&#125;]</span></span><br><span class="line">Collections.sort(studentList);</span><br></pre></td></tr></table></figure>
+<p>还可以先按 <code>age</code> 从小到大排序，若 <code>age</code> 相同，再按 <code>name</code> 排序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Student o)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> cmp = age - o.age;</span><br><span class="line">  <span class="keyword">return</span> cmp == <span class="number">0</span> ? name.compareTo(o.name) : cmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>排序结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [Student&#123;id=2, age=18, name='Bob'&#125;, Student&#123;id=2, age=18, name='Bob2'&#125;, Student&#123;id=3, age=19, name='Lily'&#125;, Student&#123;id=1, age=20, name='Mike'&#125;]</span></span><br><span class="line">Collections.sort(studentList);</span><br></pre></td></tr></table></figure>
+<h3 id="Comparator"><a href="#Comparator" class="headerlink" title="Comparator"></a><code>Comparator</code></h3><p>若不想用自然顺序排序，或排序对象未实现 <code>Comparable</code> 接口，则可用 <code>Comparator</code> 接口实现排序，<code>Comparator</code> 实例封装了某种顺序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparator</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">compare</span><span class="params">(T o1, T o2)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>compare</code> 方法语义与 <code>compareTo</code> 基本相同，同样通过正数、0、负数表示顺序。</li>
+</ul>
+<p>前面提到的 <code>Arrays.sort</code>、<code>Collections.sort</code> 和 <code>List.sort</code> 都可以指定一个 <code>Comparator</code> 参数，以自定义顺序。</p>
+<p>用 <code>age</code> 排序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [Student&#123;id=2, age=18, name='Bob'&#125;, Student&#123;id=3, age=19, name='Lily'&#125;, Student&#123;id=1, age=20, name='Mike'&#125;]</span></span><br><span class="line">Collections.sort(studentList, (a, b) -&gt; a.getAge() - b.getAge());</span><br></pre></td></tr></table></figure>
+<p>Java 8 为 <code>Comparator</code> 新增 <code>comparingInt</code> 方法，上面代码可改写为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Collections.sort(studentList, Comparator.comparingInt(Student::getAge));</span><br></pre></td></tr></table></figure>
+<p>Java 8 新增 <code>thenComparing</code> 方法，用于串联任意多比较元素，例如 先按 <code>age</code> 后按 <code>name</code> 排序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Collections.sort(studentList, Comparator.comparingInt(Student::getAge).thenComparing(Student::getName));</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>thenComparing</code> 让代码意图非常清晰。</li>
+</ul>
+<h3 id="Comparable-和-Comparator-必须遵循的约束"><a href="#Comparable-和-Comparator-必须遵循的约束" class="headerlink" title="Comparable 和 Comparator 必须遵循的约束"></a><code>Comparable</code> 和 <code>Comparator</code> 必须遵循的约束</h3><p>// TODO</p>
+<p>The compare method has to obey the same four technical restrictions as Comparable’s compareTo method for the same reason — a Comparator must induce a total order on the objects it compares.</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Comparable/" rel="tag"># Comparable</a>
+          
+            <a href="/tags/Comparator/" rel="tag"># Comparator</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/06/2018-08-06-reading-scala-with-cats/" rel="next" title="读书 | Scala with Cats">
+                <i class="fa fa-chevron-left"></i> 读书 | Scala with Cats
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本类型排序"><span class="nav-number">1.</span> <span class="nav-text">基本类型排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数组排序"><span class="nav-number">1.1.</span> <span class="nav-text">数组排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List-排序"><span class="nav-number">1.2.</span> <span class="nav-text">List 排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-和-Map-排序"><span class="nav-number">2.</span> <span class="nav-text">Set 和 Map 排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义对象排序"><span class="nav-number">3.</span> <span class="nav-text">自定义对象排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Comparable"><span class="nav-number">3.1.</span> <span class="nav-text">Comparable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Comparator"><span class="nav-number">3.2.</span> <span class="nav-text">Comparator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Comparable-和-Comparator-必须遵循的约束"><span class="nav-number">3.3.</span> <span class="nav-text">Comparable 和 Comparator 必须遵循的约束</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/08/09/2018-08-09-java-sorting/';
+        this.page.identifier = '2018/08/09/2018-08-09-java-sorting/';
+        this.page.title = '关于 Java 排序的一切';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
