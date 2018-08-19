@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="在 Java 并发编程中，Runnable 是逻辑上的工作单元，用来表示任务，而 Thread 是执行任务的机制，不过 Thread 过于底层、过于基础，因此需要复杂的资源管理，比如创建多少线程合适？当线程崩溃会如何处理？如何停止进行中的任务？ 因此一般不直接使用 Thread 执行任务，取而代之的是 Executor 接口： 123public interface Executor &amp;#123;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-14T05:24:35.942Z">
+<meta property="og:updated_time" content="2018-08-14T14:55:33.495Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="源码夜读 | Executor">
 <meta name="twitter:description" content="在 Java 并发编程中，Runnable 是逻辑上的工作单元，用来表示任务，而 Thread 是执行任务的机制，不过 Thread 过于底层、过于基础，因此需要复杂的资源管理，比如创建多少线程合适？当线程崩溃会如何处理？如何停止进行中的任务？ 因此一般不直接使用 Thread 执行任务，取而代之的是 Executor 接口： 123public interface Executor &amp;#123;">
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2018-08-14 12:33:37 / 修改时间：13:24:35" itemprop="dateCreated datePublished" datetime="2018-08-14T12:33:37+08:00">2018-08-14</time>
+              <time title="创建时间：2018-08-14 12:33:37 / 修改时间：22:55:33" itemprop="dateCreated datePublished" datetime="2018-08-14T12:33:37+08:00">2018-08-14</time>
             
 
             
@@ -465,7 +465,7 @@
 </ul>
 <p>使用：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Executor fixedThreadExecutor = Executors.newFixedThreadPool(<span class="number">10</span>);</span><br><span class="line">    Executor executor = <span class="keyword">new</span> SerialExecutor(fixedThreadExecutor);</span><br><span class="line"></span><br><span class="line">    executor.execute(() -&gt; System.out.println(Thread.currentThread()));</span><br><span class="line">    executor.execute(() -&gt; System.out.println(Thread.currentThread()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line">Thread[pool-<span class="number">1</span>-thread-<span class="number">1</span>,<span class="number">5</span>,main]</span><br><span class="line">Thread[pool-<span class="number">1</span>-thread-<span class="number">2</span>,<span class="number">5</span>,main]</span><br></pre></td></tr></table></figure>
-<h2 id="标准库-Executor-实现"><a href="#标准库-Executor-实现" class="headerlink" title="标准库 Executor 实现"></a>标准库 <code>Executor</code> 实现</h2><p><code>java.util.concurrent</code> 包中的 <code>Executor</code> 实现一般还实现了 <code>ExecutorService</code> 接口，以获取对 executor 生命周的管理，常见的 <code>Executor</code> 实现有：</p>
+<h2 id="标准库-Executor-实现"><a href="#标准库-Executor-实现" class="headerlink" title="标准库 Executor 实现"></a>标准库 <code>Executor</code> 实现</h2><p><code>java.util.concurrent</code> 包中的 <code>Executor</code> 实现还额外实现了 <code>ExecutorService</code> 接口，以获取对 executor 生命周期的管理，常见的 <code>Executor</code> 实现有：</p>
 
       
     </div>
@@ -510,6 +510,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/14/2018-08-14-java-enum/" rel="prev" title="浅析枚举">
+                浅析枚举 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -593,7 +597,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-count">53</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -733,7 +737,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">52</span>
+                      
+                    
+                    <span class="site-state-item-count">53</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
