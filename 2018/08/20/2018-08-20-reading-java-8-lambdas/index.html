@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="说来惭愧，自己平时写代码很少用枚举，最近检视同事代码，发现使用了很多枚举，就回顾了下枚举的基本用法，并简单了解了下枚举的实现原理。 int enum pattern 和 string enum pattern在 Java 支持 Enum 前， 基本用法枚举最常见的用法是定义常量，例如： 12345public enum Week &amp;#123;    Monday, Tuesday, Wednesd">
-<meta name="keywords" content="Java,Enum">
+  <meta name="description" content="近年来函数式编程语言迎来了一次小爆发，热的发紫的 Spark 是用 Scala 实现的，Storm 是用 Coujure 实现的，Jetbrains 家的 Kotlin 也在紧锣密鼓的攻城略地，这些新型语言可利用庞大的 Java 生态系统，并且在语言特性上大大超越了保守的原住民 Java，程序员们当然快活，但 Java 却坐不住了，于是有了 Java 8 大刀阔斧的进步。 在我看来，Java 8">
+<meta name="keywords" content="Java,fp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="浅析枚举">
-<meta property="og:url" content="http://songkun.me/2018/08/14/2018-08-14-java-enum/index.html">
+<meta property="og:title" content="读书 |《Java 8函数式编程》">
+<meta property="og:url" content="http://songkun.me/2018/08/20/2018-08-20-reading-java-8-lambdas/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="说来惭愧，自己平时写代码很少用枚举，最近检视同事代码，发现使用了很多枚举，就回顾了下枚举的基本用法，并简单了解了下枚举的实现原理。 int enum pattern 和 string enum pattern在 Java 支持 Enum 前， 基本用法枚举最常见的用法是定义常量，例如： 12345public enum Week &amp;#123;    Monday, Tuesday, Wednesd">
+<meta property="og:description" content="近年来函数式编程语言迎来了一次小爆发，热的发紫的 Spark 是用 Scala 实现的，Storm 是用 Coujure 实现的，Jetbrains 家的 Kotlin 也在紧锣密鼓的攻城略地，这些新型语言可利用庞大的 Java 生态系统，并且在语言特性上大大超越了保守的原住民 Java，程序员们当然快活，但 Java 却坐不住了，于是有了 Java 8 大刀阔斧的进步。 在我看来，Java 8">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-14T16:01:00.074Z">
+<meta property="og:updated_time" content="2018-08-20T15:03:50.419Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="浅析枚举">
-<meta name="twitter:description" content="说来惭愧，自己平时写代码很少用枚举，最近检视同事代码，发现使用了很多枚举，就回顾了下枚举的基本用法，并简单了解了下枚举的实现原理。 int enum pattern 和 string enum pattern在 Java 支持 Enum 前， 基本用法枚举最常见的用法是定义常量，例如： 12345public enum Week &amp;#123;    Monday, Tuesday, Wednesd">
+<meta name="twitter:title" content="读书 |《Java 8函数式编程》">
+<meta name="twitter:description" content="近年来函数式编程语言迎来了一次小爆发，热的发紫的 Spark 是用 Scala 实现的，Storm 是用 Coujure 实现的，Jetbrains 家的 Kotlin 也在紧锣密鼓的攻城略地，这些新型语言可利用庞大的 Java 生态系统，并且在语言特性上大大超越了保守的原住民 Java，程序员们当然快活，但 Java 却坐不住了，于是有了 Java 8 大刀阔斧的进步。 在我看来，Java 8">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/08/14/2018-08-14-java-enum/"/>
+  <link rel="canonical" href="http://songkun.me/2018/08/20/2018-08-20-reading-java-8-lambdas/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>浅析枚举 | 随便写写</title>
+  <title>读书 |《Java 8函数式编程》 | 随便写写</title>
   
 
 
@@ -331,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/08/14/2018-08-14-java-enum/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/08/20/2018-08-20-reading-java-8-lambdas/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">浅析枚举
+          <h1 class="post-title" itemprop="name headline">读书 |《Java 8函数式编程》
               
             
           </h1>
@@ -373,24 +373,12 @@
                 
               
 
-              <time title="创建时间：2018-08-14 22:56:15" itemprop="dateCreated datePublished" datetime="2018-08-14T22:56:15+08:00">2018-08-14</time>
+              <time title="创建时间：2018-08-20 22:33:47 / 修改时间：23:03:50" itemprop="dateCreated datePublished" datetime="2018-08-20T22:33:47+08:00">2018-08-20</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-08-15 00:01:00" itemprop="dateModified" datetime="2018-08-15T00:01:00+08:00">2018-08-15</time>
               
             
           </span>
@@ -407,7 +395,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/读书/" itemprop="url" rel="index"><span itemprop="name">读书</span></a></span>
 
                 
                 
@@ -422,9 +410,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/14/2018-08-14-java-enum/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/20/2018-08-20-reading-java-8-lambdas/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/14/2018-08-14-java-enum/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/20/2018-08-20-reading-java-8-lambdas/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -452,19 +440,18 @@
       
 
       
-        <p>说来惭愧，自己平时写代码很少用枚举，最近检视同事代码，发现使用了很多枚举，就回顾了下枚举的基本用法，并简单了解了下枚举的实现原理。</p>
-<h2 id="int-enum-pattern-和-string-enum-pattern"><a href="#int-enum-pattern-和-string-enum-pattern" class="headerlink" title="int enum pattern 和 string enum pattern"></a>int enum pattern 和 string enum pattern</h2><p>在 Java 支持 <code>Enum</code> 前，</p>
-<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>枚举最常见的用法是定义常量，例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Week &#123;</span><br><span class="line">    Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(Week.Monday);  <span class="comment">// Monday</span></span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>如果不用枚举，则要么用 <code>public static final int</code> 要么用 <code>public static final String</code>，功能肯定能实现，可读性就差了点。</p>
-<p>为 <code>Week</code> 添加两个字段，添加构造函数：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Week &#123;</span><br><span class="line">    Monday(<span class="string">"work day"</span>, <span class="number">1</span>),</span><br><span class="line">    Tuesday(<span class="string">"work day"</span>, <span class="number">2</span>),</span><br><span class="line">    Wednesday(<span class="string">"work day"</span>, <span class="number">3</span>),</span><br><span class="line">    Thursday(<span class="string">"work day"</span>, <span class="number">4</span>),</span><br><span class="line">    Friday(<span class="string">"work day"</span>, <span class="number">5</span>),</span><br><span class="line">    Saturday(<span class="string">"rest day"</span>, <span class="number">6</span>),</span><br><span class="line">    Sunday(<span class="string">"rest day"</span>, <span class="number">7</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String description;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> n;</span><br><span class="line"></span><br><span class="line">    Week(String description, <span class="keyword">int</span> n) &#123;</span><br><span class="line">        <span class="keyword">this</span>.description = description;</span><br><span class="line">        <span class="keyword">this</span>.n = n;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Week&#123;"</span> + <span class="string">"description='"</span> + description + <span class="string">'\''</span> + <span class="string">", n="</span> + n + <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(Week.Monday);  <span class="comment">// Week&#123;description='work day', n=1&#125;</span></span><br></pre></td></tr></table></figure>
+        <p>近年来函数式编程语言迎来了一次小爆发，热的发紫的 Spark 是用 Scala 实现的，Storm 是用 Coujure 实现的，Jetbrains 家的 Kotlin 也在紧锣密鼓的攻城略地，这些新型语言可利用庞大的 Java 生态系统，并且在语言特性上大大超越了保守的原住民 Java，程序员们当然快活，但 Java 却坐不住了，于是有了 Java 8 大刀阔斧的进步。</p>
+<p>在我看来，Java 8 最重要的新特性包括：</p>
 <ul>
-<li><code>Sunday</code> 后面必须添加 <code>;</code></li>
-<li><code>Week</code> 构造函数默认为 <code>private</code>，用户不能直接调用</li>
-<li>如果想要获取 <code>description</code> 和 <code>n</code> 需要自行添加 getter 方法</li>
+<li>lambda 表达式（包括用 lambda 表达式增强的集合框架）</li>
+<li><code>Optional</code></li>
+<li><code>Stream</code></li>
+<li><code>CompletableFuture</code></li>
 </ul>
+<p>说是新特性其实很勉强，因为 Java 8 早在 2014 年 3 月就发布了，而且 Java 9 在去年 9 月份也发布了，广大吃瓜群主肯定吃了一惊，哈哈。</p>
+<p>回到本书，作为一本不到 150 页的小书，<a href="https://book.douban.com/subject/26346017/" target="_blank" rel="noopener">Java 8函数式编程</a> 对以上 4 点特性都有介绍，尤其 lambda 表达式和 <code>Stream</code> 接口，<code>Optional</code> 和 <code>CompletableFuture</code> 相对着墨不多，当然这并不意味它们不重要，相反，这两者相当常用，<code>Optional</code> 可以帮助消除臭名昭著的 NPE，<code>CompletableFuture</code> 则是语言内置的异步编程工具，且作为一个 monad，具备极强的可组合性，非常实用！</p>
+<p>除语言特性外，第七章还介绍了如何调试、测试 lambda 表达式和 <code>Stream</code>，第八章介绍了新特性是如何影响程序设计的，包括对设计模式的影响、如何实现 DSL以及如何表达 SOLID 原则，这部分让我受益较大。</p>
+<p>综合来看，全书篇幅虽短，但讲解全面、内容实用，非常值得一读。</p>
 
       
     </div>
@@ -487,7 +474,7 @@
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/Enum/" rel="tag"># Enum</a>
+            <a href="/tags/fp/" rel="tag"># fp</a>
           
         </div>
       
@@ -500,8 +487,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/14/2018-08-14-source-code-reading-executor/" rel="next" title="源码夜读 | Executor">
-                <i class="fa fa-chevron-left"></i> 源码夜读 | Executor
+              <a href="/2018/08/18/2018-08-18-java-8-functional-programming/" rel="next" title="Java 8 Stream 入门">
+                <i class="fa fa-chevron-left"></i> Java 8 Stream 入门
               </a>
             
           </div>
@@ -509,10 +496,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/08/18/2018-08-18-java-8-functional-programming/" rel="prev" title="Java 8 函数式编程">
-                Java 8 函数式编程 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -571,17 +554,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -738,7 +712,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-count">52</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -778,22 +752,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#int-enum-pattern-和-string-enum-pattern"><span class="nav-number">1.</span> <span class="nav-text">int enum pattern 和 string enum pattern</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本用法"><span class="nav-number">2.</span> <span class="nav-text">基本用法</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -962,9 +920,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/08/14/2018-08-14-java-enum/';
-        this.page.identifier = '2018/08/14/2018-08-14-java-enum/';
-        this.page.title = '浅析枚举';
+        this.page.url = 'http://songkun.me/2018/08/20/2018-08-20-reading-java-8-lambdas/';
+        this.page.identifier = '2018/08/20/2018-08-20-reading-java-8-lambdas/';
+        this.page.title = '读书 |《Java 8函数式编程》';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');

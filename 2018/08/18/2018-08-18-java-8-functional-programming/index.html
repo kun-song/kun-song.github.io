@@ -120,18 +120,18 @@
 
 
   <meta name="description" content="面向对象编程是对 数据 进行抽象，函数式编程是对 行为 进行抽象，现实世界中数据与行为并存，为不同的任务选择合适的抽象方式，两全其美。 通常而言，函数式代码在 效率 上不是最优的，但可读性比面向对象代码好，如今处理器性能已经过剩，若不是特别关注效率的场景，则可读性优先。 虽然 Java 8 对 FP 支持偏薄弱，例如不支持惰性求值、不可变数据结构、typeclass 等，但相比以前，已经大大进步了">
-<meta name="keywords" content="fp,Java">
+<meta name="keywords" content="Java,fp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java 8 函数式编程">
+<meta property="og:title" content="Java 8 Stream 入门">
 <meta property="og:url" content="http://songkun.me/2018/08/18/2018-08-18-java-8-functional-programming/index.html">
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="面向对象编程是对 数据 进行抽象，函数式编程是对 行为 进行抽象，现实世界中数据与行为并存，为不同的任务选择合适的抽象方式，两全其美。 通常而言，函数式代码在 效率 上不是最优的，但可读性比面向对象代码好，如今处理器性能已经过剩，若不是特别关注效率的场景，则可读性优先。 虽然 Java 8 对 FP 支持偏薄弱，例如不支持惰性求值、不可变数据结构、typeclass 等，但相比以前，已经大大进步了">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://songkun.me/images/java-8-lambdas/outer-iteration.png">
 <meta property="og:image" content="http://songkun.me/images/java-8-lambdas/inner-iteration.png">
-<meta property="og:updated_time" content="2018-08-19T15:18:18.702Z">
+<meta property="og:updated_time" content="2018-08-20T14:32:20.505Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 8 函数式编程">
+<meta name="twitter:title" content="Java 8 Stream 入门">
 <meta name="twitter:description" content="面向对象编程是对 数据 进行抽象，函数式编程是对 行为 进行抽象，现实世界中数据与行为并存，为不同的任务选择合适的抽象方式，两全其美。 通常而言，函数式代码在 效率 上不是最优的，但可读性比面向对象代码好，如今处理器性能已经过剩，若不是特别关注效率的场景，则可读性优先。 虽然 Java 8 对 FP 支持偏薄弱，例如不支持惰性求值、不可变数据结构、typeclass 等，但相比以前，已经大大进步了">
 <meta name="twitter:image" content="http://songkun.me/images/java-8-lambdas/outer-iteration.png">
 
@@ -150,7 +150,7 @@
   };
 </script>
 
-  <title>Java 8 函数式编程 | 随便写写</title>
+  <title>Java 8 Stream 入门 | 随便写写</title>
   
 
 
@@ -351,7 +351,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java 8 函数式编程
+          <h1 class="post-title" itemprop="name headline">Java 8 Stream 入门
               
             
           </h1>
@@ -393,7 +393,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-19 23:18:18" itemprop="dateModified" datetime="2018-08-19T23:18:18+08:00">2018-08-19</time>
+                <time title="修改时间：2018-08-20 22:32:20" itemprop="dateModified" datetime="2018-08-20T22:32:20+08:00">2018-08-20</time>
               
             
           </span>
@@ -780,14 +780,12 @@
 <p>更新数组，将每个元素替换为新值，新值由 <code>IntBinaryOperator</code> 函数计算而得，以 <strong>当前元素</strong> 以及 <strong>前驱元素</strong> 为参数。</p>
 <p>求滑动平均值：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span>[] simpleMovingAverage(<span class="keyword">double</span>[] values, <span class="keyword">int</span> n) &#123;</span><br><span class="line">    <span class="keyword">double</span>[] sums = Arrays.copyOf(values, values.length);</span><br><span class="line">    􏰐Arrays.parallelPrefix(sums, Double::sum);</span><br><span class="line">    <span class="keyword">int</span> start = n - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> IntStream.range(start, sums.length)</span><br><span class="line">                    .mapToDouble(i -&gt; &#123;</span><br><span class="line">                        <span class="keyword">double</span> prefix = i == start ? <span class="number">0</span> : sums[i - n];</span><br><span class="line">                        <span class="keyword">return</span> (sums[i] - prefix) / n;</span><br><span class="line">                    &#125;)</span><br><span class="line">                    .toArray();􏰔</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="测试、调试与重构"><a href="#测试、调试与重构" class="headerlink" title="测试、调试与重构"></a>测试、调试与重构</h2><p>// TODO</p>
-<p><code>peek</code>：</p>
+<h2 id="测试、调试与重构"><a href="#测试、调试与重构" class="headerlink" title="测试、调试与重构"></a>测试、调试与重构</h2><p><code>peek</code>：</p>
 <ul>
 <li>强行打印日志，而不结束流（<code>map</code> 之类的方法是 lazy 求值，无法在其中打印日志，<code>forEach</code> 可以打印日志，但它是终止方法，导致流无法继续使用，因此使用 <code>peek</code>）；</li>
 <li><code>peek</code> 中可以添加断点，此时 <code>peek</code> 参数方法可以为空，或是简单的 <code>i -&gt; i</code>；</li>
 </ul>
-<h2 id="设计和架构的原则"><a href="#设计和架构的原则" class="headerlink" title="设计和架构的原则"></a>设计和架构的原则</h2><p>// TODO</p>
-<h2 id="使用-lambda-表达式编写并发程序"><a href="#使用-lambda-表达式编写并发程序" class="headerlink" title="使用 lambda 表达式编写并发程序"></a>使用 lambda 表达式编写并发程序</h2>
+
       
     </div>
 
@@ -807,9 +805,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/fp/" rel="tag"># fp</a>
-          
             <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/fp/" rel="tag"># fp</a>
           
         </div>
       
@@ -822,8 +820,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/14/2018-08-14-java-enum/" rel="next" title="浅析枚举">
-                <i class="fa fa-chevron-left"></i> 浅析枚举
+              <a href="/2018/08/14/2018-08-14-source-code-reading-executor/" rel="next" title="源码夜读 | Executor">
+                <i class="fa fa-chevron-left"></i> 源码夜读 | Executor
               </a>
             
           </div>
@@ -831,6 +829,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/20/2018-08-20-reading-java-8-lambdas/" rel="prev" title="读书 |《Java 8函数式编程》">
+                读书 |《Java 8函数式编程》 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -1056,7 +1058,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-count">52</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1106,7 +1108,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#lambda-表达式"><span class="nav-number">1.</span> <span class="nav-text">lambda 表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#final-变量"><span class="nav-number">1.1.</span> <span class="nav-text">final 变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数接口"><span class="nav-number">1.2.</span> <span class="nav-text">函数接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">1.3.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流"><span class="nav-number">2.</span> <span class="nav-text">流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#外部迭代-vs-内部迭代"><span class="nav-number">2.1.</span> <span class="nav-text">外部迭代 vs 内部迭代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现机制"><span class="nav-number">2.2.</span> <span class="nav-text">实现机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用函数"><span class="nav-number">2.3.</span> <span class="nav-text">常用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#collect-toList"><span class="nav-number">2.3.1.</span> <span class="nav-text">collect(toList())</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#map"><span class="nav-number">2.3.2.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#filter"><span class="nav-number">2.3.3.</span> <span class="nav-text">filter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flatMap"><span class="nav-number">2.3.4.</span> <span class="nav-text">flatMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#max-和-min"><span class="nav-number">2.3.5.</span> <span class="nav-text">max 和 min</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reduce"><span class="nav-number">2.3.6.</span> <span class="nav-text">reduce</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#返回-Stream-的方法"><span class="nav-number">2.3.7.</span> <span class="nav-text">返回 Stream 的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多次调用-Stream-操作"><span class="nav-number">2.3.8.</span> <span class="nav-text">多次调用 Stream 操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#练习"><span class="nav-number">2.3.9.</span> <span class="nav-text">练习</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类库"><span class="nav-number">3.</span> <span class="nav-text">类库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原始类型"><span class="nav-number">3.1.</span> <span class="nav-text">原始类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重载解析"><span class="nav-number">3.2.</span> <span class="nav-text">重载解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FunctionalInterface"><span class="nav-number">3.3.</span> <span class="nav-text">@FunctionalInterface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向后兼容"><span class="nav-number">3.4.</span> <span class="nav-text">向后兼容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认方法"><span class="nav-number">3.5.</span> <span class="nav-text">默认方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#默认方法和子类"><span class="nav-number">3.5.1.</span> <span class="nav-text">默认方法和子类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多重继承"><span class="nav-number">3.6.</span> <span class="nav-text">多重继承</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#三定律"><span class="nav-number">3.6.1.</span> <span class="nav-text">三定律</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#权衡"><span class="nav-number">3.7.</span> <span class="nav-text">权衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口的静态方法"><span class="nav-number">3.8.</span> <span class="nav-text">接口的静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Optional"><span class="nav-number">3.9.</span> <span class="nav-text">Optional</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高级集合类和收集器"><span class="nav-number">4.</span> <span class="nav-text">高级集合类和收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法引用"><span class="nav-number">4.1.</span> <span class="nav-text">方法引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元素顺序"><span class="nav-number">4.2.</span> <span class="nav-text">元素顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#收集器"><span class="nav-number">4.3.</span> <span class="nav-text">收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#生成其他集合"><span class="nav-number">4.3.1.</span> <span class="nav-text">生成其他集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生成值"><span class="nav-number">4.3.2.</span> <span class="nav-text">生成值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据分块"><span class="nav-number">4.3.3.</span> <span class="nav-text">数据分块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据分组"><span class="nav-number">4.3.4.</span> <span class="nav-text">数据分组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串"><span class="nav-number">4.3.5.</span> <span class="nav-text">字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组合收集器"><span class="nav-number">4.3.6.</span> <span class="nav-text">组合收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义收集器"><span class="nav-number">4.3.7.</span> <span class="nav-text">自定义收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通用的-reduce"><span class="nav-number">4.3.8.</span> <span class="nav-text">通用的 reduce</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些细节"><span class="nav-number">4.4.</span> <span class="nav-text">一些细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#练习-1"><span class="nav-number">4.5.</span> <span class="nav-text">练习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-找出名字最长的艺术家"><span class="nav-number">4.5.1.</span> <span class="nav-text">1. 找出名字最长的艺术家</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-每个名字的出现次数"><span class="nav-number">4.5.2.</span> <span class="nav-text">2. 每个名字的出现次数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-使用-computeIfAbsent-高效的计算斐波那契数列"><span class="nav-number">4.5.3.</span> <span class="nav-text">3. 使用 computeIfAbsent 高效的计算斐波那契数列</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据并行化"><span class="nav-number">5.</span> <span class="nav-text">数据并行化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#并行化流操作"><span class="nav-number">5.1.</span> <span class="nav-text">并行化流操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能"><span class="nav-number">5.2.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并行化数组操作"><span class="nav-number">5.3.</span> <span class="nav-text">并行化数组操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#parallelSetAll"><span class="nav-number">5.3.1.</span> <span class="nav-text">parallelSetAll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#parallelPrefix"><span class="nav-number">5.3.2.</span> <span class="nav-text">parallelPrefix</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试、调试与重构"><span class="nav-number">6.</span> <span class="nav-text">测试、调试与重构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计和架构的原则"><span class="nav-number">7.</span> <span class="nav-text">设计和架构的原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-lambda-表达式编写并发程序"><span class="nav-number">8.</span> <span class="nav-text">使用 lambda 表达式编写并发程序</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#lambda-表达式"><span class="nav-number">1.</span> <span class="nav-text">lambda 表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#final-变量"><span class="nav-number">1.1.</span> <span class="nav-text">final 变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数接口"><span class="nav-number">1.2.</span> <span class="nav-text">函数接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">1.3.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流"><span class="nav-number">2.</span> <span class="nav-text">流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#外部迭代-vs-内部迭代"><span class="nav-number">2.1.</span> <span class="nav-text">外部迭代 vs 内部迭代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现机制"><span class="nav-number">2.2.</span> <span class="nav-text">实现机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用函数"><span class="nav-number">2.3.</span> <span class="nav-text">常用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#collect-toList"><span class="nav-number">2.3.1.</span> <span class="nav-text">collect(toList())</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#map"><span class="nav-number">2.3.2.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#filter"><span class="nav-number">2.3.3.</span> <span class="nav-text">filter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flatMap"><span class="nav-number">2.3.4.</span> <span class="nav-text">flatMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#max-和-min"><span class="nav-number">2.3.5.</span> <span class="nav-text">max 和 min</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reduce"><span class="nav-number">2.3.6.</span> <span class="nav-text">reduce</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#返回-Stream-的方法"><span class="nav-number">2.3.7.</span> <span class="nav-text">返回 Stream 的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多次调用-Stream-操作"><span class="nav-number">2.3.8.</span> <span class="nav-text">多次调用 Stream 操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#练习"><span class="nav-number">2.3.9.</span> <span class="nav-text">练习</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类库"><span class="nav-number">3.</span> <span class="nav-text">类库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原始类型"><span class="nav-number">3.1.</span> <span class="nav-text">原始类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重载解析"><span class="nav-number">3.2.</span> <span class="nav-text">重载解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FunctionalInterface"><span class="nav-number">3.3.</span> <span class="nav-text">@FunctionalInterface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向后兼容"><span class="nav-number">3.4.</span> <span class="nav-text">向后兼容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认方法"><span class="nav-number">3.5.</span> <span class="nav-text">默认方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#默认方法和子类"><span class="nav-number">3.5.1.</span> <span class="nav-text">默认方法和子类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多重继承"><span class="nav-number">3.6.</span> <span class="nav-text">多重继承</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#三定律"><span class="nav-number">3.6.1.</span> <span class="nav-text">三定律</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#权衡"><span class="nav-number">3.7.</span> <span class="nav-text">权衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口的静态方法"><span class="nav-number">3.8.</span> <span class="nav-text">接口的静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Optional"><span class="nav-number">3.9.</span> <span class="nav-text">Optional</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高级集合类和收集器"><span class="nav-number">4.</span> <span class="nav-text">高级集合类和收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法引用"><span class="nav-number">4.1.</span> <span class="nav-text">方法引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元素顺序"><span class="nav-number">4.2.</span> <span class="nav-text">元素顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#收集器"><span class="nav-number">4.3.</span> <span class="nav-text">收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#生成其他集合"><span class="nav-number">4.3.1.</span> <span class="nav-text">生成其他集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生成值"><span class="nav-number">4.3.2.</span> <span class="nav-text">生成值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据分块"><span class="nav-number">4.3.3.</span> <span class="nav-text">数据分块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据分组"><span class="nav-number">4.3.4.</span> <span class="nav-text">数据分组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串"><span class="nav-number">4.3.5.</span> <span class="nav-text">字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组合收集器"><span class="nav-number">4.3.6.</span> <span class="nav-text">组合收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义收集器"><span class="nav-number">4.3.7.</span> <span class="nav-text">自定义收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通用的-reduce"><span class="nav-number">4.3.8.</span> <span class="nav-text">通用的 reduce</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些细节"><span class="nav-number">4.4.</span> <span class="nav-text">一些细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#练习-1"><span class="nav-number">4.5.</span> <span class="nav-text">练习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-找出名字最长的艺术家"><span class="nav-number">4.5.1.</span> <span class="nav-text">1. 找出名字最长的艺术家</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-每个名字的出现次数"><span class="nav-number">4.5.2.</span> <span class="nav-text">2. 每个名字的出现次数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-使用-computeIfAbsent-高效的计算斐波那契数列"><span class="nav-number">4.5.3.</span> <span class="nav-text">3. 使用 computeIfAbsent 高效的计算斐波那契数列</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据并行化"><span class="nav-number">5.</span> <span class="nav-text">数据并行化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#并行化流操作"><span class="nav-number">5.1.</span> <span class="nav-text">并行化流操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能"><span class="nav-number">5.2.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并行化数组操作"><span class="nav-number">5.3.</span> <span class="nav-text">并行化数组操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#parallelSetAll"><span class="nav-number">5.3.1.</span> <span class="nav-text">parallelSetAll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#parallelPrefix"><span class="nav-number">5.3.2.</span> <span class="nav-text">parallelPrefix</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试、调试与重构"><span class="nav-number">6.</span> <span class="nav-text">测试、调试与重构</span></a></li></ol></div>
             
 
           </div>
@@ -1282,7 +1284,7 @@
       var disqus_config = function () {
         this.page.url = 'http://songkun.me/2018/08/18/2018-08-18-java-8-functional-programming/';
         this.page.identifier = '2018/08/18/2018-08-18-java-8-functional-programming/';
-        this.page.title = 'Java 8 函数式编程';
+        this.page.title = 'Java 8 Stream 入门';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
