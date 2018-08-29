@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2018/08/29/2018-08-29-reading-java-concurrency-in-practice/</loc>
+    
+    <lastmod>2018-08-29T16:23:20.361Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/08/20/2018-08-20-reading-java-8-lambdas/</loc>
     
-    <lastmod>2018-08-20T15:14:22.147Z</lastmod>
+    <lastmod>2018-08-20T15:38:13.942Z</lastmod>
     
   </url>
   
@@ -289,7 +296,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
+    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -297,13 +304,6 @@
   
   <url>
     <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -324,7 +324,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
+    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -332,6 +332,13 @@
   
   <url>
     <loc>http://songkun.me/2018/05/16/scala-anonymous-function/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -366,7 +373,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -374,13 +388,6 @@
   
   <url>
     <loc>http://songkun.me/categories/index.html</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
