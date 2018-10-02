@@ -20,6 +20,8 @@ MongoDB 索引由 key 和 data page 两部分组成：
 
 数据库中的索引（index）非常像书本的“索引”，作用是加速读操作，key 类似书本索引的关键字，而 data page 类似页码。
 
+<!-- more -->
+
 ### covered query/fetch
 
 一般而言，读操作分为两步：
