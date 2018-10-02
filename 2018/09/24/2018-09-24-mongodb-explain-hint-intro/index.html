@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="explain 和 hint 是最常用的 MongoDB 性能调优工具，本文简单总结下两者的使用。 explainexplain() 是 MongoDB 最重要的性能诊断工具之一，借助 explain 可以获取很多查询语句的执行信息。 对于任何查询语句，最后 都可以添加 explain 函数，例如：">
+<meta name="keywords" content="MongoDB,索引,explain,hint">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB | explain 与 hint">
+<meta property="og:url" content="http://songkun.me/2018/09/24/2018-09-24-mongodb-explain-hint-intro/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="explain 和 hint 是最常用的 MongoDB 性能调优工具，本文简单总结下两者的使用。 explainexplain() 是 MongoDB 最重要的性能诊断工具之一，借助 explain 可以获取很多查询语句的执行信息。 对于任何查询语句，最后 都可以添加 explain 函数，例如：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-10-02T15:54:30.921Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB | explain 与 hint">
+<meta name="twitter:description" content="explain 和 hint 是最常用的 MongoDB 性能调优工具，本文简单总结下两者的使用。 explainexplain() 是 MongoDB 最重要的性能诊断工具之一，借助 explain 可以获取很多查询语句的执行信息。 对于任何查询语句，最后 都可以添加 explain 函数，例如：">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/09/24/2018-09-24-mongodb-explain-hint-intro/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>MongoDB | explain 与 hint | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/09/24/2018-09-24-mongodb-explain-hint-intro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MongoDB | explain 与 hint
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-24 23:18:03" itemprop="dateCreated datePublished" datetime="2018-09-24T23:18:03+08:00">2018-09-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-02 23:54:30" itemprop="dateModified" datetime="2018-10-02T23:54:30+08:00">2018-10-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/24/2018-09-24-mongodb-explain-hint-intro/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/24/2018-09-24-mongodb-explain-hint-intro/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>explain</code> 和 <code>hint</code> 是最常用的 MongoDB 性能调优工具，本文简单总结下两者的使用。</p>
+<h2 id="explain"><a href="#explain" class="headerlink" title="explain"></a><code>explain</code></h2><p><code>explain()</code> 是 MongoDB 最重要的性能诊断工具之一，借助 <code>explain</code> 可以获取很多查询语句的执行信息。</p>
+<p>对于任何查询语句，<strong>最后</strong> 都可以添加 <code>explain</code> 函数，例如：</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.users.find(&#123;&quot;age&quot; : 42&#125;).explain()</span><br><span class="line">&#123;</span><br><span class="line">    &quot;cursor&quot;:&quot;BtreeCursor age_1_username_1&quot;,</span><br><span class="line">    &quot;isMultiKey&quot;:false,</span><br><span class="line">    &quot;n&quot;:8332,</span><br><span class="line">    &quot;nscannedObjects&quot;:8332,</span><br><span class="line">    &quot;nscanned&quot;:8332,</span><br><span class="line">    &quot;nscannedObjectsAllPlans&quot;:8332,</span><br><span class="line">    &quot;nscannedAllPlans&quot;:8332,</span><br><span class="line">    &quot;scanAndOrder&quot;:false,</span><br><span class="line">    &quot;indexOnly&quot;:false,</span><br><span class="line">    &quot;nYields&quot;:0,</span><br><span class="line">    &quot;nChunkSkips&quot;:0,</span><br><span class="line">    &quot;millis&quot;:91,</span><br><span class="line">    &quot;indexBounds&quot;:&#123;</span><br><span class="line">        &quot;age&quot;:[</span><br><span class="line">            [</span><br><span class="line">                42,</span><br><span class="line">                42</span><br><span class="line">            ]</span><br><span class="line">        ],</span><br><span class="line">        &quot;username&quot;:[</span><br><span class="line">            [</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;$minElement&quot;:1</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;$maxElement&quot;:1</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;server&quot;:&quot;ubuntu:27017&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面介绍其中的关键字段。</p>
+<h3 id="cursor"><a href="#cursor" class="headerlink" title="cursor"></a><code>cursor</code></h3><p>从 <code>cursor</code> 字段可以看出该查询是否 <strong>命中索引</strong>：</p>
+<ul>
+<li><code>BasicCursor</code>：未命中</li>
+<li><code>BtreeCursor</code>：命中</li>
+</ul>
+<p>且命中索引是 <code>BtreeCursor</code> 后面跟随命中的索引名字，例如 <code>age_1_username_1</code>。</p>
+<h3 id="millis"><a href="#millis" class="headerlink" title="millis"></a><code>millis</code></h3><p><code>millis</code> 为该查询的执行时间，单位为 ms。</p>
+<h3 id="n"><a href="#n" class="headerlink" title="n"></a><code>n</code></h3><p><code>n</code> 是实际返回的文档数量，即结果集的数量。</p>
+<h3 id="nscanned-与-nscannedObjects"><a href="#nscanned-与-nscannedObjects" class="headerlink" title="nscanned 与 nscannedObjects"></a><code>nscanned</code> 与 <code>nscannedObjects</code></h3><p>这两个字段代表为完成该查询，MongoDB 背后做的实际工作量：</p>
+<ul>
+<li><code>nscanned</code>：MongoDB 搜索的 index entry 数量；</li>
+<li><code>nscannedObjects</code>：MongoDB 搜索的文档数量；</li>
+</ul>
+<h3 id="scanAndOrder"><a href="#scanAndOrder" class="headerlink" title="scanAndOrder"></a><code>scanAndOrder</code></h3><p><code>scanAndOrder</code> 表示是否需要内存排序：</p>
+<ul>
+<li><code>true</code> 表明无法借助索引排序，只能对结果集进行 <strong>内存排序</strong>；</li>
+<li><code>false</code> 表明可借助索引排序；</li>
+</ul>
+<p>内存排序非常慢，且只能用于小数据集，默认情况下，MongoDB 只能对小于 128M 的数据进行内存排序。</p>
+<h3 id="indexOnly"><a href="#indexOnly" class="headerlink" title="indexOnly"></a><code>indexOnly</code></h3><p><code>indexOnly</code> 表示该查询是否被索引覆盖：</p>
+<ul>
+<li><code>true</code> 表明该查询可以直接在索引中获取结果，无需 fetch 磁盘上的实际文档；</li>
+</ul>
+<p>索引覆盖需要满足两个条件：</p>
+<ul>
+<li>索引中包含想要的字段；</li>
+<li>查询不需要返回其他字段（通过 <code>find({}, {_id: 0, username: 1, age: 1})</code> 指定）</li>
+</ul>
+<h3 id="nYields"><a href="#nYields" class="headerlink" title="nYields"></a><code>nYields</code></h3><p>该查询“让出”（yield）资源，让其他写操作先执行的让出次数。</p>
+<p>一般由于该查询无法立刻完成导致，例如内存不足无法容纳全部索引，导致该查询所需索引需要从硬盘加载。</p>
+<h3 id="indexBounds"><a href="#indexBounds" class="headerlink" title="indexBounds"></a><code>indexBounds</code></h3><p><code>indexBounds</code> 代表索引的使用情况，包含被检索的索引的范围：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&quot;indexBounds&quot;:&#123;</span><br><span class="line">    &quot;age&quot;:[</span><br><span class="line">        [</span><br><span class="line">            42,</span><br><span class="line">            42</span><br><span class="line">        ]</span><br><span class="line">    ],</span><br><span class="line">    &quot;username&quot;:[</span><br><span class="line">        [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;$minElement&quot;:1</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;$maxElement&quot;:1</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为 <code>db.users.find({&quot;age&quot; : 42})</code> 中 <code>age</code> 为精确匹配，所以其上下界都是 42，且没有使用索引第二个字段，所以 <code>username</code> 上下界为最大、最小元素。</p>
+<h2 id="hint"><a href="#hint" class="headerlink" title="hint"></a><code>hint</code></h2><p><code>hint</code> 可强制 MongoDB 使用指定的索引进行查询，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.test.find(&#123;&apos;age&apos;: 14, username: /.*/&#125;).hint(&apos;username&apos;: 1, &apos;age&apos;: 1)</span><br></pre></td></tr></table></figure>
+<p>但 MongoDB 自动选择的索引一般就是最优解，<code>hint</code> 一般用来辅助调优，所以 <code>hint</code> 后一般跟 <code>explain</code>。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MongoDB/" rel="tag"># MongoDB</a>
+          
+            <a href="/tags/索引/" rel="tag"># 索引</a>
+          
+            <a href="/tags/explain/" rel="tag"># explain</a>
+          
+            <a href="/tags/hint/" rel="tag"># hint</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/23/2018-09-23-mongodb-index/" rel="next" title="MongoDB | 索引">
+                <i class="fa fa-chevron-left"></i> MongoDB | 索引
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/02/2018-10-02-reading-making-sense-of-stream-processing/" rel="prev" title="读书 | Making Sense of Stream Processing">
+                读书 | Making Sense of Stream Processing <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#explain"><span class="nav-number">1.</span> <span class="nav-text">explain</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cursor"><span class="nav-number">1.1.</span> <span class="nav-text">cursor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#millis"><span class="nav-number">1.2.</span> <span class="nav-text">millis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#n"><span class="nav-number">1.3.</span> <span class="nav-text">n</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nscanned-与-nscannedObjects"><span class="nav-number">1.4.</span> <span class="nav-text">nscanned 与 nscannedObjects</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scanAndOrder"><span class="nav-number">1.5.</span> <span class="nav-text">scanAndOrder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#indexOnly"><span class="nav-number">1.6.</span> <span class="nav-text">indexOnly</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nYields"><span class="nav-number">1.7.</span> <span class="nav-text">nYields</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#indexBounds"><span class="nav-number">1.8.</span> <span class="nav-text">indexBounds</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hint"><span class="nav-number">2.</span> <span class="nav-text">hint</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/09/24/2018-09-24-mongodb-explain-hint-intro/';
+        this.page.identifier = '2018/09/24/2018-09-24-mongodb-explain-hint-intro/';
+        this.page.title = 'MongoDB | explain 与 hint';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

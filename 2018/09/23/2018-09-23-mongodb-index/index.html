@@ -488,9 +488,9 @@
 <h3 id="query-shape"><a href="#query-shape" class="headerlink" title="query shape"></a>query shape</h3><p><a href="https://docs.mongodb.com/manual/reference/glossary/#term-query-shape" target="_blank" rel="noopener">query shape</a> 决定 <a href="https://docs.mongodb.com/manual/core/query-plans/" target="_blank" rel="noopener">query plan</a>。</p>
 <p>例如 <code>db.test.find({name: &quot;Mike&quot;, age: 10})</code> 和 <code>db.test.find({name: &quot;Bob&quot;, age: 20})</code> 的 query shape 相同，都是 <code>{name: 1, age: 1}</code>，因此这两个查询的 query plan 也相同，将使用相同的 index 加速查询。</p>
 <h3 id="index-prefix"><a href="#index-prefix" class="headerlink" title="index prefix"></a>index prefix</h3><p>复合索引有索引前缀的概念，例如：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">db</span><span class="selector-class">.test</span><span class="selector-class">.createIndex</span>(&#123;<span class="attribute">firstName</span>: <span class="number">1</span>, lastName: <span class="number">1</span>, gender: <span class="number">1</span>, age: <span class="number">1</span>&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.test.createIndex(&#123;firstName: 1, lastName: 1, gender: 1, age: 1&#125;)</span><br></pre></td></tr></table></figure>
 <p>以上索引有 3 个前缀：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attribute">firstName</span>: <span class="number">1</span>&#125;</span><br><span class="line">&#123;<span class="attribute">firstName</span>: <span class="number">1</span>, lastName: <span class="number">1</span>&#125;</span><br><span class="line">&#123;<span class="attribute">firstName</span>: <span class="number">1</span>, lastName: <span class="number">1</span>, age: <span class="number">1</span>&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;firstName: 1&#125;</span><br><span class="line">&#123;firstName: 1, lastName: 1&#125;</span><br><span class="line">&#123;firstName: 1, lastName: 1, age: 1&#125;</span><br></pre></td></tr></table></figure>
 <p>以上 3 个索引都是 <code>{firstName: 1, lastName: 1, gender: 1, age: 1}</code> 的前缀，将被其覆盖，没有必要单独创建，以避免浪费内存、磁盘空间。</p>
 <h3 id="selectivity"><a href="#selectivity" class="headerlink" title="selectivity"></a>selectivity</h3><p>过滤性是指 index 过滤数据的能力，创建索引时，过滤性是重要的参考依据。</p>
 <p>假设集合中有 10000 条文档，且：</p>
@@ -531,10 +531,10 @@
 <p>区别是插入时，维护数组的有序性代价非常高，而 B 树代价相对较低，因此数据库一般用 B 树实现数组。</p>
 <p>虽然实际是用 B 树实现的，但可以用数组来讲解。</p>
 <h4 id="单字段索引"><a href="#单字段索引" class="headerlink" title="单字段索引"></a>单字段索引</h4><p>索引 <code>{a: 1}</code>：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">db</span><span class="selector-class">.test</span><span class="selector-class">.insert</span>(&#123;<span class="attribute">a</span>: <span class="number">1</span>&#125;)    <span class="selector-attr">[1]</span></span><br><span class="line"><span class="selector-tag">db</span><span class="selector-class">.test</span><span class="selector-class">.insert</span>(&#123;<span class="attribute">a</span>: <span class="number">10</span>&#125;)   <span class="selector-attr">[1, 10]</span></span><br><span class="line"><span class="selector-tag">db</span><span class="selector-class">.test</span><span class="selector-class">.insert</span>(&#123;<span class="attribute">a</span>: <span class="number">5</span>&#125;)    <span class="selector-attr">[1, 5, 10]</span></span><br><span class="line"><span class="selector-tag">db</span><span class="selector-class">.test</span><span class="selector-class">.insert</span>(&#123;<span class="attribute">a</span>: <span class="number">7</span>&#125;)    <span class="selector-attr">[1, 5, 7, 10]</span></span><br><span class="line"><span class="selector-tag">db</span><span class="selector-class">.test</span><span class="selector-class">.insert</span>(&#123;<span class="attribute">a</span>: <span class="number">3</span>&#125;)    <span class="selector-attr">[1, 3, 5, 7, 10]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">db.test.insert(&#123;a: 1&#125;)    [1]</span><br><span class="line">db.test.insert(&#123;a: 10&#125;)   [1, 10]</span><br><span class="line">db.test.insert(&#123;a: 5&#125;)    [1, 5, 10]</span><br><span class="line">db.test.insert(&#123;a: 7&#125;)    [1, 5, 7, 10]</span><br><span class="line">db.test.insert(&#123;a: 3&#125;)    [1, 3, 5, 7, 10]</span><br></pre></td></tr></table></figure>
 <p>当插入、删除元素时，索引总是 <strong>保持有序</strong>，因为在有序 B 树/数组上，可以采用注入二分查找等算法，可以达到 O(logn) 的时间复杂度。</p>
 <h4 id="复合索引"><a href="#复合索引" class="headerlink" title="复合索引"></a>复合索引</h4><p>索引 <code>{a: 1, b: 1}</code>：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db<span class="selector-class">.test</span><span class="selector-class">.insert</span>(&#123;<span class="selector-tag">a</span>: <span class="number">1</span>, <span class="selector-tag">b</span>: <span class="number">1</span>&#125;)    [&#123;<span class="selector-tag">a</span>: <span class="number">1</span>, <span class="selector-tag">b</span>: &#123;<span class="number">1</span>&#125;&#125;]</span><br><span class="line">db<span class="selector-class">.test</span><span class="selector-class">.insert</span>(&#123;<span class="selector-tag">a</span>: <span class="number">1</span>, <span class="selector-tag">b</span>: <span class="number">10</span>&#125;)   [&#123;<span class="selector-tag">a</span>: <span class="number">1</span>, <span class="selector-tag">b</span>: &#123;<span class="number">1</span>, <span class="number">10</span>&#125;&#125;]</span><br><span class="line">db<span class="selector-class">.test</span><span class="selector-class">.insert</span>(&#123;<span class="selector-tag">a</span>: <span class="number">5</span>, <span class="selector-tag">b</span>: <span class="number">10</span>&#125;)   [&#123;<span class="selector-tag">a</span>: <span class="number">1</span>, <span class="selector-tag">b</span>: &#123;<span class="number">1</span>, <span class="number">10</span>&#125;&#125;, &#123;<span class="selector-tag">a</span>: <span class="number">5</span>, <span class="selector-tag">b</span>: &#123;<span class="number">10</span>&#125;&#125;]</span><br><span class="line">db<span class="selector-class">.test</span><span class="selector-class">.insert</span>(&#123;<span class="selector-tag">a</span>: <span class="number">5</span>, <span class="selector-tag">b</span>: <span class="number">7</span>&#125;)    [&#123;<span class="selector-tag">a</span>: <span class="number">1</span>, <span class="selector-tag">b</span>: &#123;<span class="number">1</span>, <span class="number">10</span>&#125;&#125;, &#123;<span class="selector-tag">a</span>: <span class="number">5</span>, <span class="selector-tag">b</span>: &#123;<span class="number">7</span>, <span class="number">10</span>&#125;&#125;]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db.test.insert(&#123;a: 1, b: 1&#125;)    [&#123;a: 1, b: &#123;1&#125;&#125;]</span><br><span class="line">db.test.insert(&#123;a: 1, b: 10&#125;)   [&#123;a: 1, b: &#123;1, 10&#125;&#125;]</span><br><span class="line">db.test.insert(&#123;a: 5, b: 10&#125;)   [&#123;a: 1, b: &#123;1, 10&#125;&#125;, &#123;a: 5, b: &#123;10&#125;&#125;]</span><br><span class="line">db.test.insert(&#123;a: 5, b: 7&#125;)    [&#123;a: 1, b: &#123;1, 10&#125;&#125;, &#123;a: 5, b: &#123;7, 10&#125;&#125;]</span><br></pre></td></tr></table></figure>
 <p>对于 <code>db.test.find({a: 5, b: 7})</code>，首先在 <code>[1, 5]</code> 上搜索 <code>a == 5</code>，然后在 <code>[7, 10]</code> 数组上搜索 <code>b == 7</code>，因为是有序数组，可以用二分查找，时间复杂度为 O(logn)。</p>
 <h3 id="索引作用：过滤"><a href="#索引作用：过滤" class="headerlink" title="索引作用：过滤"></a>索引作用：过滤</h3><p>索引最初的目的：加速查询。</p>
 <p>假设索引为 <code>{a: 1, b: 1, c: 1}</code>，且索引内容为：</p>
@@ -631,13 +631,13 @@
 <li>消息队列</li>
 </ul>
 <p>例如，若仅对 <code>init</code> 和 <code>error</code> 两个状态的文档创建索引，则：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">db</span><span class="selector-class">.test</span><span class="selector-class">.createIndex</span>(&#123;</span><br><span class="line">  <span class="attribute">stat</span>: <span class="number">1</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="attribute">partialFilterExpression</span>: &#123;</span><br><span class="line">    stat: &#123;</span><br><span class="line">      $in: [<span class="string">'init'</span>, <span class="string">'error'</span>]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">db.test.createIndex(&#123;</span><br><span class="line">  stat: 1</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  partialFilterExpression: &#123;</span><br><span class="line">    stat: &#123;</span><br><span class="line">      $in: [&apos;init&apos;, &apos;error&apos;]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <h3 id="TTL-索引"><a href="#TTL-索引" class="headerlink" title="TTL 索引"></a>TTL 索引</h3><p>TTL 索引可自动清理不重要的过期数据，例如过期的 session。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">db</span><span class="selector-class">.test</span><span class="selector-class">.createIndex</span>(&#123;</span><br><span class="line">  <span class="attribute">created</span>: <span class="number">1</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="attribute">expireAfterSeconds</span>: <span class="number">3600</span> * <span class="number">24</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">db.test.createIndex(&#123;</span><br><span class="line">  created: 1</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  expireAfterSeconds: 3600 * 24</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>TTL 索引过期后，将自动删除对应的文档。</p>
 <h3 id="全文索引"><a href="#全文索引" class="headerlink" title="全文索引"></a>全文索引</h3><p>关系型数据库的索引，无法支持 <strong>模糊匹配</strong>（<code>like</code>），MongoDB 索引也一样，无法支持 <strong>正则表达式</strong>。</p>
 <p>唯一的例外是前缀固定的正则表达式，这种是可以命中索引的，但前缀固定的应用场景太局限了：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="selector-tag">a</span>: <span class="string">'This is a tree.'</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">find</span><span class="params">(&#123;a: /tree/&#125;)</span></span>    <span class="comment">// 模糊匹配不能命中索引</span></span><br><span class="line"><span class="function"><span class="title">find</span><span class="params">(&#123;a: /^tree/&#125;)</span></span>   <span class="comment">// 前缀固定的模糊匹配可以命中索引</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;a: &apos;This is a tree.&apos;&#125;</span><br><span class="line"></span><br><span class="line">find(&#123;a: /tree/&#125;)    // 模糊匹配不能命中索引</span><br><span class="line">find(&#123;a: /^tree/&#125;)   // 前缀固定的模糊匹配可以命中索引</span><br></pre></td></tr></table></figure>
 <p>第二条虽然命中了索引，但并没有什么卵用，此时可以用全文索引取代正则表达式。</p>
 <blockquote>
 <p>实际上如果真要用全文索引，还不如直接上 ES。</p>
@@ -707,6 +707,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/24/2018-09-24-mongodb-explain-hint-intro/" rel="prev" title="MongoDB | explain 与 hint">
+                MongoDB | explain 与 hint <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -790,7 +794,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">58</span>
+                    <span class="site-state-item-count">60</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -942,7 +946,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">58</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">63</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
