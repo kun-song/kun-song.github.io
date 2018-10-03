@@ -4,7 +4,14 @@
   <url>
     <loc>http://songkun.me/2018/10/02/2018-10-02-reading-making-sense-of-stream-processing/</loc>
     
-    <lastmod>2018-10-02T15:57:16.473Z</lastmod>
+    <lastmod>2018-10-03T06:02:08.928Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/10/03/2018-10-03-olap-oltp-intro/</loc>
+    
+    <lastmod>2018-10-03T05:59:23.833Z</lastmod>
     
   </url>
   
@@ -331,21 +338,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -373,6 +373,13 @@
   </url>
   
   <url>
+    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/05/16/scala-anonymous-function/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -387,7 +394,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
+    <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -415,14 +422,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
