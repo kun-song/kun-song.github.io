@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/about/index.html</loc>
+    
+    <lastmod>2018-10-06T14:57:11.839Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/10/06/2018-10-06-reading-the-docker-book/</loc>
+    
+    <lastmod>2018-10-06T14:55:22.781Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/10/02/2018-10-02-reading-making-sense-of-stream-processing/</loc>
     
     <lastmod>2018-10-03T06:02:08.928Z</lastmod>
@@ -296,13 +310,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/about/index.html</loc>
-    
-    <lastmod>2018-05-26T13:06:15.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/24/2018-05-24-java-volatile-1/</loc>
     
     <lastmod>2018-05-25T12:35:56.000Z</lastmod>
@@ -338,14 +345,21 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
+    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -359,21 +373,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/09/how-to-learn-scala/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -401,6 +401,13 @@
   </url>
   
   <url>
+    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -408,7 +415,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -422,7 +429,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
+    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
