@@ -6,7 +6,7 @@ tags:
 categories: 读书
 ---
 
-豆瓣：[第一本 Docker 书](https://book.douban.com/subject/26780404/)。
+豆瓣：[第一本 Docker 书](https://book.douban.com/subject/26780404/)
 
 作为如今炙手可热的技术，过去几年 Docker 生态发展如火如荼，很惭愧，直到今天我才系统了解它。
 
