@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="J.U.C 新增的原子类用 CAS 操作替代锁，更加高效，而且异步，J.U.C 大多数并发类都基于原子类实现，所以理解原子类对于理解整个并发包是非常重要的。 原子类共有 12 个，可以分为以下 4 类：  标量类（AtomicInteger、AtomicLong、AtomicReference、AtomicBoolean） 数组类（AtomicIntegerArray、AtomicLongArra">
+<meta name="keywords" content="Java,AtomicInteger">
+<meta property="og:type" content="article">
+<meta property="og:title" content="源码夜读 | AtomicInteger">
+<meta property="og:url" content="http://songkun.me/2018/10/14/2018-10-14-source-code-reading-AtomicInteger/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="J.U.C 新增的原子类用 CAS 操作替代锁，更加高效，而且异步，J.U.C 大多数并发类都基于原子类实现，所以理解原子类对于理解整个并发包是非常重要的。 原子类共有 12 个，可以分为以下 4 类：  标量类（AtomicInteger、AtomicLong、AtomicReference、AtomicBoolean） 数组类（AtomicIntegerArray、AtomicLongArra">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-10-28T15:38:43.347Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="源码夜读 | AtomicInteger">
+<meta name="twitter:description" content="J.U.C 新增的原子类用 CAS 操作替代锁，更加高效，而且异步，J.U.C 大多数并发类都基于原子类实现，所以理解原子类对于理解整个并发包是非常重要的。 原子类共有 12 个，可以分为以下 4 类：  标量类（AtomicInteger、AtomicLong、AtomicReference、AtomicBoolean） 数组类（AtomicIntegerArray、AtomicLongArra">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/10/14/2018-10-14-source-code-reading-AtomicInteger/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>源码夜读 | AtomicInteger | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/10/14/2018-10-14-source-code-reading-AtomicInteger/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">源码夜读 | AtomicInteger
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-14 22:47:35" itemprop="dateCreated datePublished" datetime="2018-10-14T22:47:35+08:00">2018-10-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-28 23:38:43" itemprop="dateModified" datetime="2018-10-28T23:38:43+08:00">2018-10-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码夜读/" itemprop="url" rel="index"><span itemprop="name">源码夜读</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/14/2018-10-14-source-code-reading-AtomicInteger/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/10/14/2018-10-14-source-code-reading-AtomicInteger/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>J.U.C 新增的原子类用 CAS 操作替代锁，更加高效，而且异步，J.U.C 大多数并发类都基于原子类实现，所以理解原子类对于理解整个并发包是非常重要的。</p>
+<p>原子类共有 12 个，可以分为以下 4 类：</p>
+<ul>
+<li>标量类（<code>AtomicInteger</code>、<code>AtomicLong</code>、<code>AtomicReference</code>、<code>AtomicBoolean</code>）</li>
+<li>数组类（<code>AtomicIntegerArray</code>、<code>AtomicLongArray</code>、<code>AtomicReferenceArray</code>）</li>
+<li>更新器类（<code>AtomicIntegerFieldUpdater</code>、<code>AtomicLongFieldUpdater</code>、<code>AtomicReferenceFieldUpdater</code>）</li>
+<li>复合变量类（<code>AtomicMarkableReference</code>、<code>AtomicStampedReference</code>）</li>
+</ul>
+<a id="more"></a>
+<blockquote>
+<p>实际上，atomic 包中还有另外 5 个类：</p>
+<ul>
+<li><code>DoubleAccumulator</code></li>
+<li><code>DoubleAdder</code></li>
+<li><code>LongAccumulator</code></li>
+<li><code>LongAdder</code></li>
+<li><code>Striped64</code></li>
+</ul>
+</blockquote>
+<p>对于 4 个标量类而言，实现基本类似，因此以 <code>AtomicInteger</code> 来剖析其实现。</p>
+<h2 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h2><p><code>AtomicInteger</code> 的继承关系非常简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicInteger</span> <span class="keyword">extends</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br></pre></td></tr></table></figure>
+<p><code>Number</code> 是代表数字的抽象类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br></pre></td></tr></table></figure>
+<p>常见的基本数字类型的包装类都是 <code>Number</code> 的子类，例如 <code>Short</code>、<code>Integer</code>、<code>Long</code>、<code>Double</code>、<code>Byte</code> 等，<code>AtomicInteger</code> 也是数字，因此继承 <code>Number</code> 合情合理。</p>
+<p>可以把 <code>Number</code> 代表的数值转换为任意基本数字类型：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">intValue</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">longValue</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">float</span> <span class="title">floatValue</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">double</span> <span class="title">doubleValue</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">byte</span> <span class="title">byteValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">byte</span>)intValue();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">short</span> <span class="title">shortValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">short</span>)intValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>转换过程中，可能出现精度损失，或截断；</li>
+</ul>
+<h2 id="内部状态"><a href="#内部状态" class="headerlink" title="内部状态"></a>内部状态</h2><p><code>AtomicInteger</code> 的内部状态非常简单，只有 3 个字段：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// setup to use Unsafe.compareAndSwapInt for updates</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Unsafe unsafe = Unsafe.getUnsafe();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> valueOffset;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> value;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>unsafe</code> 和 <code>valueOffset</code> 是不可变字段，<code>value</code> 是可变状态，并通过 <code>volatile</code> 保证 <code>value</code> 字段的内存可见性和顺序性。</p>
+<p>因为 <code>valueOffset</code> 是 <code>static</code> 变量，因此在 static initializer 中初始化，并在在 <code>AtomicInteger</code> 类加载时初始化：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    valueOffset = unsafe.objectFieldOffset</span><br><span class="line">    (AtomicInteger.class.getDeclaredField(<span class="string">"value"</span>));</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception ex) &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Error(ex); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="关键方法"><a href="#关键方法" class="headerlink" title="关键方法"></a>关键方法</h2><p><code>AtomicInteger</code> 的初衷就是在不使用锁的前提下，实现原子的读-改-写操作，这是通过 <code>Unsafe</code> 类提供的 CAS 操作实现的，CAS 操作有底层 CPU 直接支持。</p>
+<p>因此 CAS 是 <code>AtomicInteger</code> 的重点，不过下面我们会解析 <code>AtomicInteger</code> 的全部方法。</p>
+<h3 id="构造"><a href="#构造" class="headerlink" title="构造"></a>构造</h3><p><code>AtomicInteger</code> 提供两个构造函数，既可以用给定值初始化 <code>AtomicInteger</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AtomicInteger</span><span class="params">(<span class="keyword">int</span> initialValue)</span> </span>&#123;</span><br><span class="line">    value = initialValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可用无参构造，此时初始值默认为 0：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AtomicInteger</span><span class="params">()</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="获取"><a href="#获取" class="headerlink" title="获取"></a>获取</h3><p>怎么获取 <code>AtomicInteger</code> 中封装的 int 值呢？</p>
+<p>最基本的有：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以返回其他类型的数值，例如 <code>intValue</code>、<code>longValue</code>、<code>floatValue</code> 和 <code>doubleValue</code>，这些都是 <code>Number</code> 类定义的方法，用于数值类之间的相互转换。</p>
+<h3 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h3><h4 id="set"><a href="#set" class="headerlink" title="set"></a><code>set</code></h4><p>既可以直接设置 <code>value</code> 的值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> newValue)</span> </span>&#123;</span><br><span class="line">    value = newValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于 <code>value</code> 是 <code>volatile</code> 变量，通过内存屏障，<code>set</code> 对 <code>value</code> 的修改对其他线程是 <strong>立即可见</strong> 的，所以无需添加 <code>synchronized</code>。</p>
+<h4 id="lazySet"><a href="#lazySet" class="headerlink" title="lazySet"></a><code>lazySet</code></h4><p>大部分场景直接用 <code>set</code> 即可，但 <code>set</code> 内存屏障将禁止 <strong>重排序</strong>，这会带来一定的性能消耗，因此非常关心性能，同时不需要 <strong>立即看到</strong> <code>set</code> 的效果时，可以使用 <code>lazySet</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Eventually sets to the given value.</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">lazySet</span><span class="params">(<span class="keyword">int</span> newValue)</span> </span>&#123;</span><br><span class="line">    unsafe.putOrderedInt(<span class="keyword">this</span>, valueOffset, newValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>lazySet</code> 不保证设置的结果立即对其他线程可见，相比 <code>set</code> 有一定的性能优势。</p>
+<h4 id="getAndSet"><a href="#getAndSet" class="headerlink" title="getAndSet"></a><code>getAndSet</code></h4><p>若想设置新值，同时返回旧值，应该如何实现呢？</p>
+<p>因为 <code>value</code> 是 <code>volatile</code> 变量，所以对 <code>value</code> 的 read/write 具备 happens-before 关系，所以一个很容易想到的实现为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AtomicInteger counter = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line"><span class="keyword">int</span> oldV = counter.get();</span><br><span class="line">counter.set(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<p>但很不幸，该实现是错的，因为 <code>counter.get()</code> 与 <code>counter.set(10)</code> 之间可能插入其他线程的 <code>set</code>，所以 <code>oldV</code> 不能保证是 <code>set(10)</code> 执行时的 <code>value</code> 值，当然通过锁将 <code>get</code> 与 <code>set(10)</code> 变成原子操作可以满足需求，但我们使用 <code>AtomicInteger</code> 就是为了避免使用锁，所以也不能这么做。</p>
+<p>解决办法是 <code>getAndSet</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Atomically sets to the given value and returns the old value.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndSet</span><span class="params">(<span class="keyword">int</span> newValue)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndSetInt(<span class="keyword">this</span>, valueOffset, newValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关键词是 <code>atomically</code>，即将 <code>set</code> 和 <code>get</code> 合并成一个原子操作，同时避免使用锁，依旧借助 <code>unsafe</code> 实现。</p>
+<h3 id="算术操作"><a href="#算术操作" class="headerlink" title="算术操作"></a>算术操作</h3><p>整数常见的算术操作有：</p>
+<ul>
+<li>自增、自减</li>
+<li>加减</li>
+</ul>
+<p>在 <code>AtomicInteger</code> 中他们都是基于 <code>Unsafe.getAndAddInt</code> 实现的，并且都是 <strong>原子操作</strong>。</p>
+<h4 id="自增、自减"><a href="#自增、自减" class="headerlink" title="自增、自减"></a>自增、自减</h4><p>自增、自减实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">incrementAndGet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndDecrement</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">incrementAndGet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上方法分别实现了 <code>i++</code>、<code>++i</code>、<code>i--</code>、<code>--i</code>，它们都是基于 <code>Unsafe.getAndAddInt</code> 实现的，该方法实现 <code>value</code> 加操作，且返回旧值。</p>
+<h4 id="加减"><a href="#加减" class="headerlink" title="加减"></a>加减</h4><p>任意值的加、减法实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Atomically adds the given value to the current value.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAdd</span><span class="params">(<span class="keyword">int</span> delta)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, delta);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Atomically adds the given value to the current value.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">addAndGet</span><span class="params">(<span class="keyword">int</span> delta)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, delta) + delta;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意并没有 <code>getAndSubtract</code>，因为加负值即可实现减法，所以 <code>getAndAdd</code> 足以。</p>
+<h3 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h3><h4 id="compareAndSet"><a href="#compareAndSet" class="headerlink" title="compareAndSet"></a><code>compareAndSet</code></h4><p><code>getAndSet</code> 无脑地设置 <code>value</code> 的值，但实际场景不可能一直如此简单，有时要求 <code>value</code> 满足特定条件时才设置，这是非常典型的原子复合操作：</p>
+<ol>
+<li>检查某条件是否成立；</li>
+<li>根据条件成功、失败执行不同操作；</li>
+</ol>
+<p>在业务代码中，该操作一般用锁实现，但 <code>AtomicInteger</code> 原生提供了该操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Atomically sets the value to the given updated value if the current value &#123;<span class="doctag">@code</span> ==&#125; the expected value.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span><span class="params">(<span class="keyword">int</span> expect, <span class="keyword">int</span> update)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.compareAndSwapInt(<span class="keyword">this</span>, valueOffset, expect, update);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>compareAndSet</code> 非常有用，<code>AtomicInteger</code> 中很多方法是基于它实现的，只有 <code>value</code> 的当前值等于 <code>expect</code> 时，才把 <code>value</code> 设置为 <code>update</code>，同时如果设置成功则返回 <code>true</code>，否则返回 <code>false</code>。</p>
+<p>借助返回值可以检测方法的执行结果，因此可以在循环操作中不断执行 <code>compareAndSet</code>，直到成功，后面会看到，很多方法都是这种实现套路。</p>
+<h4 id="weakCompareAndSet"><a href="#weakCompareAndSet" class="headerlink" title="weakCompareAndSet"></a><code>weakCompareAndSet</code></h4><p><code>weakCompareAndSet</code> 是 <code>compareAndSet</code> 的弱化版本：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Atomically sets the value to the given updated value if the current value &#123;<span class="doctag">@code</span> ==&#125; the expected value.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * weakCompareAndSet May fail spuriously and does not provide ordering guarantees&lt;/a&gt;, so is</span></span><br><span class="line"><span class="comment"> * only rarely an appropriate alternative to compareAndSet.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">weakCompareAndSet</span><span class="params">(<span class="keyword">int</span> expect, <span class="keyword">int</span> update)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.compareAndSwapInt(<span class="keyword">this</span>, valueOffset, expect, update);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>weakCompareAndSet</code> 使用场景很少，在某些平台上它的效率可能比 <code>compareAndSet</code> 高，但有如下两点限制：</p>
+<ul>
+<li>may fail spuriously</li>
+<li>not provide ordering guarantees</li>
+</ul>
+<h3 id="基于-CAS-的方法"><a href="#基于-CAS-的方法" class="headerlink" title="基于 CAS 的方法"></a>基于 CAS 的方法</h3><p><code>AtomicInteger</code> 有很多方法基于 <code>compareAndSet</code> 方法实现，我们把这些方法放到一起分析。</p>
+<p><code>compareAndSet</code> 一般放在一个 <code>do-while</code> 循环中使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> oldValue, newValue;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    oldValue = get();</span><br><span class="line">    newValue = f(xxx)</span><br><span class="line">&#125; <span class="keyword">while</span> (!compareAndSet(oldValue, newValue))</span><br></pre></td></tr></table></figure>
+<p>旧值一般直接用 <code>get</code> 获取，而新值则可以通过任意逻辑计算而来，因为 <code>f</code> 在 <code>while</code> 循环中可能被 <strong>不断重试</strong>，所以 <code>f</code> 必须是 <strong>纯函数</strong>，不能有任何副作用。</p>
+<h4 id="一元函数"><a href="#一元函数" class="headerlink" title="一元函数"></a>一元函数</h4><p>除了设置（<code>getAndSet</code>）、自增（<code>getAndIncrement</code>）、自减（<code>getAndDecrement</code>）、加减（<code>getAndAdd</code>）外，<code>AtomicInteger</code> 还有更加灵活的更新方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Atomically updates the current value with the results of</span></span><br><span class="line"><span class="comment"> * applying the given function, returning the previous value. The</span></span><br><span class="line"><span class="comment"> * function should be side-effect-free, since it may be re-applied</span></span><br><span class="line"><span class="comment"> * when attempted updates fail due to contention among threads.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> updateFunction a side-effect-free function</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the previous value</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 1.8</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndUpdate</span><span class="params">(IntUnaryOperator updateFunction)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> prev, next;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        prev = get();</span><br><span class="line">        next = updateFunction.applyAsInt(prev);</span><br><span class="line">    &#125; <span class="keyword">while</span> (!compareAndSet(prev, next));</span><br><span class="line">    <span class="keyword">return</span> prev;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">updateAndGet</span><span class="params">(IntUnaryOperator updateFunction)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> prev, next;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        prev = get();</span><br><span class="line">        next = updateFunction.applyAsInt(prev);</span><br><span class="line">    &#125; <span class="keyword">while</span> (!compareAndSet(prev, next));</span><br><span class="line">    <span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>getAndUpdate</code> 与 <code>updateAndGet</code> 实现几乎相同，区别仅仅是返回旧值还是新值；</li>
+<li><code>IntUnaryOperator</code> 必须是纯函数；</li>
+</ul>
+<p>其中 <code>IntUnaryOperator</code> 类型为 <code>Int =&gt; Int</code>，即一个用于 <code>Int</code> 的一元操作符：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IntUnaryOperator</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">applyAsInt</span><span class="params">(<span class="keyword">int</span> operand)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> IntUnaryOperator <span class="title">compose</span><span class="params">(IntUnaryOperator before)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(before);</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">int</span> v) -&gt; applyAsInt(before.applyAsInt(v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> IntUnaryOperator <span class="title">andThen</span><span class="params">(IntUnaryOperator after)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">int</span> t) -&gt; after.applyAsInt(applyAsInt(t));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> IntUnaryOperator <span class="title">identity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> t -&gt; t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考 Scala 的 <code>apply</code> 方法，<code>IntUnaryOperator</code> 的抽象方法为 <code>applyAsInt</code>。</p>
+<h4 id="二元函数"><a href="#二元函数" class="headerlink" title="二元函数"></a>二元函数</h4><p>前面的 <code>getAndUpdate</code> 只能通过一元操作符更新 <code>value</code>，有时我们需要联合 <code>value</code> 与其他外部世界的值来计算 <code>value</code> 的新值，此时可用 <code>getAndAccumulate</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Atomically updates the current value with the results of</span></span><br><span class="line"><span class="comment"> * applying the given function to the current and given values,</span></span><br><span class="line"><span class="comment"> * returning the previous value. The function should be</span></span><br><span class="line"><span class="comment"> * side-effect-free, since it may be re-applied when attempted</span></span><br><span class="line"><span class="comment"> * updates fail due to contention among threads.  The function</span></span><br><span class="line"><span class="comment"> * is applied with the current value as its first argument,</span></span><br><span class="line"><span class="comment"> * and the given update as the second argument.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> x the update value</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> accumulatorFunction a side-effect-free function of two arguments</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the previous value</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 1.8</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAccumulate</span><span class="params">(<span class="keyword">int</span> x,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  IntBinaryOperator accumulatorFunction)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> prev, next;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        prev = get();</span><br><span class="line">        next = accumulatorFunction.applyAsInt(prev, x);</span><br><span class="line">    &#125; <span class="keyword">while</span> (!compareAndSet(prev, next));</span><br><span class="line">    <span class="keyword">return</span> prev;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">accumulateAndGet</span><span class="params">(<span class="keyword">int</span> x,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  IntBinaryOperator accumulatorFunction)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> prev, next;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        prev = get();</span><br><span class="line">        next = accumulatorFunction.applyAsInt(prev, x);</span><br><span class="line">    &#125; <span class="keyword">while</span> (!compareAndSet(prev, next));</span><br><span class="line">    <span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与 <code>getAndUpdate</code> 几乎相同，区别仅仅是把一元操作符换成了二元操作符，并增加了一个 <code>int</code> 参数。</p>
+<p>唯一值得注意的是 <code>IntBinaryOperator</code> 的参数顺序：</p>
+<ul>
+<li>以 <code>value</code> 当前值为第一个参数；</li>
+<li>以 <code>x</code> 为第二个参数；</li>
+</ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>到此为止，<code>AtomicInteger</code> 主要方法我们都已经见过了，剩下的是一些非常常规的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Integer.toString(get());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">intValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> get();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">longValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">long</span>)get();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">floatValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">float</span>)get();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">doubleValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">double</span>)get();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>AtomicIntger</code> 的关键是 <code>compareAndSet</code> 方法，基于它可实现非常灵活的 <strong>无锁</strong> 算法。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/AtomicInteger/" rel="tag"># AtomicInteger</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/14/2018-10-14-mongodb-ttl-index/" rel="next" title="MongoDB | TTL 索引">
+                <i class="fa fa-chevron-left"></i> MongoDB | TTL 索引
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/21/2018-10-21-reading-designing-data-intensive-applications/" rel="prev" title="读书 | Designing Data-Intensive Applications">
+                读书 | Designing Data-Intensive Applications <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">65</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#继承关系"><span class="nav-number">1.</span> <span class="nav-text">继承关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部状态"><span class="nav-number">2.</span> <span class="nav-text">内部状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关键方法"><span class="nav-number">3.</span> <span class="nav-text">关键方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造"><span class="nav-number">3.1.</span> <span class="nav-text">构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取"><span class="nav-number">3.2.</span> <span class="nav-text">获取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置"><span class="nav-number">3.3.</span> <span class="nav-text">设置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#set"><span class="nav-number">3.3.1.</span> <span class="nav-text">set</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lazySet"><span class="nav-number">3.3.2.</span> <span class="nav-text">lazySet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getAndSet"><span class="nav-number">3.3.3.</span> <span class="nav-text">getAndSet</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算术操作"><span class="nav-number">3.4.</span> <span class="nav-text">算术操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#自增、自减"><span class="nav-number">3.4.1.</span> <span class="nav-text">自增、自减</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#加减"><span class="nav-number">3.4.2.</span> <span class="nav-text">加减</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS"><span class="nav-number">3.5.</span> <span class="nav-text">CAS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#compareAndSet"><span class="nav-number">3.5.1.</span> <span class="nav-text">compareAndSet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#weakCompareAndSet"><span class="nav-number">3.5.2.</span> <span class="nav-text">weakCompareAndSet</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-CAS-的方法"><span class="nav-number">3.6.</span> <span class="nav-text">基于 CAS 的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一元函数"><span class="nav-number">3.6.1.</span> <span class="nav-text">一元函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二元函数"><span class="nav-number">3.6.2.</span> <span class="nav-text">二元函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">3.7.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/10/14/2018-10-14-source-code-reading-AtomicInteger/';
+        this.page.identifier = '2018/10/14/2018-10-14-source-code-reading-AtomicInteger/';
+        this.page.title = '源码夜读 | AtomicInteger';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
