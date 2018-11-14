@@ -465,7 +465,7 @@
 <p>第 4 章课后作业即为多项式实现了 <code>Num</code> type class，所以多项式可以直接使用 <code>Num</code> 定义的 <code>+</code> 等函数：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">2</span>*x^<span class="number">2</span> + x + <span class="number">10</span>) + (x^<span class="number">3</span> + x^<span class="number">2</span> + x)</span><br></pre></td></tr></table></figure>
 <p>就好像多项式本身定义了 <code>+</code> 函数一样，完全可以以假乱真。</p>
-<p>Scala 语言本身没有显式支持 typeclass，而是通过 <code>implicit</code> 机制 + 特质 hack 出的 typeclass，而 <code>implicit</code> 和特质又不仅仅用于实现 typeclass，所以导致很难在代码中识别 typeclass（更多细节，请参考 ）。</p>
+<p>Scala 语言本身没有显式支持 typeclass，而是通过 <code>implicit</code> 机制 + 特质 hack 出的 typeclass，而 <code>implicit</code> 和特质又不仅仅用于实现 typeclass，所以导致很难在代码中识别 typeclass（更多细节，请参考 <a href="/2018/06/05/2018-06-05-type-class-simulacrum/" title="【译】Type class in Scala">【译】Type class in Scala</a>）。</p>
 <h2 id="ADT"><a href="#ADT" class="headerlink" title="ADT"></a>ADT</h2><p>Haskell 中定义 ADT 非常方便：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">infixr</span> <span class="number">5</span> :-:</span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">List'</span> a = <span class="type">Empty</span> | a :-: (<span class="type">List</span>' <span class="title">a</span>)</span></span><br><span class="line">  <span class="keyword">deriving</span> (<span class="type">Show</span>, <span class="type">Read</span>, <span class="type">Eq</span>, <span class="type">Ord</span>)</span><br><span class="line"></span><br><span class="line">λ&gt; <span class="number">1</span> :-: <span class="number">2</span> :-: <span class="type">Empty</span></span><br><span class="line"><span class="number">1</span> :-: (<span class="number">2</span> :-: <span class="type">Empty</span>)</span><br></pre></td></tr></table></figure>
 <ul>
@@ -625,7 +625,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">66</span>
+                    <span class="site-state-item-count">67</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -797,7 +797,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">68</span>
+                      
+                    
+                    <span class="site-state-item-count">69</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
