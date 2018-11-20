@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2018/11/20/2018-11-20-java-daemon-vs-non-daemon/</loc>
+    
+    <lastmod>2018-11-20T15:25:47.833Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/11/20/2018-11-20-troubleshooting-mongodb-authentication/</loc>
     
     <lastmod>2018-11-20T00:47:47.265Z</lastmod>
@@ -394,14 +401,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -422,7 +422,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -443,7 +443,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -457,14 +457,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
+    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -478,14 +471,28 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
+    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
+    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
