@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="用户线程 vs 守护线程Java 线程分为两种：  用户线程（user thread） 用户线程的优先级较高，JVM 必须等待所有用户线程结束后才能关闭   守护线程（daemon thread） 守护线程优先级较低（其实是 最低），当 JVM 发现没有运行中的用户线程时，将停止所有守护线程，然后关闭 JVM">
+  <meta name="description" content="用户线程 vs 守护线程Java 线程分为两种：  用户线程（user thread） 用户线程的优先级较高，JVM 必须等待所有用户线程结束后才能关闭   守护线程（daemon thread） 守护线程优先级较低（其实是 最低），当 JVM 发现没有运行中的用户线程时，将停止所有守护线程，然后关闭 JVM    守护线程一般为用户线程提供服务，因此用户线程停止后，守护线程 失去服务对象，JVM">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java | 守护线程">
 <meta property="og:url" content="http://songkun.me/2018/11/20/2018-11-20-java-daemon-vs-non-daemon/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="用户线程 vs 守护线程Java 线程分为两种：  用户线程（user thread） 用户线程的优先级较高，JVM 必须等待所有用户线程结束后才能关闭   守护线程（daemon thread） 守护线程优先级较低（其实是 最低），当 JVM 发现没有运行中的用户线程时，将停止所有守护线程，然后关闭 JVM">
+<meta property="og:description" content="用户线程 vs 守护线程Java 线程分为两种：  用户线程（user thread） 用户线程的优先级较高，JVM 必须等待所有用户线程结束后才能关闭   守护线程（daemon thread） 守护线程优先级较低（其实是 最低），当 JVM 发现没有运行中的用户线程时，将停止所有守护线程，然后关闭 JVM    守护线程一般为用户线程提供服务，因此用户线程停止后，守护线程 失去服务对象，JVM">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-20T15:25:47.833Z">
+<meta property="og:updated_time" content="2018-11-20T15:30:49.422Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java | 守护线程">
-<meta name="twitter:description" content="用户线程 vs 守护线程Java 线程分为两种：  用户线程（user thread） 用户线程的优先级较高，JVM 必须等待所有用户线程结束后才能关闭   守护线程（daemon thread） 守护线程优先级较低（其实是 最低），当 JVM 发现没有运行中的用户线程时，将停止所有守护线程，然后关闭 JVM">
+<meta name="twitter:description" content="用户线程 vs 守护线程Java 线程分为两种：  用户线程（user thread） 用户线程的优先级较高，JVM 必须等待所有用户线程结束后才能关闭   守护线程（daemon thread） 守护线程优先级较低（其实是 最低），当 JVM 发现没有运行中的用户线程时，将停止所有守护线程，然后关闭 JVM    守护线程一般为用户线程提供服务，因此用户线程停止后，守护线程 失去服务对象，JVM">
 
 
 
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2018-11-20 08:52:37 / 修改时间：23:25:47" itemprop="dateCreated datePublished" datetime="2018-11-20T08:52:37+08:00">2018-11-20</time>
+              <time title="创建时间：2018-11-20 08:52:37 / 修改时间：23:30:49" itemprop="dateCreated datePublished" datetime="2018-11-20T08:52:37+08:00">2018-11-20</time>
             
 
             
@@ -451,6 +451,7 @@
 </ul>
 </li>
 </ul>
+<p>守护线程一般为用户线程提供服务，因此用户线程停止后，守护线程 <strong>失去服务对象</strong>，JVM 将其终止也是合情合理。</p>
 <a id="more"></a>
 <p>守护线程中的 <strong>死循环</strong> 是无害的，因为它们不会造成 JVM 无法退出，同时若无用户线程运行，守护线程的代码执行立马被停止（包括 <code>finally</code>），因此守护线程中 <strong>不要执行 IO 任务</strong>，否则可能导致资源泄漏等问题。</p>
 <blockquote>
@@ -525,6 +526,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/21/2018-11-21-scala-tut-introduction/" rel="prev" title="tut -- 简单的 Scala 文档检查工具">
+                tut -- 简单的 Scala 文档检查工具 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -608,7 +613,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">70</span>
+                    <span class="site-state-item-count">71</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -782,7 +787,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">69</span>
+                      
+                    
+                    <span class="site-state-item-count">70</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
