@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="原文 为何废弃 Thread.stop ？因为它本质上是不安全的。 stop 线程将导致释放其持有的全部 monitor（ThreadDeath 异常在栈中传播时，monitor 被解锁），若在当前线程中，这些 monitor 保护的对象处于 不一致状态，则 stop 后这种不一致状态对其他线程可见。 我们称处于不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它">
+<meta name="keywords" content="Java,Thread.stop,Thread.resume">
+<meta property="og:type" content="article">
+<meta property="og:title" content="译 | Java Thread Primitive Deprecation">
+<meta property="og:url" content="http://songkun.me/2018/11/26/2018-11-26-java-thread-primitive-deprecation/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="原文 为何废弃 Thread.stop ？因为它本质上是不安全的。 stop 线程将导致释放其持有的全部 monitor（ThreadDeath 异常在栈中传播时，monitor 被解锁），若在当前线程中，这些 monitor 保护的对象处于 不一致状态，则 stop 后这种不一致状态对其他线程可见。 我们称处于不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-02T03:12:16.328Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="译 | Java Thread Primitive Deprecation">
+<meta name="twitter:description" content="原文 为何废弃 Thread.stop ？因为它本质上是不安全的。 stop 线程将导致释放其持有的全部 monitor（ThreadDeath 异常在栈中传播时，monitor 被解锁），若在当前线程中，这些 monitor 保护的对象处于 不一致状态，则 stop 后这种不一致状态对其他线程可见。 我们称处于不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/11/26/2018-11-26-java-thread-primitive-deprecation/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>译 | Java Thread Primitive Deprecation | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/11/26/2018-11-26-java-thread-primitive-deprecation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">译 | Java Thread Primitive Deprecation
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-26 22:59:23" itemprop="dateCreated datePublished" datetime="2018-11-26T22:59:23+08:00">2018-11-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-02 11:12:16" itemprop="dateModified" datetime="2018-12-02T11:12:16+08:00">2018-12-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/26/2018-11-26-java-thread-primitive-deprecation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/11/26/2018-11-26-java-thread-primitive-deprecation/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://docs.oracle.com/javase/8/docs/technotes/guides/concurrency/threadPrimitiveDeprecation.html" target="_blank" rel="noopener">原文</a></p>
+<h2 id="为何废弃-Thread-stop-？"><a href="#为何废弃-Thread-stop-？" class="headerlink" title="为何废弃 Thread.stop ？"></a>为何废弃 <code>Thread.stop</code> ？</h2><p>因为它本质上是不安全的。</p>
+<p><code>stop</code> 线程将导致释放其持有的全部 monitor（<code>ThreadDeath</code> 异常在栈中传播时，monitor 被解锁），若在当前线程中，这些 monitor 保护的对象处于 <strong>不一致状态</strong>，则 <code>stop</code> 后这种不一致状态对其他线程可见。</p>
+<p>我们称处于不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它们可能非常微妙且难以检测，与其他非检查异常不同，<code>ThreadDeath</code> 悄悄杀死线程，用户无法收到任何警告，用户可能到几个小时，或几天会才能发现问题。</p>
+<a id="more"></a>
+<h2 id="为何不捕获-ThreadDeath-并修复“损坏”对象？"><a href="#为何不捕获-ThreadDeath-并修复“损坏”对象？" class="headerlink" title="为何不捕获 ThreadDeath 并修复“损坏”对象？"></a>为何不捕获 <code>ThreadDeath</code> 并修复“损坏”对象？</h2><p>理论上可行，实际难度极大，由于两个原因几乎不可能做到：</p>
+<ul>
+<li>线程几乎可以在 <strong>任何地方</strong> 抛出 <code>ThreadDeath</code>，因此所有同步方法、同步代码块都需要仔细设计；</li>
+<li>处理已捕获的 <code>ThreadDeath</code> 时，可能再次抛出 <code>ThreadDeath</code>，因此必须不断重复清理，直至成功，代码会非常复杂；</li>
+</ul>
+<p>因此，这样做不切实际。</p>
+<h2 id="Thread-stop-Throwable-呢？"><a href="#Thread-stop-Throwable-呢？" class="headerlink" title="Thread.stop(Throwable) 呢？"></a><code>Thread.stop(Throwable)</code> 呢？</h2><p>虽然有种种问题，<code>stop(Throwable)</code> 可以用来抛出目标线程未准备好处理的异常，下面的方法在行为上与 <code>throw</code> 子句相同，但不强制方法声明所有受检查异常（<code>throw</code> 需要声明）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sneakyThrow</span><span class="params">(Throwable t)</span> </span>&#123;</span><br><span class="line">    Thread.currentThread().stop(t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>同样被废弃，原因与 <code>stop()</code> 相同，不安全。</p>
+</blockquote>
+<h2 id="用什么替代-Thread-stop-？"><a href="#用什么替代-Thread-stop-？" class="headerlink" title="用什么替代 Thread.stop ？"></a>用什么替代 <code>Thread.stop</code> ？</h2><p>大部分 <code>stop</code> 使用场景都可以用一个 <code>volatile</code> 变量替代，该变量用来指示当前线程是否应该停止运行，其他线程通过修改 <code>volatile</code> 变量达到停止线程的目的。</p>
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Thread blinker;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    blinker = <span class="keyword">new</span> Thread(<span class="keyword">this</span>);</span><br><span class="line">    blinker.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    blinker.stop();  <span class="comment">// UNSAFE!</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(interval);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">        &#125;</span><br><span class="line">        repaint();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可修改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Thread blinker;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    blinker = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Thread thisThread = Thread.currentThread();</span><br><span class="line">    <span class="keyword">while</span> (blinker == thisThread) &#123;  <span class="comment">// 运行标识</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(interval);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">        &#125;</span><br><span class="line">        repaint();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>目标线程检测到停止请求后，可以做必要的资源清理，相比直接释放锁，进而处于不一致状态要好很多。</p>
+<h2 id="如何停止长时间等待的线程（如等待输入）？"><a href="#如何停止长时间等待的线程（如等待输入）？" class="headerlink" title="如何停止长时间等待的线程（如等待输入）？"></a>如何停止长时间等待的线程（如等待输入）？</h2><p><code>Thread.interrupt</code> 正是为此设计的。</p>
+<p>上面“基于状态”的信号机制也可以使用，但状态修改后，可以跟一个 <code>Thread.interrupt</code> 调用，从而 <strong>中断等待</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Thread moribund = waiter;</span><br><span class="line">    waiter = <span class="keyword">null</span>;</span><br><span class="line">    moribund.interrupt();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><code>waiter == null</code> 可在下次 <code>while(waiter == thisThread)</code> 中检测到退出信号，若线程等待，则 <code>while()</code> 将无法立即退出；</li>
+<li><code>moribund.interrrupt()</code> 保证等待线程能立即退出；</li>
+</ul>
+</blockquote>
+<p>为保证中断正常工作，任何捕获中断异常，且无法合理处置的方法都 <strong>必须立即重新中断</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Thread.currentThread().interrupt();</span><br></pre></td></tr></table></figure>
+<p>此处说重新中断，而非重新抛出中断异常，是因为若方法未声明抛出 <code>InterruptedException</code> 就无法抛出，此时只能 <code>interrupt</code>。</p>
+<h2 id="线程未响应-Thread-interrupt-怎么办？"><a href="#线程未响应-Thread-interrupt-怎么办？" class="headerlink" title="线程未响应 Thread.interrupt 怎么办？"></a>线程未响应 <code>Thread.interrupt</code> 怎么办？</h2><p>部分场景，可在应用中使用一些特殊技巧，例如若线程在已知 socket 等待，可关闭 socket，线程将立即返回。</p>
+<p>但不幸的是，没有通用技巧，且任何不响应 <code>Thread.interrupt</code> 的线程，也不会响应 <code>Thread.stop</code>，例如 DDOS 攻击等。</p>
+<h2 id="Thread-suspend-和-Thread-resume-也被废弃了？"><a href="#Thread-suspend-和-Thread-resume-也被废弃了？" class="headerlink" title="Thread.suspend 和 Thread.resume 也被废弃了？"></a><code>Thread.suspend</code> 和 <code>Thread.resume</code> 也被废弃了？</h2><p><code>Thread.suspend</code> 容易导致死锁。</p>
+<p>若线程一 <code>suspend</code> 时通过 monitor A 保护稀有资源，则 <code>suspend</code> 后线程一 <strong>不释放 minotor A</strong>，因此其他线程无法访问该资源，直至线程一 <code>resume</code>。若恢复线程一的线程在调用 <code>resume</code> 前需要获取 monitor A，则发生死锁。</p>
+<blockquote>
+<p><code>resume</code> 为服务 <code>suspend</code> 而存在。</p>
+</blockquote>
+<p>对此 <code>Thread.suspend</code> 方法的注释也有解释：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">This method has been deprecated, as it is inherently deadlock-prone.</span><br><span class="line"></span><br><span class="line">If the target thread holds a lock on the monitor protecting a </span><br><span class="line">critical system resource when it is suspended, no thread can </span><br><span class="line">access this resource until the target thread is resumed. </span><br><span class="line"></span><br><span class="line">If the thread that would resume the target thread attempts </span><br><span class="line">to lock this monitor prior to calling resume, deadlock results.  </span><br><span class="line"></span><br><span class="line">Such deadlocks typically manifest themselves as &quot;frozen&quot; processes.</span><br></pre></td></tr></table></figure>
+<p><code>suspend</code> 容易死锁的根因是它 <strong>不释放锁</strong>，<code>resume</code> 它的线程如果要请求同样的锁，则挂起线程永远无法恢复。</p>
+<h2 id="用什么替代-Thread-suspend-和-Thread-resume-？"><a href="#用什么替代-Thread-suspend-和-Thread-resume-？" class="headerlink" title="用什么替代 Thread.suspend 和 Thread.resume ？"></a>用什么替代 <code>Thread.suspend</code> 和 <code>Thread.resume</code> ？</h2><p>与 <code>Tread.stop</code> 类似，明智的办法是添加一个 <code>volatile</code> 状态变量（active or suspended），目标线程不断测试该变量，若目标状态是 suspended，则目标线程通过 <code>Object.wait</code> 阻塞，resume 时，通过 <code>Object.notify</code> 唤醒目标线程。</p>
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> threadSuspended;</span><br><span class="line"></span><br><span class="line"><span class="function">Public <span class="keyword">void</span> <span class="title">mousePressed</span><span class="params">(MouseEvent e)</span> </span>&#123;</span><br><span class="line">    e.consume();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (threadSuspended)</span><br><span class="line">        blinker.resume();</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        blinker.suspend();  <span class="comment">// DEADLOCK-PRONE!</span></span><br><span class="line"></span><br><span class="line">    threadSuspended = !threadSuspended;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可修改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">mousePressed</span><span class="params">(MouseEvent e)</span> </span>&#123;</span><br><span class="line">    e.consume();</span><br><span class="line"></span><br><span class="line">    threadSuspended = !threadSuspended;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!threadSuspended)</span><br><span class="line">        notify();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在 <code>run</code> 循环中添加：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">    <span class="keyword">while</span> (threadSuspended)</span><br><span class="line">       wait();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为 <code>wait</code> 会抛出 <code>InterrupedException</code>，因此 <code>wait</code> 必须放在 <code>try catch</code> 中，最后 <code>run</code> 如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(interval);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">                <span class="keyword">while</span> (threadSuspended)</span><br><span class="line">                    wait();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e)&#123;</span><br><span class="line">        &#125;</span><br><span class="line">        repaint();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>sleep</code> 放在 <code>wait</code> 之前，可以保证线程恢复后立马执行 <code>repaint</code>。</li>
+</ul>
+<p>注意 <code>notify</code> 和 <code>wait</code> 都在 <code>synchronized</code> 代码块中，这是为了消除竞态条件，避免挂起线程错过 <code>notify</code> 消息，进而永远挂起。</p>
+<p>虽然随着 JVM 的成熟，<code>synchronized</code> 代价越来越低，但总归有代价。可借助一点小技巧避免每次循环时都要加锁：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (threadSuspended) &#123;</span><br><span class="line">    <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (threadSuspended)</span><br><span class="line">            wait();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>以前每次循环都加锁，现在只有挂起时（即 <code>threadSuspended</code> 为 <code>true</code>）时才加锁；</li>
+</ul>
+<p>现在 <code>threadSuspended</code> 没有 <code>synchronized</code> 保护了，需要声明为 <code>volatile</code>。</p>
+<p>最后 <code>run</code> 为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> threadSuspended;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(interval);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (threadSuspended) &#123;</span><br><span class="line">                <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">                    <span class="keyword">while</span> (threadSuspended)</span><br><span class="line">                        wait();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        repaint();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="能让线程既可安全-stop，也能安全-suspend-吗？"><a href="#能让线程既可安全-stop，也能安全-suspend-吗？" class="headerlink" title="能让线程既可安全 stop，也能安全 suspend 吗？"></a>能让线程既可安全 stop，也能安全 suspend 吗？</h2><p>当然可以，唯一要注意的是，停止目标线程时，目标线程可能已经被挂起。若 <code>stop</code> 仅仅将状态变量（<code>blinker</code>）设为 <code>null</code>，则目标线程仍会保持挂起，而不是优雅退出。</p>
+<p>为修正该场景，<code>stop</code> 须保证目标线程处于挂起状态时能立即恢复（resume），一旦恢复，目标线程必须立即感知自己已经被停止，然后优雅停机。</p>
+<p>如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Thread thisThread = Thread.currentThread();</span><br><span class="line">    <span class="keyword">while</span> (blinker == thisThread) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(interval);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">                <span class="keyword">while</span> (threadSuspended &amp;&amp; blinker == thisThread)</span><br><span class="line">                    wait();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        repaint();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    blinker = <span class="keyword">null</span>;</span><br><span class="line">    notify();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若 <code>stop</code> 调用 <code>Thread.interrupt</code>，就不用调用 <code>notify</code>，但 <code>stop</code> 还是必须用 <code>synchronized</code> 修饰，同步可以保证目标线程不会因为竞态条件而错误中断。</p>
+<h2 id="Thread-destroy-呢？"><a href="#Thread-destroy-呢？" class="headerlink" title="Thread.destroy 呢？"></a><code>Thread.destroy</code> 呢？</h2><p><code>Thread.destroy</code> 从来没被实现，并且已被废弃。</p>
+<p>即使实现了 <code>destory</code>，与 <code>Thread.suspend</code> 类似，<code>destroy</code> 容易导致死锁。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Thread-stop/" rel="tag"># Thread.stop</a>
+          
+            <a href="/tags/Thread-resume/" rel="tag"># Thread.resume</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/22/2018-11-22-java-thread-interrupt/" rel="next" title="Java | 终止线程">
+                <i class="fa fa-chevron-left"></i> Java | 终止线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">73</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">73</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为何废弃-Thread-stop-？"><span class="nav-number">1.</span> <span class="nav-text">为何废弃 Thread.stop ？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为何不捕获-ThreadDeath-并修复“损坏”对象？"><span class="nav-number">2.</span> <span class="nav-text">为何不捕获 ThreadDeath 并修复“损坏”对象？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Thread-stop-Throwable-呢？"><span class="nav-number">3.</span> <span class="nav-text">Thread.stop(Throwable) 呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用什么替代-Thread-stop-？"><span class="nav-number">4.</span> <span class="nav-text">用什么替代 Thread.stop ？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何停止长时间等待的线程（如等待输入）？"><span class="nav-number">5.</span> <span class="nav-text">如何停止长时间等待的线程（如等待输入）？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程未响应-Thread-interrupt-怎么办？"><span class="nav-number">6.</span> <span class="nav-text">线程未响应 Thread.interrupt 怎么办？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Thread-suspend-和-Thread-resume-也被废弃了？"><span class="nav-number">7.</span> <span class="nav-text">Thread.suspend 和 Thread.resume 也被废弃了？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用什么替代-Thread-suspend-和-Thread-resume-？"><span class="nav-number">8.</span> <span class="nav-text">用什么替代 Thread.suspend 和 Thread.resume ？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#能让线程既可安全-stop，也能安全-suspend-吗？"><span class="nav-number">9.</span> <span class="nav-text">能让线程既可安全 stop，也能安全 suspend 吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Thread-destroy-呢？"><span class="nav-number">10.</span> <span class="nav-text">Thread.destroy 呢？</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/11/26/2018-11-26-java-thread-primitive-deprecation/';
+        this.page.identifier = '2018/11/26/2018-11-26-java-thread-primitive-deprecation/';
+        this.page.title = '译 | Java Thread Primitive Deprecation';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
