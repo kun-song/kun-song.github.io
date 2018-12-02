@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="HashMap 是最常用的数据结构之一，也是面试的常客，了解 HashMap 的实现原理对正确、高效地的使用它是非常重要的，本文将细致分析 Java 8 HashMap 实现的所有细节。">
+<meta name="keywords" content="Java,HashMap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HashMap 源码分析">
+<meta property="og:url" content="http://songkun.me/2018/12/02/2018-12-2-source-code-reading-hashmap/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="HashMap 是最常用的数据结构之一，也是面试的常客，了解 HashMap 的实现原理对正确、高效地的使用它是非常重要的，本文将细致分析 Java 8 HashMap 实现的所有细节。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-02T15:21:52.887Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HashMap 源码分析">
+<meta name="twitter:description" content="HashMap 是最常用的数据结构之一，也是面试的常客，了解 HashMap 的实现原理对正确、高效地的使用它是非常重要的，本文将细致分析 Java 8 HashMap 实现的所有细节。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2018/12/02/2018-12-2-source-code-reading-hashmap/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HashMap 源码分析 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/02/2018-12-2-source-code-reading-hashmap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HashMap 源码分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-02 20:51:06 / 修改时间：23:21:52" itemprop="dateCreated datePublished" datetime="2018-12-02T20:51:06+08:00">2018-12-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码夜读/" itemprop="url" rel="index"><span itemprop="name">源码夜读</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/02/2018-12-2-source-code-reading-hashmap/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/02/2018-12-2-source-code-reading-hashmap/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>HashMap</code> 是最常用的数据结构之一，也是面试的常客，了解 <code>HashMap</code> 的实现原理对正确、高效地的使用它是非常重要的，本文将细致分析 Java 8 <code>HashMap</code> 实现的所有细节。</p>
+<a id="more"></a>
+<h2 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h2><p>首先看下 <code>HashMap</code> 的类继承：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Map</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Cloneable</span>, <span class="title">Serializable</span></span></span><br></pre></td></tr></table></figure>
+<p><code>HashMap</code> 继承 <code>AbstractMap</code>，它提供了很多 <code>Map</code> 接口的默认实现，除 <code>HashMap</code> 外，Java 集合框架中还有很多它的子类：</p>
+<ul>
+<li><code>WeakHashMap</code></li>
+<li><code>NavigableSubMap</code></li>
+<li><code>IdentityHashMap</code></li>
+<li><code>EnumMap</code></li>
+</ul>
+<p>…</p>
+<h2 id="状态字段"><a href="#状态字段" class="headerlink" title="状态字段"></a>状态字段</h2><p><code>HashMap</code> 定义的状态字段有：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;</span><br><span class="line"><span class="keyword">transient</span> Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet;</span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> size;</span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> modCount;</span><br><span class="line"><span class="keyword">int</span> threshold;</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">float</span> loadFactor;</span><br></pre></td></tr></table></figure>
+<p><code>table</code> 是 <code>Node&lt;K, V&gt;</code> 数组，它的长度要么是 0，要么是 2 的整数幂，注意 <code>table</code> 数组并非 <code>HashMap</code> 构造时初始化，而是当第一次使用时初始化。</p>
+<p><code>entrySet</code> 是 <code>HashMap</code> 的 k-v 映射视图，注意 <code>HashMap</code> 还有 key 视图和 value 视图，支持它俩的字段在 <code>AbstractMap</code> 中定义。</p>
+<p><code>size</code> 为该 <code>HashMap</code> 中保存的 k-v 映射数量。</p>
+<p><code>modCount</code> 表示该 <code>HashMap</code> 被结构化修改的次数，结构化修改分为两类：</p>
+<ol>
+<li>改变 <code>HashMap</code> 中 k-v 映射数量的操作（增、删）</li>
+<li>改变 <code>HashMap</code> 内部结构的操作（<code>rehash</code>）</li>
+</ol>
+<p>该字段的作用是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This field is used to make iterators on Collection-views of the HashMap fail-fast.</span><br></pre></td></tr></table></figure>
+<p><code>HashMap</code> 提供 3 种集合视图用于遍历 <code>HashMap</code>：</p>
+<ul>
+<li>key 集合</li>
+<li>value 集合</li>
+<li>k-v 集合</li>
+</ul>
+<p>遍历它们的时候，若 <code>HashMap</code> 发生结构化修改，则抛出 <code>ConcurrentMidificationException</code>。</p>
+<p><code>threshold</code> 注释如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The next size value at which to resize (capacity * load factor).</span><br></pre></td></tr></table></figure>
+<p>每次执行 <code>resize</code> 时，都会修改 <code>table</code> 数组的大小，而 <code>threshold</code> 则是下次调用 <code>resize</code> 时 <code>table</code> 扩容（or 初始化）的目标长度。</p>
+<p><code>loadFactor</code> 非常重要，注释如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">The load factor is a measure of how full the hash table is allowed to</span><br><span class="line">get before its capacity is automatically increased.</span><br><span class="line"></span><br><span class="line">When the number of entries in the hash table exceeds the product</span><br><span class="line">of the load factor and the current capacity, the hash table is rehashed.</span><br></pre></td></tr></table></figure>
+<p>若 <code>HashMap</code> 中保存的 k-v 映射数量（即 <code>size</code>）超过 <code>loadFactor * currentCapacity</code>，就会执行 <code>resize</code>，其中 <code>HashMap</code> 的 <code>capacity</code> 就是 <code>table</code> 数组的大小（即桶数量），当前容量即有数据的桶的个数。</p>
+<p>上面注释翻译成代码应该是这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (size &gt; loadFactor * currentCapacity)</span><br><span class="line">    resize();</span><br></pre></td></tr></table></figure>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><p><code>HashMap</code> 有 3 个常见的构造函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.loadFactor = DEFAULT_LOAD_FACTOR; <span class="comment">// all other fields defaulted</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(initialCapacity, DEFAULT_LOAD_FACTOR);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal initial capacity: "</span> + initialCapacity);</span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">        initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">    <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal load factor: "</span>  loadFactor);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">    <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，这 3 个构造函数其实就设置了两个字段：</p>
+<ul>
+<li><code>loadFactor</code></li>
+<li><code>threshold</code></li>
+</ul>
+<p><code>loadFactor</code> 很容易理解，而 <code>threshold</code> 是下次 <code>HashMap</code> 扩容的目标容量，这个值是通过 <strong>当前容量</strong> 计算出的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Returns a power of two size for the given target capacity.</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>tableSizeFor</code> 接受当前容量，然后返回比当前容量大的最小的 2 的整数幂，比如 <code>tableSizeFor(55)</code> 返回 64，表示下次 <code>HashMap</code> 扩容的目标容量为 64。</p>
+<p>因此使用 <code>HashMap</code> 时，它的容量必然是 2 的整数幂，即 <code>table</code> 长度必然为 2 的整数幂，因此可以用如下方式加速 key 查找：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(n - <span class="number">1</span>) &amp; hash(key);</span><br></pre></td></tr></table></figure>
+<p><code>n</code> 为 <code>table</code> 数组大小。</p>
+<h2 id="put"><a href="#put" class="headerlink" title="put"></a><code>put</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> putVal(hash(key), key, value, <span class="keyword">false</span>, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据注释，若 <code>HashMap</code> 已经存在该 <code>key</code>，则：</p>
+<ul>
+<li>更新该 key 绑定的值；</li>
+<li>返回该 key 绑定的旧值；</li>
+</ul>
+<p>若 <code>HashMap</code> 不存在该 key，则：</p>
+<ul>
+<li>添加 key-value</li>
+<li>返回 <code>null</code></li>
+</ul>
+<p>因此 <code>put</code> 返回值为 <code>null</code> 可能有两种情况：</p>
+<ul>
+<li>key 不存在</li>
+<li>key 旧值为 <code>null</code></li>
+</ul>
+<p>所以不能依赖 <code>put</code> 的返回值判断 key 是否已经存在。</p>
+<p><code>put</code> 实际工作是委托给 <code>putVal</code> 实现的，其签名如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回 key 映射的旧值，若不存在，则返回 null</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent, <span class="keyword">boolean</span> evict)</span></span></span><br></pre></td></tr></table></figure>
+<p>各参数含义如下：</p>
+<ul>
+<li><code>key</code> 和 <code>value</code> 是要插入的 k-v</li>
+<li><code>hash</code> 是 <code>key</code> 的哈希值</li>
+<li><code>onlyIfAbsent</code> 是否仅当该 <code>key</code> 不存在插入，若为 <code>false</code> 则修改已有映射</li>
+<li><code>evict</code> 为 <code>false</code>，表明正处于创建模式</li>
+</ul>
+<p><code>put</code> 对它调用如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">putVal(hash(key), key, value, <span class="keyword">false</span>, <span class="keyword">true</span>)</span><br></pre></td></tr></table></figure>
+<p><code>onlyIfAbsent</code> 为 <code>false</code>，所以 <code>put</code> 会修改已有的 k-v 映射，<code>evict</code> 为 <code>true</code>，表明当前并非创建模式，哈希值则通过 <code>hash</code> 计算，该函数比较重要，是 <code>HashMap</code> 实现高效查找、插入的关键，其实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h;</span><br><span class="line">    <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先注意 <code>key</code> 可为 <code>null</code>，此时哈希值为 0，因此 <code>HashMap</code> 可以允许 key 为 null，前面说过 <code>Hashtable</code> 与 <code>HashMap</code> 的区别之一是它不允许 key/value 为 <code>null</code>，原因很简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Make sure the value is not null</span></span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Entry&lt;?,?&gt; tab[] = table;</span><br><span class="line">    <span class="keyword">int</span> hash = key.hashCode();</span><br><span class="line">    <span class="keyword">int</span> index = (hash &amp; <span class="number">0x7FFFFFFF</span>) % tab.length;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>可以看到 <code>Hashtable.put</code> 直接调用 <code>key.hashCode()</code>，所以 key 当然不能为 <code>null</code> 了。</p>
+<p>若 key 不为 <code>null</code>，则计算如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>)</span><br></pre></td></tr></table></figure>
+<p>为了让元素尽可能在桶中均匀分布，哈希函数要尽量离散，上述实现综合利用了 <code>int</code> 的高位和低位，避免只用低位时可能出现的哈希碰撞，具体细节还需要研究一下。</p>
+<p>下面看下 <code>putVal</code> 的实现，这是重点，一点点看：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Node&lt;K,V&gt;[] tab;</span><br><span class="line">Node&lt;K,V&gt; p;</span><br><span class="line"><span class="keyword">int</span> n, i;</span><br></pre></td></tr></table></figure>
+<p><code>HashMap</code> 中的桶是用数组实现的，此处声明的 <code>tab</code>、<code>p</code> 都是遍历桶用的，桶声明如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;</span><br></pre></td></tr></table></figure>
+<p>注意 <code>table</code> 在首次使用时初始化，创建 <code>HashMap</code> 时并不会对其初始化，因此 <code>putVal</code> 首先要检查 <code>table</code> 是否初始化，若未初始化，或初始化长度为 0，则调用 <code>resize()</code> 对其扩容，并将容量赋值给 <code>n</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">    n = (tab = resize()).length;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>resize()</code>：若 <code>table</code> 为 <code>null</code>，则创建长度为 <code>threshold</code> 的数组，否则扩容为原来容量的两倍，容量保持为 2 的幂；</li>
+</ul>
+<p>有了 key 的哈希值，如何决定该 key 在桶中的位置呢，<code>HashMap</code> 的做法很粗暴，直接取哈希值的低 <code>n - 1</code> 位，因此位置计算如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(n - <span class="number">1</span>) &amp; hash</span><br></pre></td></tr></table></figure>
+<p>若该位置没有元素，则直接插入新 k-v，因为这是该桶第一个节点，因此 <code>next</code> 节点为 <code>null</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</span><br><span class="line">    tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
+<p>若该位置已经有元素存在，说明该桶非空，此时 <code>p</code> 为桶中链表的表头，下一步需要在链表中查找该 key 插入的位置，首先声明一个节点来表示该 k-v 的目标位置，以及一个类型为 <code>K</code> 的临时变量：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Node&lt;K, V&gt; e;</span><br><span class="line">K k;</span><br></pre></td></tr></table></figure>
+<p>若头结点 <code>p</code> 的哈希值、键值与该 k-v 相同，表明 <code>p</code> 就是该 k-v 的目标位置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 哈希值、键引用、键值都相等</span></span><br><span class="line"><span class="keyword">if</span> (p.hash == hash &amp;&amp; ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">    e = p;</span><br></pre></td></tr></table></figure>
+<p>若头结点 <code>p</code> 是 <code>TreeNode</code>，表明链表已经进化为树，调用 <code>putTreeVal</code> 执行插入：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">    e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>为啥不先判断是否是树？为啥放在第二个检查？？？</li>
+</ul>
+<p>若以上条件都不满足，则需要在链表中查找 k-v 的位置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">        <span class="comment">// 1. 到达链表尾部</span></span><br><span class="line">        <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">            p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">            <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                treeifyBin(tab, hash);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 2. 找到 key 所在元素</span></span><br><span class="line">        <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        p = e;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若到达链表尾部，则将 k-v 插入尾部并退出循环：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">    p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时通过 <code>binCount</code> 循环累加，可以获得桶中的元素数量（不一定是总数），若到达链表尾部时，桶中元素数量超过 <code>TREEIFY_THRESHOLD - 1</code>，表明元素过多，此时链表进化为红黑树：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">    treeifyBin(tab, hash);</span><br></pre></td></tr></table></figure>
+<p>若未达到尾部，但当前元素 <code>e</code> 的哈希码、引用值（或值）相等，则表明 k-v 就应该插在 <code>e</code> 的位置上，此时直接退出循环：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">    <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+<p>查找结束后，若 <code>e</code> 为 <code>null</code> 表明在第一个 <code>if</code> 分支 <code>break</code> 了，此时元素插入已经完成，若 <code>null</code> 不为 <code>null</code> 则表明必然是第二个 <code>if</code> 分支退出的，此时表明链表中已经存在该 <code>key</code>，此时可能需要更新旧值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;  <span class="comment">// e 不为 null 表明 HashMap 中已经存在该 key</span></span><br><span class="line">    V oldValue = e.value;</span><br><span class="line">    <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">        e.value = value;</span><br><span class="line">    afterNodeAccess(e);</span><br><span class="line">    <span class="keyword">return</span> oldValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>onlyIfAbsent</code> 在此处生效；</li>
+</ul>
+<p>到此为止，元素插入（or 更新）已经完成，后面是一些常规操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">++modCount;</span><br><span class="line"><span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">    resize();</span><br><span class="line">afterNodeInsertion(evict);</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<p><code>modCount</code> 很有意思，表示 <code>HashMap</code> <strong>结构化修改</strong> 的次数，且被声明为 <code>transient</code>，用来避免对 <code>HashMap</code> 的并发修改：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> modCount;</span><br></pre></td></tr></table></figure>
+<p>有两类修改属于结构化修改：</p>
+<ul>
+<li><code>HashMap</code> 映射数量的增删；</li>
+<li><code>HashMap</code> 内部结构修改，如 rehash</li>
+</ul>
+<p>若元素插入后数量太多，则执行扩容：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">    resize();</span><br></pre></td></tr></table></figure>
+<p>最后，执行插入回调，并返回 <code>null</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">afterNodeInsertion(evict);</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<p>可以看到，<code>putVal</code> 中有两个地方可以返回，若 key 已存在，则返回该 key 的旧值，否则返回 <code>null</code>。</p>
+<h2 id="get"><a href="#get" class="headerlink" title="get"></a><code>get</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt; e;</span><br><span class="line">    <span class="keyword">return</span> (e = getNode(hash(key), key)) == <span class="keyword">null</span> ? <span class="keyword">null</span> : e.value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若 <code>key</code> 存在，则返回其映射的值，否则返回 <code>null</code>，因此返回 <code>null</code> 不能证明 <code>key</code> 不存在，也可能该 <code>key</code> 的映射值恰好为 <code>null</code>，应该用 <code>containsKey</code> 判断 key 是否存在。</p>
+<p>实现重点在 <code>getNode</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">getNode</span><span class="params">(<span class="keyword">int</span> hash, Object key)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab;</span><br><span class="line">    Node&lt;K,V&gt; first, e; </span><br><span class="line">    <span class="keyword">int</span> n; K k;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((tab = table) != <span class="keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span> &amp;&amp; (first = tab[(n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span>)  &#123;</span><br><span class="line">        <span class="comment">// 该 key 可能存在</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 该 key 不存在</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查询时 key 可能真的存在，也可能并不存在，若满足 <code>table</code> 不为空、<code>table</code> 长度不为 0、该 key 所在桶不为空，则 key 可能已经存在：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(tab = table) != <span class="keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span> &amp;&amp; (first = tab[(n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span></span><br></pre></td></tr></table></figure>
+<p>接下来检查 <code>key</code> 是否真的已经存在，首先检查桶中第一个节点的键是否为 <code>key</code>，如果是直接返回：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// always check first node</span></span><br><span class="line"><span class="keyword">if</span> (first.hash == hash &amp;&amp; ((k = first.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">    <span class="keyword">return</span> first;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>首先检查哈希值是否相同，若相同再检查键是否相等（引用相同 or <code>euqals</code> 相等）；</li>
+</ul>
+<p>如果第一个节点不满足，则需要继续检查桶中剩余元素，当然前提是桶中还有元素：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((e = first.next) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 检查桶中剩余元素</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>桶元素可以以树或链表形式存储，如果是树，则其查找更加高效：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (first <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">    <span class="keyword">return</span> ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);</span><br></pre></td></tr></table></figure>
+<p>如果是链表，则只能顺序遍历：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">    <span class="keyword">return</span> e;</span><br><span class="line">&#125; <span class="keyword">while</span> ((e = e.next) != <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
+<p>无论是以树，还是以链表方式遍历，最后都可能找不到 <code>key</code>，此时 <code>getNode</code> 返回 <code>null</code>。</p>
+<h2 id="remove"><a href="#remove" class="headerlink" title="remove"></a><code>remove</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">remove</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt; e;</span><br><span class="line">    <span class="keyword">return</span> (e = removeNode(hash(key), key, <span class="keyword">null</span>, <span class="keyword">false</span>, <span class="keyword">true</span>)) == <span class="keyword">null</span> ? <span class="keyword">null</span> : e.value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若删除成功，则返回 <code>key</code> 映射的值，否则返回 <code>null</code>，因此返回 <code>null</code> 并不能证明 <code>key</code> 不存在。</p>
+<p>删除逻辑在 <code>removeNode</code> 中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">removeNode</span><span class="params">(<span class="keyword">int</span> hash, Object key, Object value, <span class="keyword">boolean</span> matchValue, <span class="keyword">boolean</span> movable)</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>matchValue</code> 为 <code>true</code> 则仅当 <code>key</code> 的旧值等于 <code>value</code> 时才执行删除；</li>
+<li><code>movable</code> 为 <code>true</code> 则删除过程中可以移动节点，否则不移动，仅在红黑树时生效；</li>
+</ul>
+<p>而 <code>remove(Object key)</code> 对 <code>removeNode</code> 调用参数如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">removeNode(hash(key), key, <span class="keyword">null</span>, <span class="keyword">false</span>, <span class="keyword">true</span>)</span><br></pre></td></tr></table></figure>
+<p>因为根本没提供 <code>value</code> 所以 <code>matchValue</code> 为 <code>false</code>，且删除过程中允许移动节点。</p>
+<p>要删除，首先要找到 <code>key</code> 所在节点：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((tab = table) != <span class="keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span> &amp;&amp; (p = tab[index = (n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// key 可能存在，执行查找、删除</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 若 key 不存在</span></span><br><span class="line"><span class="keyword">return</span> <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<p>跟查找时相同，若 <code>table</code> 不为空、长度大于 0，且 <code>key</code> 所在桶非空时 <code>key</code> 才可能存在，此时执行查找、删除逻辑。</p>
+<p>查找与 <code>getNode</code> 几乎相同：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Node&lt;K,V&gt; node = <span class="keyword">null</span>, e; </span><br><span class="line">K k; </span><br><span class="line">V v;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 头节点为目标节点</span></span><br><span class="line"><span class="keyword">if</span> (p.hash == hash &amp;&amp; ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">    node = p;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ((e = p.next) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 高效的树查找</span></span><br><span class="line">    <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">        node = ((TreeNode&lt;K,V&gt;)p).getTreeNode(hash, key);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 循环链表查找</span></span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k)))) &#123;</span><br><span class="line">                node = e;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">             &#125;</span><br><span class="line">             p = e;</span><br><span class="line">         &#125; <span class="keyword">while</span> ((e = e.next) != <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查找完成后，若成功，则 <code>node</code> 即为目标节点，否则 <code>node</code> 为 <code>null</code>，另外 <code>matchValue</code> 还可影响删除逻辑，因此删除之前需要满足：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (node != <span class="keyword">null</span> &amp;&amp; (!matchValue || (v = node.value) == value || (value != <span class="keyword">null</span> &amp;&amp; value.equals(v)))) &#123;</span><br><span class="line">    <span class="comment">// 执行删除</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只有 <code>node</code> 不为 <code>null</code>，且满足该结点满足删除条件时才执行删除，删除条件有两种：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!matchValue || (v = node.value) == value || (value != <span class="keyword">null</span> &amp;&amp; value.equals(v))</span><br></pre></td></tr></table></figure>
+<p>要么 <code>matchValue</code> 为 <code>false</code>，即不要求旧值与 <code>value</code> 相等，要么满足旧值与 <code>value</code> 相等。</p>
+<p>删除时，如果是红黑树，则用更加高效的树删除：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (node <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">    ((TreeNode&lt;K,V&gt;)node).removeTreeNode(<span class="keyword">this</span>, tab, movable);</span><br></pre></td></tr></table></figure>
+<p>否则执行链表删除：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (node == p)</span><br><span class="line">    tab[index] = node.next;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    p.next = node.next;</span><br></pre></td></tr></table></figure>
+<p>链表删除借助 <code>node</code> 和 <code>p</code> 实现，若 <code>key</code> 正好位于桶中第一个节点，即查找在这里结束：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (p.hash == hash &amp;&amp; ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">    node = p;</span><br></pre></td></tr></table></figure>
+<p>仅在该情况下满足 <code>node == p</code>，此时删除 <code>node</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tab[index] = node.next;</span><br></pre></td></tr></table></figure>
+<p>其余场景下，<code>p</code> 指向 <code>node</code> 的前驱结点，此时删除如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p.next = node.next;</span><br></pre></td></tr></table></figure>
+<p>到此为止，删除操作已经完成，最后修改 <code>modCount</code>、减小 <code>size</code>、执行回调，并返回被删除的节点：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">++modCount;</span><br><span class="line">--size;</span><br><span class="line"></span><br><span class="line">afterNodeRemoval(node);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> node;</span><br></pre></td></tr></table></figure>
+<p><code>remove</code> 还有一个重载方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object key, Object value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> removeNode(hash(key), key, value, <span class="keyword">true</span>, <span class="keyword">true</span>) != <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样委托 <code>removeNode</code> 实现删除逻辑，但因为此时同时提供了 <code>key</code> 和 <code>value</code>，所以 <code>matchValue</code> 为 <code>true</code>。</p>
+<p>注意返回值为 <code>true</code> 表明删除成功，但我们注意到，是通过将 <code>removeNode</code> 返回值与 <code>null</code> 判断实现的，因为 <code>removeNode</code> 为 <code>null</code> 证明该 <code>key</code> 不存在。</p>
+<blockquote>
+<p>前面说过，<code>remove</code> 返回值为 <code>null</code> 并不能证明该 <code>key</code> 不存在。</p>
+</blockquote>
+<h2 id="compute-类"><a href="#compute-类" class="headerlink" title="compute 类"></a>compute 类</h2><p>Java 8 新增了 3 个 compute 类方法：</p>
+<ul>
+<li><code>compute</code></li>
+<li><code>computeIfAbsent</code></li>
+<li><code>computeIfPresent</code></li>
+</ul>
+<h3 id="compute"><a href="#compute" class="headerlink" title="compute"></a><code>compute</code></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">compute</span><span class="params">(K key, BiFunction&lt;? <span class="keyword">super</span> K, ? <span class="keyword">super</span> V, ? extends V&gt; remappingFunction)</span></span></span><br></pre></td></tr></table></figure>
+<p>从签名可以猜测，<code>key</code> 用于指定要修改的映射，<code>remappingFunction</code> 则以 <code>key</code> 及其旧值为参数，计算得到一个新的 <code>value</code>，最后将 <code>key</code> 的值修改为 <code>value</code>，<code>compute</code> 该为 <code>updateInPlace</code> 似乎更合理，本身就是原地修改。</p>
+<p>以上只是我们的猜测，<code>compute</code> 实际行为需要走读源码才能掌握。</p>
+<p>首先，<code>remappingFunction</code> 不能为 <code>null</code>，否则抛出空指针异常：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (remappingFunction == <span class="keyword">null</span>)</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br></pre></td></tr></table></figure>
+<p>然后是需要用到的中间变量的声明：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> hash = hash(key);</span><br><span class="line"></span><br><span class="line">Node&lt;K,V&gt;[] tab; </span><br><span class="line">Node&lt;K,V&gt; first; </span><br><span class="line"><span class="keyword">int</span> n, i;</span><br><span class="line"><span class="keyword">int</span> binCount = <span class="number">0</span>;</span><br><span class="line">TreeNode&lt;K,V&gt; t = <span class="keyword">null</span>;</span><br><span class="line">Node&lt;K,V&gt; old = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>tab</code> 是指向 <code>table</code> 的引用；</li>
+<li><code>first</code> 是 <code>key</code> 所在桶的首元素；</li>
+<li><code>n</code> 是 <code>table</code> 的长度，即桶个数；</li>
+<li><code>i</code> 是 <code>key</code> 所在桶在 <code>table</code> 中的索引，所以 <code>first</code> 就是 <code>tab[i]</code>；</li>
+<li><code>binCount</code> 是桶中元素的数量；</li>
+<li><code>t</code> 若桶中链表退化为树，则 <code>t</code> 为首元素 <code>first</code> 转换为 <code>TreeNode</code> 后的值；</li>
+<li><code>old</code> 是 <code>key</code> 所在节点；</li>
+</ul>
+<p>实际查找 <code>key</code> 所在节点之前，先检查 <code>table</code> 是否需要扩容，或是否需要初始化：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (size &gt; threshold || (tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">    n = (tab = resize()).length;</span><br></pre></td></tr></table></figure>
+<p>注意，先检查是否需要扩容，即 <code>size &gt; threshold</code>，若放在后面，则只能执行一次，之后 <code>n</code> 赋值为 <code>table</code> 的长度。</p>
+<p>准备工作做好后，查找 <code>key</code> 所在节点：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((first = tab[i = (n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (first <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">        <span class="comment">// 树查找</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 链表查找</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先判断桶中头元素是否为空，如果是空，则 <code>key</code> 肯定不存在，若首元素 <code>first</code> 为 <code>TreeNode</code>，则执行树查找：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">old = (t = (TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);</span><br></pre></td></tr></table></figure>
+<p>否则执行链表查找，并统计桶中元素个数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Node&lt;K,V&gt; e = first; </span><br><span class="line">K k;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k)))) &#123;</span><br><span class="line">        old = e;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ++binCount;</span><br><span class="line">&#125; <span class="keyword">while</span> ((e = e.next) != <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
+<p>查找过程很简单，即顺序遍历并比较，若查找成功，则 <code>old</code> 指向 <code>key</code> 所在节点，否则 <code>old</code> 为 <code>null</code>。</p>
+<p>然后需要根据 <code>key</code> 所在节点的映射值和 <code>remappingFunction</code> 计算新的值，因为 <code>key</code> 不一定真的存在，若 <code>key</code> 不存在怎么办呢，直接返回码？当节点不存在时，<code>HashMap</code> 实际将旧值视为 <code>null</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">V oldValue = (old == <span class="keyword">null</span>) ? <span class="keyword">null</span> : old.value;</span><br></pre></td></tr></table></figure>
+<p>新值计算很直接：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">V v = remappingFunction.apply(key, oldValue);</span><br></pre></td></tr></table></figure>
+<p>因为 <code>key</code> 可能并不存在，所以更新值分为两种场景：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (old != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// key 已存在</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (v != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// key 不存在，且新值不为 null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若 <code>key</code> 已经存在，且新值不为 <code>null</code>，则更新已有节点的值，若新值为 <code>null</code>，则删除该节点：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (v != <span class="keyword">null</span>) &#123;</span><br><span class="line">    old.value = v;</span><br><span class="line">    afterNodeAccess(old);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    removeNode(hash, key, <span class="keyword">null</span>, <span class="keyword">false</span>, <span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+<p>若 <code>key</code> 不存在，且新值不为 <code>null</code>，则插入新节点：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (t != <span class="keyword">null</span>)</span><br><span class="line">    t.putTreeVal(<span class="keyword">this</span>, tab, hash, key, v);</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    tab[i] = newNode(hash, key, v, first);</span><br><span class="line">    <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>)</span><br><span class="line">        treeifyBin(tab, hash);</span><br><span class="line">&#125;</span><br><span class="line">++modCount;</span><br><span class="line">++size;</span><br><span class="line">afterNodeInsertion(<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+<p>注意，若是链表插入，则将新节点插在表头，且还需要检查是否需要 <code>treeifyBin</code>。</p>
+<p>若 <code>key</code> 不存在，且新值为 <code>null</code> 呢，代码没有处理该场景，而是直接走到最后：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> v;</span><br></pre></td></tr></table></figure>
+<p>可以看到，<code>key</code> 不存在，且新值为 <code>null</code> 时，不插入新节点，且返回 <code>null</code>。</p>
+<p>总结一下：</p>
+<ul>
+<li><code>key</code> 存在<ul>
+<li>新值不为 <code>null</code>：更新节点</li>
+<li>新值为 <code>null</code>：删除节点</li>
+</ul>
+</li>
+<li><code>key</code> 不存在：<ul>
+<li>新值不为 <code>null</code>：插入节点</li>
+<li>新值为 <code>null</code>：啥都不干</li>
+</ul>
+</li>
+</ul>
+<p>如此看来，叫 <code>updateInPlace</code> 也不合理，因为该函数会做更新、删除、插入 3 中操作，叫 <code>compute</code> 那是非常贴切的。</p>
+<p><code>compute</code> 在 <code>key</code> 存在或不存在时都能工作，但有时需明确区分这两种场景，因此 Java 8 还提供了：</p>
+<ul>
+<li><code>computeIfAbsent</code></li>
+<li><code>computeIfPresent</code></li>
+</ul>
+<h3 id="computeIfAbsent"><a href="#computeIfAbsent" class="headerlink" title="computeIfAbsent"></a><code>computeIfAbsent</code></h3><p>顾名思义，只有 <code>key</code> 不存在时才计算，因此 <code>computeIfAbsent</code> 签名如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">computeIfAbsent</span><span class="params">(K key, Function&lt;? <span class="keyword">super</span> K, ? extends V&gt; mappingFunction)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="computeIfPresent"><a href="#computeIfPresent" class="headerlink" title="computeIfPresent"></a><code>computeIfPresent</code></h3><p>// TODO</p>
+<h2 id="clear"><a href="#clear" class="headerlink" title="clear"></a><code>clear</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Removes all of the mappings from this map. The map will be empty after this call returns.</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab;</span><br><span class="line">    modCount++;</span><br><span class="line">    <span class="keyword">if</span> ((tab = table) != <span class="keyword">null</span> &amp;&amp; size &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; tab.length; ++i)</span><br><span class="line">            tab[i] = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>clear</code> 属于结构性修改，因此 <code>modCount++</code>，通过将每个桶的 <strong>头元素</strong> 设为 <code>null</code> 实现清理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; tab.length; ++i)</span><br><span class="line">    tab[i] = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<p>注意，并非将 <code>HashMap</code> 中所有元素设置 <code>null</code>，而是仅设置头元素，这么做肯定能达到清空 <code>HashMap</code> 的效果，有人会问，为啥不直接把 <code>table</code> 置为 <code>null</code> 呢，不是更简单？</p>
+<p><code>table = null</code> 也能达到清理的效果，但 <code>clear</code> 的设计使用场景是：移除已有映射后，还想 <strong>复用</strong> 该 <code>HashMap</code>，且新填充的映射数量与之前几乎相同。因此 <code>clear</code> 实现没有粗暴的将 <code>table</code> 设为 <code>null</code>，参见<a href="https://stackoverflow.com/questions/2811537/is-java-hashmap-clear-and-remove-memory-effective" target="_blank" rel="noopener">该回答</a>。</p>
+<p>如果不需要复用 <code>HashMap</code>，或之后插入的映射数量相对之前 <strong>很少</strong>，则不推荐使用 <code>clear</code>，而是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">m = <span class="keyword">null</span>;</span><br><span class="line">HashMap n = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br></pre></td></tr></table></figure>
+<p>即将原 <code>HashMap</code> 设为 <code>null</code>，之后 GC 将回收它占用的内存，并新建 <code>HashMap</code> 使用。</p>
+<h2 id="clone"><a href="#clone" class="headerlink" title="clone"></a><code>clone</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">clone</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    HashMap&lt;K,V&gt; result;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        result = (HashMap&lt;K,V&gt;)<span class="keyword">super</span>.clone();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">        <span class="comment">// this shouldn't happen, since we are Cloneable</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> InternalError(e);</span><br><span class="line">    &#125;</span><br><span class="line">    result.reinitialize();</span><br><span class="line">    result.putMapEntries(<span class="keyword">this</span>, <span class="keyword">false</span>);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>clone</code> 方法的注释写到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Returns a shallow copy of this HashMap instance: the keys and values themselves are not cloned.</span><br></pre></td></tr></table></figure>
+<p>即 <code>HashMap.clone</code> 实现的是浅克隆，首先调用 <code>AbstractMap.clone</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = (HashMap&lt;K,V&gt;)<span class="keyword">super</span>.clone();</span><br></pre></td></tr></table></figure>
+<p><code>AbstractMap.clone</code> 也是浅克隆：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">    AbstractMap&lt;?,?&gt; result = (AbstractMap&lt;?,?&gt;)<span class="keyword">super</span>.clone();</span><br><span class="line">    result.keySet = <span class="keyword">null</span>;</span><br><span class="line">    result.values = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后对克隆结果 <code>result</code> 重新初始化：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Reset to initial default state.  Called by clone and readObject.</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reinitialize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    table = <span class="keyword">null</span>;</span><br><span class="line">    entrySet = <span class="keyword">null</span>;</span><br><span class="line">    keySet = <span class="keyword">null</span>;</span><br><span class="line">    values = <span class="keyword">null</span>;</span><br><span class="line">    modCount = <span class="number">0</span>;</span><br><span class="line">    threshold = <span class="number">0</span>;</span><br><span class="line">    size = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>reinitialize</code> 将 <code>result</code> 全部状态字段设置为空，包括桶（<code>table</code>）、集合视图（<code>entrySet</code>、<code>keySet</code>、<code>values</code>），以及各种计数字段，重新初始化后，<code>result</code> 剩下的状态字段都是 <code>final</code> 的，比如 <code>loadFactor</code> 等。</p>
+<p>最后，使用 <code>HashMap.putMapEntries</code> 将当前 map（<code>this</code>）的所有映射插入 <code>result</code>，开头根据当前 map 的大小（<code>m.size</code>）将 <code>result</code> 容量初始化为合理大小：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">putMapEntries</span><span class="params">(Map&lt;? extends K, ? extends V&gt; m, <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> s = m.size();</span><br><span class="line">    <span class="keyword">if</span> (s &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (table == <span class="keyword">null</span>) &#123; <span class="comment">// pre-size</span></span><br><span class="line">            <span class="keyword">float</span> ft = ((<span class="keyword">float</span>)s / loadFactor) + <span class="number">1.0F</span>;</span><br><span class="line">            <span class="keyword">int</span> t = ((ft &lt; (<span class="keyword">float</span>)MAXIMUM_CAPACITY) ? (<span class="keyword">int</span>)ft : MAXIMUM_CAPACITY);</span><br><span class="line">            <span class="keyword">if</span> (t &gt; threshold)</span><br><span class="line">                threshold = tableSizeFor(t);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (s &gt; threshold)</span><br><span class="line">            resize();</span><br><span class="line">        <span class="comment">// 循环插入 k-v</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为消除批量插入过程中的扩容，需计算需要的最小容量：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> ft = ((<span class="keyword">float</span>)s / loadFactor) + <span class="number">1.0F</span>;</span><br><span class="line"><span class="keyword">int</span> t = ((ft &lt; (<span class="keyword">float</span>)MAXIMUM_CAPACITY) ? (<span class="keyword">int</span>)ft : MAXIMUM_CAPACITY);</span><br></pre></td></tr></table></figure>
+<p>若最小容量大于 <code>threshold</code>，表明插入时肯定需要扩容，此时将 <code>threshold</code> 设置为 <code>t</code>，循环插入时，<code>putVal</code> 第一次扩容就直接扩到 <code>t</code>，省去多次扩容的开销：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (t &gt; threshold)</span><br><span class="line">    threshold = tableSizeFor(t);</span><br></pre></td></tr></table></figure>
+<p>如果 <code>t</code> 小于 <code>threshold</code>，表明插入时不会发生扩容，那我们也不用多此一举。</p>
+<p>还有一种情况，若 <code>table</code> 不为 <code>null</code>，但 <code>s &gt; threshold</code>，<code>clone</code> 调用时该场景不会发生，但其他场景可能发生，此时 <strong>立即</strong> 扩容一次：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (s &gt; threshold)</span><br><span class="line">    resize();</span><br></pre></td></tr></table></figure>
+<p>容量准备好后，就循环将 <code>m</code> 中的映射插入 <code>result</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (Map.Entry&lt;? extends K, ? extends V&gt; e : m.entrySet()) &#123;</span><br><span class="line">    K key = e.getKey();</span><br><span class="line">    V value = e.getValue();</span><br><span class="line">    putVal(hash(key), key, value, <span class="keyword">false</span>, evict);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="contains-类"><a href="#contains-类" class="headerlink" title="contains 类"></a>contains 类</h2><p><code>HashMap</code> 中保存的是 key-value 映射，因此 <code>HashMap</code> 分别为键、值提供了检测方法：</p>
+<ul>
+<li><code>containsValue</code></li>
+<li><code>containsKey</code></li>
+</ul>
+<h3 id="containsKey"><a href="#containsKey" class="headerlink" title="containsKey"></a><code>containsKey</code></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">containsKey</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> getNode(hash(key), key) != <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>key 检测借助 <code>getNode</code> 实现，如果能查找到该 key 的节点，则表明该 key 存在，非常明确。</p>
+<h3 id="containsValue"><a href="#containsValue" class="headerlink" title="containsValue"></a><code>containsValue</code></h3><p>检测 key 很简单，直接查找即可，检测 value 没有现成方法，只能自行实现。</p>
+<p>首先，只有 <code>table</code> 不为空，且长度不为 0 时 value 才可能存在：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Node&lt;K,V&gt;[] tab; </span><br><span class="line">V v;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ((tab = table) != <span class="keyword">null</span> &amp;&amp; size &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// 可能存在 value</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="keyword">false</span>;</span><br></pre></td></tr></table></figure>
+<p>查找时，先遍历桶，然后遍历桶中元素：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; tab.length; ++i) &#123;</span><br><span class="line">    <span class="keyword">for</span> (Node&lt;K,V&gt; e = tab[i]; e != <span class="keyword">null</span>; e = e.next) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((v = e.value) == value || (value != <span class="keyword">null</span> &amp;&amp; value.equals(v)))</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若查找成功，返回 <code>true</code>，查找失败则返回 <code>false</code>。</p>
+<h2 id="集合视图"><a href="#集合视图" class="headerlink" title="集合视图"></a>集合视图</h2><p><code>HashMap</code> 提供 3 种集合视图：</p>
+<ul>
+<li><code>keySet</code></li>
+<li><code>values</code></li>
+<li><code>entrySet</code></li>
+</ul>
+<h3 id="keySet"><a href="#keySet" class="headerlink" title="keySet"></a><code>keySet</code></h3><p><code>HashMap</code> 对 <code>keySet</code> 实现很简单，若 <code>keySet</code> 不为空，则返回 <code>keySet</code>，否则返回空 <code>KeySet</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Set&lt;K&gt; <span class="title">keySet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Set&lt;K&gt; ks = keySet;</span><br><span class="line">    <span class="keyword">if</span> (ks == <span class="keyword">null</span>) &#123;</span><br><span class="line">        ks = <span class="keyword">new</span> KeySet();</span><br><span class="line">        keySet = ks;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ks;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而 <code>keySet</code> 定义在 <code>AbstractMap</code> 中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> Set&lt;K&gt;        keySet;</span><br></pre></td></tr></table></figure>
+<p><code>AbstractMap</code> 和 <code>HashMap</code> 对 <code>keySet</code> 做赋值的地方只有一处，就是上面 <code>if</code> 分支：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ks = <span class="keyword">new</span> KeySet();</span><br></pre></td></tr></table></figure>
+<p>因此，关键在于 <code>KeySet</code> 类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">KeySet</span> <span class="keyword">extends</span> <span class="title">AbstractSet</span>&lt;<span class="title">K</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span>                 </span>&#123; <span class="keyword">return</span> size; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span>               </span>&#123; HashMap.<span class="keyword">this</span>.clear(); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Iterator&lt;K&gt; <span class="title">iterator</span><span class="params">()</span>     </span>&#123; <span class="keyword">return</span> <span class="keyword">new</span> KeyIterator(); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span> </span>&#123; <span class="keyword">return</span> containsKey(o); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> removeNode(hash(key), key, <span class="keyword">null</span>, <span class="keyword">false</span>, <span class="keyword">true</span>) != <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Spliterator&lt;K&gt; <span class="title">spliterator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> KeySpliterator&lt;&gt;(HashMap.<span class="keyword">this</span>, <span class="number">0</span>, -<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">forEach</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> K&gt; action)</span> </span>&#123;</span><br><span class="line">        Node&lt;K,V&gt;[] tab;</span><br><span class="line">        <span class="keyword">if</span> (action == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        <span class="keyword">if</span> (size &gt; <span class="number">0</span> &amp;&amp; (tab = table) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> mc = modCount;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; tab.length; ++i) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Node&lt;K,V&gt; e = tab[i]; e != <span class="keyword">null</span>; e = e.next)</span><br><span class="line">                    action.accept(e.key);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (modCount != mc)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到 <code>KeySet</code> 所有方法（比如 <code>size</code>、<code>contains</code>、<code>remove</code> 等）都是基于 <code>HashMap</code> 的底层存储 <code>table</code> 实现的，因此如果 <code>HashMap</code> 的数据发生变化，<code>KeySet</code> 立马会被影响：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;String, Integer&gt; m = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">m.put(<span class="string">"a"</span>, <span class="number">1</span>);</span><br><span class="line">m.put(<span class="string">"b"</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">Set&lt;String&gt; keys = m.keySet();</span><br><span class="line">System.out.println(keys);  <span class="comment">// [a, b]</span></span><br><span class="line">        </span><br><span class="line">m.remove(<span class="string">"a"</span>);</span><br><span class="line">System.out.println(keys);  <span class="comment">// [b]</span></span><br></pre></td></tr></table></figure>
+<p>反过来，因为 <code>KeySet.remove</code> 是通过修改 <code>HashMap</code> 的 <code>table</code> 实现的，因此删除键也会立马影响 <code>HashMap</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;String, Integer&gt; m = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">m.put(<span class="string">"a"</span>, <span class="number">1</span>);</span><br><span class="line">m.put(<span class="string">"b"</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">Set&lt;String&gt; keys = m.keySet();</span><br><span class="line">System.out.println(m);  <span class="comment">// &#123;a=1, b=2&#125;</span></span><br><span class="line"></span><br><span class="line">keys.remove(<span class="string">"a"</span>);</span><br><span class="line">System.out.println(m);  <span class="comment">// &#123;b=2&#125;</span></span><br></pre></td></tr></table></figure>
+<p>当然，并非只能通过源码才能知道 <code>KeySet</code> 和 <code>HashMap</code> 互相影响，<code>keySet</code> 方法的 javadoc 里实际早就明确指出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Returns a Set view of the keys contained in this map. The set is backed by the map, </span><br><span class="line">so changes to the map are reflected in the set, and vice-versa.  </span><br><span class="line"></span><br><span class="line">If the map is modified while an iteration over the set is in progress (except through the </span><br><span class="line">iterator&apos;s own remove operation), the results of the iteration are undefined.  </span><br><span class="line"></span><br><span class="line">The set supports element removal, which removes the corresponding mapping from the map, </span><br><span class="line">via the Iterator.remove, Set.remove, removeAll, retainAll, and clear operations.  </span><br><span class="line">It does not support the add or addAll operations.</span><br></pre></td></tr></table></figure>
+<p>上面还说如果 <code>HashMap</code> 在遍历 <code>KeySet</code> 过程中被修改，则遍历结果未定义，啥意思呢？无非就是部分元素遍历不到，or 遍历到不一致的数据，我们看下原因。</p>
+<p><code>KeySet</code> 提供两种遍历方式，即：</p>
+<ul>
+<li><code>forEach</code></li>
+<li><code>iterator</code></li>
+</ul>
+<p>先看下 <code>forEach</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">forEach</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> K&gt; action)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab;</span><br><span class="line">    <span class="keyword">if</span> (action == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="keyword">if</span> (size &gt; <span class="number">0</span> &amp;&amp; (tab = table) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> mc = modCount;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; tab.length; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (Node&lt;K,V&gt; e = tab[i]; e != <span class="keyword">null</span>; e = e.next)</span><br><span class="line">                action.accept(e.key);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (modCount != mc)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果 <code>forEach</code> 遍历过程中 <code>HashMap</code> 有结构化修改，则抛出 <code>ConcurrentModificationException</code>，这是通过在遍历前（嵌套 <code>for</code>）记录 <code>modCount</code>，并在遍历后与当前 <code>modCount</code> 比较实现的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> mc = modCount;</span><br><span class="line"><span class="comment">// 遍历</span></span><br><span class="line"><span class="keyword">if</span> (modCount != mc)</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</span><br></pre></td></tr></table></figure>
+<p>再看下 <code>iterator</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Iterator&lt;K&gt; <span class="title">iterator</span><span class="params">()</span>     </span>&#123; <span class="keyword">return</span> <span class="keyword">new</span> KeyIterator(); &#125;</span><br></pre></td></tr></table></figure>
+<p><code>iterator</code> 返回一个 <code>KeyIterator</code>，通过该 <code>Iterator</code> 可以实现 key 遍历，<code>KeyIterator</code> 实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">KeyIterator</span> <span class="keyword">extends</span> <span class="title">HashIterator</span> <span class="keyword">implements</span> <span class="title">Iterator</span>&lt;<span class="title">K</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> K <span class="title">next</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> nextNode().key; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>KeyIterator.next</code> 是委托给 <code>HashIterator.nextNode</code> 实现的，因此重点在 <code>HashIterator</code>，这里说句题外话，<code>HashMap</code> 有 3 个分别用于 key/value/entry 的遍历器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">KeyIterator</span> <span class="keyword">extends</span> <span class="title">HashIterator</span> <span class="keyword">implements</span> <span class="title">Iterator</span>&lt;<span class="title">K</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> K <span class="title">next</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> nextNode().key; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ValueIterator</span> <span class="keyword">extends</span> <span class="title">HashIterator</span> <span class="keyword">implements</span> <span class="title">Iterator</span>&lt;<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> V <span class="title">next</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> nextNode().value; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">EntryIterator</span> <span class="keyword">extends</span> <span class="title">HashIterator</span> <span class="keyword">implements</span> <span class="title">Iterator</span>&lt;<span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> Map.<span class="function">Entry&lt;K,V&gt; <span class="title">next</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> nextNode(); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>他们都是 <code>HashIterator</code> 的子类，且大部分功能都委托给 <code>HashIterator</code> 实现，因此理解 <code>HashIterator</code> 对于理解 <code>HashMap</code> 遍历非常重要。</p>
+<p><code>HashIterator</code> 是一个抽象类，共有 4 个状态字段和 3 个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">HashIterator</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt; next;        <span class="comment">// next entry to return</span></span><br><span class="line">    Node&lt;K,V&gt; current;     <span class="comment">// current entry</span></span><br><span class="line">    <span class="keyword">int</span> expectedModCount;  <span class="comment">// for fast-fail</span></span><br><span class="line">    <span class="keyword">int</span> index;             <span class="comment">// current slot</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span> </span>&#123; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">nextNode</span><span class="params">()</span> </span>&#123; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span> </span>&#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4 个字段分别用于：</p>
+<ul>
+<li><code>index</code> 当前桶索引，<code>current</code> 当前 k-v 引用</li>
+<li><code>next</code> 下一个 k-v</li>
+<li><code>expectedModCount</code> 为 <code>modCount</code> 的副本</li>
+</ul>
+<p>构造时初始化所有字段：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HashIterator() &#123;</span><br><span class="line">    expectedModCount = modCount;</span><br><span class="line">    Node&lt;K,V&gt;[] t = table;</span><br><span class="line">    current = next = <span class="keyword">null</span>;</span><br><span class="line">    index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (t != <span class="keyword">null</span> &amp;&amp; size &gt; <span class="number">0</span>) &#123; <span class="comment">// advance to first entry</span></span><br><span class="line">        <span class="keyword">do</span> &#123;&#125; <span class="keyword">while</span> (index &lt; t.length &amp;&amp; (next = t[index++]) == <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>expectedModCount</code> 和 <code>current</code> 初始化比较简单，当前节点默认为 <code>null</code>，因此 <code>current</code> 被初始化为 <code>null</code>。</p>
+<p>关键一句是 <code>next = t[index++]</code>，这句完成 <code>next</code> 和 <code>index</code> 的初始化，最后 <code>index</code> 为第一个不为空的桶的索引，而 <code>next</code> 为该桶首元素的引用。</p>
+<p><code>hasNext</code> 用于判断是否还有剩余元素，<code>next</code> 不为空则表示还有剩余：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> next != <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>nextNode</code> 返回下一个元素，首先判断 <code>HashMap</code> 是否有结构性修改，以及是否已经没有元素了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">nextNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt;[] t;</span><br><span class="line">    Node&lt;K,V&gt; e = next;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (modCount != expectedModCount)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</span><br><span class="line">    <span class="keyword">if</span> (e == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回下个节点容易，直接把 <code>e</code> 返回即可，但返回后需要修改 <code>HashInterator</code> 的内部状态，即 <code>current</code>、<code>next</code> 和 <code>index</code>，这是 <code>nextNode</code> 正确工作的关键：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((next = (current = e).next) == <span class="keyword">null</span> &amp;&amp; (t = table) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">do</span> &#123;&#125; <span class="keyword">while</span> (index &lt; t.length &amp;&amp; (next = t[index++]) == <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>next = (current = e).next</code> 很巧妙，完成了 <code>next</code> 和 <code>current</code> 移动，移动后若 <code>next</code> 为 <code>null</code>，且 <code>table</code> 不为 <code>null</code>，此时若无其他动作，下次 <code>nextNode</code> 调用将返回 <code>null</code>，但 <code>HashMap</code> 还不致于如此弱智，因为 <code>next</code> 和 <code>current</code> 在同一个桶中，所以 <code>next</code> 为 <code>null</code> 表明该桶已经遍历结束，此时需要前往下一个非空的桶：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;&#125; <span class="keyword">while</span> (index &lt; t.length &amp;&amp; (next = t[index++]) == <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
+<p>这里为啥不直接用 <code>while</code>，而是用 <code>do while</code> 呢？我也没搞明白，我觉得语义上没有区别，可能虚拟机实现上有区别吧。</p>
+<p><code>remove</code> 实现也比较简单，首先还是各种检查：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt; p = current;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (p == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException();</span><br><span class="line">    <span class="keyword">if</span> (modCount != expectedModCount)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>核心的删除逻辑是通过 <code>removeNode</code> 实现的，删除之前先将 <code>current</code> 置为 <code>null</code>，便于垃圾回收，然后执行删除：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">current = <span class="keyword">null</span>;</span><br><span class="line">K key = p.key;</span><br><span class="line">removeNode(hash(key), key, <span class="keyword">null</span>, <span class="keyword">false</span>, <span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
+<p>注意，前面说过遍历 <code>KeySet</code> 时若 <code>HashMap</code> 发生结构化修改，则抛出 <code>ConcurrentModificationException</code>，但通过 <code>Iterator.remove</code> 删除除外，原因是 <code>Iterator.remove</code> 在删除元素后修改了 <code>expectedModCount</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expectedModCount = modCount;</span><br></pre></td></tr></table></figure>
+<p>这样遍历时 <code>nextNode</code> 中的检查就能通过了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">nextNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (modCount != expectedModCount)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</span><br></pre></td></tr></table></figure>
+<h3 id="values"><a href="#values" class="headerlink" title="values"></a><code>values</code></h3><p><code>keySet()</code> 返回键的集合，而 <code>values</code> 返回值的集合，不过因为可能存在多个相同值，所以返回的集合类型为 <code>Collection</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Collection&lt;V&gt; <span class="title">values</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Collection&lt;V&gt; vs = values;</span><br><span class="line">    <span class="keyword">if</span> (vs == <span class="keyword">null</span>) &#123;</span><br><span class="line">        vs = <span class="keyword">new</span> Values();</span><br><span class="line">        values = vs;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> vs;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现与 <code>keySet</code> 几乎完全相同，同样 <code>Values</code> 与 <code>HashMap</code> 修改时互相影响，且遍历 <code>values()</code> 结果时，若 <code>HashMap</code> 发生结构性修改（通过 <code>Iterator.remove</code> 删除除外），则抛出 <code>ConcurrentModificationException</code>。</p>
+<p>同样，<code>values</code> 重点也在 <code>Values</code> 类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Values</span> <span class="keyword">extends</span> <span class="title">AbstractCollection</span>&lt;<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span>                 </span>&#123; <span class="keyword">return</span> size; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span>               </span>&#123; HashMap.<span class="keyword">this</span>.clear(); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Iterator&lt;V&gt; <span class="title">iterator</span><span class="params">()</span>     </span>&#123; <span class="keyword">return</span> <span class="keyword">new</span> ValueIterator(); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span> </span>&#123; <span class="keyword">return</span> containsValue(o); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Spliterator&lt;V&gt; <span class="title">spliterator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ValueSpliterator&lt;&gt;(HashMap.<span class="keyword">this</span>, <span class="number">0</span>, -<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">forEach</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> V&gt; action)</span> </span>&#123;</span><br><span class="line">        Node&lt;K,V&gt;[] tab;</span><br><span class="line">        <span class="keyword">if</span> (action == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        <span class="keyword">if</span> (size &gt; <span class="number">0</span> &amp;&amp; (tab = table) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> mc = modCount;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; tab.length; ++i) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Node&lt;K,V&gt; e = tab[i]; e != <span class="keyword">null</span>; e = e.next)</span><br><span class="line">                    action.accept(e.value);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (modCount != mc)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>遍历 <code>Values</code> 通过 <code>ValueIterator</code> 实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ValueIterator</span> <span class="keyword">extends</span> <span class="title">HashIterator</span> <span class="keyword">implements</span> <span class="title">Iterator</span>&lt;<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> V <span class="title">next</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> nextNode().value; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>HashIterator</code> 前面已经介绍过了。</p>
+<h3 id="entrySet"><a href="#entrySet" class="headerlink" title="entrySet"></a><code>entrySet</code></h3><p><code>keySet</code> 和 <code>values</code> 各从键、值两个角度反映了 <code>HashMap</code> 的内部结构，<code>entrySet</code> 则是从键值映射角度：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() &#123;</span><br><span class="line">    Set&lt;Map.Entry&lt;K,V&gt;&gt; es;</span><br><span class="line">    <span class="keyword">return</span> (es = entrySet) == <span class="keyword">null</span> ? (entrySet = <span class="keyword">new</span> EntrySet()) : es;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这次代码比 <code>keySet</code> 和 <code>values</code> 要简洁一些，汗。</p>
+<p><code>Set&lt;Map.Entry&lt;K, V&gt;&gt;</code> 与 <code>HashMap</code> 同样互相影响，结构化修改同样会抛出 <code>ConcurrentModificationException</code>，但例外场景有两个：</p>
+<ul>
+<li><code>Iterator.remove</code></li>
+<li><code>Entry.setValue</code></li>
+</ul>
+<p>这两个方法修改不会导致 <code>ConcurrentModificationException</code>。</p>
+<p>实现重点同样在 <code>EntrySet</code>，与 <code>KeySet</code> 和 <code>Values</code> 大同小异。</p>
+<h2 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h2><p><code>HashMap</code> 提供以下 3 个回调函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">afterNodeAccess</span><span class="params">(Node&lt;K,V&gt; p)</span> </span>&#123; &#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">afterNodeInsertion</span><span class="params">(<span class="keyword">boolean</span> evict)</span> </span>&#123; &#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">afterNodeRemoval</span><span class="params">(Node&lt;K,V&gt; p)</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<p><code>HashMap</code> 中这 3 个方法为空实现，主要留给 <code>LinkedHashMap</code>（<code>LinkedHashMap</code> 继承 <code>HashMap</code>）使用。</p>
+<h2 id="元素查找"><a href="#元素查找" class="headerlink" title="元素查找"></a>元素查找</h2><p>元素查找即查找指定 key 所在的节点，可以分为两步：</p>
+<ol>
+<li>桶查找</li>
+<li>链表/红黑树查找</li>
+</ol>
+<h3 id="桶查找"><a href="#桶查找" class="headerlink" title="桶查找"></a>桶查找</h3><p><code>HashMap</code> 中的桶是一个 <code>Node&lt;K, V&gt;[] table</code> 数组，给定 <code>key-value</code>，通过如下公式确定该 <code>key</code> 所在的桶的索引：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(n - <span class="number">1</span>) &amp; hash</span><br></pre></td></tr></table></figure>
+<p>由于 <code>n</code> 是 2 的整数幂，因此 <code>n - 1</code> 正好是只保留 <code>hash</code> 的 <code>n - 1</code> 位的掩码，例如 n = 16 时，n - 1 的二进制表示为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1111</span><br></pre></td></tr></table></figure>
+<p>而 <code>1111 &amp; hash</code> 的效果是过滤掉低 4 位以上的其他字段，最后的结果可以直接作为桶的索引。</p>
+<p>其效果与 <code>hash % n</code> 相同（前提：n 是 2 的整数幂），但是位操作比 <code>%</code> 更加高效。</p>
+<h3 id="链表-红黑树查找"><a href="#链表-红黑树查找" class="headerlink" title="链表/红黑树查找"></a>链表/红黑树查找</h3><p>找到 key 所在桶后，桶中元素要么形成链表，要么形成红黑树，无论哪种情况，要找到 key 所在节点，需：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br></pre></td></tr></table></figure>
+<p>判断节点 <code>e</code> 的键是否为 <code>key</code>，首先要满足哈希值相等，然后满足键相等，键相等分为两种情况：</p>
+<ul>
+<li>引用相同，表明两个键实际指向同一个对象，自然相等；</li>
+<li>引用不同，但 <code>equals</code> 相等，表明两个键对象在 <code>equals</code> 意义上相等；</li>
+</ul>
+<p>可以看出，如果要把类型 <code>A</code> 作为 <code>HashMap</code> 的键使用，则必须保证类型 <code>A</code> 正确实现了 <code>equals</code> 方法（实际还需要实现 <code>hashCode</code> 方法），否则无法保证能查找到已插入的映射。</p>
+<p>还有一点，如果 <code>key</code> 为 <code>null</code>，且当前节点 <code>e</code> 的键也是 <code>null</code>，则根据 <code>hash</code> 函数可知，<code>hash(null)</code> 为 0，因此满足 <code>e.hash == hash</code>，而 <code>null == null</code> 结果也是 <code>true</code>，因此 <code>null</code> 键也可以被正确查找。</p>
+<h2 id="HashMap-在并发场景中问题"><a href="#HashMap-在并发场景中问题" class="headerlink" title="HashMap 在并发场景中问题"></a><code>HashMap</code> 在并发场景中问题</h2><p><code>HashMap</code> 非并发安全，但并非并发场景一定不能用 <code>HashMap</code>，只不过需要做额外同步，相对直接用 <code>ConcurrentHashMap</code> 就有点得不偿失了，了解下 <code>HashMap</code> 在并发场景下存在的问题还是有点意思的。</p>
+<blockquote>
+<p>若所有线程对 <code>HashMap</code> 都是读取操作，则无需同步。</p>
+</blockquote>
+<h3 id="丢失元素"><a href="#丢失元素" class="headerlink" title="丢失元素"></a>丢失元素</h3><p>即 <code>put</code> 时，不同 key 同时插入，但因为 <code>putVal</code> 未做同步，导致插入位置相同：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">    p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此处注意，Java 7 在头部插入，Java 8 在尾部插入。</p>
+</blockquote>
+<p>多个线程都在同一个链表尾部插入，肯定只有最后一个的结果能保存，其他的都丢失了。</p>
+<h3 id="get-死循环"><a href="#get-死循环" class="headerlink" title="get 死循环"></a><code>get</code> 死循环</h3><p>网上很多文章提到该问题，Java 8 已经修复。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/HashMap/" rel="tag"># HashMap</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/26/2018-11-26-java-thread-primitive-deprecation/" rel="next" title="译 | Java Thread Primitive Deprecation">
+                <i class="fa fa-chevron-left"></i> 译 | Java Thread Primitive Deprecation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/02/2018-12-2-java-hashmap-hash-collision/" rel="prev" title="HashMap | 哈希碰撞">
+                HashMap | 哈希碰撞 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#继承关系"><span class="nav-number">1.</span> <span class="nav-text">继承关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#状态字段"><span class="nav-number">2.</span> <span class="nav-text">状态字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">3.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#put"><span class="nav-number">4.</span> <span class="nav-text">put</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get"><span class="nav-number">5.</span> <span class="nav-text">get</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#remove"><span class="nav-number">6.</span> <span class="nav-text">remove</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compute-类"><span class="nav-number">7.</span> <span class="nav-text">compute 类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#compute"><span class="nav-number">7.1.</span> <span class="nav-text">compute</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#computeIfAbsent"><span class="nav-number">7.2.</span> <span class="nav-text">computeIfAbsent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#computeIfPresent"><span class="nav-number">7.3.</span> <span class="nav-text">computeIfPresent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clear"><span class="nav-number">8.</span> <span class="nav-text">clear</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clone"><span class="nav-number">9.</span> <span class="nav-text">clone</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#contains-类"><span class="nav-number">10.</span> <span class="nav-text">contains 类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#containsKey"><span class="nav-number">10.1.</span> <span class="nav-text">containsKey</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#containsValue"><span class="nav-number">10.2.</span> <span class="nav-text">containsValue</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集合视图"><span class="nav-number">11.</span> <span class="nav-text">集合视图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#keySet"><span class="nav-number">11.1.</span> <span class="nav-text">keySet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#values"><span class="nav-number">11.2.</span> <span class="nav-text">values</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#entrySet"><span class="nav-number">11.3.</span> <span class="nav-text">entrySet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回调函数"><span class="nav-number">12.</span> <span class="nav-text">回调函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#元素查找"><span class="nav-number">13.</span> <span class="nav-text">元素查找</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#桶查找"><span class="nav-number">13.1.</span> <span class="nav-text">桶查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链表-红黑树查找"><span class="nav-number">13.2.</span> <span class="nav-text">链表/红黑树查找</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap-在并发场景中问题"><span class="nav-number">14.</span> <span class="nav-text">HashMap 在并发场景中问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#丢失元素"><span class="nav-number">14.1.</span> <span class="nav-text">丢失元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-死循环"><span class="nav-number">14.2.</span> <span class="nav-text">get 死循环</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2018/12/02/2018-12-2-source-code-reading-hashmap/';
+        this.page.identifier = '2018/12/02/2018-12-2-source-code-reading-hashmap/';
+        this.page.title = 'HashMap 源码分析';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
