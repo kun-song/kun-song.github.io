@@ -330,6 +330,201 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/03/2018-12-3-java-completablfuture-drawbacks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/03/2018-12-3-java-completablfuture-drawbacks/" itemprop="url">
+                  CompletableFuture | commonPool vs 自定义线程池
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-03 21:08:39 / 修改时间：22:27:46" itemprop="dateCreated datePublished" datetime="2018-12-03T21:08:39+08:00">2018-12-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/03/2018-12-3-java-completablfuture-drawbacks/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/03/2018-12-3-java-completablfuture-drawbacks/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><code>CompletableFuture</code> 既可以替代传统的线程池，也能实现异步编程，用起来很爽，但其中的坑也不少。</p>
+<p>本文将解释一个使用 <code>CompletableFuture</code> 时常见的问题，即：要不要提供自定义的线程池。</p>
+<p>我们知道，<code>CompletableFuture</code> 的 API 一般分为两类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CompletableFuture.runAsync(() -&gt; System.out.println(<span class="string">"Hello World!"</span>));</span><br><span class="line">CompletableFuture.runAsync(() -&gt; System.out.println(<span class="string">"Hello World!"</span>), pool);</span><br></pre></td></tr></table></figure>
+<p>它们的区别在于是否显式提供线程池，不提供线程池时，默认使用 <code>ForkJoinPool.commonPool()</code>。</p>
+<p>那 <code>commonPool</code> 是一个怎样的线程池呢？即使对它不熟悉，从名字也能猜测一二，它是一个会被很多任务 <strong>共享</strong> 的线程池，比如同一 JVM 上的所有 <code>CompletableFuture</code>、并行 <code>Stream</code> 都将共享 <code>commonPool</code>，除此之外，应用代码也能使用它。</p>
+<p><code>commonPool</code> 设计时的目标场景是运行 <strong>非阻塞的 CPU 密集型任务</strong>，为最大化利用 CPU，其线程数默认为 <code>CPU 数量 - 1</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// default 1 less than #cores</span></span><br><span class="line"><span class="keyword">if</span> (parallelism &lt; <span class="number">0</span> &amp;&amp; (parallelism = Runtime.getRuntime().availableProcessors() - <span class="number">1</span>) &lt;= <span class="number">0</span>)</span><br><span class="line">    parallelism = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>每个线程有一个双端队列（deque），用于存储自己负责运行的任务，线程池的空闲线程通过 work-stealing 算法“偷取”其他线程的任务，从而提升 CPU 利用率。</p>
+<p><code>commonPool</code> 方便共享（直接调用 <code>ForkJoinPool.commonPool()</code>），避免了每个任务创建自己的线程池的开销，减少了资源消耗。</p>
+<p><code>commonPool</code> 有很多优点，是好东西，我们应该在 <code>CompletableFuture</code> 中使用它！</p>
+<p>但问题是，<code>CompletableFuture</code> 运行的并非一定是 CPU 密集型任务啊，恰好相反，<code>CompletableFuture</code> 的一大使用场景为 <strong>异步编程</strong>，异步编程不可避免会涉及很多阻塞操作，而阻塞操作是 <code>ForkJoinPool</code> 极力避免的。</p>
+<p>详细而言，在 <code>CompletableFuture</code> 中使用 <code>commonPool</code> 会有如下问题：</p>
+<p>首先，<code>commonPool</code> 默认线程数较少（CPU总数 - 1），如果在 <code>CompletableFuture</code> 中使用，会无意中造成 <code>commonPool</code> 运行过多任务，若当前运行的全部是阻塞任务，则其余任务将排在工作线程 deque 中，导致它们无法立即执行。</p>
+<p>其次，线程池使用原则之一是：</p>
+<blockquote>
+<p>不要在同一线程池混合运行阻塞任务和非阻塞任务。</p>
+</blockquote>
+<p>实际使用 <code>CompletableFuture</code> 时，一般会混合执行阻塞任务和非阻塞任务，如果使用 <code>commonPool</code> 将导致其中部分工作线程一致阻塞，从而降低资源利用率。</p>
+<p>最后，<code>commonPool</code> 是为 CPU 密集型任务设计的，对于大部分实际应用而言，应该配置比 CPU 数量更多的线程，否则无法充分利用资源。</p>
+<p>因此使用 <code>CompletableFuture</code> 时，最好要提供自定义的线程池，不要使用默认的 <code>commonPool</code>。</p>
+<hr>
+<p>参考：</p>
+<ul>
+<li><a href="https://www.nurkiewicz.com/2015/11/which-thread-executes.html" target="_blank" rel="noopener">Which thread executes CompletableFuture’s tasks and callbacks?</a></li>
+<li><a href="https://www.baeldung.com/java-fork-join" target="_blank" rel="noopener">Guide to the Fork/Join Framework in Java</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/02/2018-12-2-java-hashmap-hash-collision/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1953,186 +2148,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/" itemprop="url">
-                  【译】How to choose the number of partitions in a Kafka cluster?
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-10-28 23:44:39 / 修改时间：23:53:50" itemprop="dateCreated datePublished" datetime="2018-10-28T23:44:39+08:00">2018-10-28</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><a href="https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster" target="_blank" rel="noopener">原文链接</a></p>
-<p>很多 Kafka 用户都有同样的疑问，本文将讲解释分区数量选择的几个重要影响因素，并提供简单的计算公式。</p>
-<h2 id="分区越多，吞吐量越高"><a href="#分区越多，吞吐量越高" class="headerlink" title="分区越多，吞吐量越高"></a>分区越多，吞吐量越高</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>首先需要明确，主题分区（topic partition）是 Kafka 中的 <strong>并行单元</strong>（the unit of parallelism）。</p>
-<ul>
-<li>在 producer 端和 broker 端，对不同分区的写操作可以 <strong>完全并行执行</strong>，因此耗时操作（如压缩）可以更好地利用硬件资源；</li>
-<li>在 consumer 端，Kafka 会把单个分区分配给一个 consumer 线程（即分区与 consumer 是 1 : N 的关系），因此 consumer 端的并行度上限受（该 consumer group 消费的）分区数量限制。</li>
-</ul>
-<p>所以，总体而言，Kafka 集群中分区越多，则可达的吞吐量越高。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2180,7 +2195,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-count">76</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2366,7 +2381,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">75</span>
+                      
+                    
+                    <span class="site-state-item-count">76</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
