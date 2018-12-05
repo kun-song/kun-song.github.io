@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="CompletableFuture 既可以替代传统的线程池，也能实现异步编程，用起来很爽，但其中的坑也不少。 本文将解释一个使用 CompletableFuture 时常见的问题，即：要不要提供自定义的线程池。 我们知道，CompletableFuture 的 API 一般分为两类： 12CompletableFuture.runAsync(() -&amp;gt; System.out.println(">
+  <meta name="description" content="CompletableFuture 既可以替代传统的线程池，也能实现异步编程，用起来很爽，但其中的坑也不少。 本文将解释一个使用 CompletableFuture 时常见的问题，即：要不要提供自定义的线程池。">
 <meta name="keywords" content="Java,CompletableFuture">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CompletableFuture | commonPool vs 自定义线程池">
 <meta property="og:url" content="http://songkun.me/2018/12/03/2018-12-3-java-completablfuture-drawbacks/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="CompletableFuture 既可以替代传统的线程池，也能实现异步编程，用起来很爽，但其中的坑也不少。 本文将解释一个使用 CompletableFuture 时常见的问题，即：要不要提供自定义的线程池。 我们知道，CompletableFuture 的 API 一般分为两类： 12CompletableFuture.runAsync(() -&amp;gt; System.out.println(">
+<meta property="og:description" content="CompletableFuture 既可以替代传统的线程池，也能实现异步编程，用起来很爽，但其中的坑也不少。 本文将解释一个使用 CompletableFuture 时常见的问题，即：要不要提供自定义的线程池。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-03T14:27:46.697Z">
+<meta property="og:updated_time" content="2018-12-03T14:31:26.677Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CompletableFuture | commonPool vs 自定义线程池">
-<meta name="twitter:description" content="CompletableFuture 既可以替代传统的线程池，也能实现异步编程，用起来很爽，但其中的坑也不少。 本文将解释一个使用 CompletableFuture 时常见的问题，即：要不要提供自定义的线程池。 我们知道，CompletableFuture 的 API 一般分为两类： 12CompletableFuture.runAsync(() -&amp;gt; System.out.println(">
+<meta name="twitter:description" content="CompletableFuture 既可以替代传统的线程池，也能实现异步编程，用起来很爽，但其中的坑也不少。 本文将解释一个使用 CompletableFuture 时常见的问题，即：要不要提供自定义的线程池。">
 
 
 
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2018-12-03 21:08:39 / 修改时间：22:27:46" itemprop="dateCreated datePublished" datetime="2018-12-03T21:08:39+08:00">2018-12-03</time>
+              <time title="创建时间：2018-12-03 21:08:39 / 修改时间：22:31:26" itemprop="dateCreated datePublished" datetime="2018-12-03T21:08:39+08:00">2018-12-03</time>
             
 
             
@@ -442,6 +442,7 @@
       
         <p><code>CompletableFuture</code> 既可以替代传统的线程池，也能实现异步编程，用起来很爽，但其中的坑也不少。</p>
 <p>本文将解释一个使用 <code>CompletableFuture</code> 时常见的问题，即：要不要提供自定义的线程池。</p>
+<a id="more"></a>
 <p>我们知道，<code>CompletableFuture</code> 的 API 一般分为两类：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CompletableFuture.runAsync(() -&gt; System.out.println(<span class="string">"Hello World!"</span>));</span><br><span class="line">CompletableFuture.runAsync(() -&gt; System.out.println(<span class="string">"Hello World!"</span>), pool);</span><br></pre></td></tr></table></figure>
 <p>它们的区别在于是否显式提供线程池，不提供线程池时，默认使用 <code>ForkJoinPool.commonPool()</code>。</p>
@@ -511,6 +512,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/05/2018-12-5-emacs-c-h-kvf/" rel="prev" title="三个常用的 emacs 快捷键">
+                三个常用的 emacs 快捷键 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -585,7 +590,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -608,7 +613,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -773,7 +780,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">76</span>
+                      
+                    
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

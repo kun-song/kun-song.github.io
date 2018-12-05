@@ -122,14 +122,14 @@
   <meta name="description" content="Object 源码非常简单，只有区区几个方法，除 registerNatives、getClass 外，其余方法可分为两类：  子类覆盖 hashCode equals clone toString finalize   并发控制 notify notifyAll wait 3 个重载版本    虽然源码很简单，但要准确理解它们的含义却没那么容易，下面介绍这几个方法的用途，以及惯用法。">
 <meta name="keywords" content="Java,Object">
 <meta property="og:type" content="article">
-<meta property="og:title" content="源码夜读 | Object">
+<meta property="og:title" content="源码分析 | Object">
 <meta property="og:url" content="http://songkun.me/2018/08/12/2018-08-12-source-code-reading-object/index.html">
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="Object 源码非常简单，只有区区几个方法，除 registerNatives、getClass 外，其余方法可分为两类：  子类覆盖 hashCode equals clone toString finalize   并发控制 notify notifyAll wait 3 个重载版本    虽然源码很简单，但要准确理解它们的含义却没那么容易，下面介绍这几个方法的用途，以及惯用法。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-12T15:40:40.214Z">
+<meta property="og:updated_time" content="2018-12-05T15:06:11.175Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="源码夜读 | Object">
+<meta name="twitter:title" content="源码分析 | Object">
 <meta name="twitter:description" content="Object 源码非常简单，只有区区几个方法，除 registerNatives、getClass 外，其余方法可分为两类：  子类覆盖 hashCode equals clone toString finalize   并发控制 notify notifyAll wait 3 个重载版本    虽然源码很简单，但要准确理解它们的含义却没那么容易，下面介绍这几个方法的用途，以及惯用法。">
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>源码夜读 | Object | 随便写写</title>
+  <title>源码分析 | Object | 随便写写</title>
   
 
 
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">源码夜读 | Object
+          <h1 class="post-title" itemprop="name headline">源码分析 | Object
               
             
           </h1>
@@ -373,12 +373,24 @@
                 
               
 
-              <time title="创建时间：2018-08-12 19:21:55 / 修改时间：23:40:40" itemprop="dateCreated datePublished" datetime="2018-08-12T19:21:55+08:00">2018-08-12</time>
+              <time title="创建时间：2018-08-12 19:21:55" itemprop="dateCreated datePublished" datetime="2018-08-12T19:21:55+08:00">2018-08-12</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-05 23:06:11" itemprop="dateModified" datetime="2018-12-05T23:06:11+08:00">2018-12-05</time>
               
             
           </span>
@@ -395,7 +407,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码夜读/" itemprop="url" rel="index"><span itemprop="name">源码夜读</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码分析/" itemprop="url" rel="index"><span itemprop="name">源码分析</span></a></span>
 
                 
                 
@@ -543,8 +555,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/14/2018-08-14-source-code-reading-executor/" rel="prev" title="源码夜读 | Executor">
-                源码夜读 | Executor <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/14/2018-08-14-source-code-reading-executor/" rel="prev" title="源码分析 | Executor">
+                源码分析 | Executor <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -629,7 +641,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -652,7 +664,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -817,7 +831,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">76</span>
+                      
+                    
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1043,7 +1059,7 @@
       var disqus_config = function () {
         this.page.url = 'http://songkun.me/2018/08/12/2018-08-12-source-code-reading-object/';
         this.page.identifier = '2018/08/12/2018-08-12-source-code-reading-object/';
-        this.page.title = '源码夜读 | Object';
+        this.page.title = '源码分析 | Object';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');

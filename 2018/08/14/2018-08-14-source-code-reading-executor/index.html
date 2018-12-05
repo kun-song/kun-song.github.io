@@ -122,14 +122,14 @@
   <meta name="description" content="在 Java 并发编程中，Runnable 是逻辑上的工作单元，用来表示任务，而 Thread 是执行任务的机制，不过 Thread 过于底层、过于基础，因此需要复杂的资源管理，比如创建多少线程合适？当线程崩溃会如何处理？如何停止进行中的任务？ 因此一般不直接使用 Thread 执行任务，取而代之的是 Executor 接口： 123public interface Executor &amp;#123;">
 <meta name="keywords" content="Java,Executor">
 <meta property="og:type" content="article">
-<meta property="og:title" content="源码夜读 | Executor">
+<meta property="og:title" content="源码分析 | Executor">
 <meta property="og:url" content="http://songkun.me/2018/08/14/2018-08-14-source-code-reading-executor/index.html">
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="在 Java 并发编程中，Runnable 是逻辑上的工作单元，用来表示任务，而 Thread 是执行任务的机制，不过 Thread 过于底层、过于基础，因此需要复杂的资源管理，比如创建多少线程合适？当线程崩溃会如何处理？如何停止进行中的任务？ 因此一般不直接使用 Thread 执行任务，取而代之的是 Executor 接口： 123public interface Executor &amp;#123;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-14T14:55:33.495Z">
+<meta property="og:updated_time" content="2018-12-05T15:06:36.727Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="源码夜读 | Executor">
+<meta name="twitter:title" content="源码分析 | Executor">
 <meta name="twitter:description" content="在 Java 并发编程中，Runnable 是逻辑上的工作单元，用来表示任务，而 Thread 是执行任务的机制，不过 Thread 过于底层、过于基础，因此需要复杂的资源管理，比如创建多少线程合适？当线程崩溃会如何处理？如何停止进行中的任务？ 因此一般不直接使用 Thread 执行任务，取而代之的是 Executor 接口： 123public interface Executor &amp;#123;">
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>源码夜读 | Executor | 随便写写</title>
+  <title>源码分析 | Executor | 随便写写</title>
   
 
 
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">源码夜读 | Executor
+          <h1 class="post-title" itemprop="name headline">源码分析 | Executor
               
             
           </h1>
@@ -373,12 +373,24 @@
                 
               
 
-              <time title="创建时间：2018-08-14 12:33:37 / 修改时间：22:55:33" itemprop="dateCreated datePublished" datetime="2018-08-14T12:33:37+08:00">2018-08-14</time>
+              <time title="创建时间：2018-08-14 12:33:37" itemprop="dateCreated datePublished" datetime="2018-08-14T12:33:37+08:00">2018-08-14</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-05 23:06:36" itemprop="dateModified" datetime="2018-12-05T23:06:36+08:00">2018-12-05</time>
               
             
           </span>
@@ -395,7 +407,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码夜读/" itemprop="url" rel="index"><span itemprop="name">源码夜读</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码分析/" itemprop="url" rel="index"><span itemprop="name">源码分析</span></a></span>
 
                 
                 
@@ -501,8 +513,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/12/2018-08-12-source-code-reading-object/" rel="next" title="源码夜读 | Object">
-                <i class="fa fa-chevron-left"></i> 源码夜读 | Object
+              <a href="/2018/08/12/2018-08-12-source-code-reading-object/" rel="next" title="源码分析 | Object">
+                <i class="fa fa-chevron-left"></i> 源码分析 | Object
               </a>
             
           </div>
@@ -597,7 +609,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -620,7 +632,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -785,7 +799,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">76</span>
+                      
+                    
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1011,7 +1027,7 @@
       var disqus_config = function () {
         this.page.url = 'http://songkun.me/2018/08/14/2018-08-14-source-code-reading-executor/';
         this.page.identifier = '2018/08/14/2018-08-14-source-code-reading-executor/';
-        this.page.title = '源码夜读 | Executor';
+        this.page.title = '源码分析 | Executor';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');

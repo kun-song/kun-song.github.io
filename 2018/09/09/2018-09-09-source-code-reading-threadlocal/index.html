@@ -122,14 +122,14 @@
   <meta name="description" content="当状态变量 非线程安全 时，是无法在并发场景中直接共享的，常见的解决办法有：  同步（synchronized 或 Lock） 修改为线程安全的实现 线程封闭  其中第三种方法有两种实现方式：  将对共享状态的读写操作集中到 一个线程 中，即在事实上将该变量 封闭 到单线程； ThreadLocal；">
 <meta name="keywords" content="Java,ThreadLocal">
 <meta property="og:type" content="article">
-<meta property="og:title" content="源码夜读 | ThreadLocal">
+<meta property="og:title" content="源码分析 | ThreadLocal">
 <meta property="og:url" content="http://songkun.me/2018/09/09/2018-09-09-source-code-reading-threadlocal/index.html">
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="当状态变量 非线程安全 时，是无法在并发场景中直接共享的，常见的解决办法有：  同步（synchronized 或 Lock） 修改为线程安全的实现 线程封闭  其中第三种方法有两种实现方式：  将对共享状态的读写操作集中到 一个线程 中，即在事实上将该变量 封闭 到单线程； ThreadLocal；">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-16T13:45:48.175Z">
+<meta property="og:updated_time" content="2018-12-05T15:06:50.884Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="源码夜读 | ThreadLocal">
+<meta name="twitter:title" content="源码分析 | ThreadLocal">
 <meta name="twitter:description" content="当状态变量 非线程安全 时，是无法在并发场景中直接共享的，常见的解决办法有：  同步（synchronized 或 Lock） 修改为线程安全的实现 线程封闭  其中第三种方法有两种实现方式：  将对共享状态的读写操作集中到 一个线程 中，即在事实上将该变量 封闭 到单线程； ThreadLocal；">
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>源码夜读 | ThreadLocal | 随便写写</title>
+  <title>源码分析 | ThreadLocal | 随便写写</title>
   
 
 
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">源码夜读 | ThreadLocal
+          <h1 class="post-title" itemprop="name headline">源码分析 | ThreadLocal
               
             
           </h1>
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-16 21:45:48" itemprop="dateModified" datetime="2018-09-16T21:45:48+08:00">2018-09-16</time>
+                <time title="修改时间：2018-12-05 23:06:50" itemprop="dateModified" datetime="2018-12-05T23:06:50+08:00">2018-12-05</time>
               
             
           </span>
@@ -407,7 +407,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码夜读/" itemprop="url" rel="index"><span itemprop="name">源码夜读</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码分析/" itemprop="url" rel="index"><span itemprop="name">源码分析</span></a></span>
 
                 
                 
@@ -654,7 +654,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -677,7 +677,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -842,7 +844,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">76</span>
+                      
+                    
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1068,7 +1072,7 @@
       var disqus_config = function () {
         this.page.url = 'http://songkun.me/2018/09/09/2018-09-09-source-code-reading-threadlocal/';
         this.page.identifier = '2018/09/09/2018-09-09-source-code-reading-threadlocal/';
-        this.page.title = '源码夜读 | ThreadLocal';
+        this.page.title = '源码分析 | ThreadLocal';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
