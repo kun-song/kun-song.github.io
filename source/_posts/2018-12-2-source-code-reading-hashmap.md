@@ -1,10 +1,10 @@
 ---
-title: HashMap 源码分析
+title: 源码分析 | HashMap
 date: 2018-12-02 20:51:06
 tags:
   - Java
   - HashMap
-categories: 源码夜读
+categories: 源码分析
 ---
 
 `HashMap` 是最常用的数据结构之一，也是面试的常客，了解 `HashMap` 的实现原理对正确、高效地的使用它是非常重要的，本文将细致分析 Java 8 `HashMap` 实现的所有细节。

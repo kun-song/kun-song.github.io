@@ -1,10 +1,10 @@
 ---
-title: 源码夜读 | AtomicInteger
+title: 源码分析 | AtomicInteger
 date: 2018-10-14 22:47:35
 tags:
   - Java
   - AtomicInteger
-categories: 源码夜读
+categories: 源码分析
 ---
 
 J.U.C 新增的原子类用 CAS 操作替代锁，更加高效，而且异步，J.U.C 大多数并发类都基于原子类实现，所以理解原子类对于理解整个并发包是非常重要的。

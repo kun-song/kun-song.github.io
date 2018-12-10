@@ -1,10 +1,10 @@
 ---
-title: 源码夜读 | Executor
+title: 源码分析 | Executor
 date: 2018-08-14 12:33:37
 tags:
   - Java
   - Executor
-categories: 源码夜读
+categories: 源码分析
 ---
 
 在 Java 并发编程中，`Runnable` 是逻辑上的工作单元，用来表示任务，而 `Thread` 是执行任务的机制，不过 `Thread` 过于底层、过于基础，因此需要复杂的资源管理，比如创建多少线程合适？当线程崩溃会如何处理？如何停止进行中的任务？

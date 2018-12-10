@@ -11,6 +11,8 @@ categories: 技术
 
 本文将解释一个使用 `CompletableFuture` 时常见的问题，即：要不要提供自定义的线程池。
 
+<!-- more -->
+
 我们知道，`CompletableFuture` 的 API 一般分为两类：
 
 ```Java

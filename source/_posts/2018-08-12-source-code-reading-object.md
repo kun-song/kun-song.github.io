@@ -1,10 +1,10 @@
 ---
-title: 源码夜读 | Object
+title: 源码分析 | Object
 date: 2018-08-12 19:21:55
 tags:
   - Java
   - Object
-categories: 源码夜读
+categories: 源码分析
 ---
 
 `Object` 源码非常简单，只有区区几个方法，除 `registerNatives`、`getClass` 外，其余方法可分为两类：
