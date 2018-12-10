@@ -4,7 +4,14 @@
   <url>
     <loc>http://songkun.me/2018/12/05/2018-12-5-emacs-c-h-kvf/</loc>
     
-    <lastmod>2018-12-05T15:37:26.719Z</lastmod>
+    <lastmod>2018-12-10T01:02:25.870Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/09/2018-12-9-emacs-counsel/</loc>
+    
+    <lastmod>2018-12-10T01:01:27.291Z</lastmod>
     
   </url>
   
@@ -450,21 +457,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -478,13 +471,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/09/how-to-learn-scala/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -492,35 +478,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/16/scala-anonymous-function/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/14/scala-string-ops/</loc>
+    <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -534,7 +492,35 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
+    <loc>http://songkun.me/2018/05/09/how-to-learn-scala/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/16/scala-anonymous-function/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -542,6 +528,27 @@
   
   <url>
     <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/14/scala-string-ops/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
