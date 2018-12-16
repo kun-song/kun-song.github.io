@@ -2,9 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2018/12/16/2018-12-16-java-jenv-intro/</loc>
+    
+    <lastmod>2018-12-16T06:50:03.942Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/15/2018-12-15-ml-overfitting/</loc>
+    
+    <lastmod>2018-12-15T14:29:08.810Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/11/2018-12-11-emacs-evil-intro/</loc>
+    
+    <lastmod>2018-12-15T13:39:19.661Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/12/15/2018-12-15-emacs-ag/</loc>
     
-    <lastmod>2018-12-15T11:32:44.736Z</lastmod>
+    <lastmod>2018-12-15T11:37:27.920Z</lastmod>
     
   </url>
   
@@ -12,13 +33,6 @@
     <loc>http://songkun.me/2018/12/14/2018-12-14-ml-intro/</loc>
     
     <lastmod>2018-12-15T10:57:02.071Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/11/2018-12-11-emacs-evil-intro/</loc>
-    
-    <lastmod>2018-12-11T16:53:18.246Z</lastmod>
     
   </url>
   
@@ -499,13 +513,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -520,7 +527,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
+    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -534,13 +548,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/16/scala-anonymous-function/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -548,14 +555,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/14/scala-string-ops/</loc>
+    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -569,6 +569,13 @@
   </url>
   
   <url>
+    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -576,7 +583,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
+    <loc>http://songkun.me/2018/05/14/scala-string-ops/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -584,6 +591,13 @@
   
   <url>
     <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
