@@ -119,18 +119,18 @@
 
 
 
-  <meta name="description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的消息，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
+  <meta name="description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的事件，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
 <meta name="keywords" content="Kafka">
 <meta property="og:type" content="article">
-<meta property="og:title" content="译 | 不同类型的消息可以放到同一主题中吗？">
+<meta property="og:title" content="译 | 不同类型的事件可以放到同一主题中吗？">
 <meta property="og:url" content="http://songkun.me/2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的消息，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
+<meta property="og:description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的事件，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-19T00:43:43.240Z">
+<meta property="og:updated_time" content="2018-12-19T00:53:14.305Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="译 | 不同类型的消息可以放到同一主题中吗？">
-<meta name="twitter:description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的消息，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
+<meta name="twitter:title" content="译 | 不同类型的事件可以放到同一主题中吗？">
+<meta name="twitter:description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的事件，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>译 | 不同类型的消息可以放到同一主题中吗？ | 随便写写</title>
+  <title>译 | 不同类型的事件可以放到同一主题中吗？ | 随便写写</title>
   
 
 
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">译 | 不同类型的消息可以放到同一主题中吗？
+          <h1 class="post-title" itemprop="name headline">译 | 不同类型的事件可以放到同一主题中吗？
               
             
           </h1>
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-19 08:43:43" itemprop="dateModified" datetime="2018-12-19T08:43:43+08:00">2018-12-19</time>
+                <time title="修改时间：2018-12-19 08:53:14" itemprop="dateModified" datetime="2018-12-19T08:53:14+08:00">2018-12-19</time>
               
             
           </span>
@@ -453,7 +453,7 @@
 
       
         <p>原文地址在 <a href="http://martin.kleppmann.com/2018/01/18/event-types-in-kafka-topic.html" target="_blank" rel="noopener">这里</a>，InfoQ 已经翻译成中文，本文仅总结个人所得。</p>
-<p>使用 Kafka 时，若有多种不同类型的消息，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？</p>
+<p>使用 Kafka 时，若有多种不同类型的事件，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？</p>
 <p>首先，topic 的首要作用为：</p>
 <blockquote>
 <p>allow a consumer to specify which subset of messages it wants to consume.</p>
@@ -461,20 +461,20 @@
 <a id="more"></a>
 <p>考虑两种极端：</p>
 <ul>
-<li>若只有一个 topic，则消费者只能消费全部消息，无法自由选择感兴趣的消息子集；</li>
+<li>若只有一个 topic，则消费者只能消费全部事件，无法自由选择感兴趣的事件子集；</li>
 <li>若 topic 太多，如几百万，由于每个 topic 至少有一个分区，所以集群至少有几百万分区，将严重影响性能；</li>
 </ul>
 <p>过多 topic 对性能的影响的主要原因是分区数量，更多关于分区数量对 Kafka 性能影响的分析，可以参考 <a href="./2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster.md">译 | How to choose the number of partitions in a Kafka cluster?</a>。</p>
-<p>几千个 topic 会明显影响性能，若性能要求很高，可以将多个细粒度的消息合并成一个粗粒度的消息，从而减小分区数量对性能的影响。</p>
+<p>几千个 topic 会明显影响性能，若性能要求很高，可以将多个 <strong>细粒度</strong> 事件合并成一个 <strong>粗粒度</strong> 事件，从而减小分区数量对性能的影响。</p>
 <h2 id="Topic-collection-of-events-of-the-same-type"><a href="#Topic-collection-of-events-of-the-same-type" class="headerlink" title="Topic = collection of events of the same type?"></a>Topic = collection of events of the same type?</h2><p>常见的推荐用法是：</p>
 <ul>
-<li>把相同类型的消息放到同一 topic 中；</li>
-<li>把不同类型的消息放到不同 topic 中；</li>
+<li>把相同类型的事件放到同一 topic 中；</li>
+<li>把不同类型的事件放到不同 topic 中；</li>
 </ul>
 <p>这与关系型数据库有点类似，因为表（table）也是一组类型相同的记录（record）的集合。</p>
-<p><a href="https://docs.confluent.io/current/schema-registry/docs/index.html" target="_blank" rel="noopener">Confluent Avro Schema Register</a> 加强了这种观点，因为它鼓励用户对 topic 内的消息使用相同的 Avro 模式。</p>
-<p>对部分应用（如用户行为日志）而言，要求同一 topic 内的消息模式相同（即类型相同 or 兼容）是合理的。</p>
-<p>但对于将 Kafka 用作数据库的应用（如 <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing" target="_blank" rel="noopener">event sourcing</a>、<a href="https://www.confluent.io/blog/build-services-backbone-events/" target="_blank" rel="noopener">exchanging data between microservices</a>）而言，topic 内的消息类型是否相同并不重要，它们更关心的是 Kafka 在每个 topic partition 内保持消息顺序的能力。</p>
+<p><a href="https://docs.confluent.io/current/schema-registry/docs/index.html" target="_blank" rel="noopener">Confluent Avro Schema Register</a> 加强了这种观点，因为它鼓励用户对 topic 内的事件使用相同的 Avro 模式。</p>
+<p>对部分应用（如用户行为日志）而言，要求同一 topic 内的事件模式相同（即类型相同 or 兼容）是合理的。</p>
+<p>但对于将 Kafka 用作数据库的应用（如<a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing" target="_blank" rel="noopener">event sourcing</a>、<a href="https://www.confluent.io/blog/build-services-backbone-events/" target="_blank" rel="noopener">exchanging data between microservices</a>）而言，topic 内的事件类型是否相同并不重要，它们更关心的是 Kafka 在每个 topic partition 内保持事件 <strong>顺序</strong> 的能力。</p>
 <p>假设有一个 entity，例如 customer 实体，该 entity 上可以发生很多事件：</p>
 <ul>
 <li>创建 customer</li>
@@ -487,23 +487,23 @@
 <p>若使用 Kafka 对其建模，可将所有 entity 相关的事件放到同一 partition，Kafka 将保证 partition 内事件的顺序，这时同一 topic 内出现了多种不同类型的事件。</p>
 <h2 id="Ordering-problems"><a href="#Ordering-problems" class="headerlink" title="Ordering problems"></a>Ordering problems</h2><p>若把 <code>customerCreated</code>、<code>customerAddressChanged</code>、<code>customerClosed</code> 等事件放到不同 topic 中，则消费者无法保证按照生产者的生产顺序来消费它们。</p>
 <p>即使为每个事件绑定时间戳也不行。</p>
-<p>首先，当处理完时间戳为 A 的事件后，无法确定 A 前面的事件都已处理完毕，此时要么等待一段随机时间，要么继续处理后面的消息，无论如何选择，都无法保证事件顺序。</p>
+<p>首先，当处理完时间戳为 A 的事件后，无法确定 A 前面的事件都已处理完毕，此时要么等待一段随机时间，要么继续处理后面的事件，无论如何选择，都无法保证事件顺序。</p>
 <p>其次，在分布式系统中，依赖时钟同步是非常麻烦的，参考 DDIA 第 8 章。</p>
 <h2 id="When-to-split-topics-when-to-combine"><a href="#When-to-split-topics-when-to-combine" class="headerlink" title="When to split topics, when to combine?"></a>When to split topics, when to combine?</h2><p>有了前面的背景，本节给出何时放入同一 topic，何时拆分到不同 topic 的一般准则。</p>
-<h4 id="1-The-most-important-rule-is-that-any-events-that-need-to-stay-in-a-fixed-order-must-go-in-the-same-topic-and-they-must-also-use-the-same-partitioning-key"><a href="#1-The-most-important-rule-is-that-any-events-that-need-to-stay-in-a-fixed-order-must-go-in-the-same-topic-and-they-must-also-use-the-same-partitioning-key" class="headerlink" title="1. The most important rule is that any events that need to stay in a fixed order must go in the same topic(and they must also use the same partitioning key)."></a>1. The most important rule is that any events that need to stay in a fixed order must go in the same topic(and they must also use the same partitioning key).</h4><blockquote>
+<h3 id="1-The-most-important-rule-is-that-any-events-that-need-to-stay-in-a-fixed-order-must-go-in-the-same-topic-and-the-same-partition"><a href="#1-The-most-important-rule-is-that-any-events-that-need-to-stay-in-a-fixed-order-must-go-in-the-same-topic-and-the-same-partition" class="headerlink" title="1. The most important rule is that any events that need to stay in a fixed order must go in the same topic and the same partition."></a>1. The most important rule is that any events that need to stay in a fixed order must go in the same topic and the same partition.</h3><blockquote>
 <p>全局无序，partition 内有序。</p>
 </blockquote>
 <p>一般同一 entity 的不同事件才关心事件顺序，因此要把它们放到同一 topic 的同一 parition 上，如 event sourcing。</p>
-<h4 id="2-For-events-about-different-entities-it-depends"><a href="#2-For-events-about-different-entities-it-depends" class="headerlink" title="2. For events about different entities, it depends."></a>2. For events about different entities, it depends.</h4><p>若 entity 之间有依赖关系，如 address 从属于 customer，或一组 entity 经常一起使用，则这些 entity 的事件最好放到同一 topic 中。</p>
+<h3 id="2-For-events-about-different-entities-it-depends"><a href="#2-For-events-about-different-entities-it-depends" class="headerlink" title="2. For events about different entities, it depends."></a>2. For events about different entities, it depends.</h3><p>若 entity 之间有依赖关系，如 address 从属于 customer，或一组 entity 经常一起使用，则这些 entity 的事件最好放到同一 topic 中。</p>
 <p>若各 entity 没有关联，且由不同团队负责，则最好放到不同 topic 中。</p>
 <p>另外，还要考虑吞吐量，若某事件吞吐量远远超过其他事件，则最好把它拆分到独立 topic 中，不然只关心其他低频事件的消费者也必须消费该事件。</p>
-<h4 id="3-What-if-an-event-involves-several-entities"><a href="#3-What-if-an-event-involves-several-entities" class="headerlink" title="3. What if an event involves several entities?"></a>3. What if an event involves several entities?</h4><p>例如 purchase 事件涉及 product 和 customer 两个实体，transfer 事件涉及转入、转出两个 account 实体。</p>
-<p>推荐开始时将 event 记录为 single atomic message，不要过早将其拆分为（多个 topic 中的）多个消息。因为借助 stream processor 可轻易拆分 compound event，但重建原始事件却非常困难。</p>
+<h3 id="3-What-if-an-event-involves-several-entities"><a href="#3-What-if-an-event-involves-several-entities" class="headerlink" title="3. What if an event involves several entities?"></a>3. What if an event involves several entities?</h3><p>例如 purchase 事件涉及 product 和 customer 两个实体，transfer 事件涉及转入、转出两个 account 实体。</p>
+<p>推荐开始时将 event 记录为 single atomic message，不要过早将其拆分为（多个 topic 中的）多个事件。因为借助 stream processor 可轻易拆分 compound event，但重建原始事件却非常困难。</p>
 <p>可以给原始事件一个 UUID，将该事件拆分为关于每个 entity 的事件时，携带该 UUID，从而实现事件追踪。</p>
-<h4 id="4-If-several-consumers-all-read-a-particular-group-of-topics-then-consider-to-combine-them"><a href="#4-If-several-consumers-all-read-a-particular-group-of-topics-then-consider-to-combine-them" class="headerlink" title="4. If several consumers all read a particular group of topics, then consider to combine them."></a>4. If several consumers all read a particular group of topics, then consider to combine them.</h4><p>把细粒度 topic 合并为粗粒度 topic 后，部分 consumer 可能会收到并不感兴趣的事件，这不是大事，因为从 Kafka 消费消息非常轻量级，即使 consumer 选择忽略一半的消息，这种 overconsumption 消耗也不会很大。</p>
-<p>只有当 consumer 需要忽略大部分消息（如 99.9%）时，才推荐将低频事件拆分出来。</p>
-<h4 id="5-A-changelog-topic-for-a-Kafka-Streams-state-store-should-be-a-separate-from-all-other-topics"><a href="#5-A-changelog-topic-for-a-Kafka-Streams-state-store-should-be-a-separate-from-all-other-topics" class="headerlink" title="5. A changelog topic for a Kafka Streams state store should be a separate from all other topics."></a>5. A changelog topic for a Kafka Streams state store should be a separate from all other topics.</h4><h4 id="6-The-last-one-you-should-choose"><a href="#6-The-last-one-you-should-choose" class="headerlink" title="6. The last one you should choose."></a>6. The last one you should choose.</h4><p>若前面的准则都不适用，则把相同类型的事件放到同一 topic 中，该准则相当于什么都没说。</p>
-<h2 id="Schema-Management"><a href="#Schema-Management" class="headerlink" title="Schema Management"></a>Schema Management</h2><p>消息编码的影响：</p>
+<h3 id="4-If-several-consumers-all-read-a-particular-group-of-topics-then-consider-to-combine-them"><a href="#4-If-several-consumers-all-read-a-particular-group-of-topics-then-consider-to-combine-them" class="headerlink" title="4. If several consumers all read a particular group of topics, then consider to combine them."></a>4. If several consumers all read a particular group of topics, then consider to combine them.</h3><p>把细粒度 topic 合并为粗粒度 topic 后，部分 consumer 可能会收到并不感兴趣的事件，这不是大事，因为从 Kafka 消费事件非常轻量级，即使 consumer 选择忽略一半的事件，这种 overconsumption 消耗也不会很大。</p>
+<p>只有当 consumer 需要忽略大部分事件（如 99.9%）时，才推荐将低频事件拆分出来。</p>
+<h3 id="5-A-changelog-topic-for-a-Kafka-Streams-state-store-should-be-a-separate-from-all-other-topics"><a href="#5-A-changelog-topic-for-a-Kafka-Streams-state-store-should-be-a-separate-from-all-other-topics" class="headerlink" title="5. A changelog topic for a Kafka Streams state store should be a separate from all other topics."></a>5. A changelog topic for a Kafka Streams state store should be a separate from all other topics.</h3><h3 id="6-The-last-one-you-should-choose"><a href="#6-The-last-one-you-should-choose" class="headerlink" title="6. The last one you should choose."></a>6. The last one you should choose.</h3><p>若前面的准则都不适用，则把相同类型的事件放到同一 topic 中，该准则相当于什么都没说。</p>
+<h2 id="Schema-Management"><a href="#Schema-Management" class="headerlink" title="Schema Management"></a>Schema Management</h2><p>事件编码的影响：</p>
 <ul>
 <li>使用无模式的 JSON 编码时，同一 topic 中可以轻易存放很多不同类型的事件；</li>
 <li>使用有模式的编码时，如 Avro，同一 topic 中还是可以存放不同类型的事件，但没那么容易；</li>
@@ -902,7 +902,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic-collection-of-events-of-the-same-type"><span class="nav-number">1.</span> <span class="nav-text">Topic = collection of events of the same type?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ordering-problems"><span class="nav-number">2.</span> <span class="nav-text">Ordering problems</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#When-to-split-topics-when-to-combine"><span class="nav-number">3.</span> <span class="nav-text">When to split topics, when to combine?</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-The-most-important-rule-is-that-any-events-that-need-to-stay-in-a-fixed-order-must-go-in-the-same-topic-and-they-must-also-use-the-same-partitioning-key"><span class="nav-number">3.0.1.</span> <span class="nav-text">1. The most important rule is that any events that need to stay in a fixed order must go in the same topic(and they must also use the same partitioning key).</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-For-events-about-different-entities-it-depends"><span class="nav-number">3.0.2.</span> <span class="nav-text">2. For events about different entities, it depends.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-What-if-an-event-involves-several-entities"><span class="nav-number">3.0.3.</span> <span class="nav-text">3. What if an event involves several entities?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-If-several-consumers-all-read-a-particular-group-of-topics-then-consider-to-combine-them"><span class="nav-number">3.0.4.</span> <span class="nav-text">4. If several consumers all read a particular group of topics, then consider to combine them.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-A-changelog-topic-for-a-Kafka-Streams-state-store-should-be-a-separate-from-all-other-topics"><span class="nav-number">3.0.5.</span> <span class="nav-text">5. A changelog topic for a Kafka Streams state store should be a separate from all other topics.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-The-last-one-you-should-choose"><span class="nav-number">3.0.6.</span> <span class="nav-text">6. The last one you should choose.</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Schema-Management"><span class="nav-number">4.</span> <span class="nav-text">Schema Management</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic-collection-of-events-of-the-same-type"><span class="nav-number">1.</span> <span class="nav-text">Topic = collection of events of the same type?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ordering-problems"><span class="nav-number">2.</span> <span class="nav-text">Ordering problems</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#When-to-split-topics-when-to-combine"><span class="nav-number">3.</span> <span class="nav-text">When to split topics, when to combine?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-The-most-important-rule-is-that-any-events-that-need-to-stay-in-a-fixed-order-must-go-in-the-same-topic-and-the-same-partition"><span class="nav-number">3.1.</span> <span class="nav-text">1. The most important rule is that any events that need to stay in a fixed order must go in the same topic and the same partition.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-For-events-about-different-entities-it-depends"><span class="nav-number">3.2.</span> <span class="nav-text">2. For events about different entities, it depends.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-What-if-an-event-involves-several-entities"><span class="nav-number">3.3.</span> <span class="nav-text">3. What if an event involves several entities?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-If-several-consumers-all-read-a-particular-group-of-topics-then-consider-to-combine-them"><span class="nav-number">3.4.</span> <span class="nav-text">4. If several consumers all read a particular group of topics, then consider to combine them.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-A-changelog-topic-for-a-Kafka-Streams-state-store-should-be-a-separate-from-all-other-topics"><span class="nav-number">3.5.</span> <span class="nav-text">5. A changelog topic for a Kafka Streams state store should be a separate from all other topics.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-The-last-one-you-should-choose"><span class="nav-number">3.6.</span> <span class="nav-text">6. The last one you should choose.</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Schema-Management"><span class="nav-number">4.</span> <span class="nav-text">Schema Management</span></a></li></ol></div>
             
 
           </div>
@@ -1078,7 +1078,7 @@
       var disqus_config = function () {
         this.page.url = 'http://songkun.me/2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/';
         this.page.identifier = '2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/';
-        this.page.title = '译 | 不同类型的消息可以放到同一主题中吗？';
+        this.page.title = '译 | 不同类型的事件可以放到同一主题中吗？';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
