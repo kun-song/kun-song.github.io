@@ -1,5 +1,5 @@
 ---
-title: 【译】How to choose the number of partitions in a Kafka cluster?
+title: 译 | How to choose the number of partitions in a Kafka cluster?
 date: 2018-10-28 23:44:39
 tags:
   - Kafka
