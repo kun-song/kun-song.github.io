@@ -122,14 +122,14 @@
   <meta name="description" content="原文链接 很多 Kafka 用户都有同样的疑问，本文将讲解释分区数量选择的几个重要影响因素，并提供简单的计算公式。 分区越多，吞吐量越高原理首先需要明确，主题分区（topic partition）是 Kafka 中的 并行单元（the unit of parallelism）。  在 producer 端和 broker 端，对不同分区的写操作可以 完全并行执行，因此耗时操作（如压缩）可以更好地利">
 <meta name="keywords" content="Kafka">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【译】How to choose the number of partitions in a Kafka cluster?">
+<meta property="og:title" content="译 | How to choose the number of partitions in a Kafka cluster?">
 <meta property="og:url" content="http://songkun.me/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/index.html">
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="原文链接 很多 Kafka 用户都有同样的疑问，本文将讲解释分区数量选择的几个重要影响因素，并提供简单的计算公式。 分区越多，吞吐量越高原理首先需要明确，主题分区（topic partition）是 Kafka 中的 并行单元（the unit of parallelism）。  在 producer 端和 broker 端，对不同分区的写操作可以 完全并行执行，因此耗时操作（如压缩）可以更好地利">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-28T15:53:50.572Z">
+<meta property="og:updated_time" content="2018-12-17T16:00:45.401Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【译】How to choose the number of partitions in a Kafka cluster?">
+<meta name="twitter:title" content="译 | How to choose the number of partitions in a Kafka cluster?">
 <meta name="twitter:description" content="原文链接 很多 Kafka 用户都有同样的疑问，本文将讲解释分区数量选择的几个重要影响因素，并提供简单的计算公式。 分区越多，吞吐量越高原理首先需要明确，主题分区（topic partition）是 Kafka 中的 并行单元（the unit of parallelism）。  在 producer 端和 broker 端，对不同分区的写操作可以 完全并行执行，因此耗时操作（如压缩）可以更好地利">
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>【译】How to choose the number of partitions in a Kafka cluster? | 随便写写</title>
+  <title>译 | How to choose the number of partitions in a Kafka cluster? | 随便写写</title>
   
 
 
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【译】How to choose the number of partitions in a Kafka cluster?
+          <h1 class="post-title" itemprop="name headline">译 | How to choose the number of partitions in a Kafka cluster?
               
             
           </h1>
@@ -373,12 +373,24 @@
                 
               
 
-              <time title="创建时间：2018-10-28 23:44:39 / 修改时间：23:53:50" itemprop="dateCreated datePublished" datetime="2018-10-28T23:44:39+08:00">2018-10-28</time>
+              <time title="创建时间：2018-10-28 23:44:39" itemprop="dateCreated datePublished" datetime="2018-10-28T23:44:39+08:00">2018-10-28</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-18 00:00:45" itemprop="dateModified" datetime="2018-12-18T00:00:45+08:00">2018-12-18</time>
               
             
           </span>
@@ -621,7 +633,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">85</span>
+                    <span class="site-state-item-count">86</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1063,7 +1075,7 @@
       var disqus_config = function () {
         this.page.url = 'http://songkun.me/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/';
         this.page.identifier = '2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/';
-        this.page.title = '【译】How to choose the number of partitions in a Kafka cluster?';
+        this.page.title = '译 | How to choose the number of partitions in a Kafka cluster?';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');

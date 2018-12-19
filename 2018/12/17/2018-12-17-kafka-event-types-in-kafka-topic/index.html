@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="在 Scala | case 关键字的 4 种用法 一文中我提到 case 语句可以创建偏函数字面值，实际上这种说法并不完全正确。 Scala 中 case 语句形如： 1&amp;#123; case p1 =&amp;gt; e1; case p2 =&amp;gt; e2; ...; case pn =&amp;gt; en &amp;#125; 实际上，仅给定 case 语句本身，我们只能确定它是一个 匿名函数，但 无法 确定该">
-<meta name="keywords" content="Scala,case statement,偏函数">
+  <meta name="description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的消息，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
+<meta name="keywords" content="Kafka">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala | case 语句究竟是什么类型？">
-<meta property="og:url" content="http://songkun.me/2018/06/07/2018-06-07-type-of-case-statement/index.html">
+<meta property="og:title" content="译 | 不同类型的消息可以放到同一主题中吗？">
+<meta property="og:url" content="http://songkun.me/2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="在 Scala | case 关键字的 4 种用法 一文中我提到 case 语句可以创建偏函数字面值，实际上这种说法并不完全正确。 Scala 中 case 语句形如： 1&amp;#123; case p1 =&amp;gt; e1; case p2 =&amp;gt; e2; ...; case pn =&amp;gt; en &amp;#125; 实际上，仅给定 case 语句本身，我们只能确定它是一个 匿名函数，但 无法 确定该">
+<meta property="og:description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的消息，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-07T14:25:41.000Z">
+<meta property="og:updated_time" content="2018-12-19T00:43:43.240Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala | case 语句究竟是什么类型？">
-<meta name="twitter:description" content="在 Scala | case 关键字的 4 种用法 一文中我提到 case 语句可以创建偏函数字面值，实际上这种说法并不完全正确。 Scala 中 case 语句形如： 1&amp;#123; case p1 =&amp;gt; e1; case p2 =&amp;gt; e2; ...; case pn =&amp;gt; en &amp;#125; 实际上，仅给定 case 语句本身，我们只能确定它是一个 匿名函数，但 无法 确定该">
+<meta name="twitter:title" content="译 | 不同类型的消息可以放到同一主题中吗？">
+<meta name="twitter:description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的消息，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/06/07/2018-06-07-type-of-case-statement/"/>
+  <link rel="canonical" href="http://songkun.me/2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>Scala | case 语句究竟是什么类型？ | 随便写写</title>
+  <title>译 | 不同类型的消息可以放到同一主题中吗？ | 随便写写</title>
   
 
 
@@ -331,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/06/07/2018-06-07-type-of-case-statement/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Scala | case 语句究竟是什么类型？
+          <h1 class="post-title" itemprop="name headline">译 | 不同类型的消息可以放到同一主题中吗？
               
             
           </h1>
@@ -373,12 +373,24 @@
                 
               
 
-              <time title="创建时间：2018-06-07 21:55:21 / 修改时间：22:25:41" itemprop="dateCreated datePublished" datetime="2018-06-07T21:55:21+08:00">2018-06-07</time>
+              <time title="创建时间：2018-12-17 23:35:25" itemprop="dateCreated datePublished" datetime="2018-12-17T23:35:25+08:00">2018-12-17</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-19 08:43:43" itemprop="dateModified" datetime="2018-12-19T08:43:43+08:00">2018-12-19</time>
               
             
           </span>
@@ -410,9 +422,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/07/2018-06-07-type-of-case-statement/#comments" itemprop="discussionUrl">
+                <a href="/2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/07/2018-06-07-type-of-case-statement/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -440,29 +452,65 @@
       
 
       
-        <p>在 <a href="/2018/05/15/scala-case-use-cases/" title="Scala | case 关键字的 4 种用法">Scala | case 关键字的 4 种用法</a> 一文中我提到 case 语句可以创建偏函数字面值，实际上这种说法并不完全正确。</p>
-<p>Scala 中 case 语句形如：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123; <span class="keyword">case</span> p1 =&gt; e1; <span class="keyword">case</span> p2 =&gt; e2; ...; <span class="keyword">case</span> pn =&gt; en &#125;</span><br></pre></td></tr></table></figure>
-<p>实际上，仅给定 case 语句本身，我们只能确定它是一个 <strong>匿名函数</strong>，但 <strong>无法</strong> 确定该匿名函数的具体类型，根据 case 语句所处上下文对它的期待，它可以是：</p>
-<ul>
-<li>普通函数（<code>FunctionN</code>）的匿名值</li>
-<li>偏函数（<code>PartialFunction</code>）的匿名值</li>
-</ul>
+        <p>原文地址在 <a href="http://martin.kleppmann.com/2018/01/18/event-types-in-kafka-topic.html" target="_blank" rel="noopener">这里</a>，InfoQ 已经翻译成中文，本文仅总结个人所得。</p>
+<p>使用 Kafka 时，若有多种不同类型的消息，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？</p>
+<p>首先，topic 的首要作用为：</p>
+<blockquote>
+<p>allow a consumer to specify which subset of messages it wants to consume.</p>
+</blockquote>
 <a id="more"></a>
-<h2 id="普通函数"><a href="#普通函数" class="headerlink" title="普通函数"></a>普通函数</h2><p><code>Seq.map</code> 的参数类型为 <code>A =&gt; B</code>（<code>Function1[A, B]</code>），因此若用 case 语句作为其实参，则 case 语句类型就是 <code>A =&gt; B</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List(2, 4, 6)</span></span><br><span class="line"><span class="type">Seq</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).map &#123;</span><br><span class="line">  <span class="keyword">case</span> n ⇒ n * <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>该场景下 <code>{ case n =&gt; n * 2 }</code> 将被 Scala 编译器展开成 <code>Function1[Int, Int]</code> 实例：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="type">Function</span>[<span class="type">Int</span>, <span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">Int</span>) = v1 <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> n ⇒ n * <span class="number">2</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="偏函数"><a href="#偏函数" class="headerlink" title="偏函数"></a>偏函数</h2><p><code>Seq.collect</code> 的参数类型为 <code>PartialFunction[A, B]</code>，因此若用 case 语句作为其实参，则 case 语句类型为 <code>PartialFunction[A, B]</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List(2, 4, 6)</span></span><br><span class="line"><span class="type">Seq</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">"A"</span>).collect &#123;</span><br><span class="line">  <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n * <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>该场景下 <code>{ case n: Int =&gt; n * 2 }</code> 将被 Scala 编译器展开为 <code>PartialFunction[Int, Int]</code> 实例：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">Int</span>] &#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">isDefinedAt</span></span>(x: <span class="type">Int</span>) = x <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> _: <span class="type">Int</span> ⇒ <span class="literal">true</span></span><br><span class="line">    <span class="keyword">case</span> _      ⇒ <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">Int</span>) = v1 <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n * <span class="number">2</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<p>参考：</p>
+<p>考虑两种极端：</p>
 <ul>
-<li>知乎问题：<a href="https://www.zhihu.com/question/29175392/answer/124176745" target="_blank" rel="noopener">Scala 中的case关键字在这里是什么意思？</a></li>
-<li>Cousera 公开课 <a href="https://www.coursera.org/learn/progfun2/lecture/zsnJ0/recap-functions-and-pattern-matching" target="_blank" rel="noopener">Functional Program Design in Scala - Week 1</a></li>
+<li>若只有一个 topic，则消费者只能消费全部消息，无法自由选择感兴趣的消息子集；</li>
+<li>若 topic 太多，如几百万，由于每个 topic 至少有一个分区，所以集群至少有几百万分区，将严重影响性能；</li>
 </ul>
+<p>过多 topic 对性能的影响的主要原因是分区数量，更多关于分区数量对 Kafka 性能影响的分析，可以参考 <a href="./2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster.md">译 | How to choose the number of partitions in a Kafka cluster?</a>。</p>
+<p>几千个 topic 会明显影响性能，若性能要求很高，可以将多个细粒度的消息合并成一个粗粒度的消息，从而减小分区数量对性能的影响。</p>
+<h2 id="Topic-collection-of-events-of-the-same-type"><a href="#Topic-collection-of-events-of-the-same-type" class="headerlink" title="Topic = collection of events of the same type?"></a>Topic = collection of events of the same type?</h2><p>常见的推荐用法是：</p>
+<ul>
+<li>把相同类型的消息放到同一 topic 中；</li>
+<li>把不同类型的消息放到不同 topic 中；</li>
+</ul>
+<p>这与关系型数据库有点类似，因为表（table）也是一组类型相同的记录（record）的集合。</p>
+<p><a href="https://docs.confluent.io/current/schema-registry/docs/index.html" target="_blank" rel="noopener">Confluent Avro Schema Register</a> 加强了这种观点，因为它鼓励用户对 topic 内的消息使用相同的 Avro 模式。</p>
+<p>对部分应用（如用户行为日志）而言，要求同一 topic 内的消息模式相同（即类型相同 or 兼容）是合理的。</p>
+<p>但对于将 Kafka 用作数据库的应用（如 <a href="https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing" target="_blank" rel="noopener">event sourcing</a>、<a href="https://www.confluent.io/blog/build-services-backbone-events/" target="_blank" rel="noopener">exchanging data between microservices</a>）而言，topic 内的消息类型是否相同并不重要，它们更关心的是 Kafka 在每个 topic partition 内保持消息顺序的能力。</p>
+<p>假设有一个 entity，例如 customer 实体，该 entity 上可以发生很多事件：</p>
+<ul>
+<li>创建 customer</li>
+<li>修改 customer 的地址</li>
+<li>为 customer 添加信用卡</li>
+<li>customer 关闭自己的账号</li>
+<li>…</li>
+</ul>
+<p>这些事件的顺序非常重要：创建之前不能发生任何动作，关闭之后也不能再次添加信用卡。</p>
+<p>若使用 Kafka 对其建模，可将所有 entity 相关的事件放到同一 partition，Kafka 将保证 partition 内事件的顺序，这时同一 topic 内出现了多种不同类型的事件。</p>
+<h2 id="Ordering-problems"><a href="#Ordering-problems" class="headerlink" title="Ordering problems"></a>Ordering problems</h2><p>若把 <code>customerCreated</code>、<code>customerAddressChanged</code>、<code>customerClosed</code> 等事件放到不同 topic 中，则消费者无法保证按照生产者的生产顺序来消费它们。</p>
+<p>即使为每个事件绑定时间戳也不行。</p>
+<p>首先，当处理完时间戳为 A 的事件后，无法确定 A 前面的事件都已处理完毕，此时要么等待一段随机时间，要么继续处理后面的消息，无论如何选择，都无法保证事件顺序。</p>
+<p>其次，在分布式系统中，依赖时钟同步是非常麻烦的，参考 DDIA 第 8 章。</p>
+<h2 id="When-to-split-topics-when-to-combine"><a href="#When-to-split-topics-when-to-combine" class="headerlink" title="When to split topics, when to combine?"></a>When to split topics, when to combine?</h2><p>有了前面的背景，本节给出何时放入同一 topic，何时拆分到不同 topic 的一般准则。</p>
+<h4 id="1-The-most-important-rule-is-that-any-events-that-need-to-stay-in-a-fixed-order-must-go-in-the-same-topic-and-they-must-also-use-the-same-partitioning-key"><a href="#1-The-most-important-rule-is-that-any-events-that-need-to-stay-in-a-fixed-order-must-go-in-the-same-topic-and-they-must-also-use-the-same-partitioning-key" class="headerlink" title="1. The most important rule is that any events that need to stay in a fixed order must go in the same topic(and they must also use the same partitioning key)."></a>1. The most important rule is that any events that need to stay in a fixed order must go in the same topic(and they must also use the same partitioning key).</h4><blockquote>
+<p>全局无序，partition 内有序。</p>
+</blockquote>
+<p>一般同一 entity 的不同事件才关心事件顺序，因此要把它们放到同一 topic 的同一 parition 上，如 event sourcing。</p>
+<h4 id="2-For-events-about-different-entities-it-depends"><a href="#2-For-events-about-different-entities-it-depends" class="headerlink" title="2. For events about different entities, it depends."></a>2. For events about different entities, it depends.</h4><p>若 entity 之间有依赖关系，如 address 从属于 customer，或一组 entity 经常一起使用，则这些 entity 的事件最好放到同一 topic 中。</p>
+<p>若各 entity 没有关联，且由不同团队负责，则最好放到不同 topic 中。</p>
+<p>另外，还要考虑吞吐量，若某事件吞吐量远远超过其他事件，则最好把它拆分到独立 topic 中，不然只关心其他低频事件的消费者也必须消费该事件。</p>
+<h4 id="3-What-if-an-event-involves-several-entities"><a href="#3-What-if-an-event-involves-several-entities" class="headerlink" title="3. What if an event involves several entities?"></a>3. What if an event involves several entities?</h4><p>例如 purchase 事件涉及 product 和 customer 两个实体，transfer 事件涉及转入、转出两个 account 实体。</p>
+<p>推荐开始时将 event 记录为 single atomic message，不要过早将其拆分为（多个 topic 中的）多个消息。因为借助 stream processor 可轻易拆分 compound event，但重建原始事件却非常困难。</p>
+<p>可以给原始事件一个 UUID，将该事件拆分为关于每个 entity 的事件时，携带该 UUID，从而实现事件追踪。</p>
+<h4 id="4-If-several-consumers-all-read-a-particular-group-of-topics-then-consider-to-combine-them"><a href="#4-If-several-consumers-all-read-a-particular-group-of-topics-then-consider-to-combine-them" class="headerlink" title="4. If several consumers all read a particular group of topics, then consider to combine them."></a>4. If several consumers all read a particular group of topics, then consider to combine them.</h4><p>把细粒度 topic 合并为粗粒度 topic 后，部分 consumer 可能会收到并不感兴趣的事件，这不是大事，因为从 Kafka 消费消息非常轻量级，即使 consumer 选择忽略一半的消息，这种 overconsumption 消耗也不会很大。</p>
+<p>只有当 consumer 需要忽略大部分消息（如 99.9%）时，才推荐将低频事件拆分出来。</p>
+<h4 id="5-A-changelog-topic-for-a-Kafka-Streams-state-store-should-be-a-separate-from-all-other-topics"><a href="#5-A-changelog-topic-for-a-Kafka-Streams-state-store-should-be-a-separate-from-all-other-topics" class="headerlink" title="5. A changelog topic for a Kafka Streams state store should be a separate from all other topics."></a>5. A changelog topic for a Kafka Streams state store should be a separate from all other topics.</h4><h4 id="6-The-last-one-you-should-choose"><a href="#6-The-last-one-you-should-choose" class="headerlink" title="6. The last one you should choose."></a>6. The last one you should choose.</h4><p>若前面的准则都不适用，则把相同类型的事件放到同一 topic 中，该准则相当于什么都没说。</p>
+<h2 id="Schema-Management"><a href="#Schema-Management" class="headerlink" title="Schema Management"></a>Schema Management</h2><p>消息编码的影响：</p>
+<ul>
+<li>使用无模式的 JSON 编码时，同一 topic 中可以轻易存放很多不同类型的事件；</li>
+<li>使用有模式的编码时，如 Avro，同一 topic 中还是可以存放不同类型的事件，但没那么容易；</li>
+</ul>
+<p>前面说过，<a href="https://docs.confluent.io/current/schema-registry/docs/index.html" target="_blank" rel="noopener">Confluent Avro Schema Register</a> 基于一个 topic 只有一种模式的假设，模式（schema）可以修改，但要保持向前、向后兼容，这种设计的优点是：多个 producer/consumer 可同时使用不同的模式，且保持互相兼容。</p>
+<p>在 Avro Schema Register 注册模式时，需要指定主题（subject name），默认主题为 topic-key/topic-value，Register 将为该 subject 下注册的模式检查其向前、向后兼容性。</p>
+<p>作者为 Register 做了修改，以允许同一 topic 中出现多种类型的事件，具体可参考原文，现在 Confluent Avro Schema Register 也没有原来的限制了。</p>
 
       
     </div>
@@ -483,11 +531,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Scala/" rel="tag"># Scala</a>
-          
-            <a href="/tags/case-statement/" rel="tag"># case statement</a>
-          
-            <a href="/tags/偏函数/" rel="tag"># 偏函数</a>
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
           
         </div>
       
@@ -500,8 +544,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/06/2018-06-06-variance-in-collections/" rel="next" title="Scala | 集合中的型变">
-                <i class="fa fa-chevron-left"></i> Scala | 集合中的型变
+              <a href="/2018/12/16/2018-12-16-java-jenv-intro/" rel="next" title="使用 jenv 进行 JDK 版本管理">
+                <i class="fa fa-chevron-left"></i> 使用 jenv 进行 JDK 版本管理
               </a>
             
           </div>
@@ -509,10 +553,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/08/2018-06-08-referentially-transparent/" rel="prev" title="基本概念 | 引用透明 & 纯函数 & 代换模型">
-                基本概念 | 引用透明 & 纯函数 & 代换模型 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -862,7 +902,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#普通函数"><span class="nav-number">1.</span> <span class="nav-text">普通函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#偏函数"><span class="nav-number">2.</span> <span class="nav-text">偏函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic-collection-of-events-of-the-same-type"><span class="nav-number">1.</span> <span class="nav-text">Topic = collection of events of the same type?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ordering-problems"><span class="nav-number">2.</span> <span class="nav-text">Ordering problems</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#When-to-split-topics-when-to-combine"><span class="nav-number">3.</span> <span class="nav-text">When to split topics, when to combine?</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-The-most-important-rule-is-that-any-events-that-need-to-stay-in-a-fixed-order-must-go-in-the-same-topic-and-they-must-also-use-the-same-partitioning-key"><span class="nav-number">3.0.1.</span> <span class="nav-text">1. The most important rule is that any events that need to stay in a fixed order must go in the same topic(and they must also use the same partitioning key).</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-For-events-about-different-entities-it-depends"><span class="nav-number">3.0.2.</span> <span class="nav-text">2. For events about different entities, it depends.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-What-if-an-event-involves-several-entities"><span class="nav-number">3.0.3.</span> <span class="nav-text">3. What if an event involves several entities?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-If-several-consumers-all-read-a-particular-group-of-topics-then-consider-to-combine-them"><span class="nav-number">3.0.4.</span> <span class="nav-text">4. If several consumers all read a particular group of topics, then consider to combine them.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-A-changelog-topic-for-a-Kafka-Streams-state-store-should-be-a-separate-from-all-other-topics"><span class="nav-number">3.0.5.</span> <span class="nav-text">5. A changelog topic for a Kafka Streams state store should be a separate from all other topics.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-The-last-one-you-should-choose"><span class="nav-number">3.0.6.</span> <span class="nav-text">6. The last one you should choose.</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Schema-Management"><span class="nav-number">4.</span> <span class="nav-text">Schema Management</span></a></li></ol></div>
             
 
           </div>
@@ -1036,9 +1076,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/06/07/2018-06-07-type-of-case-statement/';
-        this.page.identifier = '2018/06/07/2018-06-07-type-of-case-statement/';
-        this.page.title = 'Scala | case 语句究竟是什么类型？';
+        this.page.url = 'http://songkun.me/2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/';
+        this.page.identifier = '2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/';
+        this.page.title = '译 | 不同类型的消息可以放到同一主题中吗？';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
