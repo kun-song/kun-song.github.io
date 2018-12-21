@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="很早就听老司机说，在生产环境，最好把 Xms 和 Xmx 设为相同值，但这是为什么呢？ Xms/Xmx 对 JVM 行为的影响如下：  app 启动时，JVM 将申请大小为 Xms 的内存作为堆的初始内存，随着新对象不断创建，堆空闲部分越来越少，当空闲部分少于 2% （GC 也无法增加更多空闲时）时：  若堆已经达到 Xmx，则抛出 OutOfMemoryError； 若未达到 Xmx，则 JVM">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-19T15:56:26.581Z">
+<meta property="og:updated_time" content="2018-12-19T16:05:08.215Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM | 为何生产环境最好保持 Xms = Xmx ？">
 <meta name="twitter:description" content="很早就听老司机说，在生产环境，最好把 Xms 和 Xmx 设为相同值，但这是为什么呢？ Xms/Xmx 对 JVM 行为的影响如下：  app 启动时，JVM 将申请大小为 Xms 的内存作为堆的初始内存，随着新对象不断创建，堆空闲部分越来越少，当空闲部分少于 2% （GC 也无法增加更多空闲时）时：  若堆已经达到 Xmx，则抛出 OutOfMemoryError； 若未达到 Xmx，则 JVM">
@@ -373,12 +373,24 @@
                 
               
 
-              <time title="创建时间：2018-12-19 08:58:48 / 修改时间：23:56:26" itemprop="dateCreated datePublished" datetime="2018-12-19T08:58:48+08:00">2018-12-19</time>
+              <time title="创建时间：2018-12-19 08:58:48" itemprop="dateCreated datePublished" datetime="2018-12-19T08:58:48+08:00">2018-12-19</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-20 00:05:08" itemprop="dateModified" datetime="2018-12-20T00:05:08+08:00">2018-12-20</time>
               
             
           </span>
@@ -519,6 +531,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/12/20/2018-12-20-java-jvm-how-to-choose-heap-size/" rel="prev" title="JVM | 如何选择堆大小？">
+                JVM | 如何选择堆大小？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -592,7 +608,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">89</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -812,7 +828,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">90</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">92</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
