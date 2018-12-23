@@ -330,6 +330,187 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/23/2018-12-23-java-jvm-jinfo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/2018-12-23-java-jvm-jinfo/" itemprop="url">
+                  JVM | jinfo
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-23 19:35:30 / 修改时间：20:35:53" itemprop="dateCreated datePublished" datetime="2018-12-23T19:35:30+08:00">2018-12-23</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/23/2018-12-23-java-jvm-jinfo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/23/2018-12-23-java-jvm-jinfo/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>jinfo 是 JVM 配置信息的查看、修改工具，man 手册介绍如下：</p>
+<blockquote>
+<p>jinfo prints Java configuration information for a given Java process or core file or a  remote  debug server. Configuration  information includes Java System properties and Java virtual machine command line flags.</p>
+</blockquote>
+<p>且：</p>
+<blockquote>
+<p>This utility is unsupported and may or may not be available in future  versions  of  the  J2SE SDK.</p>
+</blockquote>
+<p>目前 Java 11 还是支持 jinfo 的，不过 jinfo 的 JDK 版本要与 app 一致才行。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/23/2018-12-23-java-jvm-jinfo/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/23/2018-12-23-java-guide-to-the-most-important-jvm-parameters/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -376,7 +557,7 @@
                 
               
 
-              <time title="创建时间：2018-12-23 15:21:19 / 修改时间：16:11:04" itemprop="dateCreated datePublished" datetime="2018-12-23T15:21:19+08:00">2018-12-23</time>
+              <time title="创建时间：2018-12-23 15:21:19 / 修改时间：19:38:44" itemprop="dateCreated datePublished" datetime="2018-12-23T15:21:19+08:00">2018-12-23</time>
             
 
             
@@ -444,16 +625,45 @@
 
       
         
-          <p>原文在 <a href="https://www.baeldung.com/jvm-parameters" target="_blank" rel="noopener">这里</a>。</p>
+          
+            <p>原文在 <a href="https://www.baeldung.com/jvm-parameters" target="_blank" rel="noopener">这里</a>。</p>
 <p>本文介绍配置 JVM 的几个关键选项。</p>
 <h2 id="堆内存"><a href="#堆内存" class="headerlink" title="堆内存"></a>堆内存</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-Xms&lt;heap size&gt;[unit]</span><br><span class="line">-Xmx&lt;heap size&gt;[unit]</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/23/2018-12-23-java-guide-to-the-most-important-jvm-parameters/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+<p>其中 <code>unit</code> 可以是 <code>g/m/k</code> 等，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Xms2g -Xmx5g</span><br></pre></td></tr></table></figure>
+<p>按 <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/sizing.html" target="_blank" rel="noopener">Oracle 官方指南</a>，除堆的总容量（Xms/Xmx）外，第二重要的设置是新生代的内存占比，默认情况下，新生代最小 1310M，无上限，也可以显式设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-XX:NewSize=&lt;young size&gt;[unit]</span><br><span class="line">-XX:MaxNewSize=&lt;young size&gt;[unit]</span><br></pre></td></tr></table></figure>
+<h2 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h2><p>选择合适的垃圾收集算法也很重要，JVM 有 4 种 GC 实现：</p>
+<ul>
+<li>Serial Garbage Collector</li>
+<li>Parallel Garbage Collecor</li>
+<li>GMS Garbage Collecor</li>
+<li>G1 Garbage Collecor</li>
+</ul>
+<p>分别通过如下选项指定：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseSerialGC</span><br><span class="line">-XX:+UseParallelGC</span><br><span class="line">-XX:+UseParNewGC</span><br><span class="line">-XX:+UseG1GC</span><br></pre></td></tr></table></figure>
+<h2 id="GC-日志"><a href="#GC-日志" class="headerlink" title="GC 日志"></a>GC 日志</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseGCLogFileRotation </span><br><span class="line">-XX:NumberOfGCLogFiles=&lt; number of log files &gt; </span><br><span class="line">-XX:GCLogFileSize=&lt; file size &gt;[ unit ]</span><br><span class="line">-Xloggc:/path/to/gc.log</span><br><span class="line"></span><br><span class="line">-XX:+PrintGCTimeStamps </span><br><span class="line">-XX:+PrintGCDateStamps</span><br></pre></td></tr></table></figure>
+<h2 id="处理内存不足"><a href="#处理内存不足" class="headerlink" title="处理内存不足"></a>处理内存不足</h2><p>线上应用若出现 <code>OutOfMemoryError</code>，可能直接崩溃，这类错误很难复现，因此出现该错误时转储堆信息（dump heap memory）非常重要：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-XX:+HeapDumpOnOutOfMemoryError </span><br><span class="line">-XX:HeapDumpPath=./java_pid&lt;pid&gt;.hprof</span><br><span class="line">-XX:OnOutOfMemoryError=&quot;&lt; cmd args &gt;;&lt; cmd args &gt;&quot; </span><br><span class="line">-XX:+UseGCOverheadLimit</span><br></pre></td></tr></table></figure>
+<p><code>HeapDumpOnOutOfMemoryError</code> 开启转储功能，<code>OnOutOfMemoryError</code> 类似回调，当 <code>OutOfMemoryError</code> 发生时执行指定指令，例如重启：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:OnOutOfMemoryError=&quot;shutdown -r&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="32-64-位"><a href="#32-64-位" class="headerlink" title="32/64 位"></a>32/64 位</h2><p>若 OS 上同时存在 32 位和 64 位的 JDK，则 JVM 默认选择 32 位，可以手动指定为 64 位：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-d64</span><br></pre></td></tr></table></figure>
+<h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><ul>
+<li><code>-server</code>：使用 Server Hotspot VM，注意 64 位 JVM 默认开启 <code>-server</code>；</li>
+<li><code>-XX:+UseStringDeduplication</code>：Java 8u20 引入，将相同 <code>String</code> 实例转化为全局 <code>char[]</code>，减少重复内存消耗；</li>
+<li><code>-XX:+UseLWPSynchronization</code>：使用 LWP(light weight process)-based 同步策略，而非 thread-based 同步；</li>
+<li><code>-XX:LargePageSizeInBytes</code>：sets the large page size used for the Java heap; it takes the argument in GB/MB/KB; with larger page sizes we can make better use of virtual memory hardware resources; however, this may cause larger space sizes for the PermGen, which in turn can force to reduce the size of Java heap space.</li>
+<li><code>-XX:MaxHeapFreeRatio</code>：GC 后堆空闲内存的最大比例，防止 shrink；</li>
+<li><code>-XX:MinHeapFreeRatio</code>：GC 后堆空闲内存的最小比例，防止 expansion；</li>
+<li><code>-XX:SurvivorRatio</code>：eden/survivor 比例，例如 <code>-XX:SurvivorRatio=5</code> 则新生代分为 7 分，eden 占 5，两个 survivor 占 2；</li>
+<li><code>-XX:+UseLargePages</code>：use large page memory if it is supported by the system; please note that OpenJDK 7 tends to crash if using this JVM parameter</li>
+<li><code>-XX:+UseStringCache</code>：缓存常用的字符串；</li>
+<li><code>-XX:+UseCompressedStrings</code>：用 <code>bye[]</code> 而非 <code>char[]</code> 表示字符串；</li>
+<li><code>-XX:+OptimizeStringConcat</code>：优化字符串拼接操作；</li>
+</ul>
+
+          
         
       
     </div>
@@ -1983,197 +2193,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/14/2018-12-14-ml-intro/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/14/2018-12-14-ml-intro/" itemprop="url">
-                  机器学习 | ML 算法介绍
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-14 08:59:34" itemprop="dateCreated datePublished" datetime="2018-12-14T08:59:34+08:00">2018-12-14</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-15 18:57:02" itemprop="dateModified" datetime="2018-12-15T18:57:02+08:00">2018-12-15</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/14/2018-12-14-ml-intro/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/14/2018-12-14-ml-intro/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>机器学习算法很多，大略可分为以下两类：</p>
-<ul>
-<li>监督学习（supervised learning）</li>
-<li>非监督学习（unsupervised learning）</li>
-</ul>
-<p>其他的还有加强学习（reinforcement learning）等。</p>
-<p>不管是监督学习，还是非监督学习，都需要使用训练集对算法进行训练，如果训练集中的每个训练样本（tranning example）具备标记，则该称该算法为监督学习。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/14/2018-12-14-ml-intro/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2221,7 +2240,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">91</span>
+                    <span class="site-state-item-count">92</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2455,7 +2474,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">94</span>
+                      
+                    
+                    <span class="site-state-item-count">95</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
