@@ -20,6 +20,8 @@ categories: JVM
 
 其中 `unit` 可以是 `g/m/k` 等，例如：
 
+<!-- more -->
+
 ```
 -Xms2g -Xmx5g
 ```
