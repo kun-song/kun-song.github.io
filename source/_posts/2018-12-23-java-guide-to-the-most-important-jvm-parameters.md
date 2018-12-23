@@ -18,8 +18,6 @@ categories: JVM
 -Xmx<heap size>[unit]
 ```
 
-<!-- more -->
-
 其中 `unit` 可以是 `g/m/k` 等，例如：
 
 ```
