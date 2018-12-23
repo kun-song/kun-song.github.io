@@ -80,3 +80,53 @@ jline.esc.timeout = 0
 java.runtime.name = Java(TM) SE Runtime Environment
 ...
 ```
+
+只查看指定参数的值：
+
+```
+± jinfo -flag SurvivorRatio 13938
+-XX:SurvivorRatio=8
+```
+
+修改 `SurvivorRatio` 的值：
+
+```
+± jinfo -flag SurvivorRatio=9 13938
+```
+
+结果报错了：
+
+```
+Exception in thread "main" com.sun.tools.attach.AttachOperationFailedException: flag 'SurvivorRatio' cannot be changed
+
+	at sun.tools.attach.BsdVirtualMachine.execute(BsdVirtualMachine.java:213)
+	at sun.tools.attach.HotSpotVirtualMachine.executeCommand(HotSpotVirtualMachine.java:261)
+	at sun.tools.attach.HotSpotVirtualMachine.setFlag(HotSpotVirtualMachine.java:234)
+	at sun.tools.jinfo.JInfo.flag(JInfo.java:134)
+	at sun.tools.jinfo.JInfo.main(JInfo.java:81)
+```
+
+原因是 JVM 启动默认开启 `-XX:+UseAdaptiveSizePolicy`，它与 jinfo 设置参数冲突，参考 [stackoverflow 该回答](https://stackoverflow.com/questions/42719887/survivorratio-flag-of-jvm-does-not-work)。
+
+换一个参数：
+
+```
+± jinfo -flag HeapDumpPath 13938              
+-XX:HeapDumpPath=
+```
+
+没有设置该值，用 jinfo 设置一下：
+
+```
+± jinfo -flag HeapDumpPath=/home/satansk/xx.hprof 13938
+```
+
+再看下 `HeapDumppath` 的值;
+
+```
+± jinfo -flag HeapDumpPath 13938                       
+-XX:HeapDumpPath=/home/satansk/xx.hprof
+```
+
+nice ~~
+
