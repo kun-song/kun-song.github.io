@@ -6,7 +6,7 @@ tags:
   - 公开课
   - fp
   - CIS 194
-categories: 技术
+categories: 公开课
 ---
 
 Martin Odersky 曾经说过：

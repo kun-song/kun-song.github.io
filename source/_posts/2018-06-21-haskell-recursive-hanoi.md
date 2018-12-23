@@ -6,7 +6,7 @@ tags:
   - 递归
   - 算法
   - CIS 194
-categories: 技术
+categories: 公开课
 ---
 
 汉诺塔问题是一个非常经典的可以用递归优美解决的问题。

@@ -8,7 +8,7 @@ tags:
   - Haskell
   - 环境
   - 语法糖
-categories: 技术
+categories: 公开课
 ---
 
 最近在跟宾夕法尼亚大学的 Haskell 课程（见 {% post_link 2018-06-15-haskell-begin-cis-194 正式入坑 Haskell %}），这周末两天完成了第二周、第三周的学习内容。

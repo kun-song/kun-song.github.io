@@ -6,7 +6,7 @@ tags:
   - JVM
   - jstat
   - GC log
-categories: 技术
+categories: JVM
 ---
 
 看懂 GC 日志是 Java 司机的必备技能，本文简单总结 GC 日志的相关内容。

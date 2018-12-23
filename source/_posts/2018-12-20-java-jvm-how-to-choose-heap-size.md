@@ -4,7 +4,7 @@ date: 2018-12-20 00:04:32
 tags:
   - Java
   - JVM
-categories: 技术
+categories: JVM
 ---
 
 

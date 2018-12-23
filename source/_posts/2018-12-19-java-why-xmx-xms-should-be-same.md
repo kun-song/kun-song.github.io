@@ -9,15 +9,20 @@ tags:
 categories: 技术
 ---
 
-很早就听老司机说，在生产环境，最好把 Xms 和 Xmx 设为相同值，但这是为什么呢？
+很早就听老司机说，在生产环境，最好把 Xms 和 Xmx 设为相同值，并且 [Oralce 官方]() 也是这样推荐的：
 
-Xms/Xmx 对 JVM 行为的影响如下：
+Setting initial and minimum heap size | Xms | Oracle recommends setting the minimum heap size (-Xms)equal to the maximum heap size (-Xmx) to minimize garbage collections.
+-- | -- | --
+
+这是为什么呢？
+
+首先，Xms/Xmx 对 JVM 行为的影响如下：
+
+<!-- more -->
 
 >app 启动时，JVM 将申请大小为 Xms 的内存作为堆的初始内存，随着新对象不断创建，堆空闲部分越来越少，当空闲部分少于 2% （GC 也无法增加更多空闲时）时：
 >* 若堆已经达到 Xmx，则抛出 `OutOfMemoryError`；
 >* 若未达到 Xmx，则 JVM 向 OS 申请内存，增加堆大小；
-
-<!-- more -->
 
 因此，把 Xms/Xmx 设为相同值有如下优势：
 

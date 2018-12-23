@@ -6,7 +6,7 @@ tags:
   - CIS 194
   - Haskell
   - lazy
-categories: 技术
+categories: 公开课
 ---
 
 这里的 lazy 指 lazy evaluation，是一种编程语言的求值策略，与之对立的是 strict evaluation，更多关于求值策略的内容可以参考 {% post_link 2018-05-17-call-by-value-call-by-name 传值调用 vs 传名调用 %}。

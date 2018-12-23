@@ -6,7 +6,7 @@ tags:
   - CIS 194
   - Haskell
   - Type Class
-categories: 技术
+categories: 公开课
 ---
 
 最近两周完成了 [CIS 194](http://www.seas.upenn.edu/~cis194/spring15/lectures.html) 第 4 章、第 5 章的学习，其中
