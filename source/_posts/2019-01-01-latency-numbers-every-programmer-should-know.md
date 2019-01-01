@@ -5,11 +5,13 @@ tags:
 categories: 技术
 ---
 
-Jeff Dean 和 Peter Norvig 对计算机各类操作的耗时做了大致估计（我找到的最早出处是 Peter Norvig 著名的 [Teach Yourself Programming in Ten Years](http://norvig.com/21-days.html#answers)），具体数值随硬件的发展肯定有变化，伯克利有个 [动态图表](https://people.eecs.berkeley.edu/~rcs/research/interactive_latency.html)，可清晰看到每年各个操作耗时的变化，非常赞！
+Jeff Dean 和 Peter Norvig 对计算机各类操作的耗时做了大致估计（我找到的最早出处是 Peter Norvig 著名的 [Teach Yourself Programming in Ten Years](http://norvig.com/21-days.html#answers)），具体数值随硬件的发展肯定有变化，伯克利有个[动态图表](https://people.eecs.berkeley.edu/~rcs/research/interactive_latency.html)，可查看每年各个操作耗时的变化，非常赞！
 
 例如 2019 年数据如下：
 
 <img src="/images/2019/latency-numbers/latency-numbers-2019.png" alt="latency numbers 2019" style="width: 800px;"/>
+
+<!-- more -->
 
 比较每年各个数值的变化，可发现一些有趣的现象。
 
