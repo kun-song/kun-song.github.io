@@ -376,7 +376,7 @@
                 
               
 
-              <time title="创建时间：2019-01-01 17:13:54 / 修改时间：18:32:51" itemprop="dateCreated datePublished" datetime="2019-01-01T17:13:54+08:00">2019-01-01</time>
+              <time title="创建时间：2019-01-01 17:13:54 / 修改时间：19:35:16" itemprop="dateCreated datePublished" datetime="2019-01-01T17:13:54+08:00">2019-01-01</time>
             
 
             
@@ -444,36 +444,16 @@
 
       
         
-          
-            <p>Jeff Dean 和 Peter Norvig 对计算机各类操作的耗时做了大致估计（我找到的最早出处是 Peter Norvig 著名的 <a href="http://norvig.com/21-days.html#answers" target="_blank" rel="noopener">Teach Yourself Programming in Ten Years</a>），具体数值随硬件的发展肯定有变化，伯克利有个 <a href="https://people.eecs.berkeley.edu/~rcs/research/interactive_latency.html" target="_blank" rel="noopener">动态图表</a>，可清晰看到每年各个操作耗时的变化，非常赞！</p>
+          <p>Jeff Dean 和 Peter Norvig 对计算机各类操作的耗时做了大致估计（我找到的最早出处是 Peter Norvig 著名的 <a href="http://norvig.com/21-days.html#answers" target="_blank" rel="noopener">Teach Yourself Programming in Ten Years</a>），具体数值随硬件的发展肯定有变化，伯克利有个<a href="https://people.eecs.berkeley.edu/~rcs/research/interactive_latency.html" target="_blank" rel="noopener">动态图表</a>，可查看每年各个操作耗时的变化，非常赞！</p>
 <p>例如 2019 年数据如下：</p>
 <p><img src="/images/2019/latency-numbers/latency-numbers-2019.png" alt="latency numbers 2019" style="width: 800px;"></p>
-<p>比较每年各个数值的变化，可发现一些有趣的现象。</p>
-<p>第一，roundtrip in same datacenter 和 packet roundtrip CA to Netherlands 耗时没有任何变化，一致保持 500us 和 150ms，原因很好理解，毕竟信号在光纤中以近似光速传播，该时间由物理规律决定。</p>
-<p>第二，从 2006 年开始，前两列操作的数值不再变化，只有后两列在变化，说明近十年来存储介质的速度有较大提升。</p>
-<p>第三，SSD 的随机读取速度从 1990 年到 2019 年变化不同，不过从 19us 提升到 16us，但顺序读取速度却从 50ms 提升到 49us，提升巨大。</p>
-<p>…</p>
-<p>前面说过，具体数值不重要，重要的是对各操作之间耗时数量级的直观感受，为便于理解，把实际数值放大 10 亿倍，则：</p>
-<ul>
-<li><p>秒级操作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">L1 cache reference                   1  s</span><br><span class="line">Branch mispredict                    3  s</span><br><span class="line">L2 cache reference                   74 s</span><br><span class="line">Mutex lock/unlock                    17 s</span><br><span class="line">Send 2K bytes over commdity network  62 s</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>分钟级操作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Main memory reference               1.7 m</span><br><span class="line">Compress 1K bytes with Zippy        3.4 m</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>小时级操作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Read 1 MB sequentially from memory  1   hour</span><br><span class="line">SSD random read                     4.5 hour</span><br><span class="line">Read 1 MB sequentially from SSD     17  hour</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>天级操作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Round trip within same datacenter   6  day</span><br><span class="line">Read 1 MB sequentially from disk    11 day</span><br><span class="line">Disk seek                           35 day</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>年级操作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Packet roundtrip CA to Netherlands  4.76 year</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>这样一来，数量级的差别就很明显了，L1 cache reference 相当于一次心跳，则硬盘寻址相当于在宿舍蹉跎一个月才搞清楚要追的妹子住在哪栋宿舍，而从加州发送一个 package 到荷兰就更夸张了，相当于读完本科，并且又工作了半年，我的天，长距离网络传输真的慢的要死！</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/01/2019-01-01-latency-numbers-every-programmer-should-know/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
