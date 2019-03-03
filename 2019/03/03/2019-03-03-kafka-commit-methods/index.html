@@ -119,25 +119,25 @@
 
 
 
-  <meta name="description" content="基本概念偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 Partial Function 条目。 简单地说，对于类型为 A =&amp;gt; B 的函数 f 而言：  若 f 能处理所有类型 A 的值，则 f 为 total function； 若 f 仅能处理类型为 A 的值的 子集，则 f 为 partial fun">
-<meta name="keywords" content="Scala,fp">
+  <meta name="description" content="Kafka 通过 enable.auto.commit 控制 offset 提交方式：  true：通过后台线程周期性提交（默认） false：手动提交  自动提交既然是周期性提交，就需要配置提交周期，Kafka 通过 auto.commit.interval.ms 配置提交周期，默认值是 5000ms。">
+<meta name="keywords" content="Kafka">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Scala | 偏函数">
-<meta property="og:url" content="http://songkun.me/2018/05/15/scala-partialfunction-1/index.html">
+<meta property="og:title" content="Kafka offset 提交方式">
+<meta property="og:url" content="http://songkun.me/2019/03/03/2019-03-03-kafka-commit-methods/index.html">
 <meta property="og:site_name" content="随便写写">
-<meta property="og:description" content="基本概念偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 Partial Function 条目。 简单地说，对于类型为 A =&amp;gt; B 的函数 f 而言：  若 f 能处理所有类型 A 的值，则 f 为 total function； 若 f 仅能处理类型为 A 的值的 子集，则 f 为 partial fun">
+<meta property="og:description" content="Kafka 通过 enable.auto.commit 控制 offset 提交方式：  true：通过后台线程周期性提交（默认） false：手动提交  自动提交既然是周期性提交，就需要配置提交周期，Kafka 通过 auto.commit.interval.ms 配置提交周期，默认值是 5000ms。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-22T15:06:49.000Z">
+<meta property="og:updated_time" content="2019-03-03T06:35:53.941Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Scala | 偏函数">
-<meta name="twitter:description" content="基本概念偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 Partial Function 条目。 简单地说，对于类型为 A =&amp;gt; B 的函数 f 而言：  若 f 能处理所有类型 A 的值，则 f 为 total function； 若 f 仅能处理类型为 A 的值的 子集，则 f 为 partial fun">
+<meta name="twitter:title" content="Kafka offset 提交方式">
+<meta name="twitter:description" content="Kafka 通过 enable.auto.commit 控制 offset 提交方式：  true：通过后台线程周期性提交（默认） false：手动提交  自动提交既然是周期性提交，就需要配置提交周期，Kafka 通过 auto.commit.interval.ms 配置提交周期，默认值是 5000ms。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/05/15/scala-partialfunction-1/"/>
+  <link rel="canonical" href="http://songkun.me/2019/03/03/2019-03-03-kafka-commit-methods/"/>
 
 
 
@@ -147,7 +147,7 @@
   };
 </script>
 
-  <title>Scala | 偏函数 | 随便写写</title>
+  <title>Kafka offset 提交方式 | 随便写写</title>
   
 
 
@@ -331,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-partialfunction-1/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/03/03/2019-03-03-kafka-commit-methods/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -348,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Scala | 偏函数
+          <h1 class="post-title" itemprop="name headline">Kafka offset 提交方式
               
             
           </h1>
@@ -373,24 +373,12 @@
                 
               
 
-              <time title="创建时间：2018-05-15 23:08:20" itemprop="dateCreated datePublished" datetime="2018-05-15T23:08:20+08:00">2018-05-15</time>
+              <time title="创建时间：2019-03-03 14:21:03 / 修改时间：14:35:53" itemprop="dateCreated datePublished" datetime="2019-03-03T14:21:03+08:00">2019-03-03</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-05-22 23:06:49" itemprop="dateModified" datetime="2018-05-22T23:06:49+08:00">2018-05-22</time>
               
             
           </span>
@@ -422,9 +410,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/15/scala-partialfunction-1/#comments" itemprop="discussionUrl">
+                <a href="/2019/03/03/2019-03-03-kafka-commit-methods/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/15/scala-partialfunction-1/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/03/03/2019-03-03-kafka-commit-methods/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -452,50 +440,53 @@
       
 
       
-        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 <a href="https://en.wikipedia.org/wiki/Partial_function" target="_blank" rel="noopener">Partial Function</a> 条目。</p>
-<p>简单地说，对于类型为 <code>A =&gt; B</code> 的函数 <code>f</code> 而言：</p>
+        <p>Kafka 通过 <code>enable.auto.commit</code> 控制 offset 提交方式：</p>
 <ul>
-<li>若 <code>f</code> 能处理所有类型 <code>A</code> 的值，则 <code>f</code> 为 total function；</li>
-<li>若 <code>f</code> 仅能处理类型为 <code>A</code> 的值的 <strong>子集</strong>，则 <code>f</code> 为 partial function；</li>
+<li><code>true</code>：通过后台线程周期性提交（默认）</li>
+<li><code>false</code>：手动提交</li>
 </ul>
+<h2 id="自动提交"><a href="#自动提交" class="headerlink" title="自动提交"></a>自动提交</h2><p>既然是周期性提交，就需要配置提交周期，Kafka 通过 <code>auto.commit.interval.ms</code> 配置提交周期，默认值是 5000ms。</p>
 <a id="more"></a>
-<p>看一个具体例子，假设有两个类型为 <code>Double ⇒ Double</code> 的函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> addOne: <span class="type">Double</span> ⇒ <span class="type">Double</span> = x ⇒ x + <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> sqrt: <span class="type">Double</span> ⇒ <span class="type">Double</span> = x ⇒ <span class="type">Math</span>.sqrt(x)</span><br></pre></td></tr></table></figure>
-<p>其中 <code>sqrt</code> 根本无法处理非正实数，因此 <code>sqrt</code> 是数学上的 partial function。</p>
-<h2 id="创建-PartialFunction"><a href="#创建-PartialFunction" class="headerlink" title="创建 PartialFunction"></a>创建 <code>PartialFunction</code></h2><p>Scala 使用 <code>PartialFunction</code> 类型表示偏函数，<code>sqrt</code> 可以实现为 <code>PartialFunction</code> 实例：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sqrt: <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] =</span><br><span class="line">  <span class="keyword">new</span> <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">isDefinedAt</span></span>(x: <span class="type">Double</span>) = x &gt;= <span class="number">0</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">Double</span>) = <span class="type">Math</span>.sqrt(v1)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>Scala 将函数视为第一等公民，可 <code>PartialFunction</code> 使用也太麻烦了吧？为了方便用户，Scala 允许通过 <code>case</code> 关键字创建 <code>PartialFunction</code> 函数的字面值</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sqrt: <span class="type">PartialFunction</span>[<span class="type">Double</span>, <span class="type">Double</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> x <span class="keyword">if</span> x &gt;= <span class="number">0</span> ⇒ <span class="type">Math</span>.sqrt(x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>是不是清爽了很多，虽然不如普通函数字面值简洁，但也相去不远了。</p>
-<blockquote>
-<p><code>case</code> 语句仅仅是语法糖而已，Scala 编译器会将其转换为前面的 <code>PartialFunction</code> 实例创建代码。</p>
-</blockquote>
-<h2 id="组合-PartialFunction"><a href="#组合-PartialFunction" class="headerlink" title="组合 PartialFunction"></a>组合 <code>PartialFunction</code></h2><p>可以用 <code>orElse</code> 组合偏函数，若有如下偏函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> one: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">String</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">1</span>  ⇒ <span class="string">"one"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> two: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">String</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">2</span>  ⇒ <span class="string">"two"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> three: <span class="type">PartialFunction</span>[<span class="type">Int</span>, <span class="type">String</span>] = &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="number">3</span>  ⇒ <span class="string">"three"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们想要一个能同时翻译 1, 2, 3 的函数，可以这样组合：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> all = one orElse two orElse three</span><br></pre></td></tr></table></figure>
-<p><code>all</code> 函数可以处理 1 2 3：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">all(<span class="number">1</span>)  <span class="comment">// one</span></span><br><span class="line">all(<span class="number">2</span>)  <span class="comment">// two</span></span><br><span class="line">all(<span class="number">3</span>)  <span class="comment">// three</span></span><br></pre></td></tr></table></figure>
-<h2 id="偏函数应用"><a href="#偏函数应用" class="headerlink" title="偏函数应用"></a>偏函数应用</h2><p>在 Scala 代码中，偏函数几乎随处可见，本文仅列举几个简单例子。</p>
-<h3 id="List-collect"><a href="#List-collect" class="headerlink" title="List.collect"></a><code>List.collect</code></h3><p>对列表中每个元素加 1，可以用 <code>map</code> 轻易实现：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) map &#123;</span><br><span class="line">  <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>但如果 <code>List</code> 中含有非数字类型，则 <code>map</code> 将抛出异常：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抛出异常</span></span><br><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">"Hi"</span>) map &#123;</span><br><span class="line">  <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>此时可以用 <code>collect</code> 函数取代 <code>map</code>：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">"Hi"</span>) collect &#123;</span><br><span class="line">  <span class="keyword">case</span> n: <span class="type">Int</span> ⇒ n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>结果为 <code>List(2, 3, 4)</code>，跳过了字符串 <code>Hi</code>，原因是 <code>collect</code> 参数为 <code>PartialFunction</code>，其实现根据偏函数参数的定义域，自动跳过无定义的元素。</p>
-<h3 id="Akka-中的例子"><a href="#Akka-中的例子" class="headerlink" title="Akka 中的例子"></a>Akka 中的例子</h3><p>偏函数在 Akka 中使用非常普遍，例如前几天我提的这个 <a href="https://github.com/akka/akka/pull/25036/files" target="_blank" rel="noopener">PR</a> 中：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recoverWith</span></span>(clazz: <span class="type">Class</span>[_ &lt;: <span class="type">Throwable</span>], supplier: <span class="type">Supplier</span>[<span class="type">Graph</span>[<span class="type">SourceShape</span>[<span class="type">Out</span>], <span class="type">NotUsed</span>]]): javadsl.<span class="type">Flow</span>[<span class="type">In</span>, <span class="type">Out</span>, <span class="type">Mat</span>] =</span><br><span class="line">  recoverWith &#123;</span><br><span class="line">    <span class="keyword">case</span> elem <span class="keyword">if</span> clazz.isInstance(elem) ⇒ supplier.get()</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p><code>recoverWith</code> 参数是偏函数：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">PartialFunction</span>[<span class="type">Throwable</span>, <span class="type">Graph</span>[<span class="type">SourceShape</span>[<span class="type">Out</span>], <span class="type">NotUsed</span>]]</span><br></pre></td></tr></table></figure>
-<p>通过偏函数，清晰表明 <code>recoverWith</code> 并非能处理所有 <code>Throwable</code> 值，而是仅处理参数 <code>PartialFunction</code> 能处理的 <code>Throwable</code> 子集。</p>
-<p>有人可能会问，即使不用偏函数，我用 <code>Throwable ⇒ Option[Graph[SourceShape[Out], NotUsed]]</code> 一样能表达相同的语义啊？哈哈，原因很简单，偏函数也是函数，可组合性更好，更方便。</p>
-<hr>
-<p>参考</p>
+<p>大部分提交是定时任务，也有部分例外，比如 <code>pool()</code> 和 <code>close()</code> 也会提交当前的最大偏移量。</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>自动提交可能导致：</p>
 <ul>
-<li><a href="http://twitter.github.io/effectivescala/#Functional%20programming-Partial%20functions" target="_blank" rel="noopener">Effective Scala</a></li>
-<li><a href="https://twitter.github.io/scala_school/zh_cn/pattern-matching-and-functional-composition.html" target="_blank" rel="noopener">Twitter Scala School</a></li>
+<li>丢失消息</li>
+<li>重复消费</li>
 </ul>
+<p>若 <code>pool()</code> 返回消息后是异步处理，或同步处理耗时过长，则自动提交时，若消息没有处理完，也会将它们提交，在 Kafka broker 看来，这些消息已经完成处理。若此时 consumer 崩溃，则未处理的消息在当前 consumer 丢失，该 consumer 负责处理的分区将被负载均衡到其他 consumer，其他 consumer 将从最新偏移量开始消息，从而彻底丢失这部分消息。</p>
+<p>再看下重复消费的场景，若 <code>pool()</code> 返回的消息处理了一部分，但由于时间原因，还未自动提交，此时若 consumer 崩溃，则其他 consumer 接手它的分区时，会从上次提交的偏移量处开始消费，从而再次拉取相同的消息，造成重复消费。</p>
+<p>最后，自动提交时，<strong>无法避免</strong> 丢失消息、重复消费。</p>
+<h2 id="手动提交"><a href="#手动提交" class="headerlink" title="手动提交"></a>手动提交</h2><p>为避免丢失消息、重复消费，可选择手动提交。</p>
+<h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><p><code>commitSync()</code> 将提交上次 <code>pool()</code> 返回（批量）消息中的最大 offset，且阻塞到 broker 提示提交成功，因此非常可靠，若提交失败，则抛出异常，详细解释提交失败的原因。</p>
+<p>注意，同步提交也 <strong>可能</strong> 出现：</p>
+<ul>
+<li>丢失消息</li>
+<li>重复消费</li>
+</ul>
+<p>因为 <code>commitSync()</code> 将提交最大 offset，所以一定要确保提交时所有消息已经处理完成，否则可能 <strong>丢失消息</strong>，例如先提交，再真正处理消息。</p>
+<p>而若 <code>pool()</code> 返回后，<code>commitSync()</code> 提交前，发生 rebalance，则 <code>commitSync()</code> 将因 rebalance 提交失败，该批次消费将被其他 consumer 再次 <code>pool()</code> 获取，因此在该 <code>pool()</code> 和 rebalance 之间处理的消息将被 <strong>重复消费</strong>。</p>
+<p>最后，使用 <code>commitSync()</code> 时，若保证提交时所有消息已完成处理，则可 <strong>避免消息丢失</strong>，但无法避免重复消费。</p>
+<blockquote>
+<p><code>commitSync</code> 遇到提交失败时会 <strong>自动重试</strong>，大部分错误可通过重试解决，若重试（几次？）后遇到重试无法解决的错误，再抛出异常，因此不要捕获异常，然后自己 <strong>手动重试</strong>。</p>
+</blockquote>
+<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p><code>commitSync()</code> 将阻塞直到提交成功 or 失败，这增加了可靠性，但降低了吞吐量，因此 Kafka 提供了另一个选择 <code>commitAsync()</code>。</p>
+<p>前面说过，同步提交会 <strong>自动重试</strong>，直到成功，或遇到重试无法解决的错误（如 rebalance 导致的提交失败），但异步提交不会重试，因为在异步提交中允许重试可能造成大量重复消费。</p>
+<p>比如现在异步提交时的 offset 为 500，但因为网络原因该提交发送失败，该错误应该可以通过重试解决，因此 consumer 会重新提交 offset = 500，但因为是异步提交，所以重试时可能已经成功提交了 offset = 5000（记住，Kafka 可能每秒消费百万级消息），若允许重试，则会把当前 offset 重置为 500，导致后面大量消息被重复消费，所以在异步提交中应该禁止自动重试。</p>
+<p><code>commitAsync</code> 提供回调函数，供提交失败时调用，可以在回调中打印日志，也可以在回调中尝试重试，但如同前面所说，重试异步提交可能 <strong>重置 offset</strong>，从而造成重复消费，因此要特别小心。</p>
+<p>可以通过一个单调增长的计数器解决重试异步提交的问题，具体做法是：</p>
+<ol>
+<li>每次调用 <code>commitAsync()</code> 时将计数器加 1，并将计数器当前值传入其回调函数；</li>
+<li>回调函数中检查计数器的当前值与提交时的传入值是否相等，若相等则再次提交，若当前值更大，说明有更新的 offset 被提交，则放弃重试；</li>
+</ol>
+<p>伪代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val commitCount = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">val callback = count -&gt;  (offsets, e) -&gt; <span class="keyword">if</span> (commitCount == count)  consumer.commitAynsc()</span><br><span class="line"></span><br><span class="line">consumer.commitAsync(callback(commitCount));</span><br></pre></td></tr></table></figure>
+<h3 id="同步-异步"><a href="#同步-异步" class="headerlink" title="同步 + 异步"></a>同步 + 异步</h3><p>若因为暂时问题（如暂时的网络故障）导致提交失败，则没有重试机制影响不大，因为后续的其他提交将修复该问题。</p>
+<p>但若该次提交是 consumer 停止之前的最后一次提交，我们希望能重试最后这个失败的提交，此时可结合使用同步和异步提交：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">    ConsumerRecords records = consumer.pool()</span><br><span class="line">    ... processing</span><br><span class="line">    comsumer.commitAsync()</span><br><span class="line">  &#125;</span><br><span class="line"><span class="keyword">catch</span> (ex) &#123;</span><br><span class="line">  log.error()</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">finally</span> &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    consumer.commitSync()</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">finally</span> &#123;</span><br><span class="line">    consumer.close()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正常场景下使用 <code>commitAsync()</code>，异步提交速度更快，而且若一直在 <code>while(true)</code> 中正常运行，则某次提交失败将被随后的其他提交修复，随后的这些提交可以视为某种“重试”。</p>
+<p>若 consumer 终止，则 <strong>最后一次提交</strong> 使用 <code>commitSync()</code>，同步提交将 <strong>一直重试</strong>，直到成功，或遇到无法通过重试解决的错误。</p>
+<p>通过结合同步、异步两种提交方式，综合了异步提交的高效和同步提交的可靠。</p>
+<h3 id="提交指定偏移量"><a href="#提交指定偏移量" class="headerlink" title="提交指定偏移量"></a>提交指定偏移量</h3><p><code>commitSync()</code> 和 <code>commitAsync()</code> 将提交上次 <code>pool()</code> 返回的最大偏移量，若每次拉取的消息批量太大，每次又仅提交最大偏移量，则若发生 rebalance，大量消息会被重复处理，此时可以在处理批量消息中间，多次少量提交。</p>
 
       
     </div>
@@ -516,9 +507,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Scala/" rel="tag"># Scala</a>
-          
-            <a href="/tags/fp/" rel="tag"># fp</a>
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
           
         </div>
       
@@ -531,8 +520,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/15/scala-case-use-cases/" rel="next" title="Scala | case 关键字的 4 种用法">
-                <i class="fa fa-chevron-left"></i> Scala | case 关键字的 4 种用法
+              <a href="/2019/03/03/2019-03-03-base64-introduction/" rel="next" title="Base64 简介">
+                <i class="fa fa-chevron-left"></i> Base64 简介
               </a>
             
           </div>
@@ -540,10 +529,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/16/scala-partialfunction-partially-applied-function-currying/" rel="prev" title="偏函数 vs 部分应用函数 vs 柯里化">
-                偏函数 vs 部分应用函数 vs 柯里化 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -919,7 +904,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建-PartialFunction"><span class="nav-number">2.</span> <span class="nav-text">创建 PartialFunction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合-PartialFunction"><span class="nav-number">3.</span> <span class="nav-text">组合 PartialFunction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#偏函数应用"><span class="nav-number">4.</span> <span class="nav-text">偏函数应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#List-collect"><span class="nav-number">4.1.</span> <span class="nav-text">List.collect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Akka-中的例子"><span class="nav-number">4.2.</span> <span class="nav-text">Akka 中的例子</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#自动提交"><span class="nav-number">1.</span> <span class="nav-text">自动提交</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">1.1.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手动提交"><span class="nav-number">2.</span> <span class="nav-text">手动提交</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步"><span class="nav-number">2.1.</span> <span class="nav-text">同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步"><span class="nav-number">2.2.</span> <span class="nav-text">异步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步-异步"><span class="nav-number">2.3.</span> <span class="nav-text">同步 + 异步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提交指定偏移量"><span class="nav-number">2.4.</span> <span class="nav-text">提交指定偏移量</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1093,9 +1078,9 @@
   
     <script type="text/javascript">
       var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/05/15/scala-partialfunction-1/';
-        this.page.identifier = '2018/05/15/scala-partialfunction-1/';
-        this.page.title = 'Scala | 偏函数';
+        this.page.url = 'http://songkun.me/2019/03/03/2019-03-03-kafka-commit-methods/';
+        this.page.identifier = '2019/03/03/2019-03-03-kafka-commit-methods/';
+        this.page.title = 'Kafka offset 提交方式';
       };
       function loadComments () {
         var d = document, s = d.createElement('script');
