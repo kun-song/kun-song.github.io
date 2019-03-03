@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="在分布式系统中，可能出现各种故障，例如机房断电、数据中心被炸毁、节点崩溃、网络延迟、网络分区、网络故障、时钟漂移、网络攻击、网络欺骗等等，因此分布式环境 极度不可靠，那分布式算法是如何建立在如此不可靠的基础上的呢？ 任何算法都无法保证解决以上所有问题，但每个算法都能解决部分问题，那不能解决的剩余部分怎么办呢？">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-03T07:45:03.520Z">
+<meta property="og:updated_time" content="2019-03-03T08:37:59.248Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式系统 | 系统模型（System Model）">
 <meta name="twitter:description" content="在分布式系统中，可能出现各种故障，例如机房断电、数据中心被炸毁、节点崩溃、网络延迟、网络分区、网络故障、时钟漂移、网络攻击、网络欺骗等等，因此分布式环境 极度不可靠，那分布式算法是如何建立在如此不可靠的基础上的呢？ 任何算法都无法保证解决以上所有问题，但每个算法都能解决部分问题，那不能解决的剩余部分怎么办呢？">
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2019-03-03 14:43:10 / 修改时间：15:45:03" itemprop="dateCreated datePublished" datetime="2019-03-03T14:43:10+08:00">2019-03-03</time>
+              <time title="创建时间：2019-03-03 14:43:10 / 修改时间：16:37:59" itemprop="dateCreated datePublished" datetime="2019-03-03T14:43:10+08:00">2019-03-03</time>
             
 
             
@@ -459,7 +459,7 @@
 <li>有界时钟漂移（bounded clock drift）</li>
 </ul>
 <p>同步模型并不实际，因为现实中的网络延迟、处理暂停时间可能是无限的。</p>
-<h3 id="部分同步模型（partially-synchronous-model）"><a href="#部分同步模型（partially-synchronous-model）" class="headerlink" title="部分同步模型（partially synchronous model）"></a>部分同步模型（partially synchronous model）</h3><p>部分同步模型假定系统大部分时间处于同步模型，但偶尔网络延迟、处理暂停、时钟漂移超出时间上界。</p>
+<h3 id="部分同步模型（partially-synchronous-model）"><a href="#部分同步模型（partially-synchronous-model）" class="headerlink" title="部分同步模型（partially synchronous model）"></a>部分同步模型（partially synchronous model）</h3><p>部分同步模型假定系统大部分时间处于同步模型，但偶尔网络延迟、处理暂停、时钟漂移超出时间上界，但这种状态在 <strong>有限时间</strong> 内会被修复，重新回到同步模型。</p>
 <p>部分同步模型非常实用，符合实际。</p>
 <h3 id="异步模型（asynchronous-model）"><a href="#异步模型（asynchronous-model）" class="headerlink" title="异步模型（asynchronous model）"></a>异步模型（asynchronous model）</h3><p>异步模型没有 <strong>时间概念</strong>，进而没有 <strong>超时</strong> 概念，异步模型适用场景较少。</p>
 <h2 id="节点维度"><a href="#节点维度" class="headerlink" title="节点维度"></a>节点维度</h2><h3 id="崩溃-停止错误（crash-stop-faults-model）"><a href="#崩溃-停止错误（crash-stop-faults-model）" class="headerlink" title="崩溃-停止错误（crash-stop faults/model）"></a>崩溃-停止错误（crash-stop faults/model）</h3><p>该模型假设节点只能以 <strong>崩溃</strong> 方式失败（can fail only by crashing），且节点崩溃后 <strong>无法恢复</strong>。</p>
@@ -514,6 +514,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/03/2019-03-03-distributed-algorithm-correctness/" rel="prev" title="分布式算法的正确性">
+                分布式算法的正确性 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -597,7 +601,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">101</span>
+                    <span class="site-state-item-count">102</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -841,7 +845,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">99</span>
+                      
+                    
+                    <span class="site-state-item-count">100</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
