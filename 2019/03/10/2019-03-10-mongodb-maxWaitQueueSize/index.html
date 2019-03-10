@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="最近有位同事遇到一个 MongoDB 的线上异常，类似： 123Exception in thread &amp;quot;pool-1-thread-301&amp;quot; com.mongodb.MongoWaitQueueFullException: Too many threads are already waiting for a connection. Max number of threads">
+<meta name="keywords" content="MongoDB,连接池">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB | 如何配置连接池？">
+<meta property="og:url" content="http://songkun.me/2019/03/10/2019-03-10-mongodb-maxWaitQueueSize/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="最近有位同事遇到一个 MongoDB 的线上异常，类似： 123Exception in thread &amp;quot;pool-1-thread-301&amp;quot; com.mongodb.MongoWaitQueueFullException: Too many threads are already waiting for a connection. Max number of threads">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-10T04:42:16.668Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB | 如何配置连接池？">
+<meta name="twitter:description" content="最近有位同事遇到一个 MongoDB 的线上异常，类似： 123Exception in thread &amp;quot;pool-1-thread-301&amp;quot; com.mongodb.MongoWaitQueueFullException: Too many threads are already waiting for a connection. Max number of threads">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2019/03/10/2019-03-10-mongodb-maxWaitQueueSize/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>MongoDB | 如何配置连接池？ | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/03/10/2019-03-10-mongodb-maxWaitQueueSize/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MongoDB | 如何配置连接池？
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-10 10:34:39 / 修改时间：12:42:16" itemprop="dateCreated datePublished" datetime="2019-03-10T10:34:39+08:00">2019-03-10</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/10/2019-03-10-mongodb-maxWaitQueueSize/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/10/2019-03-10-mongodb-maxWaitQueueSize/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近有位同事遇到一个 MongoDB 的线上异常，类似：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;pool-1-thread-301&quot; com.mongodb.MongoWaitQueueFullException: Too many threads are already waiting for a connection. Max number of threads (maxWaitQueueSize) of 500 has been exceeded.</span><br><span class="line">    at com.mongodb.PooledConnectionProvider.get(PooledConnectionProvider.java:70)</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>异常原因堆栈里说的很清楚：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Too many threads are already waiting for a connection. </span><br><span class="line">Max number of threads (maxWaitQueueSize) of 500 has been exceeded.</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>即请求数据库连接的线程太多，已经超过 <strong>等待队列</strong> 的最大值，所以请求被直接 <strong>拒绝</strong> 了。</p>
+<p>最无脑的解决方式是增加队列最大长度，连接池是客户端行为，不同驱动的实现可能不同，在 <a href="http://mongodb.github.io/mongo-java-driver/3.10/javadoc/?com/mongodb/MongoClientURI.html" target="_blank" rel="noopener">Java 驱动</a> 中，相关的配置有：</p>
+<ul>
+<li><code>maxPoolSize</code>：连接池中的最大连接数量；</li>
+<li><code>waitQueueMultiple</code>：该配置 * <code>maxPoolSize</code>  =&gt; <code>maxWaitQueueSize</code>，计算出等待连接的线程队列的最大长度，若超出限制，则抛出异常，丢弃该线程；</li>
+<li><code>waitQueueTimeoutMS</code>：暂无空闲连接时，允许线程等待的最长时间（ms）；</li>
+</ul>
+<p>所以，无法直接设置 <code>maxWaitQueueSize</code>，只能通过 <code>maxPoolSize</code> 和 <code>waitQueueMultiple</code> 两个参数间接设置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">connectionPoolSettings = ConnectionPoolSettings.builder()</span><br><span class="line">    ...</span><br><span class="line">    .maxWaitQueueSize(getThreadsAllowedToBlockForConnectionMultiplier() * getConnectionsPerHost())</span><br><span class="line">    ...</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+<p><code>connectionsPerHost</code> 对应 <code>maxPoolSize</code>，即线程池大小，默认 100，<code>threadsAllowedToBlockForConnectionMultiplier</code> 对应 <code>waitQueueMultiple</code>，默认 5，因此 <code>maxWaitQueueSize</code> 默认大小为 500（100 * 5），要增加等待队列长度，增大 <code>maxPoolSize</code> 或者 <code>waitQueueMultiple</code> 即可。</p>
+<p>单纯避免这个异常很简单，但问题是该如何决定这些配置的合理值呢？</p>
+<p>下面将分别介绍如何确定连接池、等待队列、连接超时等 3 个配置的合理值。</p>
+<h2 id="连接池"><a href="#连接池" class="headerlink" title="连接池"></a>连接池</h2><p>Little’s Law 是排队论中的一个公式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L = λ * W</span><br></pre></td></tr></table></figure>
+<p>在一个稳定系统中，顾客数量 <code>L</code> 等于顾客到达速率 <code>λ</code> 乘以顾客逗留时间 <code>W</code>，其中 <code>L</code>、<code>λ</code>、<code>W</code> 都是长期平均值，与顾客到达时间和顺序无关。</p>
+<p>Little’s Law 应用非常广泛，对应到请求排队的场景：</p>
+<ul>
+<li><code>L</code> 即平均使用的连接数；</li>
+<li><code>λ</code> 即系统吞吐量，单位为 “请求/s”；</li>
+<li><code>W</code> 即每个请求的处理时间；</li>
+</ul>
+<p>因此如果我们知道 <code>λ</code> 和 <code>W</code>，就能推导出一直保持使用的平均连接数，该值即为 <strong>连接池</strong> 的合理值。</p>
+<p>假设 <code>λ = 500</code>，即每秒需要处理 500 个请求，<code>W = 30ms</code>，即每个请求数据库需要 30ms 才能响应，则平均使用的数据库连接数 <code>L</code> 为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">L = λ * W</span><br><span class="line">  = 500 请求/s * 0.03 s/请求</span><br><span class="line">  = 15</span><br></pre></td></tr></table></figure>
+<p>因此，当前负载（<code>λ = 500 请求/s</code>）和数据库处理能力（<code>W = 0.03 s/请求</code>）下，系统会保持使用 15 个数据库连接，因此连接池大小应为 15，从而最大化连接池的利用率。</p>
+<blockquote>
+<p>注意：500 和 30ms 都是本例中的假设值，生产环境通过测试获取。</p>
+</blockquote>
+<h2 id="等待队列"><a href="#等待队列" class="headerlink" title="等待队列"></a>等待队列</h2><p>前面借助 Little’s Law 计算得到“平均每时每刻有 15 个数据库连接请求”，但这只是平均值，系统实际负载不断变化，请求数量的峰值可能远远超过 15（想象一下双十一），若没有等待队列，洪峰来临时会有 <strong>大量请求被拒绝</strong>，因此等待队列必不可少。</p>
+<p>首先，等待队列有以下作用：</p>
+<ol>
+<li>削峰填谷，防止高负载下的大量请求被拒绝；</li>
+<li>限制请求的 <strong>最大延迟</strong>；</li>
+</ol>
+<p>削峰填谷容易理解，但凡队列都有该作用，可等待队列是如何影响延迟时间的呢？</p>
+<p>假设等待队列长度为 500，且请求的平均处理时间为 30ms，则每个请求的最大延迟为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">最大延迟</span><br><span class="line">  = 最大排队时间 + 该请求处理时间</span><br><span class="line">  = 500 * 0.03 s + 0.03 s</span><br><span class="line">  = 15.03 s</span><br></pre></td></tr></table></figure>
+<p>因此等待队列越长，则最大延迟越大，如果要限制延迟上限，则可以减小等待队列的长度，这与直觉相符。</p>
+<p>因此等待队列长度需要考虑：</p>
+<ol>
+<li>请求洪峰有多大？</li>
+<li>能容忍的最大延迟有多大？</li>
+</ol>
+<p>这两个因素互相影响，一起决定等待队列的长度，假设洪峰请求数量为 100 个，如果要成功处理这 100 个请求，则队列长度应为 100，此时最大延迟为 3.03s（100 * 0.03s + 0.03s），该延迟超过大多数用户的忍耐上限，一般用户可能在 1s 后没看到响应就会关闭页面，因此我们想要更短的延迟，所以需要减小等待队列，比如到 40，此时最大延迟为 1.23s，大约可用。</p>
+<h2 id="超时时间"><a href="#超时时间" class="headerlink" title="超时时间"></a>超时时间</h2><p>超时时间也是连接池的重要配置，给定如下配置，连接超时应该设置多少呢？</p>
+<ul>
+<li>连接池大小 15</li>
+<li>等待队列长度 40</li>
+<li>请求平均处理时间 30ms</li>
+</ul>
+<p>超时时间与 <strong>最大延迟</strong> 相关，因此应该设为 40 * 0.03s + 0.03s，即 1.23s 左右，</p>
+<p>一个常见误区是根据 <strong>平均延迟</strong> 来设置超时，例如等待队列大部分时间并不满，若大部分时间等待队列只有不到 10 个请求排队，则平均延迟肯定大大低于 1.23s，比如可能是 500ms，如果把超时时间设置为 500ms，则会导致队列较满时，很多排队的请求超时失败。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MongoDB/" rel="tag"># MongoDB</a>
+          
+            <a href="/tags/连接池/" rel="tag"># 连接池</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/09/2019-03-09-ej-item-55-return-optionals-judiciously/" rel="next" title="Item 55 | Return optionals judiciously">
+                <i class="fa fa-chevron-left"></i> Item 55 | Return optionals judiciously
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">106</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">102</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#连接池"><span class="nav-number">1.</span> <span class="nav-text">连接池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#等待队列"><span class="nav-number">2.</span> <span class="nav-text">等待队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#超时时间"><span class="nav-number">3.</span> <span class="nav-text">超时时间</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2019/03/10/2019-03-10-mongodb-maxWaitQueueSize/';
+        this.page.identifier = '2019/03/10/2019-03-10-mongodb-maxWaitQueueSize/';
+        this.page.title = 'MongoDB | 如何配置连接池？';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
