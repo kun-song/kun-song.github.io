@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="quorum [ˈkwɔ:rəm]，法定人数  Quorum 机制是一种投票算法，核心思想是：  执行某操作之前，必须先获取足够的票数。  在分布式系统中，Quorum 投票有两种常见用法：  副本读写控制：保证同一数据的多个副本在每一时刻，只能用于读 or 写； 事务提交协议：存在网络分区时，保证分布式事务的原子性；">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-10T13:01:47.741Z">
+<meta property="og:updated_time" content="2019-03-16T09:33:31.888Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于 Quorum 的投票机制">
 <meta name="twitter:description" content="quorum [ˈkwɔ:rəm]，法定人数  Quorum 机制是一种投票算法，核心思想是：  执行某操作之前，必须先获取足够的票数。  在分布式系统中，Quorum 投票有两种常见用法：  副本读写控制：保证同一数据的多个副本在每一时刻，只能用于读 or 写； 事务提交协议：存在网络分区时，保证分布式事务的原子性；">
@@ -373,12 +373,24 @@
                 
               
 
-              <time title="创建时间：2019-03-10 19:54:30 / 修改时间：21:01:47" itemprop="dateCreated datePublished" datetime="2019-03-10T19:54:30+08:00">2019-03-10</time>
+              <time title="创建时间：2019-03-10 19:54:30" itemprop="dateCreated datePublished" datetime="2019-03-10T19:54:30+08:00">2019-03-10</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-16 17:33:31" itemprop="dateModified" datetime="2019-03-16T17:33:31+08:00">2019-03-16</time>
               
             
           </span>
@@ -484,7 +496,16 @@
 <p>两条规则一起能保证系统的一致性模型为 <strong>one-copy serializability</strong>（1SR）。</p>
 </blockquote>
 <p>Quorum 投票对于分布式数据库很重要，为了保证可用性，分布式数据库对每份数据做复制冗余，考虑可用性，副本（replica）越多越好，但副本越多，对应的写操作、磁盘占用、响应时间都要翻倍，从而响应性能，因此副本数量需要综合权衡两者。</p>
-<p>一般而言，3 个副本太少（可用性不足），5 个副本太多（性能太差），借助 Quorum 机制，5 个副本只需要完成 3 个写即可响应成功，大大提升了写操作的响应速度，又没有减弱可靠性，因此很好。</p>
+<p>一般而言，3 个副本太少（只能容忍一个副本失败，可用性不足），5 个副本太多（性能太差），借助 Quorum 机制，5 个副本只需要完成 3 个写即可响应成功，大大提升了写操作的响应速度，又没有减弱可靠性，因此很好。</p>
+<blockquote>
+<p>5 副本在保证高可靠性的同时，代价很大：</p>
+<ul>
+<li>5 倍磁盘占用</li>
+<li>5 倍贷款占用</li>
+<li>1/5 吞吐量</li>
+</ul>
+<p>所以 Quorum 常用于存储集群 <strong>配置信息/元数据</strong>（如 Zookeeper），但较少用于真正的数据存储，一个例子是 HDFS，它使用 Quorum 实现高可用的 namenode，但真正的数据存储并没有使用 Quorum.</p>
+</blockquote>
 <p>Quorum 投票本质上是把 <strong>写负载</strong> 转移到了 <strong>读负载</strong>，是一种设计权衡。</p>
 <p>比如 5 副本时，写入成功需要 5 次写，读时仅需访问一个副本即可；但 5 次写入的开销太大，设计者认为用户无法接受，因此决定采用 Quorum 投票，并决定 <code>W</code> = 3，<code>R</code> = 3，所以此后 3 次写入即认为写成功，成功 <strong>减小了写入负载</strong>，但代价是读操作必须至少访问 3 个副本才能保证其中有最新副本，否则可能导致脏读。</p>
 <p>只要保证 <code>W</code> + <code>R</code> &gt; 5，且 <code>W</code> &gt; 2.5 即可，具体选值反应了设计者的不同权衡，以下都是合法值：</p>
