@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="时至今日（2019 年），微服务已经飞入寻常百姓家，但关于微服务的争论却还没有停止（事实上早就该停止了），我在公司 espace 群里经常听到两种截然不同的观点：  微服务解决了很多问题，不上微服务就是不先进，就是技术落后； 微服务没有解决问题，反而引入了很多复杂性；  这两种说法各自阐述了微服务的一面，合起来才是对它的完整描述：  以增加复杂度为代价，微服务解决了很多问题。  至于该不该使用微服">
+<meta property="og:type" content="article">
+<meta property="og:title" content="是否应该上微服务？">
+<meta property="og:url" content="http://songkun.me/2019/03/16/2019-03-16-from-monolithic-to-microservice/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="时至今日（2019 年），微服务已经飞入寻常百姓家，但关于微服务的争论却还没有停止（事实上早就该停止了），我在公司 espace 群里经常听到两种截然不同的观点：  微服务解决了很多问题，不上微服务就是不先进，就是技术落后； 微服务没有解决问题，反而引入了很多复杂性；  这两种说法各自阐述了微服务的一面，合起来才是对它的完整描述：  以增加复杂度为代价，微服务解决了很多问题。  至于该不该使用微服">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-16T09:23:59.686Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="是否应该上微服务？">
+<meta name="twitter:description" content="时至今日（2019 年），微服务已经飞入寻常百姓家，但关于微服务的争论却还没有停止（事实上早就该停止了），我在公司 espace 群里经常听到两种截然不同的观点：  微服务解决了很多问题，不上微服务就是不先进，就是技术落后； 微服务没有解决问题，反而引入了很多复杂性；  这两种说法各自阐述了微服务的一面，合起来才是对它的完整描述：  以增加复杂度为代价，微服务解决了很多问题。  至于该不该使用微服">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2019/03/16/2019-03-16-from-monolithic-to-microservice/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>是否应该上微服务？ | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/03/16/2019-03-16-from-monolithic-to-microservice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">是否应该上微服务？
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-16 15:19:31 / 修改时间：17:23:59" itemprop="dateCreated datePublished" datetime="2019-03-16T15:19:31+08:00">2019-03-16</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/读书/" itemprop="url" rel="index"><span itemprop="name">读书</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/16/2019-03-16-from-monolithic-to-microservice/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/16/2019-03-16-from-monolithic-to-microservice/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>时至今日（2019 年），微服务已经飞入寻常百姓家，但关于微服务的争论却还没有停止（事实上早就该停止了），我在公司 espace 群里经常听到两种截然不同的观点：</p>
+<ol>
+<li>微服务解决了很多问题，不上微服务就是不先进，就是技术落后；</li>
+<li>微服务没有解决问题，反而引入了很多复杂性；</li>
+</ol>
+<p>这两种说法各自阐述了微服务的一面，合起来才是对它的完整描述：</p>
+<blockquote>
+<p>以增加复杂度为代价，微服务解决了很多问题。</p>
+</blockquote>
+<p>至于该不该使用微服务，则需要先了解微服务解决了什么问题，又引入了什么问题，只有明确了它的优点和缺点，才能根据实际业务需求做出理智的权衡。</p>
+<a id="more"></a>
+<h2 id="单体应用"><a href="#单体应用" class="headerlink" title="单体应用"></a>单体应用</h2><p>首先，应用开发模式从单体应用到 SOA，再从 SOA 到微服务，是一个自然发生的演化过程，这里我把 SOA 和微服务统称为微服务，因为 SOA 相当于微服务的早期版本。</p>
+<p>最早的时候，应用都是单体的（monolithic app），因此开发、部署、运维都围绕单体应用这个“太阳”运转，单体应用通常只有一个安装包（例如 jar 包），所以 <strong>开发、部署非常简单</strong>，这是它的优点。</p>
+<p>单体应用内部由许多组件组成，但整体只有一个进程，导致 <strong>维护困难</strong>：</p>
+<ol>
+<li>一个组件修改，需要重新部署整个应用；</li>
+<li>组件之间缺少 <strong>强边界</strong>（hard boundaries），组件之间的依赖复杂度不断增加，导致应用整体的复杂度增长过快、代码质量下降；</li>
+<li>单体应用难以水平扩展，大多数只能通过更强的硬件进行垂直伸缩，但单台服务器的硬件能力有上限，且要考虑性价比；</li>
+</ol>
+<blockquote>
+<p>水平扩展、垂直扩展各有利弊：</p>
+<ul>
+<li>垂直扩展：不需要改代码，无脑提升配置即可，但有上限，而且现在上限越来越容易达到；</li>
+<li>水平扩展：可能需要 <strong>大量改动代码</strong>，而且部分组件 <strong>几乎无法水平扩展</strong>（如关系型数据库），优点是成本较低，而且几乎没有上限；</li>
+</ul>
+</blockquote>
+<h2 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h2><p>这些缺点在“上古时期”并不明显，但随着时代发展，这些问题的影响越来越大，解决之道即微服务，微服务把单体应用中的组件拆分出来，形成一个个独立的微服务，从而解决前面的问题：</p>
+<ol>
+<li>独立部署：每个微服务都是独立进程，因此单个微服务的修改只需要部署该服务即可，不影响整个应用；</li>
+<li>复杂度：微服务之间存在明确的边界、依赖，可以很好的控制复杂度增长；</li>
+<li>独立扩展：扩展粒度变成微服务，即使单体应用存在无法水平扩展的组件，拆分成微服务后可以扩展其他组件；</li>
+</ol>
+<blockquote>
+<p>独立部署前提：<strong>未改变对外接口</strong>，或接口的修改 <strong>向后兼容</strong>，因为微服务的对外接口 <strong>相对稳定</strong>，所以该限制可以接受。</p>
+</blockquote>
+<p>微服务不是银弹，带来优点的同时，有以下缺点：</p>
+<ol>
+<li>部署困难：<ul>
+<li>微服务本质是分布式系统，当应用由成百上千微服务组成时，部署极其困难：<ul>
+<li>不同微服务环境要求不同，比如有的微服务需要强力 CPU，有的需要 SSD 盘，有的需要高性能网卡；</li>
+<li>部分微服务相互协作，整体作为一个子系统对外提供服务，它们需要部署在同一台主机上；</li>
+<li>微服务之间存在依赖，随着微服务数量增加，很快将无法手动处理这些依赖；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>运维困难<ul>
+<li>请求处理经过了哪些微服务，在哪个环境出错了？</li>
+<li>上百上千个服务的日志如何查看？</li>
+</ul>
+</li>
+</ol>
+<p>在微服务实践的早期，以上问题没有明确有效的处理方式，大家的微服务基本处于“裸奔”状态，但到目前为止，以上问题的解决方案逐渐清晰：</p>
+<ol>
+<li>借助 K8S + Docker 进行微服务的部署、管理；</li>
+<li>借助 Zipkin/SkyWalking 等追踪分布式请求；</li>
+<li>借助 ELK 构建日志分析系统；</li>
+</ol>
+<p>可以看到，使用微服务的成本是很高的，需要很多支撑工具。</p>
+<h2 id="权衡"><a href="#权衡" class="headerlink" title="权衡"></a>权衡</h2><p>总结一下微服务的优缺点：</p>
+<ul>
+<li>优点<ul>
+<li>独立开发、部署、交付；</li>
+<li>独立扩展，水平扩展方便；</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>需要很多支撑工具；</li>
+</ul>
+</li>
+</ul>
+<p>我把微服务的优点分为两类，分别对应两类微服务的“鼓吹者”，即咨询公司和互联网公司：</p>
+<ul>
+<li>咨询公司喜欢微服务独立开发、部署、交付的优点，但他们的产品一般不存在所谓的大流量、高并发需求，因此对水平扩展能力相对关注较低；</li>
+<li>互联网公司产品的流量很大，因此他们对水平扩展能力更加关注，但同时也喜欢独立开发、部署、交付的能力（谁能不喜欢呢？）；</li>
+</ul>
+<p>至于要不要使用微服务？</p>
+<p>如果单体应用能满足要求，就不要用微服务；如果单体应用已经无法满足，那么恭喜你，说明你的产品发展势头很好，大刀阔斧上马微服务吧，至于微服务的缺点，活人总不能被尿憋死吧。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/10/2019-03-10-quorum-based-voting/" rel="next" title="基于 Quorum 的投票机制">
+                <i class="fa fa-chevron-left"></i> 基于 Quorum 的投票机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">109</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">104</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#单体应用"><span class="nav-number">1.</span> <span class="nav-text">单体应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微服务"><span class="nav-number">2.</span> <span class="nav-text">微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权衡"><span class="nav-number">3.</span> <span class="nav-text">权衡</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://songkun.me/2019/03/16/2019-03-16-from-monolithic-to-microservice/';
+        this.page.identifier = '2019/03/16/2019-03-16-from-monolithic-to-microservice/';
+        this.page.title = '是否应该上微服务？';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://songkun.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
