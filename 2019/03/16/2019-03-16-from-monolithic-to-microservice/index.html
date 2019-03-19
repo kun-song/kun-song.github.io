@@ -126,7 +126,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="时至今日（2019 年），微服务已经飞入寻常百姓家，但关于微服务的争论却还没有停止（事实上早就该停止了），我在公司 espace 群里经常听到两种截然不同的观点：  微服务解决了很多问题，不上微服务就是不先进，就是技术落后； 微服务没有解决问题，反而引入了很多复杂性；  这两种说法各自阐述了微服务的一面，合起来才是对它的完整描述：  以增加复杂度为代价，微服务解决了很多问题。  至于该不该使用微服">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-16T09:23:59.686Z">
+<meta property="og:updated_time" content="2019-03-19T16:13:15.597Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="是否应该上微服务？">
 <meta name="twitter:description" content="时至今日（2019 年），微服务已经飞入寻常百姓家，但关于微服务的争论却还没有停止（事实上早就该停止了），我在公司 espace 群里经常听到两种截然不同的观点：  微服务解决了很多问题，不上微服务就是不先进，就是技术落后； 微服务没有解决问题，反而引入了很多复杂性；  这两种说法各自阐述了微服务的一面，合起来才是对它的完整描述：  以增加复杂度为代价，微服务解决了很多问题。  至于该不该使用微服">
@@ -372,12 +372,24 @@
                 
               
 
-              <time title="创建时间：2019-03-16 15:19:31 / 修改时间：17:23:59" itemprop="dateCreated datePublished" datetime="2019-03-16T15:19:31+08:00">2019-03-16</time>
+              <time title="创建时间：2019-03-16 15:19:31" itemprop="dateCreated datePublished" datetime="2019-03-16T15:19:31+08:00">2019-03-16</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-20 00:13:15" itemprop="dateModified" datetime="2019-03-20T00:13:15+08:00">2019-03-20</time>
               
             
           </span>
@@ -476,6 +488,13 @@
 </blockquote>
 <p>微服务不是银弹，带来优点的同时，有以下缺点：</p>
 <ol>
+<li>分布式系统的固有问题<ul>
+<li>服务注册、发现</li>
+<li>负载均衡</li>
+<li>限流、熔断</li>
+<li>动态扩展</li>
+</ul>
+</li>
 <li>部署困难：<ul>
 <li>微服务本质是分布式系统，当应用由成百上千微服务组成时，部署极其困难：<ul>
 <li>不同微服务环境要求不同，比如有的微服务需要强力 CPU，有的需要 SSD 盘，有的需要高性能网卡；</li>
@@ -491,13 +510,14 @@
 </ul>
 </li>
 </ol>
-<p>在微服务实践的早期，以上问题没有明确有效的处理方式，大家的微服务基本处于“裸奔”状态，但到目前为止，以上问题的解决方案逐渐清晰：</p>
+<p>在微服务实践的早期，以上问题没有明确有效的处理方式，大家的微服务基本处于“裸奔”状态，后来针对分布式系统的各种问题，出现了很多对应的解决框架，例如用于服务注册与发现的 Zookeeper、etcd、Eureka、Consul 等，用于限流熔断的 Sentinel、Hystrix（已停止维护）、Resilience4j 等，以及集大成的 Spring Cloud 大礼包，到此为止，由分布式导致的问题基本解决。</p>
+<p>但部署问题直到 Docker + K8S 出现后才得以解决，而且现在的趋势是将第一类问题下沉到基础设施层解决，因为诸如服务注册和发现、负载均衡之类的问题与业务并不相关，如果基础设施屏蔽这些问题，则应用开发者完全没必要关注它们，所以 Docker + K8S 可以解决第一、二两类问题。</p>
+<p>第三类问题目前普遍的做法是：</p>
 <ol>
-<li>借助 K8S + Docker 进行微服务的部署、管理；</li>
 <li>借助 Zipkin/SkyWalking 等追踪分布式请求；</li>
 <li>借助 ELK 构建日志分析系统；</li>
 </ol>
-<p>可以看到，使用微服务的成本是很高的，需要很多支撑工具。</p>
+<p>可以看到，微服务的使用成本很高，需要很多支撑工具，如果完全从 0 开始，需要耗费大量的人力去做这些支撑工具。</p>
 <h2 id="权衡"><a href="#权衡" class="headerlink" title="权衡"></a>权衡</h2><p>总结一下微服务的优缺点：</p>
 <ul>
 <li>优点<ul>
