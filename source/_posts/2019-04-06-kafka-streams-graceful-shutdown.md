@@ -3,6 +3,7 @@ title: Kafka Streams 优雅停机
 date: 2019-04-06 11:50:49
 tags:
   - Kafka
+  - 优雅停机
 categories: 技术
 ---
 
