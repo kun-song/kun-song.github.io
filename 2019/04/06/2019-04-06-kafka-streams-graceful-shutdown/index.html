@@ -120,14 +120,14 @@
 
 
   <meta name="description" content="很多框架要求应用（正常 or 异常）退出时，显式进行“善后”处理，如释放资源、防止数据不一致、主动告知自己死亡，避免被动检测带来的时间浪费等等。 下面以 Kafka Streams 为例介绍如何实现优雅停机。 应用关闭后，应显式关闭 Kafka Streams 线程，以防止数据不一致、进行 task 迁移等： 12// KafkaStreams#close()streams.close(); 为实">
-<meta name="keywords" content="Kafka">
+<meta name="keywords" content="Kafka,优雅停机">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka Streams 优雅停机">
 <meta property="og:url" content="http://songkun.me/2019/04/06/2019-04-06-kafka-streams-graceful-shutdown/index.html">
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="很多框架要求应用（正常 or 异常）退出时，显式进行“善后”处理，如释放资源、防止数据不一致、主动告知自己死亡，避免被动检测带来的时间浪费等等。 下面以 Kafka Streams 为例介绍如何实现优雅停机。 应用关闭后，应显式关闭 Kafka Streams 线程，以防止数据不一致、进行 task 迁移等： 12// KafkaStreams#close()streams.close(); 为实">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-04-06T05:02:07.611Z">
+<meta property="og:updated_time" content="2019-04-06T05:08:31.982Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka Streams 优雅停机">
 <meta name="twitter:description" content="很多框架要求应用（正常 or 异常）退出时，显式进行“善后”处理，如释放资源、防止数据不一致、主动告知自己死亡，避免被动检测带来的时间浪费等等。 下面以 Kafka Streams 为例介绍如何实现优雅停机。 应用关闭后，应显式关闭 Kafka Streams 线程，以防止数据不一致、进行 task 迁移等： 12// KafkaStreams#close()streams.close(); 为实">
@@ -373,7 +373,7 @@
                 
               
 
-              <time title="创建时间：2019-04-06 11:50:49 / 修改时间：13:02:07" itemprop="dateCreated datePublished" datetime="2019-04-06T11:50:49+08:00">2019-04-06</time>
+              <time title="创建时间：2019-04-06 11:50:49 / 修改时间：13:08:31" itemprop="dateCreated datePublished" datetime="2019-04-06T11:50:49+08:00">2019-04-06</time>
             
 
             
@@ -500,6 +500,8 @@
           
             <a href="/tags/Kafka/" rel="tag"># Kafka</a>
           
+            <a href="/tags/优雅停机/" rel="tag"># 优雅停机</a>
+          
         </div>
       
 
@@ -520,6 +522,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/14/2019-04-14-scala-function-vs-method/" rel="prev" title="Scala | 函数 vs 方法">
+                Scala | 函数 vs 方法 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -594,7 +600,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">111</span>
+                    <span class="site-state-item-count">112</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -856,7 +862,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">106</span>
+                      
+                    
+                    <span class="site-state-item-count">108</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
