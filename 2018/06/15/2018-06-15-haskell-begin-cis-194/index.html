@@ -7,10 +7,10 @@
 
 
 <html class="theme-next pisces" lang="zh-CN">
-<head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -24,8 +24,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -67,9 +67,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
@@ -120,7 +120,7 @@
 
 
   <meta name="description" content="Martin Odersky 曾经说过：  Scala is a gateway drug to Haskell.  虽是戏言，却一语成谶。 虽然 Scala 是一门不错的 FP 语言，但由于兼顾 OO，所以很多 FP 概念在 Scala 中显得不够清晰，即语法噪声很多。 我对真正的 FP 语言越来越好奇，想深入了解一门，以便破除 Scala 中的一些迷惑之处，这时我有几个选择：  Haskell">
-<meta name="keywords" content="fp,Haskell,公开课,CIS 194">
+<meta name="keywords" content="fp,Haskell,CIS 194,公开课">
 <meta property="og:type" content="article">
 <meta property="og:title" content="正式入坑 Haskell">
 <meta property="og:url" content="http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/index.html">
@@ -137,7 +137,7 @@
 
 
 
-  <link rel="canonical" href="http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/"/>
+  <link rel="canonical" href="http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/">
 
 
 
@@ -193,7 +193,7 @@
       .logo-line-after i { right: initial; }
     }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
 </head>
 
@@ -204,7 +204,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
@@ -248,7 +248,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
   </li>
         
         
@@ -256,7 +256,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
         
         
@@ -264,7 +264,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
   </li>
         
         
@@ -272,7 +272,7 @@
           
           <li class="menu-item menu-item-books">
     <a href="/books" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-book"></i> <br />书单</a>
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br>书单</a>
   </li>
         
         
@@ -280,7 +280,7 @@
           
           <li class="menu-item menu-item-about">
     <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
   </li>
 
       
@@ -335,7 +335,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
@@ -396,7 +396,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -417,17 +417,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/06/15/2018-06-15-haskell-begin-cis-194/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/15/2018-06-15-haskell-begin-cis-194/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -435,11 +424,10 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon"
-            >
+            <span class="post-meta-item-icon">
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
 
@@ -509,9 +497,9 @@
           
             <a href="/tags/Haskell/" rel="tag"># Haskell</a>
           
-            <a href="/tags/公开课/" rel="tag"># 公开课</a>
-          
             <a href="/tags/CIS-194/" rel="tag"># CIS 194</a>
+          
+            <a href="/tags/公开课/" rel="tag"># 公开课</a>
           
         </div>
       
@@ -561,16 +549,6 @@
 
           </div>
           
-
-  
-    <div class="comments" id="comments">
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
-    </div>
 
   
 
@@ -951,7 +929,7 @@
 
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -1102,31 +1080,6 @@
 
   
 
-  
-    <script id="dsq-count-scr" src="https://songkun.disqus.com/count.js" async></script>
-  
-
-  
-    <script type="text/javascript">
-      var disqus_config = function () {
-        this.page.url = 'http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/';
-        this.page.identifier = '2018/06/15/2018-06-15-haskell-begin-cis-194/';
-        this.page.title = '正式入坑 Haskell';
-      };
-      function loadComments () {
-        var d = document, s = d.createElement('script');
-        s.src = 'https://songkun.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      }
-      
-        loadComments();
-      
-    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
-
-
-
 
 
 	
@@ -1138,6 +1091,10 @@
   
 
 
+
+
+
+  
 
 
 
