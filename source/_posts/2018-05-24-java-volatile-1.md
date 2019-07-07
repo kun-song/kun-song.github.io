@@ -5,7 +5,7 @@ tags:
   - Java
   - 并发
   - JVM
-categories: 技术
+categories: Java
 ---
 
 并发编程中的 **同步机制** 可以实现：

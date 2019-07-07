@@ -3,7 +3,7 @@ title: 基于 Quorum 的投票机制
 date: 2019-03-10 19:54:30
 tags:
   - Quorum
-categories: 技术
+categories: 分布式
 ---
 
 >quorum [ˈkwɔ:rəm]，法定人数

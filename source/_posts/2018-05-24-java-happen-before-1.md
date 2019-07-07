@@ -5,7 +5,7 @@ tags:
   - Java
   - 并发
   - JVM
-categories: 技术
+categories: Java
 ---
 
 Java 内存模型其实是 **一组规则**，这些规则规定了线程对内存的访问排序、内存对线程的可见性等。

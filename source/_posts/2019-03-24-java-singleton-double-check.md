@@ -3,7 +3,7 @@ title: 双重检查加锁错在哪里？
 date: 2019-03-24 20:48:33
 tags:
   - 单例模式
-categories: 技术
+categories: Java
 ---
 
 双重检查加锁是实现（多线程版本）单例模式的典型错误：

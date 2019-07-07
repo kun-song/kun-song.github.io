@@ -3,7 +3,7 @@ title: Item 55 | Return optionals judiciously
 date: 2019-03-09 14:39:58
 tags:
   - Java
-categories: Effective Java
+categories: Java
 ---
 
 方法并非在所有场景下都能返回值，例如 `max` 返回集合中的最大元素，若集合为空，则不存在合理的返回值。

@@ -1,8 +1,7 @@
 ---
 title: Objects 工具类
 tags: Java
-categories: 技术
-abbrlink: 24451
+categories: Java
 date: 2018-05-20 22:46:15
 ---
 

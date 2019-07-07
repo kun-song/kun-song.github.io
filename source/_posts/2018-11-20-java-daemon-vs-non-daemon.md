@@ -3,7 +3,7 @@ title: Java | 守护线程
 date: 2018-11-20 08:52:37
 tags:
   - Java
-categories: 技术
+categories: Java
 ---
 
 ## 用户线程 vs 守护线程

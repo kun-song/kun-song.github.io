@@ -5,7 +5,7 @@ tags:
   - Java
   - Comparable
   - Comparator
-categories: 技术
+categories: Java
 ---
 
 排序是一项非常基础、常见的功能，几乎所有应用都会涉及，本文介绍 Java 排序的基本知识。

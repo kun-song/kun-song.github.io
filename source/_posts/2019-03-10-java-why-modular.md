@@ -3,7 +3,7 @@ title: 为什么 Java 9 要支持模块化？
 date: 2019-03-10 19:11:16
 tags:
   - 模块化
-categories: 技术
+categories: Java
 ---
 
 模块化设计是一种应对软件复杂度的有效工具，但 Java 对它支持并不理想。

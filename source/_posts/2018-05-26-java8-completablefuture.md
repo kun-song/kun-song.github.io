@@ -4,7 +4,7 @@ date: 2018-05-27 11:42:38
 tags:
   - Java 8
   - CompletableFuture
-categories: 技术
+categories: Java
 ---
 
 本文翻译自 [Guide To CompletableFuture](http://www.baeldung.com/java-completablefuture)。

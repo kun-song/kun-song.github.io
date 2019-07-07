@@ -4,7 +4,7 @@ date: 2018-12-03 21:08:39
 tags:
   - Java
   - CompletableFuture
-categories: 技术
+categories: Java
 ---
 
 `CompletableFuture` 既可以替代传统的线程池，也能实现异步编程，用起来很爽，但其中的坑也不少。

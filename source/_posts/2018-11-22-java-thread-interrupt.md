@@ -4,7 +4,7 @@ date: 2018-11-22 00:11:17
 tags:
   - Java
   - 线程中断
-categories: 技术
+categories: Java
 ---
 
 任何非 toy 项目都会用到多线程，启动线程可以用线程池，那终止线程呢，是用 `Thread.stop` 呢，还是 `Thread.sleep` 呢，还是中断呢？

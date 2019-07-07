@@ -5,7 +5,7 @@ tags:
   - Java
   - Thread.stop
   - Thread.resume
-categories: 技术
+categories: Java
 ---
 
 [原文](https://docs.oracle.com/javase/8/docs/technotes/guides/concurrency/threadPrimitiveDeprecation.html)
