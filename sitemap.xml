@@ -2,6 +2,139 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/01/01/2019-01-01-latency-numbers-every-programmer-should-know/</loc>
+    
+    <lastmod>2019-07-07T11:15:43.284Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/03/03/2019-03-03-distributed-algorithm-correctness/</loc>
+    
+    <lastmod>2019-07-07T11:15:34.467Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/03/03/2019-03-03-system-model-in-distributed-systems/</loc>
+    
+    <lastmod>2019-07-07T11:15:29.192Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/03/09/2019-03-09-ej-item-55-return-optionals-judiciously/</loc>
+    
+    <lastmod>2019-07-07T11:15:23.645Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/03/10/2019-03-10-quorum-based-voting/</loc>
+    
+    <lastmod>2019-07-07T11:15:12.655Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
+    
+    <lastmod>2019-07-07T11:14:04.376Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/24/2018-05-24-java-happen-before-1/</loc>
+    
+    <lastmod>2019-07-07T11:13:47.526Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/24/2018-05-24-java-volatile-1/</loc>
+    
+    <lastmod>2019-07-07T11:13:42.470Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/27/2018-05-26-java8-completablefuture/</loc>
+    
+    <lastmod>2019-07-07T11:13:38.166Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/09/2018-08-09-java-sorting/</loc>
+    
+    <lastmod>2019-07-07T11:13:25.278Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/18/2018-08-18-java-8-functional-programming/</loc>
+    
+    <lastmod>2019-07-07T11:13:18.586Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/11/20/2018-11-20-java-daemon-vs-non-daemon/</loc>
+    
+    <lastmod>2019-07-07T11:13:05.480Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/11/22/2018-11-22-java-thread-interrupt/</loc>
+    
+    <lastmod>2019-07-07T11:12:59.772Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/11/26/2018-11-26-java-thread-primitive-deprecation/</loc>
+    
+    <lastmod>2019-07-07T11:12:54.671Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/02/2018-12-2-java-hashmap-hash-collision/</loc>
+    
+    <lastmod>2019-07-07T11:12:47.696Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/03/2018-12-3-java-completablfuture-drawbacks/</loc>
+    
+    <lastmod>2019-07-07T11:12:42.169Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/03/10/2019-03-10-java-why-modular/</loc>
+    
+    <lastmod>2019-07-07T11:12:16.963Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/03/24/2019-03-24-java-singleton-double-check/</loc>
+    
+    <lastmod>2019-07-07T11:12:10.592Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/07/07/2019-07-07-java-try-with-resource/</loc>
+    
+    <lastmod>2019-07-07T11:08:48.557Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/06/15/2019-06-15-why-replication/</loc>
     
     <lastmod>2019-06-15T13:22:51.708Z</lastmod>
@@ -30,13 +163,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2019/03/24/2019-03-24-java-singleton-double-check/</loc>
-    
-    <lastmod>2019-03-24T15:25:35.082Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2019/03/16/2019-03-16-from-monolithic-to-microservice/</loc>
     
     <lastmod>2019-03-23T01:49:11.458Z</lastmod>
@@ -44,37 +170,9 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2019/03/10/2019-03-10-quorum-based-voting/</loc>
-    
-    <lastmod>2019-03-16T09:33:31.888Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/03/10/2019-03-10-java-why-modular/</loc>
-    
-    <lastmod>2019-03-10T11:50:52.024Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2019/03/10/2019-03-10-mongodb-maxWaitQueueSize/</loc>
     
     <lastmod>2019-03-10T04:42:16.668Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/03/09/2019-03-09-ej-item-55-return-optionals-judiciously/</loc>
-    
-    <lastmod>2019-03-09T07:07:24.071Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/03/03/2019-03-03-system-model-in-distributed-systems/</loc>
-    
-    <lastmod>2019-03-06T11:56:24.440Z</lastmod>
     
   </url>
   
@@ -89,13 +187,6 @@
     <loc>http://songkun.me/2019/03/04/2019-03-04-kafka-unclean-leader-election/</loc>
     
     <lastmod>2019-03-04T12:15:48.806Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/03/03/2019-03-03-distributed-algorithm-correctness/</loc>
-    
-    <lastmod>2019-03-03T09:12:18.544Z</lastmod>
     
   </url>
   
@@ -145,13 +236,6 @@
     <loc>http://songkun.me/2018/12/28/2018-12-28-troubleshooting-high-cpu-usage-thread-pool/</loc>
     
     <lastmod>2019-01-24T15:08:47.023Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/01/01/2019-01-01-latency-numbers-every-programmer-should-know/</loc>
-    
-    <lastmod>2019-01-03T15:54:15.317Z</lastmod>
     
   </url>
   
@@ -243,13 +327,6 @@
     <loc>http://songkun.me/2018/12/19/2018-12-19-java-why-xmx-xms-should-be-same/</loc>
     
     <lastmod>2018-12-23T07:18:05.854Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
-    
-    <lastmod>2018-12-23T06:33:53.957Z</lastmod>
     
   </url>
   
@@ -366,48 +443,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/12/03/2018-12-3-java-completablfuture-drawbacks/</loc>
-    
-    <lastmod>2018-12-03T14:31:26.677Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/27/2018-05-26-java8-completablefuture/</loc>
-    
-    <lastmod>2018-12-03T14:27:41.950Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/02/2018-12-2-java-hashmap-hash-collision/</loc>
-    
-    <lastmod>2018-12-02T15:37:14.171Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/11/26/2018-11-26-java-thread-primitive-deprecation/</loc>
-    
-    <lastmod>2018-12-02T03:12:16.328Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/11/22/2018-11-22-java-thread-interrupt/</loc>
-    
-    <lastmod>2018-11-26T14:57:44.571Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/11/20/2018-11-20-java-daemon-vs-non-daemon/</loc>
-    
-    <lastmod>2018-11-20T15:30:49.422Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/11/20/2018-11-20-troubleshooting-mongodb-authentication/</loc>
     
     <lastmod>2018-11-20T00:47:47.265Z</lastmod>
@@ -516,20 +551,6 @@
     <loc>http://songkun.me/2018/08/20/2018-08-20-reading-java-8-lambdas/</loc>
     
     <lastmod>2018-08-20T15:38:13.942Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/08/18/2018-08-18-java-8-functional-programming/</loc>
-    
-    <lastmod>2018-08-20T14:32:20.505Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/08/09/2018-08-09-java-sorting/</loc>
-    
-    <lastmod>2018-08-09T15:20:12.055Z</lastmod>
     
   </url>
   
@@ -681,20 +702,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/24/2018-05-24-java-volatile-1/</loc>
-    
-    <lastmod>2018-05-25T12:35:56.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/24/2018-05-24-java-happen-before-1/</loc>
-    
-    <lastmod>2018-05-24T15:19:22.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/23/2018-05-23-list-in-scala-racket/</loc>
     
     <lastmod>2018-05-23T15:02:52.000Z</lastmod>
@@ -723,14 +730,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/tags/index.html</loc>
+    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -751,7 +758,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
+    <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -779,13 +786,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/14/scala-string-ops/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -793,7 +793,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
+    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -814,7 +821,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
+    <loc>http://songkun.me/tags/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
