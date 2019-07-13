@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的事件，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-19T00:53:14.305Z">
+<meta property="og:updated_time" content="2019-07-13T03:19:13.820Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="译 | 不同类型的事件可以放到同一主题中吗？">
 <meta name="twitter:description" content="原文地址在 这里，InfoQ 已经翻译成中文，本文仅总结个人所得。 使用 Kafka 时，若有多种不同类型的事件，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？ 首先，topic 的首要作用为：  allow a consumer to specify which subset of messages it wants to consume.">
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-19 08:53:14" itemprop="dateModified" datetime="2018-12-19T08:53:14+08:00">2018-12-19</time>
+                <time title="修改时间：2019-07-13 11:19:13" itemprop="dateModified" datetime="2019-07-13T11:19:13+08:00">2019-07-13</time>
               
             
           </span>
@@ -453,7 +453,7 @@
 <li>若只有一个 topic，则消费者只能消费全部事件，无法自由选择感兴趣的事件子集；</li>
 <li>若 topic 太多，如几百万，由于每个 topic 至少有一个分区，所以集群至少有几百万分区，将严重影响性能；</li>
 </ul>
-<p>过多 topic 对性能的影响的主要原因是分区数量，更多关于分区数量对 Kafka 性能影响的分析，可以参考 <a href="./2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster.md">译 | How to choose the number of partitions in a Kafka cluster?</a>。</p>
+<p>过多 topic 对性能的影响的主要原因是分区数量，更多关于分区数量对 Kafka 性能影响的分析，可以参考 <a href="http://songkun.me/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/">译 | How to choose the number of partitions in a Kafka cluster?</a>。</p>
 <p>几千个 topic 会明显影响性能，若性能要求很高，可以将多个 <strong>细粒度</strong> 事件合并成一个 <strong>粗粒度</strong> 事件，从而减小分区数量对性能的影响。</p>
 <h2 id="Topic-collection-of-events-of-the-same-type"><a href="#Topic-collection-of-events-of-the-same-type" class="headerlink" title="Topic = collection of events of the same type?"></a>Topic = collection of events of the same type?</h2><p>常见的推荐用法是：</p>
 <ul>
@@ -619,7 +619,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-count">116</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -905,7 +905,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">117</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">119</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
