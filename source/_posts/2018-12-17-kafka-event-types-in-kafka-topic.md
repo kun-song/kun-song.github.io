@@ -21,7 +21,7 @@ categories: 技术
 * 若只有一个 topic，则消费者只能消费全部事件，无法自由选择感兴趣的事件子集；
 * 若 topic 太多，如几百万，由于每个 topic 至少有一个分区，所以集群至少有几百万分区，将严重影响性能；
 
-过多 topic 对性能的影响的主要原因是分区数量，更多关于分区数量对 Kafka 性能影响的分析，可以参考 [译 | How to choose the number of partitions in a Kafka cluster?](./2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster.md)。
+过多 topic 对性能的影响的主要原因是分区数量，更多关于分区数量对 Kafka 性能影响的分析，可以参考 [译 | How to choose the number of partitions in a Kafka cluster?](http://songkun.me/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/)。
 
 几千个 topic 会明显影响性能，若性能要求很高，可以将多个 **细粒度** 事件合并成一个 **粗粒度** 事件，从而减小分区数量对性能的影响。
 
