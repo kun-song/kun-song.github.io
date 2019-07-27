@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="最近学习 Netty 时，看到 Netty 宣称解决了很多 Java 原生 NIO 的很多 bug，其中之一是 epoll 空轮询导致 CPU 利用率 100%。">
+<meta name="keywords" content="Netty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java NIO epoll bug 以及 Netty 的解决之道">
+<meta property="og:url" content="http://songkun.me/2019/07/26/2019-07-26-java-nio-epoll-bug-and-netty-solution/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="最近学习 Netty 时，看到 Netty 宣称解决了很多 Java 原生 NIO 的很多 bug，其中之一是 epoll 空轮询导致 CPU 利用率 100%。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-27T15:11:36.593Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java NIO epoll bug 以及 Netty 的解决之道">
+<meta name="twitter:description" content="最近学习 Netty 时，看到 Netty 宣称解决了很多 Java 原生 NIO 的很多 bug，其中之一是 epoll 空轮询导致 CPU 利用率 100%。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2019/07/26/2019-07-26-java-nio-epoll-bug-and-netty-solution/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java NIO epoll bug 以及 Netty 的解决之道 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br>书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/07/26/2019-07-26-java-nio-epoll-bug-and-netty-solution/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java NIO epoll bug 以及 Netty 的解决之道
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-26 23:04:28" itemprop="dateCreated datePublished" datetime="2019-07-26T23:04:28+08:00">2019-07-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-27 23:11:36" itemprop="dateModified" datetime="2019-07-27T23:11:36+08:00">2019-07-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近学习 Netty 时，看到 Netty 宣称解决了很多 Java 原生 NIO 的很多 bug，其中之一是 epoll 空轮询导致 CPU 利用率 100%。</p>
+<a id="more"></a>
+<h2 id="什么是-epoll-空轮询"><a href="#什么是-epoll-空轮询" class="headerlink" title="什么是 epoll 空轮询"></a>什么是 epoll 空轮询</h2><p>如果使用 Java 原生 NIO 来编写服务器应用，代码一般类似：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建、配置 ServerSocketChannel</span></span><br><span class="line">ServerSocketChannel serverChannel = ServerSocketChannel.open();</span><br><span class="line">serverChannel.socket().bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">9998</span>));</span><br><span class="line">serverChannel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建 Selector</span></span><br><span class="line">Selector selector = Selector.open();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册</span></span><br><span class="line">serverChannel.register(selector, SelectionKey.OP_ACCEPT);</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">    selector.select();  <span class="comment">// select 可能在无就绪事件时异常返回！</span></span><br><span class="line"></span><br><span class="line">    Set&lt;SelectionKey&gt; readyKeys = selector.selectedKeys();</span><br><span class="line">    Iterator&lt;SelectionKey&gt; it = readyKeys.iterator();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (it.hasNext()) &#123;</span><br><span class="line">        SelectionKey key = it.next();</span><br><span class="line">        ...  <span class="comment">// 处理事件</span></span><br><span class="line">        it.remove();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>selector.select()</code> 应该 <strong>一直阻塞</strong>，直到有就绪事件到达，但很遗憾，由于 Java NIO 实现上存在 bug，<code>select()</code> 可能在 <strong>没有</strong> 任何就绪事件的情况下返回，从而导致 <code>while(true)</code> 被不断执行，最后导致某个 CPU 核心的利用率飙升到 100%，这就是臭名昭著的 Java NIO 的 epoll bug。</p>
+<blockquote>
+<p>实际上，这是 Linux 系统下 poll/epoll 实现导致的 bug，但 Java NIO 并未完善处理它，所以也可以说是 Java NIO 的 bug。</p>
+<p>该问题最早在 Java 6 发现，随后很多版本声称解决了该问题，但实际上只是降低了该 bug 的出现频率，起码从网上搜索看，Java 8 还是存在该问题（<a href="https://juejin.im/entry/5995084ef265da247779d23c" target="_blank" rel="noopener">当 Thrift 遇到 JDK Epoll Bug</a>）。</p>
+</blockquote>
+<h2 id="Netty-的解决之道"><a href="#Netty-的解决之道" class="headerlink" title="Netty 的解决之道"></a>Netty 的解决之道</h2><p>很多 NIO 框架都在 Java 原生 NIO 基础上增加了解决 epoll 空轮询的增强，本文介绍 Netty 的做法。</p>
+<p>Netty 的解决方式分为两步：</p>
+<ol>
+<li>检测 epoll bug；</li>
+<li>通过重建 <code>Selector</code> 解决 epoll bug；</li>
+</ol>
+<p>其实大部分框架的解决方式都类似，差别仅在 <strong>检测方式</strong>，检测到后基本都是通过重建 <code>Selector</code> 来解决。</p>
+<h3 id="检测-epoll-空轮询"><a href="#检测-epoll-空轮询" class="headerlink" title="检测 epoll 空轮询"></a>检测 epoll 空轮询</h3><p>Netty 使用 <code>NioEventLoop.select()</code> 替代 <code>Selector.select()</code>，检测 epoll bug 的逻辑就在 <code>NioEventLoop.select()</code> 中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">selectCnt = <span class="number">0</span>;  <span class="comment">// epoll 空轮询场景下 select 调用次数</span></span><br><span class="line"><span class="keyword">long</span> currentTimeNanos = System.nanoTime();  <span class="comment">// 每个 for 循环开始时的绝对时间</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (;;) &#123;</span><br><span class="line">    timeoutMillis = ...  <span class="comment">// 初始化超时参数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> selectedKeys = selector.select(timeoutMillis);</span><br><span class="line">    selectCnt++;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> time = System.nanoTime();  <span class="comment">// 记录执行到此处的绝对时间：</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检测逻辑</span></span><br><span class="line">    <span class="keyword">if</span> (time - currentTimeNanos &gt; timeoutMillis) &#123;</span><br><span class="line">        selectCnt = <span class="number">1</span>;  <span class="comment">// 未发生 epoll 空轮询，所以把 selectCnt 重置为 1</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (selectCnt &gt;= 重试次数阈值（默认 <span class="number">512</span>）) &#123;</span><br><span class="line">        selector = selectRebuildSelector(selectCnt);  <span class="comment">// 解决 epoll bug 的实际逻辑</span></span><br><span class="line">        selectCnt = <span class="number">1</span>;  <span class="comment">// 解决本次 epoll bug，重置 selectCnt</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    currentTimeNanos = time;  <span class="comment">// 重置下次 for 循环开始时间</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果满足以下两个条件，则认为发生 epoll 空轮询：</p>
+<ol>
+<li><code>selector.select(timeoutMillis)</code> 阻塞时间小于 <code>timeoutMillis</code>，且</li>
+<li><code>select</code> 执行次数 &gt; 阈值（默认 512）</li>
+</ol>
+<p>因为阻塞时间无法做到很精准，所以若某次阻塞时间大于等于 <code>timeoutMillis</code> 立刻重置 <code>selectCnt</code> 为 1，即需要 <strong>连续</strong> 512 次 <code>selector.select(timeoutMillis)</code> 阻塞时间都小于 <code>timeoutMillis</code> 才认为发生了 epoll 空轮询。</p>
+<p><code>timeoutMillis</code> 有一套计算逻辑，无法进行配置，而次数阈值可以通过 <code>io.netty.selectorAutoRebuildThreshold</code> 系统配置进行设置，默认值为 512。</p>
+<h3 id="解决-epoll-空轮询"><a href="#解决-epoll-空轮询" class="headerlink" title="解决 epoll 空轮询"></a>解决 epoll 空轮询</h3><p>检测到 epoll bug 后，通过 <code>selectRebuildSelector</code> 方法来实际解决：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Selector <span class="title">selectRebuildSelector</span><span class="params">(<span class="keyword">int</span> selectCnt)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">// The selector returned prematurely many times in a row.</span></span><br><span class="line">    <span class="comment">// Rebuild the selector to work around the problem.</span></span><br><span class="line">    logger.warn(<span class="string">"Selector.select() returned prematurely &#123;&#125; times in a row; rebuilding Selector &#123;&#125;."</span>, selectCnt, selector);</span><br><span class="line"></span><br><span class="line">    rebuildSelector();  <span class="comment">// 重建逻辑</span></span><br><span class="line">    Selector selector = <span class="keyword">this</span>.selector;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Select again to populate selectedKeys.</span></span><br><span class="line">    selector.selectNow();</span><br><span class="line">    <span class="keyword">return</span> selector;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重建过程代理给了 <code>rebuildSelector</code> 方法，重建完成后，立即 <code>selectNow</code> 重新监听事件。</p>
+<p>而 <code>rebuildSelector</code> 又把重建逻辑代理给了 <code>rebuildSelector0</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Replaces the current Selector of this event loop with newly created Selectors to work</span></span><br><span class="line"><span class="comment"> * around the **infamous epoll 100% CPU bug**.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">rebuildSelector</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!inEventLoop()) &#123;</span><br><span class="line">        execute(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                rebuildSelector0();  <span class="comment">// 重建逻辑</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    rebuildSelector0();  <span class="comment">// 重建逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>inEventLoop()</code> 判断当前线程是否是事件循环线程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">inEventLoop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> inEventLoop(Thread.currentThread());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而 <code>inEventLoop(Thread)</code> 定义在 <code>EventExecutor</code> 中，不同实现类的实现逻辑不同，<code>NioEventLoop.inEventLoop</code> 具体实现在其父类 <code>SingleThreadEventLoop</code> 中： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">inEventLoop</span><span class="params">(Thread thread)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> thread == <span class="keyword">this</span>.thread;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Netty 中，一个 IO 线程可以处理多个 channel，但一个 channel 只能被一个 IO 线程处理，重建 <code>Selector</code> <strong>必须</strong> 在事件循环线程内完成，如果当前线程是 <code>NioEventLoop</code> 线程，则直接在当前线程执行 <code>Selector</code> 重建，否则将重建任务 <code>submit</code> 给各个 <code>NioEventLoop</code>。</p>
+<p>添加该判断的原因是除了 <code>NioEventLoop</code> 检测到 epoll bug 时会调用 <code>rebuildSelector</code> 外，<code>NioEventLoopGroup</code> 也有调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">rebuildSelectors</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (EventExecutor e: <span class="keyword">this</span>) &#123;</span><br><span class="line">        ((NioEventLoop) e).rebuildSelector();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法被暴露出来，供用户调用，因此最终 <code>rebuildSelector</code> 是可能在非事件循环线程中被调用的。</p>
+<p>重建任务最终在 <code>rebuildSelector0</code> 中完成，重建步骤：</p>
+<ol>
+<li>新建一个 <code>Selector</code>；</li>
+<li>将旧 <code>Selector</code> 的所有 channel 注册到新 <code>Selector</code> 上；</li>
+<li>关闭旧 <code>Selector</code>；</li>
+</ol>
+<p>至此，完成对 epoll bug 的解决。</p>
+<hr>
+<p>参考：</p>
+<ol>
+<li><a href="https://www.zhihu.com/question/291370310" target="_blank" rel="noopener">Netty 解决/规避了 JDK 的 NIO bug 了吗？</a></li>
+<li><a href="https://www.cnblogs.com/JAYIT/p/8241634.html" target="_blank" rel="noopener">NIO 的 epoll 空轮询 bug</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Netty/" rel="tag"># Netty</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/26/2019-07-26-java-why-some-methods-endwith-zero/" rel="next" title="为什么有的 Java 方法以 0 结尾？">
+                <i class="fa fa-chevron-left"></i> 为什么有的 Java 方法以 0 结尾？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">121</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">126</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-epoll-空轮询"><span class="nav-number">1.</span> <span class="nav-text">什么是 epoll 空轮询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty-的解决之道"><span class="nav-number">2.</span> <span class="nav-text">Netty 的解决之道</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#检测-epoll-空轮询"><span class="nav-number">2.1.</span> <span class="nav-text">检测 epoll 空轮询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决-epoll-空轮询"><span class="nav-number">2.2.</span> <span class="nav-text">解决 epoll 空轮询</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
