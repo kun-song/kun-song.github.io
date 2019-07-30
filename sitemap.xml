@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/07/27/2019-07-27-java-how-to-stop-a-thread-correctly/</loc>
+    
+    <lastmod>2019-07-30T00:59:02.733Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/07/26/2019-07-26-java-nio-epoll-bug-and-netty-solution/</loc>
     
     <lastmod>2019-07-27T15:11:36.593Z</lastmod>
@@ -765,13 +772,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
@@ -787,6 +787,13 @@
   
   <url>
     <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -814,7 +821,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
+    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -835,14 +842,7 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
+    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
@@ -850,6 +850,13 @@
   
   <url>
     <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
+    
+    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
