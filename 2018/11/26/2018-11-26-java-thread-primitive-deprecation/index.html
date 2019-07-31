@@ -120,14 +120,14 @@
 
 
   <meta name="description" content="原文 为何废弃 Thread.stop ？因为它本质上是不安全的。 stop 线程将导致释放其持有的全部 monitor（ThreadDeath 异常在栈中传播时，monitor 被解锁），若在当前线程中，这些 monitor 保护的对象处于 不一致状态，则 stop 后这种不一致状态对其他线程可见。 我们称处于不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它">
-<meta name="keywords" content="Java,Thread.stop,Thread.resume">
+<meta name="keywords" content="Thread.stop,Thread.resume">
 <meta property="og:type" content="article">
 <meta property="og:title" content="译 | Java Thread Primitive Deprecation">
 <meta property="og:url" content="http://songkun.me/2018/11/26/2018-11-26-java-thread-primitive-deprecation/index.html">
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="原文 为何废弃 Thread.stop ？因为它本质上是不安全的。 stop 线程将导致释放其持有的全部 monitor（ThreadDeath 异常在栈中传播时，monitor 被解锁），若在当前线程中，这些 monitor 保护的对象处于 不一致状态，则 stop 后这种不一致状态对其他线程可见。 我们称处于不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-07T11:12:54.671Z">
+<meta property="og:updated_time" content="2019-07-30T14:09:13.402Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="译 | Java Thread Primitive Deprecation">
 <meta name="twitter:description" content="原文 为何废弃 Thread.stop ？因为它本质上是不安全的。 stop 线程将导致释放其持有的全部 monitor（ThreadDeath 异常在栈中传播时，monitor 被解锁），若在当前线程中，这些 monitor 保护的对象处于 不一致状态，则 stop 后这种不一致状态对其他线程可见。 我们称处于不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它">
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-07 19:12:54" itemprop="dateModified" datetime="2019-07-07T19:12:54+08:00">2019-07-07</time>
+                <time title="修改时间：2019-07-30 22:09:13" itemprop="dateModified" datetime="2019-07-30T22:09:13+08:00">2019-07-30</time>
               
             
           </span>
@@ -533,8 +533,6 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java/" rel="tag"># Java</a>
-          
             <a href="/tags/Thread-stop/" rel="tag"># Thread.stop</a>
           
             <a href="/tags/Thread-resume/" rel="tag"># Thread.resume</a>
@@ -550,8 +548,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/22/2018-11-22-java-thread-interrupt/" rel="next" title="Java | 终止线程">
-                <i class="fa fa-chevron-left"></i> Java | 终止线程
+              <a href="/2018/11/21/2018-11-21-scala-tut-introduction/" rel="next" title="tut -- 简单的 Scala 文档检查工具">
+                <i class="fa fa-chevron-left"></i> tut -- 简单的 Scala 文档检查工具
               </a>
             
           </div>
@@ -636,7 +634,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">122</span>
+                    <span class="site-state-item-count">121</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -648,6 +646,8 @@
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
+                    
+                      
                     
                       
                     
@@ -942,7 +942,23 @@
                     
                       
                     
-                    <span class="site-state-item-count">127</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">126</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -2,9 +2,478 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/07/30/2019-07-30-java-difference-between-wait-and-sleep/</loc>
+    
+    <lastmod>2019-07-31T00:30:11.507Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/11/scala-closure-1/</loc>
+    
+    <lastmod>2019-07-30T14:22:37.296Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
+    
+    <lastmod>2019-07-30T14:22:34.743Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/20/2018-08-20-reading-java-8-lambdas/</loc>
+    
+    <lastmod>2019-07-30T14:22:32.115Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/18/2018-08-18-java-8-functional-programming/</loc>
+    
+    <lastmod>2019-07-30T14:22:29.149Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/07/10/2018-07-10-haskell-cis194-lazy/</loc>
+    
+    <lastmod>2019-07-30T14:22:26.246Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/07/08/2018-07-08-haskell-typeclass-a-shallow-look/</loc>
+    
+    <lastmod>2019-07-30T14:22:23.574Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/24/2018-06-24-haskell-a-tiny-interpreter/</loc>
+    
+    <lastmod>2019-07-30T14:22:20.973Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/</loc>
+    
+    <lastmod>2019-07-30T14:22:18.095Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/10/2018-06-10-scala-val-and-def/</loc>
+    
+    <lastmod>2019-07-30T14:22:15.453Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/08/2018-06-08-referentially-transparent/</loc>
+    
+    <lastmod>2019-07-30T14:22:13.014Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/03/2018-06-03-scala-cats-sum-by-monoid/</loc>
+    
+    <lastmod>2019-07-30T14:22:10.017Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/22/2018-05-22-racket-lazy-evaluation/</loc>
+    
+    <lastmod>2019-07-30T14:22:06.511Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/16/2018-05-16-tail-recursion/</loc>
+    
+    <lastmod>2019-07-30T14:22:03.816Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/23/2018-12-23-java-jvm-jps/</loc>
+    
+    <lastmod>2019-07-30T14:21:30.245Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/23/2018-12-23-java-jvm-jinfo/</loc>
+    
+    <lastmod>2019-07-30T14:21:27.098Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/23/2018-12-23-java-guide-to-the-most-important-jvm-parameters/</loc>
+    
+    <lastmod>2019-07-30T14:21:24.263Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/20/2018-12-20-java-jvm-gc-log-meaning/</loc>
+    
+    <lastmod>2019-07-30T14:21:21.134Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/19/2018-12-19-java-why-xmx-xms-should-be-same/</loc>
+    
+    <lastmod>2019-07-30T14:21:18.121Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/24/2018-05-24-java-volatile-1/</loc>
+    
+    <lastmod>2019-07-30T14:21:12.609Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/24/2018-05-24-java-happen-before-1/</loc>
+    
+    <lastmod>2019-07-30T14:21:04.674Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/09/how-to-learn-scala/</loc>
+    
+    <lastmod>2019-07-30T14:19:47.555Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/14/scala-string-ops/</loc>
+    
+    <lastmod>2019-07-30T14:19:36.674Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
+    
+    <lastmod>2019-07-30T14:19:22.323Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/07/2018-06-07-type-of-case-statement/</loc>
+    
+    <lastmod>2019-07-30T14:19:13.256Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
+    
+    <lastmod>2019-07-30T14:19:02.671Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
+    
+    <lastmod>2019-07-30T14:18:33.061Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/15/scala-variance/</loc>
+    
+    <lastmod>2019-07-30T14:17:02.436Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/16/scala-partialfunction-partially-applied-function-currying/</loc>
+    
+    <lastmod>2019-07-30T14:16:56.437Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
+    
+    <lastmod>2019-07-30T14:16:47.582Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/16/scala-anonymous-function/</loc>
+    
+    <lastmod>2019-07-30T14:16:34.698Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/04/14/2019-04-14-scala-function-vs-method/</loc>
+    
+    <lastmod>2019-07-30T14:16:27.148Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/11/21/2018-11-21-scala-tut-introduction/</loc>
+    
+    <lastmod>2019-07-30T14:16:20.198Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/06/2018-08-06-reading-scala-with-cats/</loc>
+    
+    <lastmod>2019-07-30T14:16:16.466Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/05/2018-08-05-reading-functional-and-reactive-domain-modeling/</loc>
+    
+    <lastmod>2019-07-30T14:16:11.645Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/07/12/2018-07-12-adt-in-haskell-and-scala/</loc>
+    
+    <lastmod>2019-07-30T14:16:06.105Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/19/2018-06-19-scala-training-in-huawei/</loc>
+    
+    <lastmod>2019-07-30T14:15:58.642Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/</loc>
+    
+    <lastmod>2019-07-30T14:15:52.806Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/11/2018-06-11-scala-hybrid-of-fp-oop/</loc>
+    
+    <lastmod>2019-07-30T14:15:42.146Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/10/2018-06-10-scala-square-root-newtons-method/</loc>
+    
+    <lastmod>2019-07-30T14:15:29.365Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/09/2018-06-09-open-source-akka-contributions/</loc>
+    
+    <lastmod>2019-07-30T14:15:21.247Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/06/2018-06-06-variance-in-collections/</loc>
+    
+    <lastmod>2019-07-30T14:15:06.655Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/05/2018-06-05-type-class-simulacrum/</loc>
+    
+    <lastmod>2019-07-30T14:14:59.522Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/</loc>
+    
+    <lastmod>2019-07-30T14:14:52.476Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/02/2018-06-02-scala-3-polymorphism/</loc>
+    
+    <lastmod>2019-07-30T14:14:36.655Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/23/2018-05-23-list-in-scala-racket/</loc>
+    
+    <lastmod>2019-07-30T14:14:23.691Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
+    
+    <lastmod>2019-07-30T14:14:13.114Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
+    
+    <lastmod>2019-07-30T14:14:05.078Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
+    
+    <lastmod>2019-07-30T14:13:50.011Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
+    
+    <lastmod>2019-07-30T14:13:36.384Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
+    
+    <lastmod>2019-07-30T14:11:53.948Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/27/2018-05-26-java8-completablefuture/</loc>
+    
+    <lastmod>2019-07-30T14:10:32.235Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/11/20/2018-11-20-java-daemon-vs-non-daemon/</loc>
+    
+    <lastmod>2019-07-30T14:10:20.827Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/16/2018-12-16-java-jenv-intro/</loc>
+    
+    <lastmod>2019-07-30T14:10:12.522Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/02/2018-12-2-java-hashmap-hash-collision/</loc>
+    
+    <lastmod>2019-07-30T14:10:09.116Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/02/2018-12-2-source-code-reading-hashmap/</loc>
+    
+    <lastmod>2019-07-30T14:10:05.613Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/12/03/2018-12-3-java-completablfuture-drawbacks/</loc>
+    
+    <lastmod>2019-07-30T14:09:47.655Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/11/26/2018-11-26-java-thread-primitive-deprecation/</loc>
+    
+    <lastmod>2019-07-30T14:09:13.402Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/10/14/2018-10-14-source-code-reading-AtomicInteger/</loc>
+    
+    <lastmod>2019-07-30T14:07:55.935Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/09/09/2018-09-09-source-code-reading-threadlocal/</loc>
+    
+    <lastmod>2019-07-30T14:07:52.567Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/29/2018-08-29-reading-java-concurrency-in-practice/</loc>
+    
+    <lastmod>2019-07-30T14:07:48.543Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/14/2018-08-14-source-code-reading-executor/</loc>
+    
+    <lastmod>2019-07-30T14:07:40.664Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/12/2018-08-12-source-code-reading-object/</loc>
+    
+    <lastmod>2019-07-30T14:07:37.416Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/09/2018-08-09-java-sorting/</loc>
+    
+    <lastmod>2019-07-30T14:07:32.964Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/25/2018-05-25-pessimistic-optimistic-lock/</loc>
+    
+    <lastmod>2019-07-30T14:06:08.761Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
+    
+    <lastmod>2019-07-30T14:05:53.727Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/03/09/2019-03-09-ej-item-55-return-optionals-judiciously/</loc>
+    
+    <lastmod>2019-07-30T14:03:18.066Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/07/27/2019-07-27-java-how-to-stop-a-thread-correctly/</loc>
     
-    <lastmod>2019-07-30T00:59:02.733Z</lastmod>
+    <lastmod>2019-07-30T13:59:47.306Z</lastmod>
     
   </url>
   
@@ -79,93 +548,9 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2019/03/09/2019-03-09-ej-item-55-return-optionals-judiciously/</loc>
-    
-    <lastmod>2019-07-07T11:15:23.645Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2019/03/10/2019-03-10-quorum-based-voting/</loc>
     
     <lastmod>2019-07-07T11:15:12.655Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-java7-objects/</loc>
-    
-    <lastmod>2019-07-07T11:14:04.376Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/24/2018-05-24-java-happen-before-1/</loc>
-    
-    <lastmod>2019-07-07T11:13:47.526Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/24/2018-05-24-java-volatile-1/</loc>
-    
-    <lastmod>2019-07-07T11:13:42.470Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/27/2018-05-26-java8-completablefuture/</loc>
-    
-    <lastmod>2019-07-07T11:13:38.166Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/08/09/2018-08-09-java-sorting/</loc>
-    
-    <lastmod>2019-07-07T11:13:25.278Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/08/18/2018-08-18-java-8-functional-programming/</loc>
-    
-    <lastmod>2019-07-07T11:13:18.586Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/11/20/2018-11-20-java-daemon-vs-non-daemon/</loc>
-    
-    <lastmod>2019-07-07T11:13:05.480Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/11/22/2018-11-22-java-thread-interrupt/</loc>
-    
-    <lastmod>2019-07-07T11:12:59.772Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/11/26/2018-11-26-java-thread-primitive-deprecation/</loc>
-    
-    <lastmod>2019-07-07T11:12:54.671Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/02/2018-12-2-java-hashmap-hash-collision/</loc>
-    
-    <lastmod>2019-07-07T11:12:47.696Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/03/2018-12-3-java-completablfuture-drawbacks/</loc>
-    
-    <lastmod>2019-07-07T11:12:42.169Z</lastmod>
     
   </url>
   
@@ -201,13 +586,6 @@
     <loc>http://songkun.me/2019/05/13/2019-05-13-k8s-why-single-node-app-should-be-divided-into-containers/</loc>
     
     <lastmod>2019-05-14T00:47:06.965Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/04/14/2019-04-14-scala-function-vs-method/</loc>
-    
-    <lastmod>2019-04-14T06:41:46.504Z</lastmod>
     
   </url>
   
@@ -296,79 +674,9 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/12/23/2018-12-23-java-guide-to-the-most-important-jvm-parameters/</loc>
-    
-    <lastmod>2018-12-23T13:46:34.919Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/23/2018-12-23-java-jvm-jinfo/</loc>
-    
-    <lastmod>2018-12-23T13:39:56.529Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/23/2018-12-23-java-jvm-jps/</loc>
-    
-    <lastmod>2018-12-23T13:38:59.484Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/11/21/2018-11-21-scala-tut-introduction/</loc>
-    
-    <lastmod>2018-12-23T08:14:32.512Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/07/10/2018-07-10-haskell-cis194-lazy/</loc>
-    
-    <lastmod>2018-12-23T08:13:19.847Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/07/08/2018-07-08-haskell-typeclass-a-shallow-look/</loc>
-    
-    <lastmod>2018-12-23T08:13:08.081Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/24/2018-06-24-haskell-a-tiny-interpreter/</loc>
-    
-    <lastmod>2018-12-23T08:12:55.433Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/06/21/2018-06-21-haskell-recursive-hanoi/</loc>
     
     <lastmod>2018-12-23T08:12:44.092Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/</loc>
-    
-    <lastmod>2018-12-23T08:12:33.234Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/20/2018-12-20-java-jvm-how-to-choose-heap-size/</loc>
-    
-    <lastmod>2018-12-23T08:10:51.776Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/20/2018-12-20-java-jvm-gc-log-meaning/</loc>
-    
-    <lastmod>2018-12-23T08:10:33.352Z</lastmod>
     
   </url>
   
@@ -380,23 +688,9 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/12/19/2018-12-19-java-why-xmx-xms-should-be-same/</loc>
-    
-    <lastmod>2018-12-23T07:18:05.854Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/</loc>
     
     <lastmod>2018-12-17T16:00:45.401Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/16/2018-12-16-java-jenv-intro/</loc>
-    
-    <lastmod>2018-12-16T06:50:03.942Z</lastmod>
     
   </url>
   
@@ -457,41 +751,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/12/02/2018-12-2-source-code-reading-hashmap/</loc>
-    
-    <lastmod>2018-12-05T15:08:10.328Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/10/14/2018-10-14-source-code-reading-AtomicInteger/</loc>
-    
-    <lastmod>2018-12-05T15:07:06.333Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/09/09/2018-09-09-source-code-reading-threadlocal/</loc>
-    
-    <lastmod>2018-12-05T15:06:50.884Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/08/14/2018-08-14-source-code-reading-executor/</loc>
-    
-    <lastmod>2018-12-05T15:06:36.727Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/08/12/2018-08-12-source-code-reading-object/</loc>
-    
-    <lastmod>2018-12-05T15:06:11.175Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/11/20/2018-11-20-troubleshooting-mongodb-authentication/</loc>
     
     <lastmod>2018-11-20T00:47:47.265Z</lastmod>
@@ -509,13 +768,6 @@
     <loc>http://songkun.me/2018/11/14/2018-11-14-round-robin/</loc>
     
     <lastmod>2018-11-14T14:21:09.816Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/05/2018-06-05-type-class-simulacrum/</loc>
-    
-    <lastmod>2018-10-28T15:55:11.609Z</lastmod>
     
   </url>
   
@@ -590,27 +842,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/08/29/2018-08-29-reading-java-concurrency-in-practice/</loc>
-    
-    <lastmod>2018-08-29T16:23:20.361Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/08/20/2018-08-20-reading-java-8-lambdas/</loc>
-    
-    <lastmod>2018-08-20T15:38:13.942Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/08/06/2018-08-06-reading-scala-with-cats/</loc>
-    
-    <lastmod>2018-08-06T15:08:05.634Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/08/06/2018-08-06-reading-learn-you-a-haskell-for-great-good/</loc>
     
     <lastmod>2018-08-06T14:30:37.355Z</lastmod>
@@ -618,247 +849,9 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/08/05/2018-08-05-reading-functional-and-reactive-domain-modeling/</loc>
-    
-    <lastmod>2018-08-05T12:47:00.830Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/07/26/2018-07-26-haskell-suspend-learning/</loc>
     
     <lastmod>2018-07-26T14:28:40.612Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/07/12/2018-07-12-adt-in-haskell-and-scala/</loc>
-    
-    <lastmod>2018-07-13T00:36:52.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/19/2018-06-19-scala-training-in-huawei/</loc>
-    
-    <lastmod>2018-06-19T15:39:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/12/2018-06-12-scala-everyhting-about-high-order-functions/</loc>
-    
-    <lastmod>2018-06-12T15:08:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/16/scala-partialfunction-partially-applied-function-currying/</loc>
-    
-    <lastmod>2018-06-12T15:08:23.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/11/2018-06-11-scala-hybrid-of-fp-oop/</loc>
-    
-    <lastmod>2018-06-12T00:41:58.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/16/2018-05-16-tail-recursion/</loc>
-    
-    <lastmod>2018-06-10T14:50:36.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/10/2018-06-10-scala-square-root-newtons-method/</loc>
-    
-    <lastmod>2018-06-10T14:30:42.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/10/2018-06-10-scala-val-and-def/</loc>
-    
-    <lastmod>2018-06-10T13:13:32.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/09/2018-06-09-open-source-akka-contributions/</loc>
-    
-    <lastmod>2018-06-10T05:03:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/08/2018-06-08-referentially-transparent/</loc>
-    
-    <lastmod>2018-06-10T05:01:38.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/07/2018-06-07-type-of-case-statement/</loc>
-    
-    <lastmod>2018-06-07T14:25:41.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/06/2018-06-06-variance-in-collections/</loc>
-    
-    <lastmod>2018-06-07T00:59:52.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/15/scala-variance/</loc>
-    
-    <lastmod>2018-06-06T15:50:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/03/2018-06-03-scala-cats-sum-by-monoid/</loc>
-    
-    <lastmod>2018-06-06T15:33:38.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/03/2018-06-03-scala-tail-call-optimization-limitation/</loc>
-    
-    <lastmod>2018-06-04T16:50:59.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/02/2018-06-02-scala-3-polymorphism/</loc>
-    
-    <lastmod>2018-06-04T13:20:30.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/25/2018-05-25-pessimistic-optimistic-lock/</loc>
-    
-    <lastmod>2018-05-27T03:33:37.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/23/2018-05-23-list-in-scala-racket/</loc>
-    
-    <lastmod>2018-05-23T15:02:52.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/11/scala-closure-1/</loc>
-    
-    <lastmod>2018-05-23T00:54:17.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/22/2018-05-22-racket-lazy-evaluation/</loc>
-    
-    <lastmod>2018-05-22T16:12:09.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/20/2018-05-20-why-option/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/09/how-to-learn-scala/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/16/scala-anonymous-function/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/15/scala-case-use-cases/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/15/scala-partialfunction-1/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/14/scala-string-ops/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/16/2018-05-16-first-class-function/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/05/18/2018-05-18-scala-case-class/</loc>
-    
-    <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   

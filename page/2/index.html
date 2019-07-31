@@ -330,6 +330,188 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/05/13/2019-05-13-k8s-why-single-node-app-should-be-divided-into-containers/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/13/2019-05-13-k8s-why-single-node-app-should-be-divided-into-containers/" itemprop="url">
+                  为什么单机应用有时也“应该”拆分为多个容器？
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-13 23:18:08" itemprop="dateCreated datePublished" datetime="2019-05-13T23:18:08+08:00">2019-05-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-14 08:47:06" itemprop="dateModified" datetime="2019-05-14T08:47:06+08:00">2019-05-14</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/容器/" itemprop="url" rel="index"><span itemprop="name">容器</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>分布式系统容器化为多个容器容易理解，但为什么单机应用有时也需要拆分为多个容器呢，直接放到一个容器中不行吗？</p>
+<p>首先，明确下应用容器化目的：</p>
+<ol>
+<li>资源隔离（CPU &amp; 内存）</li>
+<li>管理隔离（不同镜像由不同团队负责）</li>
+<li>关注点分离（每个容器仅做一件事，并将其做好）</li>
+</ol>
+<p>因此，如果单机应用有以上需求，就需要考虑将其拆分为多个容器。</p>
+<p>当然，单机应用拆分为多个容器后，并非就变成分布式系统了，因为拆分后的容器通常借助 Kubernetes 的 Pod 运行在 <strong>同一物理节点</strong> 上，因此依然可视之为单机应用，只不过该应用现在由多个进程（容器）组成。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/05/13/2019-05-13-k8s-why-single-node-app-should-be-divided-into-containers/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/04/14/2019-04-14-scala-function-vs-method/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -376,12 +558,24 @@
                 
               
 
-              <time title="创建时间：2019-04-14 13:50:03 / 修改时间：14:41:46" itemprop="dateCreated datePublished" datetime="2019-04-14T13:50:03+08:00">2019-04-14</time>
+              <time title="创建时间：2019-04-14 13:50:03" itemprop="dateCreated datePublished" datetime="2019-04-14T13:50:03+08:00">2019-04-14</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:16:27" itemprop="dateModified" datetime="2019-07-30T22:16:27+08:00">2019-07-30</time>
               
             
           </span>
@@ -398,7 +592,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a></span>
 
                 
                 
@@ -1617,7 +1811,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-07 19:15:23" itemprop="dateModified" datetime="2019-07-07T19:15:23+08:00">2019-07-07</time>
+                <time title="修改时间：2019-07-30 22:03:18" itemprop="dateModified" datetime="2019-07-30T22:03:18+08:00">2019-07-30</time>
               
             
           </span>
@@ -1885,195 +2079,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/03/03/2019-03-03-kafka-message-delivery-semantics-and-impl/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/03/2019-03-03-kafka-message-delivery-semantics-and-impl/" itemprop="url">
-                  Kafka 消息语义
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-03 17:18:35" itemprop="dateCreated datePublished" datetime="2019-03-03T17:18:35+08:00">2019-03-03</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-03-06 19:56:23" itemprop="dateModified" datetime="2019-03-06T19:56:23+08:00">2019-03-06</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>常见的消息投递语义（message delivery semantics）有 3 种：</p>
-<ul>
-<li>At most once<ul>
-<li>消息可能丢失，但不会重复投递</li>
-</ul>
-</li>
-<li>At least once<ul>
-<li>消息不丢失，但可能重复投递</li>
-</ul>
-</li>
-<li>Exactly once<ul>
-<li>不丢失、不重复</li>
-</ul>
-</li>
-</ul>
-<p>不同语义的 <strong>实现成本不同</strong>，虽然 exactly once 是最完美的语义，但它的实现成本最高。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/03/03/2019-03-03-kafka-message-delivery-semantics-and-impl/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2121,7 +2126,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">122</span>
+                    <span class="site-state-item-count">121</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2133,6 +2138,8 @@
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
+                    
+                      
                     
                       
                     
@@ -2427,7 +2434,23 @@
                     
                       
                     
-                    <span class="site-state-item-count">127</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">126</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

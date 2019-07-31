@@ -120,14 +120,14 @@
 
 
   <meta name="description" content="在 Java 并发编程中，Runnable 是逻辑上的工作单元，用来表示任务，而 Thread 是执行任务的机制，不过 Thread 过于底层、过于基础，因此需要复杂的资源管理，比如创建多少线程合适？当线程崩溃会如何处理？如何停止进行中的任务？ 因此一般不直接使用 Thread 执行任务，取而代之的是 Executor 接口： 123public interface Executor &amp;#123;">
-<meta name="keywords" content="Java,Executor">
+<meta name="keywords" content="Executor">
 <meta property="og:type" content="article">
 <meta property="og:title" content="源码分析 | Executor">
 <meta property="og:url" content="http://songkun.me/2018/08/14/2018-08-14-source-code-reading-executor/index.html">
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="在 Java 并发编程中，Runnable 是逻辑上的工作单元，用来表示任务，而 Thread 是执行任务的机制，不过 Thread 过于底层、过于基础，因此需要复杂的资源管理，比如创建多少线程合适？当线程崩溃会如何处理？如何停止进行中的任务？ 因此一般不直接使用 Thread 执行任务，取而代之的是 Executor 接口： 123public interface Executor &amp;#123;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-05T15:06:36.727Z">
+<meta property="og:updated_time" content="2019-07-30T14:07:40.664Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="源码分析 | Executor">
 <meta name="twitter:description" content="在 Java 并发编程中，Runnable 是逻辑上的工作单元，用来表示任务，而 Thread 是执行任务的机制，不过 Thread 过于底层、过于基础，因此需要复杂的资源管理，比如创建多少线程合适？当线程崩溃会如何处理？如何停止进行中的任务？ 因此一般不直接使用 Thread 执行任务，取而代之的是 Executor 接口： 123public interface Executor &amp;#123;">
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-05 23:06:36" itemprop="dateModified" datetime="2018-12-05T23:06:36+08:00">2018-12-05</time>
+                <time title="修改时间：2019-07-30 22:07:40" itemprop="dateModified" datetime="2019-07-30T22:07:40+08:00">2019-07-30</time>
               
             
           </span>
@@ -486,8 +486,6 @@
     <footer class="post-footer">
       
         <div class="post-tags">
-          
-            <a href="/tags/Java/" rel="tag"># Java</a>
           
             <a href="/tags/Executor/" rel="tag"># Executor</a>
           
@@ -588,7 +586,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">122</span>
+                    <span class="site-state-item-count">121</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -600,6 +598,8 @@
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
+                    
+                      
                     
                       
                     
@@ -894,7 +894,23 @@
                     
                       
                     
-                    <span class="site-state-item-count">127</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">126</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

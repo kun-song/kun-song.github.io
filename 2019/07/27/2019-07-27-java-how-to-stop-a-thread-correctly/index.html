@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="在多线程编程中，有多种方式可以终止线程，但要“安全地”终止线程却没那么容易。 Java 没有提供 可以直接安全终止线程机制（Thread.stop 虽可直接终止线程，但并不安全），这是合理的，因为通常 只有线程自己 才知道该如何安全终止自己（资源释放、状态回滚等），因此 Java 使用协作的终止方式，即控制线程发出终止目标线程的请求，目标线程检测到该请求后，首先执行必要的 清理工作，然后安全地终止">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-30T00:59:02.733Z">
+<meta property="og:updated_time" content="2019-07-30T13:59:47.306Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何安全地终止线程？">
 <meta name="twitter:description" content="在多线程编程中，有多种方式可以终止线程，但要“安全地”终止线程却没那么容易。 Java 没有提供 可以直接安全终止线程机制（Thread.stop 虽可直接终止线程，但并不安全），这是合理的，因为通常 只有线程自己 才知道该如何安全终止自己（资源释放、状态回滚等），因此 Java 使用协作的终止方式，即控制线程发出终止目标线程的请求，目标线程检测到该请求后，首先执行必要的 清理工作，然后安全地终止">
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-30 08:59:02" itemprop="dateModified" datetime="2019-07-30T08:59:02+08:00">2019-07-30</time>
+                <time title="修改时间：2019-07-30 21:59:47" itemprop="dateModified" datetime="2019-07-30T21:59:47+08:00">2019-07-30</time>
               
             
           </span>
@@ -449,7 +449,13 @@
 <p>This method is inherently unsafe. </p>
 <p>Stopping a thread with Thread.stop causes it to <strong>unlock all of the monitors</strong> that it has locked (as a natural consequence of the unchecked <strong>ThreadDeath</strong>s exception propagating up the stack).  If any of the objects previously protected by these monitors were in an <strong>inconsistent state</strong>, the damaged objects become <strong>visible</strong> to other threads, potentially resulting in arbitrary behavior.  </p>
 </blockquote>
-<p><code>Thread.stop</code> 会粗暴地 <strong>立即释放</strong> 线程持有的监视器锁，以前被这些锁保护的 <strong>共享状态</strong> 立刻 <strong>对其他线程可见</strong>，因为释放锁的那一刻线程执行情况未知，所以共享状态可能 <strong>违反一致性协议</strong>，最终结果无法预料。</p>
+<p><code>Thread.stop</code> 会粗暴地立刻停止，有两个后果：</p>
+<ol>
+<li><strong>立即释放</strong> 线程持有的监视器锁；</li>
+<li><strong>无法自动调用</strong> <code>Lock.unlock()</code>，从而无法释放线程持有的 <code>Lock</code> 锁；</li>
+</ol>
+<p>立即释放监视器锁后，以前被这些锁保护的 <strong>共享状态</strong> 立刻 <strong>对其他线程可见</strong>，因为释放锁的那一刻线程执行情况未知，所以共享状态可能 <strong>违反一致性协议</strong>，最终结果无法预料。</p>
+<p>而不释放 <code>Lock</code> 锁，则其他线程再也无法获取该锁，应用肯定不正常。</p>
 <p>例如下面的同步方法修改了 <code>target</code> 和 <code>max</code> 两个状态变量：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="title">freeLockAbruptly</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    target = findTarget();</span><br><span class="line">    <span class="keyword">if</span> (target &gt; max) &#123;</span><br><span class="line">        max = target;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果 <code>findTarget()</code> 返回后线程被 <code>stop()</code> 强制终止，且 <code>max</code> 应该更新为 <code>findTarget()</code> 的结果，则其他线程可以看到 <code>target</code> 已经更新，但 <code>max</code> 却没及时更新，导致程序状态不一致。</p>
@@ -544,6 +550,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/07/30/2019-07-30-java-difference-between-wait-and-sleep/" rel="prev" title="wait() 与 sleep() 的异同点">
+                wait() 与 sleep() 的异同点 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -616,7 +626,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">122</span>
+                    <span class="site-state-item-count">121</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -628,6 +638,8 @@
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
+                    
+                      
                     
                       
                     
@@ -922,7 +934,23 @@
                     
                       
                     
-                    <span class="site-state-item-count">127</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">126</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
