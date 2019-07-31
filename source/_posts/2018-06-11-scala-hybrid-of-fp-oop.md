@@ -2,10 +2,7 @@
 title: Scala 是如何融合 OO 和 FP 两种编程范式的 ？
 date: 2018-06-11 21:17:29
 tags:
-  - Scala
-  - fp
-  - oop
-categories: 技术
+categories: Scala
 ---
 
 Scala 在其官网宣称：

@@ -2,8 +2,6 @@
 title: Java 8 Stream 入门
 date: 2018-08-18 12:24:17
 tags:
-  - Java
-  - fp
 categories: Java
 ---
 

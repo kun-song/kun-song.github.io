@@ -2,9 +2,7 @@
 title: 基本概念 | 重排序、内存可见性、happen-before 关系
 date: 2018-05-24 23:13:44
 tags:
-  - Java
   - 并发
-  - JVM
 categories: Java
 ---
 

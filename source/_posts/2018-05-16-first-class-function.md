@@ -1,9 +1,7 @@
 ---
 title: 头等函数
 tags:
-  - Scala
-  - fp
-categories: 技术
+categories: Scala
 abbrlink: 35818
 date: 2018-05-16 20:38:12
 ---

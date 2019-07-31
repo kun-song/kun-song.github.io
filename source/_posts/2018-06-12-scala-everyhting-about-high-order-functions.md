@@ -2,13 +2,11 @@
 title: Scala | 一篇文章读懂高阶函数
 date: 2018-06-12 21:02:39
 tags:
-  - Scala
-  - fp
   - 高阶函数
   - 柯里化
   - 部分应用函数
   - 柯里化
-categories: 技术
+categories: Scala
 ---
 
 首先，高阶函数是一种特殊的函数：

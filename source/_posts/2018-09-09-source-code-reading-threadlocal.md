@@ -2,7 +2,6 @@
 title: 源码分析 | ThreadLocal
 date: 2018-09-09 22:23:16
 tags:
-  - Java
   - ThreadLocal
 categories: 源码分析
 ---

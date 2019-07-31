@@ -3,7 +3,6 @@ title: Racket | 拨开延迟计算的迷雾
 date: 2018-05-22 23:18:10
 tags:
   - Racket
-  - fp
 categories: 技术
 ---
 

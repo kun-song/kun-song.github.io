@@ -2,7 +2,6 @@
 title: A tiny interpreter in Haskell
 date: 2018-06-24 21:20:09
 tags:
-  - fp
   - 解释器
   - CIS 194
   - Haskell

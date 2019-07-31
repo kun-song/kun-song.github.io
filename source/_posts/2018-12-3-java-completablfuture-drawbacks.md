@@ -2,7 +2,6 @@
 title: CompletableFuture | commonPool vs 自定义线程池
 date: 2018-12-03 21:08:39
 tags:
-  - Java
   - CompletableFuture
 categories: Java
 ---

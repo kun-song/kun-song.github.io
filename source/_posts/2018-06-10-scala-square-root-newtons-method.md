@@ -2,9 +2,7 @@
 title: 牛顿法求平方根（Scala 版）
 date: 2018-06-10 21:52:34
 tags:
-  - fp
-  - Scala
-categories: 技术
+categories: Scala
 ---
 
 牛顿法求平方根是 [计算机程序的构造与解释](https://book.douban.com/subject/1148282/) 一书中的经典例子。

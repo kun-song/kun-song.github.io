@@ -2,7 +2,6 @@
 title: 成研所 Scala 培训后记
 date: 2018-06-19 22:56:17
 tags:
-  - Scala
 categories: 随笔
 ---
 

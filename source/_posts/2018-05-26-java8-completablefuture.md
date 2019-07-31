@@ -2,7 +2,6 @@
 title: 【译】CompletableFuture 指南
 date: 2018-05-27 11:42:38
 tags:
-  - Java 8
   - CompletableFuture
 categories: Java
 ---

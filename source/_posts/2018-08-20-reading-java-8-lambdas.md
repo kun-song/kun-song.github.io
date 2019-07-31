@@ -2,8 +2,6 @@
 title: 读书 |《Java 8函数式编程》
 date: 2018-08-20 22:33:47
 tags:
-  - Java
-  - fp
 categories: 读书
 ---
 

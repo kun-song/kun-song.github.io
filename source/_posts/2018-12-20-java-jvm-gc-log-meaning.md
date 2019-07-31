@@ -2,8 +2,6 @@
 title: JVM | GC 日志
 date: 2018-12-20 08:42:42
 tags:
-  - Java
-  - JVM
   - jstat
   - GC log
 categories: JVM

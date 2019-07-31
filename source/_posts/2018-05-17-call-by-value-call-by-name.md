@@ -1,10 +1,8 @@
 ---
 title: 传值调用 vs 传名调用
 tags:
-  - Scala
-  - fp
   - 求值策略
-categories: 技术
+categories: Scala
 abbrlink: 15180
 date: 2018-05-17 22:00:17
 ---

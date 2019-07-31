@@ -2,8 +2,6 @@
 title: JVM | jps
 date: 2018-12-23 20:39:39
 tags:
-  - Java
-  - JVM
   - jps
 categories: JVM
 ---

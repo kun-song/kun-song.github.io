@@ -2,7 +2,6 @@
 title: 译 | Java Thread Primitive Deprecation
 date: 2018-11-26 22:59:23
 tags:
-  - Java
   - Thread.stop
   - Thread.resume
 categories: Java

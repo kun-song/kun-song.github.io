@@ -2,11 +2,9 @@
 title: 【译】Type class in Scala
 date: 2018-06-05 00:49:52
 tags:
-  - Scala
-  - fp
   - Simulacrum
   - Type Class
-categories: 技术
+categories: Scala
 ---
 
 >本文写的非常好，忍不住翻译一下，原文链接 [在此](https://blog.scalac.io/2017/04/19/typeclasses-in-scala.html)。

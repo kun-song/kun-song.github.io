@@ -2,7 +2,6 @@
 title: CIS 194 | Lazy
 date: 2018-07-10 22:21:34
 tags:
-  - fp
   - CIS 194
   - Haskell
   - lazy

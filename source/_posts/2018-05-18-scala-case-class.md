@@ -1,7 +1,7 @@
 ---
 title: Scala | case 类
-tags: Scala
-categories: 技术
+tags: case
+categories: Scala
 abbrlink: 23516
 date: 2018-05-18 00:17:13
 ---

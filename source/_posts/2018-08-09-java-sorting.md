@@ -2,7 +2,6 @@
 title: 关于 Java 排序的一切
 date: 2018-08-09 21:38:09
 tags:
-  - Java
   - Comparable
   - Comparator
 categories: Java

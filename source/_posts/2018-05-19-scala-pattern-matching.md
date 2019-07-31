@@ -1,9 +1,8 @@
 ---
 title: Scala | 模式匹配
 tags:
-  - Scala
-  - fp
-categories: 技术
+  - 模式匹配
+categories: Scala
 abbrlink: 47388
 date: 2018-05-19 22:16:37
 ---

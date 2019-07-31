@@ -1,7 +1,6 @@
 ---
 title: 面向表达式编程
 tags:
-  - fp
 categories: 技术
 abbrlink: 43893
 date: 2018-05-15 08:35:13

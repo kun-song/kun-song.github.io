@@ -2,7 +2,6 @@
 title: Scala | 求值策略：val vs def
 date: 2018-06-10 20:29:05
 tags:
-  - fp
   - 求值策略
   - val
   - def

@@ -1,10 +1,8 @@
 ---
 title: 基本概念 | 多态知多少？
 tags:
-  - Scala
-  - Java
   - 多态
-categories: 技术
+categories: Scala
 date: 2018-06-02 11:40:57
 ---
 

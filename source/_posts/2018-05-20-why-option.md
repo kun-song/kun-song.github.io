@@ -1,9 +1,8 @@
 ---
 title: 我们为什么需要 Option ？
 tags:
-  - Scala
-  - fp
-categories: 技术
+  - Option
+categories: Scala
 abbrlink: 52452
 date: 2018-05-20 21:43:42
 ---

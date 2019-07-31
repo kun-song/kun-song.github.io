@@ -2,11 +2,9 @@
 title: Scala | 不完美的尾递归优化
 date: 2018-06-03 15:50:26
 tags:
-  - Scala
-  - fp
   - 尾递归
   - 蹦床
-categories: 技术
+categories: Scala
 ---
 
 前几天我在 {% post_link 2018-05-16-tail-recursion 为什么需要尾递归？%} 一文中介绍了尾递归的基本概念，以及 Scala 编译器对尾调用（递归）的优化。

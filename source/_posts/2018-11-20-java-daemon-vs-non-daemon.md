@@ -2,7 +2,6 @@
 title: Java | 守护线程
 date: 2018-11-20 08:52:37
 tags:
-  - Java
 categories: Java
 ---
 

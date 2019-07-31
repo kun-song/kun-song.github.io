@@ -2,9 +2,8 @@
 title: Scala | 函数 vs 方法
 date: 2019-04-14 13:50:03
 tags:
-  - Scala
   - eta-expansion
-categories: 技术
+categories: Scala
 ---
 
 在 Scala 中，函数（function）和方法（method）是两个非常接近的概念，大多数场景中，可以不区分两者，如果非要区分，可查阅文末的参考文档。

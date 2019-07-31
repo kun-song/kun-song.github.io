@@ -2,7 +2,6 @@
 title: 读书 | Java 并发编程实战
 date: 2018-08-29 23:01:22
 tags:
-  - Java
   - 并发
   - JMM
 categories: 读书

@@ -2,7 +2,6 @@
 title: tut -- 简单的 Scala 文档检查工具
 date: 2018-11-21 09:00:39
 tags:
-  - Scala
   - tut
 categories: 编程工具
 ---

@@ -2,13 +2,11 @@
 title: Type Class | 基于 Monoid 和 Foldable 的 sum 函数
 date: 2018-06-03 21:42:15
 tags:
-  - Scala
-  - fp
   - Cats
   - Monoid
   - Foldable
   - Type Class
-categories: 技术
+categories: Scala
 ---
 
 在 {% post_link 2018-06-02-scala-3-polymorphism 基本概念 | 多态知多少？%} 一文中我说过特设多态在 Scala 中非常常见，且 Scala 利用 type class 实现特设多态。

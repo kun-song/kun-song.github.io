@@ -1,9 +1,7 @@
 ---
 title: 匿名函数
 tags:
-  - Scala
-  - fp
-categories: 技术
+categories: Scala
 abbrlink: 58244
 date: 2018-05-16 08:42:18
 ---

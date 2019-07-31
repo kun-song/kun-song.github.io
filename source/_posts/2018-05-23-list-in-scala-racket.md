@@ -2,10 +2,8 @@
 title: 天下 List 是一家
 date: 2018-05-23 21:12:07
 tags:
-  - Scala
   - Racket
-  - fp
-categories: 技术
+categories: Scala
 ---
 
 几乎所有编程语言都有 `List` 数据结构，尤其在函数式编程语言中，`List` 更是举足轻重，Lisp 甚至只用 `List` 就能一力降十会，可见其威力之无穷。

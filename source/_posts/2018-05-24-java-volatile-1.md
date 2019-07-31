@@ -2,9 +2,7 @@
 title: volatile 初探
 date: 2018-05-24 21:41:45
 tags:
-  - Java
-  - 并发
-  - JVM
+  - volatile
 categories: Java
 ---
 

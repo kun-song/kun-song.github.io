@@ -1,6 +1,6 @@
 ---
 title: 我的 Scala 学习之路
-tags: Scala
+tags:
 categories: 随笔
 abbrlink: 41898
 date: 2018-05-09 23:12:42

@@ -1,7 +1,7 @@
 ---
 title: Scala | case 关键字的 4 种用法
-tags: Scala
-categories: 技术
+tags: case
+categories: Scala
 abbrlink: 38736
 date: 2018-05-15 22:44:37
 ---

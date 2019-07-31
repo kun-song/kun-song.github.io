@@ -1,9 +1,7 @@
 ---
 title: Scala | List 拼接考古
 tags:
-  - Scala
-  - fp
-categories: 技术
+categories: Scala
 abbrlink: 59889
 date: 2018-05-21 23:42:24
 ---

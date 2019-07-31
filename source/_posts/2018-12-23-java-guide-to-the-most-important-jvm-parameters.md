@@ -2,8 +2,6 @@
 title: 译 | Guide to the Most Important JVM Parameters
 date: 2018-12-23 15:21:19
 tags:
-  - Java
-  - JVM
 categories: JVM
 ---
 

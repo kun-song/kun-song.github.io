@@ -1,9 +1,8 @@
 ---
 title: Scala | 偏函数
 tags:
-  - fp
-  - Scala
-categories: 技术
+  - 偏函数
+categories: Scala
 abbrlink: 48567
 date: 2018-05-15 23:08:20
 ---

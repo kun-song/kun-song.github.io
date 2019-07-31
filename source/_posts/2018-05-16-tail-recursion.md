@@ -1,10 +1,8 @@
 ---
 title: 为什么需要尾递归？
 tags:
-  - Scala
-  - fp
   - 尾递归
-categories: 技术
+categories: Scala
 abbrlink: 32377
 date: 2018-05-16 22:58:23
 ---

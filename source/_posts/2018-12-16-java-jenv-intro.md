@@ -2,7 +2,6 @@
 title: 使用 jenv 进行 JDK 版本管理
 date: 2018-12-16 12:37:48
 tags:
-  - Java
   - jenv
 categories: 编程工具
 ---

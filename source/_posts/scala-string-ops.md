@@ -1,7 +1,7 @@
 ---
 title: Scala | 字符串揭秘
-tags: Scala
-categories: 技术
+tags:
+categories: Scala
 abbrlink: 557
 date: 2018-05-14 23:24:19
 ---

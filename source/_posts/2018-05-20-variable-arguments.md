@@ -1,9 +1,7 @@
 ---
 title: 变长参数
 tags:
-  - Scala
-  - Java
-categories: 技术
+categories: Java
 abbrlink: 15952
 date: 2018-05-20 22:27:44
 ---

@@ -1,7 +1,6 @@
 ---
 title: 闭包初探
 tags:
-  - fp
   - 闭包
 categories: 技术
 abbrlink: 60696

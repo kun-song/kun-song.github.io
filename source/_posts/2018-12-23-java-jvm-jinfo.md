@@ -2,8 +2,6 @@
 title: JVM | jinfo
 date: 2018-12-23 19:35:30
 tags:
-  - Java
-  - JVM
   - jinfo
 categories: JVM
 ---

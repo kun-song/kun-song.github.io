@@ -4,7 +4,6 @@ date: 2018-06-15 08:35:45
 tags:
   - Haskell
   - 公开课
-  - fp
   - CIS 194
 categories: 公开课
 ---

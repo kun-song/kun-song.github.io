@@ -2,10 +2,9 @@
 title:  Scala | case 语句究竟是什么类型？
 date: 2018-06-07 21:55:21
 tags:
-  - Scala
-  - case statement
+  - case
   - 偏函数
-categories: 技术
+categories: Scala
 ---
 
 在 {% post_link scala-case-use-cases Scala | case 关键字的 4 种用法 %} 一文中我提到 case 语句可以创建偏函数字面值，实际上这种说法并不完全正确。

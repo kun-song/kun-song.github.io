@@ -2,7 +2,6 @@
 title: 读书 | Scala with Cats
 date: 2018-08-06 23:03:00
 tags:
-  - Scala
   - Cats
 categories: 读书
 ---

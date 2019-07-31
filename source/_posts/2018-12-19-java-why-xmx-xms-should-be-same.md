@@ -2,11 +2,9 @@
 title: JVM | 为何生产环境最好保持 Xms = Xmx ？
 date: 2018-12-19 08:58:48
 tags:
-  - Java
-  - JVM
   - Xms
   - Xmx
-categories: 技术
+categories: JVM
 ---
 
 很早就听老司机说，在生产环境，最好把 Xms 和 Xmx 设为相同值，并且 [Oralce 官方]() 也是这样推荐的：

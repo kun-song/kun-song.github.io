@@ -2,10 +2,9 @@
 title: Scala | 集合中的型变
 date: 2018-06-06 23:49:17
 tags:
-  - Scala
   - 类型系统
   - 型变
-categories: 技术
+categories: Scala
 ---
 
 在 {% post_link scala-variance Scala | 型变 %} 一文中我简单介绍了 Scala 中的协变、逆变和不变，Scala 的集合类型一般是协变 or 不变，本文将简单介绍不同集合选择协变 or 不变的原因，进一步加深对 Scala 型变（variance）的理解。

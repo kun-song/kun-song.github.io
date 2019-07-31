@@ -1,11 +1,9 @@
 ---
 title: Algebraic Data Type 及其在 Haskell 和 Scala 中的表现
 date: 2018-07-12 00:40:11
-  - fp
-  - Scala
   - Haskell
   - Algebraic Data Type 
-categories: 技术
+categories: Scala
 ---
 
 函数式编程接触久了以后，我们会发现很多 FP 语言（这里指静态 FP 语言）具有不少类似的语言特性，这非常自然，因为语言特性就那么多，好用、实用的特性更少，这一方面造成了语言之间的同质化，另一方面也减轻了我们语言切换的成本，算是有利也有弊吧。
