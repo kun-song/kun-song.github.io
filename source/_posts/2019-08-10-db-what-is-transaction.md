@@ -3,7 +3,7 @@ title: 事务的定义
 date: 2019-08-10 15:29:30
 tags:
   - 事务
-categories: Java
+categories: 数据库
 ---
 
 从概念上讲，事务非常简单，四十多年从未变过：
