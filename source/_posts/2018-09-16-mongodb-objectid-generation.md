@@ -3,7 +3,7 @@ title: MongoDB | ObjectId 生成
 date: 2018-09-16 21:31:01
 tags:
   - MongoDB
-categories: 技术
+categories: 数据库
 ---
 
 在 MongoDB 中每个 document 都有一个 `_id` 字段，该字段用于标识（通常是唯一标识）collection 中的特定 document。

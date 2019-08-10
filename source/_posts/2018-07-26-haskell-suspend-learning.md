@@ -4,7 +4,7 @@ date: 2018-07-26 21:26:10
 tags:
   - Haskell
   - CIS 194
-categories: 技术
+categories: 公开课
 ---
 
 最近一个多月（见 {% post_link 2018-06-15-haskell-begin-cis-194 正式入坑 Haskell %}）的业余时间基本都在学习 Haskell，学习材料是：

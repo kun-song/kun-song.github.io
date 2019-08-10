@@ -4,7 +4,7 @@ date: 2019-03-10 10:34:39
 tags:
   - MongoDB
   - 连接池
-categories: 技术
+categories: 数据库
 ---
 
 最近有位同事遇到一个 MongoDB 的线上异常，类似：

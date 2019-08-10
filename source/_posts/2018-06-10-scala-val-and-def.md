@@ -5,7 +5,7 @@ tags:
   - 求值策略
   - val
   - def
-categories: 技术
+categories: Scala
 ---
 
 在 {% post_link 2018-05-17-call-by-value-call-by-name 传值调用 vs 传名调用 %} 一文中我以函数参数为例介绍了 Scala 的两种求值策略：

@@ -1,7 +1,7 @@
 ---
 title: 面向表达式编程
 tags:
-categories: 技术
+categories: Scala
 abbrlink: 43893
 date: 2018-05-15 08:35:13
 ---

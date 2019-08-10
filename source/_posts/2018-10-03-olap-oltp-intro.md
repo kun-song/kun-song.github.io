@@ -4,7 +4,7 @@ date: 2018-10-03 12:48:27
 tags:
   - OLAP
   - OLTP
-categories: 技术
+categories: 数据库
 ---
 
 OLTP 和 OLAP 是数据库的两种应用场景：

@@ -4,7 +4,7 @@ date: 2018-09-23 23:17:10
 tags:
   - MongoDB
   - 索引
-categories: 技术
+categories: 数据库
 ---
 
 ## 基本术语

@@ -5,7 +5,7 @@ tags:
   - MongoDB
   - 索引
   - TTL
-categories: 技术
+categories: 数据库
 ---
 
 MongoDB 有几种很实用的特殊索引，在特定场景中可以达到事半功倍的效果，TTL 索引即其中之一。

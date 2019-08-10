@@ -6,7 +6,7 @@ tags:
   - 索引
   - explain
   - hint
-categories: 技术
+categories: 数据库
 ---
 
 `explain` 和 `hint` 是最常用的 MongoDB 性能调优工具，本文简单总结下两者的使用。

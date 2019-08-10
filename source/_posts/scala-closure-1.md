@@ -2,7 +2,7 @@
 title: 闭包初探
 tags:
   - 闭包
-categories: 技术
+categories: Scala
 abbrlink: 60696
 date: 2018-05-11 08:20:01
 ---

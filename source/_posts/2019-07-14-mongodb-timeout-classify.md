@@ -3,7 +3,7 @@ title: MongoDB 超时配置
 date: 2019-07-14 10:27:02
 tags:
   - MongoDB
-categories: 技术
+categories: 数据库
 ---
 
 MongoDB 有很多超时配置，虽然它们都有各自的默认值，但为了提升应用的及时响应性、性能等，有时需根据实际情况进行修改。
