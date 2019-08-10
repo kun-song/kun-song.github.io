@@ -2,23 +2,107 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://songkun.me/2019/07/30/2019-07-30-java-difference-between-wait-and-sleep/</loc>
+    <loc>http://songkun.me/2018/11/20/2018-11-20-troubleshooting-mongodb-authentication/</loc>
     
-    <lastmod>2019-07-31T00:30:11.507Z</lastmod>
+    <lastmod>2019-08-10T07:24:08.905Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/08/2018-06-08-referentially-transparent/</loc>
+    
+    <lastmod>2019-08-10T07:23:41.938Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/07/26/2018-07-26-haskell-suspend-learning/</loc>
+    
+    <lastmod>2019-08-10T07:23:21.447Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://songkun.me/2018/05/11/scala-closure-1/</loc>
     
-    <lastmod>2019-07-30T14:22:37.296Z</lastmod>
+    <lastmod>2019-08-10T07:23:06.030Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://songkun.me/2018/05/15/expression-oriented-programming/</loc>
     
-    <lastmod>2019-07-30T14:22:34.743Z</lastmod>
+    <lastmod>2019-08-10T07:22:52.121Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/10/03/2018-10-03-olap-oltp-intro/</loc>
+    
+    <lastmod>2019-08-10T07:22:23.762Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/10/2018-06-10-scala-val-and-def/</loc>
+    
+    <lastmod>2019-08-10T07:22:05.072Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/09/23/2018-09-23-mongodb-index/</loc>
+    
+    <lastmod>2019-08-10T07:20:43.163Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/09/16/2018-09-16-mongodb-objectid-generation/</loc>
+    
+    <lastmod>2019-08-10T07:20:36.887Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/09/24/2018-09-24-mongodb-explain-hint-intro/</loc>
+    
+    <lastmod>2019-08-10T07:20:29.841Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/10/14/2018-10-14-mongodb-ttl-index/</loc>
+    
+    <lastmod>2019-08-10T07:20:21.128Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/03/10/2019-03-10-mongodb-maxWaitQueueSize/</loc>
+    
+    <lastmod>2019-08-10T07:20:08.965Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/07/14/2019-07-14-mongodb-timeout-classify/</loc>
+    
+    <lastmod>2019-08-10T07:19:57.798Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/08/10/2019-08-10-db-why-we-need-transactions/</loc>
+    
+    <lastmod>2019-08-10T07:19:16.503Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/07/30/2019-07-30-java-difference-between-wait-and-sleep/</loc>
+    
+    <lastmod>2019-07-31T00:30:11.507Z</lastmod>
     
   </url>
   
@@ -61,20 +145,6 @@
     <loc>http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/</loc>
     
     <lastmod>2019-07-30T14:22:18.095Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/10/2018-06-10-scala-val-and-def/</loc>
-    
-    <lastmod>2019-07-30T14:22:15.453Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/08/2018-06-08-referentially-transparent/</loc>
-    
-    <lastmod>2019-07-30T14:22:13.014Z</lastmod>
     
   </url>
   
@@ -499,13 +569,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2019/07/14/2019-07-14-mongodb-timeout-classify/</loc>
-    
-    <lastmod>2019-07-14T03:12:41.886Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2019/07/13/2019-07-13-java-thinking-about-BufferedInputStream/</loc>
     
     <lastmod>2019-07-13T09:08:05.635Z</lastmod>
@@ -600,13 +663,6 @@
     <loc>http://songkun.me/2019/03/16/2019-03-16-from-monolithic-to-microservice/</loc>
     
     <lastmod>2019-03-23T01:49:11.458Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/03/10/2019-03-10-mongodb-maxWaitQueueSize/</loc>
-    
-    <lastmod>2019-03-10T04:42:16.668Z</lastmod>
     
   </url>
   
@@ -751,13 +807,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/11/20/2018-11-20-troubleshooting-mongodb-authentication/</loc>
-    
-    <lastmod>2018-11-20T00:47:47.265Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/11/15/2018-11-15-kafka-kip-62-allow-consumer-to-send-heartbeats-from-a-background-thread/</loc>
     
     <lastmod>2018-11-20T00:25:40.720Z</lastmod>
@@ -786,13 +835,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/10/14/2018-10-14-mongodb-ttl-index/</loc>
-    
-    <lastmod>2018-10-14T14:36:14.161Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/about/index.html</loc>
     
     <lastmod>2018-10-06T14:57:11.839Z</lastmod>
@@ -807,34 +849,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/10/03/2018-10-03-olap-oltp-intro/</loc>
-    
-    <lastmod>2018-10-03T05:59:23.833Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/09/24/2018-09-24-mongodb-explain-hint-intro/</loc>
-    
-    <lastmod>2018-10-02T15:54:30.921Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/09/23/2018-09-23-mongodb-index/</loc>
-    
-    <lastmod>2018-09-24T08:59:41.264Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/09/16/2018-09-16-mongodb-objectid-generation/</loc>
-    
-    <lastmod>2018-09-16T15:32:22.952Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/09/02/2018-09-02-reading-I-heart-logs/</loc>
     
     <lastmod>2018-09-02T14:01:08.825Z</lastmod>
@@ -845,13 +859,6 @@
     <loc>http://songkun.me/2018/08/06/2018-08-06-reading-learn-you-a-haskell-for-great-good/</loc>
     
     <lastmod>2018-08-06T14:30:37.355Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/07/26/2018-07-26-haskell-suspend-learning/</loc>
-    
-    <lastmod>2018-07-26T14:28:40.612Z</lastmod>
     
   </url>
   
