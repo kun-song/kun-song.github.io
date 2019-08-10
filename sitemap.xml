@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/08/10/2019-08-10-db-what-is-transaction/</loc>
+    
+    <lastmod>2019-08-10T09:09:19.589Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2018/11/20/2018-11-20-troubleshooting-mongodb-authentication/</loc>
     
     <lastmod>2019-08-10T07:24:08.905Z</lastmod>
