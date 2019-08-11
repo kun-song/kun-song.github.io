@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/08/11/2019-08-11-db-4-isolation-levels/</loc>
+    
+    <lastmod>2019-08-11T08:41:23.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/08/10/2019-08-10-db-meaning-of-ACID/</loc>
     
     <lastmod>2019-08-10T10:32:02.381Z</lastmod>
@@ -877,14 +884,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/tags/index.html</loc>
+    <loc>http://songkun.me/categories/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/categories/index.html</loc>
+    <loc>http://songkun.me/tags/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
