@@ -2,6 +2,76 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2018/08/06/2018-08-06-reading-learn-you-a-haskell-for-great-good/</loc>
+    
+    <lastmod>2019-08-17T03:38:44.500Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/08/05/2018-08-05-reading-functional-and-reactive-domain-modeling/</loc>
+    
+    <lastmod>2019-08-17T03:38:41.390Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/07/26/2018-07-26-haskell-suspend-learning/</loc>
+    
+    <lastmod>2019-08-17T03:38:18.180Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/07/12/2018-07-12-adt-in-haskell-and-scala/</loc>
+    
+    <lastmod>2019-08-17T03:38:15.442Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/07/10/2018-07-10-haskell-cis194-lazy/</loc>
+    
+    <lastmod>2019-08-17T03:38:12.620Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/07/08/2018-07-08-haskell-typeclass-a-shallow-look/</loc>
+    
+    <lastmod>2019-08-17T03:38:09.951Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/24/2018-06-24-haskell-a-tiny-interpreter/</loc>
+    
+    <lastmod>2019-08-17T03:38:06.765Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/21/2018-06-21-haskell-recursive-hanoi/</loc>
+    
+    <lastmod>2019-08-17T03:38:03.912Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/</loc>
+    
+    <lastmod>2019-08-17T03:38:01.172Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/08/11/2019-08-11-java-why-primitives-should-not-be-used-in-synchronized/</loc>
+    
+    <lastmod>2019-08-17T03:34:40.415Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/08/11/2019-08-11-db-4-isolation-levels/</loc>
     
     <lastmod>2019-08-11T08:41:23.000Z</lastmod>
@@ -33,13 +103,6 @@
     <loc>http://songkun.me/2018/06/08/2018-06-08-referentially-transparent/</loc>
     
     <lastmod>2019-08-10T07:23:41.938Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/07/26/2018-07-26-haskell-suspend-learning/</loc>
-    
-    <lastmod>2019-08-10T07:23:21.447Z</lastmod>
     
   </url>
   
@@ -138,34 +201,6 @@
     <loc>http://songkun.me/2018/08/18/2018-08-18-java-8-functional-programming/</loc>
     
     <lastmod>2019-07-30T14:22:29.149Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/07/10/2018-07-10-haskell-cis194-lazy/</loc>
-    
-    <lastmod>2019-07-30T14:22:26.246Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/07/08/2018-07-08-haskell-typeclass-a-shallow-look/</loc>
-    
-    <lastmod>2019-07-30T14:22:23.574Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/24/2018-06-24-haskell-a-tiny-interpreter/</loc>
-    
-    <lastmod>2019-07-30T14:22:20.973Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/</loc>
-    
-    <lastmod>2019-07-30T14:22:18.095Z</lastmod>
     
   </url>
   
@@ -327,20 +362,6 @@
     <loc>http://songkun.me/2018/08/06/2018-08-06-reading-scala-with-cats/</loc>
     
     <lastmod>2019-07-30T14:16:16.466Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/08/05/2018-08-05-reading-functional-and-reactive-domain-modeling/</loc>
-    
-    <lastmod>2019-07-30T14:16:11.645Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/07/12/2018-07-12-adt-in-haskell-and-scala/</loc>
-    
-    <lastmod>2019-07-30T14:16:06.105Z</lastmod>
     
   </url>
   
@@ -751,13 +772,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/06/21/2018-06-21-haskell-recursive-hanoi/</loc>
-    
-    <lastmod>2018-12-23T08:12:44.092Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/12/22/2018-12-22-linux-free-intro/</loc>
     
     <lastmod>2018-12-23T08:10:05.780Z</lastmod>
@@ -873,13 +887,6 @@
     <loc>http://songkun.me/2018/09/02/2018-09-02-reading-I-heart-logs/</loc>
     
     <lastmod>2018-09-02T14:01:08.825Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/08/06/2018-08-06-reading-learn-you-a-haskell-for-great-good/</loc>
-    
-    <lastmod>2018-08-06T14:30:37.355Z</lastmod>
     
   </url>
   
