@@ -2,8 +2,6 @@
 title: CIS 194 | Typeclass 和 IO
 date: 2018-07-08 22:56:14
 tags:
-  - CIS 194
-  - Haskell
   - Type Class
 categories: 公开课
 ---

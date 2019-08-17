@@ -2,10 +2,8 @@
 title: The Towers of Hanoi -- 递归的力量
 date: 2018-06-21 23:34:05
 tags:
-  - Haskell
   - 递归
   - 算法
-  - CIS 194
 categories: 公开课
 ---
 

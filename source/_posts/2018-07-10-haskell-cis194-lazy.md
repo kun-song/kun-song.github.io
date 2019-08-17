@@ -2,8 +2,6 @@
 title: CIS 194 | Lazy
 date: 2018-07-10 22:21:34
 tags:
-  - CIS 194
-  - Haskell
   - lazy
 categories: 公开课
 ---

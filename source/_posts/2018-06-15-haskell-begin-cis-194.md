@@ -2,9 +2,6 @@
 title: 正式入坑 Haskell
 date: 2018-06-15 08:35:45
 tags:
-  - Haskell
-  - 公开课
-  - CIS 194
 categories: 公开课
 ---
 

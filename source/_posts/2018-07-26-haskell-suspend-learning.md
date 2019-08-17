@@ -2,8 +2,6 @@
 title: 暂时出坑 Haskell
 date: 2018-07-26 21:26:10
 tags:
-  - Haskell
-  - CIS 194
 categories: 公开课
 ---
 

@@ -2,8 +2,6 @@
 title: 读书 | Learn You a Haskell for Great Good
 date: 2018-08-06 21:51:20
 tags:
-  - Haskell
-  - 函数式
 categories: 读书
 ---
 

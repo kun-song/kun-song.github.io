@@ -3,8 +3,6 @@ title: A tiny interpreter in Haskell
 date: 2018-06-24 21:20:09
 tags:
   - 解释器
-  - CIS 194
-  - Haskell
   - 环境
   - 语法糖
 categories: 公开课

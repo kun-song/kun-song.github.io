@@ -1,7 +1,6 @@
 ---
 title: Algebraic Data Type 及其在 Haskell 和 Scala 中的表现
 date: 2018-07-12 00:40:11
-  - Haskell
   - Algebraic Data Type 
 categories: Scala
 ---
