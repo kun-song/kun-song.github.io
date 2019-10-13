@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/10/13/2019-10-13-java-jvm-object-meomory-layout/</loc>
+    
+    <lastmod>2019-10-13T13:39:25.784Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/10/10/2019-10-10-java-how-to-create-an-object/</loc>
     
     <lastmod>2019-10-13T12:59:32.431Z</lastmod>
