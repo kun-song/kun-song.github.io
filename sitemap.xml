@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/10/19/2019-10-19-java-jvm-reachability-analysis/</loc>
+    
+    <lastmod>2019-10-19T02:08:36.362Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/10/15/2019-10-15-java-jvm-object-gc-algorithms/</loc>
     
     <lastmod>2019-10-19T01:09:49.608Z</lastmod>
