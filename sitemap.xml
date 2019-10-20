@@ -2,9 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/10/19/2019-10-19-java-jvm-hotspot-safepoint-saferegion/</loc>
+    
+    <lastmod>2019-10-20T01:34:03.983Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/10/19/2019-10-19-java-jvm-hotspot-how-to-find-gc-roots/</loc>
+    
+    <lastmod>2019-10-19T14:31:31.178Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/10/19/2019-10-19-java-jvm-reachability-analysis/</loc>
     
-    <lastmod>2019-10-19T02:08:36.362Z</lastmod>
+    <lastmod>2019-10-19T03:18:38.303Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/10/19/2019-10-19-java-jvm-4-kind-reference/</loc>
+    
+    <lastmod>2019-10-19T02:57:01.373Z</lastmod>
     
   </url>
   
