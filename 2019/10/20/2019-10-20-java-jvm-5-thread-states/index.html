@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Java 线程模型基于底层操作系统的 线程模型 实现，每个 Java 线程都与一个 OS 线程 一一对应。 OS 和 JVM 都有线程生命周期的概念，它由一系列 线程状态 构成，描述了一个线程生老病死的状态变化，但两者的线程状态并非一一对应。">
+<meta name="keywords" content="线程状态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 线程的生命周期">
+<meta property="og:url" content="http://songkun.me/2019/10/20/2019-10-20-java-jvm-5-thread-states/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="Java 线程模型基于底层操作系统的 线程模型 实现，每个 Java 线程都与一个 OS 线程 一一对应。 OS 和 JVM 都有线程生命周期的概念，它由一系列 线程状态 构成，描述了一个线程生老病死的状态变化，但两者的线程状态并非一一对应。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://songkun.me/images/java/os-thread-state.png">
+<meta property="og:image" content="http://songkun.me/images/java/java-thread-state.png">
+<meta property="og:updated_time" content="2019-10-25T00:49:25.577Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 线程的生命周期">
+<meta name="twitter:description" content="Java 线程模型基于底层操作系统的 线程模型 实现，每个 Java 线程都与一个 OS 线程 一一对应。 OS 和 JVM 都有线程生命周期的概念，它由一系列 线程状态 构成，描述了一个线程生老病死的状态变化，但两者的线程状态并非一一对应。">
+<meta name="twitter:image" content="http://songkun.me/images/java/os-thread-state.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2019/10/20/2019-10-20-java-jvm-5-thread-states/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java 线程的生命周期 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br>书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/10/20/2019-10-20-java-jvm-5-thread-states/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java 线程的生命周期
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-20 09:45:50" itemprop="dateCreated datePublished" datetime="2019-10-20T09:45:50+08:00">2019-10-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-25 08:49:25" itemprop="dateModified" datetime="2019-10-25T08:49:25+08:00">2019-10-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Java 线程模型基于底层操作系统的 <strong>线程模型</strong> 实现，每个 Java 线程都与一个 OS 线程 <strong>一一对应</strong>。</p>
+<p>OS 和 JVM 都有线程生命周期的概念，它由一系列 <strong>线程状态</strong> 构成，描述了一个线程生老病死的状态变化，但两者的线程状态并非一一对应。</p>
+<a id="more"></a>
+<h2 id="OS-线程状态"><a href="#OS-线程状态" class="headerlink" title="OS 线程状态"></a>OS 线程状态</h2><p>OS 定义的线程生命周期一般由 5 个状态组成：</p>
+<p><img src="/images/java/os-thread-state.png" alt="OS 线程状态转换图" style="width: 600px;"></p>
+<ol>
+<li>初始状态<ol>
+<li>线程在 <strong>编程语言层面</strong> 被创建，只是内存中的一段数据，OS 无法感知它的存在，在 OS 看来，线程还 <strong>未被创建</strong>；</li>
+<li>不允许分配 CPU 执行（因为 OS 线程还没被创建，想分配 CPU 也不可能）；</li>
+</ol>
+</li>
+<li>可运行状态<ol>
+<li>对应的 OS 线程已经被创建成功；</li>
+<li>可分配 CPU 执行；</li>
+</ol>
+</li>
+<li>运行状态<ol>
+<li>当有 <strong>空闲 CPU</strong> 时，OS 可将其分配给一个处于 <strong>可运行状态</strong> 的线程，该线程进入运行状态；</li>
+<li>占用 CPU；</li>
+</ol>
+</li>
+<li>休眠状态<ol>
+<li>处于运行状态的线程若调用阻塞 API or 等待某事件（如条件变量）就会进入休眠状态；</li>
+<li>释放 CPU；</li>
+<li>阻塞 API 返回 or 等待的时间发生后，OS 重新调度，可再次获得 CPU；</li>
+</ol>
+</li>
+<li>终止状态<ol>
+<li>线程正常 or 异常执行结束；</li>
+</ol>
+</li>
+</ol>
+<p>不同编程语言会对这 5 种状态进行合并 or 细化：</p>
+<ul>
+<li>C 语言把初始状态、可运行状态合并为一个状态；</li>
+<li>Java 语言<ul>
+<li>把 <strong>可运行状态</strong> 和 <strong>运行状态</strong> 合并为可运行状态；</li>
+<li>把 <strong>休眠状态</strong> 细化为 <strong>阻塞状态</strong>、<strong>限时等待</strong> 和 <strong>不限时等待</strong> 3 个状态；</li>
+</ul>
+</li>
+</ul>
+<h2 id="Java-线程状态"><a href="#Java-线程状态" class="headerlink" title="Java 线程状态"></a>Java 线程状态</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>Java 共有 6 种线程状态：</p>
+<p><img src="/images/java/java-thread-state.png" alt="Java 线程状态转换图" style="width: 600px;"></p>
+<ol>
+<li>NEW（初始状态）</li>
+<li>RUNNABLE（可运行状态 + 运行状态）</li>
+<li>BLOCKED（阻塞状态，属于休眠状态）</li>
+<li>WAITING（无限时等待，属于休眠状态）</li>
+<li>TIMED_WAITING（限时等待，属于休眠状态）</li>
+<li>TERMINATED（终止状态）</li>
+</ol>
+<p>其中：</p>
+<ul>
+<li>NEW 和 TERMINATED 对应 OS 的初始状态、终止状态；</li>
+<li>RUNNABLE 对应 OS 的可运行状态 + 运行状态，因为这两个状态对 OS 进行 <strong>线程调度</strong> 有用，但 JVM 依赖 OS 调度，本身不关心调度细节，自然无需区分；</li>
+<li>BLOCKED + WAITING + TIMED_WAITING 都对应 OS 的休眠状态，可视为 <strong>导致休眠状态的三大原因</strong>；</li>
+</ul>
+<h3 id="状态转换"><a href="#状态转换" class="headerlink" title="状态转换"></a>状态转换</h3><p>在 OS 线程模型中，最重要的状态转换关系是可运行状态、运行状态、休眠状态 3 者之间的相互转换，它们涉及 OS 线程调度的知识；在 JVM 中，对应的是 RUNNABLE、BLOCKED、WAITING、TIMED_WAITING 4 者之间的相互转换，更加细致。</p>
+<h4 id="1-RUNNABLE-BLOCKED"><a href="#1-RUNNABLE-BLOCKED" class="headerlink" title="1. RUNNABLE  BLOCKED"></a>1. RUNNABLE <-> BLOCKED</-></h4><p>在 OS 层面对应 <strong>运行状态 <-> 休眠状态</-></strong>，虽然 JVM 的 RUNNABLE 包含可运行状态 + 运行状态，但 OS 不允许 <strong>可运行状态 <-> 休眠状态</-></strong>，JVM 也要遵循客观规律。</p>
+<p>只有一种场景会触发该转换，即线程等待 or 成功获取 <code>synchronized</code> 使用的监视器锁（同步块、同步方法）：</p>
+<ul>
+<li>RUNNABLE -&gt; BLOCKED：线程等待监视器锁；</li>
+<li>BLOCKED -&gt; RUNNABLE：线程成功获取监视器锁；</li>
+</ul>
+<blockquote>
+<p>注意：调用阻塞 API 不会导致线程进入 JVM 层面的 BLOCKED 状态，但会导致线程进入 OS 层面的休眠状态。</p>
+</blockquote>
+<h4 id="2-RUNNABLE-WAITING"><a href="#2-RUNNABLE-WAITING" class="headerlink" title="2. RUNNABLE  WAITING"></a>2. RUNNABLE <-> WAITING</-></h4><p>有 3 个方法会触发该转换：</p>
+<ol>
+<li><code>Object.wait()</code> 和 <code>Object.notify()/notifyAll()</code></li>
+<li><code>Thread.join()</code></li>
+<li><code>LockSupport.park()</code> 和 <code>LockSupport.unpark()</code></li>
+</ol>
+<h6 id="wait-和-notify-notifyAll"><a href="#wait-和-notify-notifyAll" class="headerlink" title="wait() 和 notify()/notifyAll()"></a><code>wait()</code> 和 <code>notify()/notifyAll()</code></h6><p><code>wait</code> + <code>notify/notifyAll</code> 可构建 <strong>条件队列</strong>，它们都必须在 <code>synchronized</code> 块 or 方法中使用。</p>
+<p>假设有线程 A B 分别调用 <code>wait</code> 和 <code>notify/notifyAll</code>，转换路径为：</p>
+<ul>
+<li>RUNNABLE -&gt; WAITING：A 先获得 <code>synchronized</code> 监视器锁，然后调用 <code>Object.wait()</code>，则<ul>
+<li>线程 A 进入 WAITING 状态；</li>
+<li>线程 A 释放前面获取到的 <code>synchronized</code> 监视器锁；</li>
+</ul>
+</li>
+<li>WAITING -&gt; RUNNABLE：B 先获得 <code>synchronized</code> 监视器锁，然后调用 <code>Object.notify/notifyAll</code>，则<ul>
+<li>线程 A 被唤醒，进入 RUNNABLE 状态；</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>更多关于 <code>wait</code> 和 <code>notify/notifyAll</code> 可参考 <a href="http://songkun.me/2019/07/30/2019-07-30-java-difference-between-wait-and-sleep/">wait() 与 sleep() 的异同点</a>。</p>
+</blockquote>
+<h6 id="Thread-join"><a href="#Thread-join" class="headerlink" title="Thread.join()"></a><code>Thread.join()</code></h6><p>假设有线程 A B，并且在 A 中执行 <code>B.join()</code>，转换路径为：</p>
+<ul>
+<li>RUNNABLE -&gt; WAITING：A 执行完 <code>B.join()</code> 后进入 WAITING 状态；</li>
+<li>WAITING -&gt; RUNNABLE：B 执行结束后，A 恢复 RUNNABLE 状态，继续执行；</li>
+</ul>
+<h6 id="park-和-unpark-thread"><a href="#park-和-unpark-thread" class="headerlink" title="park() 和 unpark(thread)"></a><code>park()</code> 和 <code>unpark(thread)</code></h6><p><code>LockSupport.park/unpark</code> 被设计取代 <code>Thread.suspend/resume</code>，用于挂起、恢复线程（<a href="http://songkun.me/2019/07/12/2019-07-12-java-locksupport-vs-suspend-resume/">谈谈 LockSupport 对 suspend/resume 的改进</a>）。</p>
+<p>假设有线程 A B，转换路径为：</p>
+<ul>
+<li>RUNNABLE -&gt; WAITING：B 执行 <code>LockSupport.park()</code> 挂起自己，让自己进入 WAITING 状态；</li>
+<li>WAITING -&gt; RUNNABLE：A 执行 <code>LockSupport.unpark(B)</code> 恢复 B，让 B 进入 RUNNABLE 状态；</li>
+</ul>
+<h4 id="3-RUNNABLE-TIMED-WAITING"><a href="#3-RUNNABLE-TIMED-WAITING" class="headerlink" title="3. RUNNABLE  TIMED_WAITING"></a>3. RUNNABLE <-> TIMED_WAITING</-></h4><p>有 5 个方法会触发该转换：</p>
+<ol>
+<li><code>Thread.sleep(millis)</code></li>
+<li><code>Object.wait(millis)</code> 和 <code>Object.notify/notifyAll</code></li>
+<li><code>Thread.join(millis)</code></li>
+<li><code>LockSupport.parkNanos(Object blocker, long deadline)</code></li>
+<li><code>LockSupport.parkUntil(long deadline)</code></li>
+</ol>
+<p>其中后面 4 个分别是 <code>wait()</code>、<code>join()</code>、<code>park()</code> 等 <strong>带超时时间的版本</strong>，使用原来与前面相同。</p>
+<p><code>Thread.sleep(millis)</code> 必须携带超时参数，转换路径为：</p>
+<ul>
+<li>RUNNABLE -&gt; TIMED_WAITING：线程 A 执行 <code>Thread.sleep(millis)</code> 休眠自己，让自己进入 TIMED_WAITING 状态；</li>
+<li>TIMED_WAITING -&gt; RUNNABLE：休眠时间结束后，A 再次进入 RUNNABLE；</li>
+</ul>
+<h4 id="4-NEW-gt-RUNNABLE"><a href="#4-NEW-gt-RUNNABLE" class="headerlink" title="4. NEW -&gt; RUNNABLE"></a>4. NEW -&gt; RUNNABLE</h4><p>首先新创建的线程处于 NEW 状态，NEW 状态的线程仅存在于 Java 语言层面，OS 无法感知，也 <strong>无法调度执行</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// t 处于 NEW 状态</span></span><br><span class="line">Thread t = <span class="keyword">new</span> Thread(() -&gt; System.out.println(<span class="string">"hello world"</span>));</span><br></pre></td></tr></table></figure>
+<p>想要 <code>t</code> 被 OS 调度执行，必须将它从 NEW 转换为 RUNNABLE，有且仅有调用 <code>Thread.start()</code> 一种方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NEW -&gt; RUNNABLE</span></span><br><span class="line">t.start();</span><br></pre></td></tr></table></figure>
+<p>前面说过 JVM 层面的 RUNNABLE 状态对应 OS 的：</p>
+<ul>
+<li>可运行状态</li>
+<li>运行状态</li>
+</ul>
+<p>因此执行完 <code>t.start()</code> 后并不意味着线程立即开始执行了，只是说 JVM 层面认为线程已经开始执行了，实际上需要 OS 真正调度分配 CPU 后才算执行，不过 JVM 不关心调度而已。</p>
+<h4 id="5-其他状态-gt-TERMINATED"><a href="#5-其他状态-gt-TERMINATED" class="headerlink" title="5. 其他状态 -&gt; TERMINATED"></a>5. 其他状态 -&gt; TERMINATED</h4><p>从除 TERMINATED/NEW 以外的 4 种状态都可以转换到 TERMINATED：</p>
+<ol>
+<li>线程执行完 <code>run()</code> 方法（正常执行完 + 抛出异常），会自动进入 TERMINATED 状态；</li>
+<li>提前终止线程</li>
+</ol>
+<p>关于第二点，参考 <a href="2019-07-27-java-how-to-stop-a-thread-correctly.md">如何安全地终止线程？</a>，有两种终止方式：</p>
+<ol>
+<li><code>volatile</code> 状态变量 + 轮询<ol>
+<li>RUNNABLE -&gt; TERMINATED</li>
+</ol>
+</li>
+<li>中断 + 轮询<ol>
+<li>RUNNABLE -&gt; TERMINATED</li>
+<li>BLOCKED -&gt; RUNNABLE -&gt; TERMINATED</li>
+<li>WAITING -&gt; RUNNABLE -&gt; TERMINATED</li>
+<li>TIMED_WAITING -&gt; RUNNABLE -&gt; TERMINATED</li>
+</ol>
+</li>
+</ol>
+<h5 id="RUNNABLE-gt-TERMINATED"><a href="#RUNNABLE-gt-TERMINATED" class="headerlink" title="RUNNABLE -&gt; TERMINATED"></a>RUNNABLE -&gt; TERMINATED</h5><p>可以看到，转换路径其实只有一条，即 RUNNABLE -&gt; TERMINATED，要终止 <strong>休眠状态</strong>（BLOCKED/WAITING/TIMED_WAITING）的线程，需要先将其从休眠状态唤醒到 RUNNABLE，然后再终止。</p>
+<p><code>volatile</code> 状态变量 or 中断（2.1）都可以使线程从 RUNNABLE -&gt; TERMINATED，它们的用法、原理都是类似的，唯一区别是表示是否终止的状态变量是 <code>volatile</code> 标志 or 线程本身的中断标志而已。</p>
+<h5 id="休眠状态-gt-TERMINATED"><a href="#休眠状态-gt-TERMINATED" class="headerlink" title="休眠状态 -&gt; TERMINATED"></a>休眠状态 -&gt; TERMINATED</h5><p>中断另外 3 种用法（2.2/3/4）则不同，它们通过 <strong>抛出 <code>InterruptedException</code> 异常</strong> 将线程从休眠状态唤醒到 RUNNABLE，然后按照 RUNNABLE -&gt; TERMINATED 路径转换即可。</p>
+<p>前面总结过使线程 RUNNABLE -&gt; BLOCKED/WAITING/TIMED_WAITING 的几个方法：</p>
+<ul>
+<li>RUNNABLE -&gt; BLOCKED：<code>synchronized</code></li>
+<li>RUNNABLE -&gt; WAITING：<code>join()</code>、<code>wait/notify</code>、<code>park/unpark</code></li>
+<li>RUNNABLE -&gt; TIMED_WAITING：<code>join(t)/sleep(t)</code>、<code>wait(t)</code>、<code>parkUntil/parkNanos</code></li>
+</ul>
+<p>这些方法的签名都声明了 <code>InterruptedException</code>，即它们都能响应中断（调用 <code>t.interrupt()</code>），<strong>即使处于休眠状态</strong>。</p>
+<h5 id="特殊：RUNNABLE-阻塞"><a href="#特殊：RUNNABLE-阻塞" class="headerlink" title="特殊：RUNNABLE 阻塞"></a>特殊：RUNNABLE 阻塞</h5><p>Java NIO 有两个方法比较特殊，调用时线程处于 JVM 层面的 RUNNABLE 状态，但处于 OS 层面的阻塞状态（？）：</p>
+<ul>
+<li><code>java.nio.channels.InterruptibleChannel</code></li>
+<li><code>java.nio.channels.Selector</code></li>
+</ul>
+<p>线程调用它们时，不会进入 BLOCKED/WAITING/TIMED_WAITING 等，但它们可能长时间阻塞等待，使用 <strong>轮询</strong> 很难处理。</p>
+<p>幸运的是这两个方法都能 <strong>响应中断</strong>，即其他线程执行 <code>t.interrupt()</code> 时，若 t 处于 RUNNABLE 且正在阻塞在 <code>InterruptibleChannel</code> 或 <code>Selector</code> 上，则它们分别如此响应中断：</p>
+<ul>
+<li><code>InterruptibleChannel</code> 抛出 <code>ClosedByInterruptException</code></li>
+<li><code>java.nio.channels.Selector</code> 会立即返回，不抛出异常</li>
+</ul>
+<p>不管是抛出异常 or 立即返回，线程都从阻塞状态恢复了，可以继续终止。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/线程状态/" rel="tag"># 线程状态</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/19/2019-10-19-java-jvm-hotspot-safepoint-saferegion/" rel="next" title="何时回收：安全点 & 安全区域">
+                <i class="fa fa-chevron-left"></i> 何时回收：安全点 & 安全区域
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">138</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">125</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OS-线程状态"><span class="nav-number">1.</span> <span class="nav-text">OS 线程状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-线程状态"><span class="nav-number">2.</span> <span class="nav-text">Java 线程状态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">2.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态转换"><span class="nav-number">2.2.</span> <span class="nav-text">状态转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-RUNNABLE-BLOCKED"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. RUNNABLE  BLOCKED</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-RUNNABLE-WAITING"><span class="nav-number">2.2.2.</span> <span class="nav-text">2. RUNNABLE  WAITING</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#wait-和-notify-notifyAll"><span class="nav-number">2.2.2.0.1.</span> <span class="nav-text">wait() 和 notify()/notifyAll()</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Thread-join"><span class="nav-number">2.2.2.0.2.</span> <span class="nav-text">Thread.join()</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#park-和-unpark-thread"><span class="nav-number">2.2.2.0.3.</span> <span class="nav-text">park() 和 unpark(thread)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-RUNNABLE-TIMED-WAITING"><span class="nav-number">2.2.3.</span> <span class="nav-text">3. RUNNABLE  TIMED_WAITING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-NEW-gt-RUNNABLE"><span class="nav-number">2.2.4.</span> <span class="nav-text">4. NEW -&gt; RUNNABLE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-其他状态-gt-TERMINATED"><span class="nav-number">2.2.5.</span> <span class="nav-text">5. 其他状态 -&gt; TERMINATED</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#RUNNABLE-gt-TERMINATED"><span class="nav-number">2.2.5.1.</span> <span class="nav-text">RUNNABLE -&gt; TERMINATED</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#休眠状态-gt-TERMINATED"><span class="nav-number">2.2.5.2.</span> <span class="nav-text">休眠状态 -&gt; TERMINATED</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#特殊：RUNNABLE-阻塞"><span class="nav-number">2.2.5.3.</span> <span class="nav-text">特殊：RUNNABLE 阻塞</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

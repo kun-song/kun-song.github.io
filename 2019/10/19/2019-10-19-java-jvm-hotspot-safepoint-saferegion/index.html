@@ -126,7 +126,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="垃圾回收有 3 个基本问题：  哪些对象需要回收？ 何时回收？ 如何回收？  HotSpot 在安全点、安全区域执行垃圾回收，对应第 2 个问题。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-20T01:34:03.983Z">
+<meta property="og:updated_time" content="2019-10-20T01:43:27.457Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="何时回收：安全点 &amp; 安全区域">
 <meta name="twitter:description" content="垃圾回收有 3 个基本问题：  哪些对象需要回收？ 何时回收？ 如何回收？  HotSpot 在安全点、安全区域执行垃圾回收，对应第 2 个问题。">
@@ -389,7 +389,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-20 09:34:03" itemprop="dateModified" datetime="2019-10-20T09:34:03+08:00">2019-10-20</time>
+                <time title="修改时间：2019-10-20 09:43:27" itemprop="dateModified" datetime="2019-10-20T09:43:27+08:00">2019-10-20</time>
               
             
           </span>
@@ -469,6 +469,7 @@
 <li>异常跳转处；</li>
 <li>…</li>
 </ol>
+<p>选择这些位置是为了 <strong>避免程序长时间运行而不进入安全点</strong>，比如在循环末尾的安全点，可以避免超大循环一致运行，导致系统一直等待该线程达到安全点，最后导致 GC 迟迟不能执行。</p>
 <h3 id="全部用户线程-gt-安全点"><a href="#全部用户线程-gt-安全点" class="headerlink" title="全部用户线程 -&gt; 安全点"></a>全部用户线程 -&gt; 安全点</h3><p>虚拟机要执行一次 GC，必须等待 <strong>全部用户线程都到达安全点</strong>，有两种实现方式：</p>
 <ul>
 <li>抢占式中断（几乎没有虚拟机使用）<ul>
@@ -538,6 +539,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/20/2019-10-20-java-jvm-5-thread-states/" rel="prev" title="Java 线程的生命周期">
+                Java 线程的生命周期 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -611,7 +616,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">137</span>
+                    <span class="site-state-item-count">138</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -913,7 +918,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">124</span>
+                      
+                    
+                    <span class="site-state-item-count">125</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

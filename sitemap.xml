@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/10/20/2019-10-20-java-jvm-5-thread-states/</loc>
+    
+    <lastmod>2019-10-25T00:49:25.577Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/07/27/2019-07-27-java-how-to-stop-a-thread-correctly/</loc>
+    
+    <lastmod>2019-10-25T00:13:18.791Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/10/19/2019-10-19-java-jvm-hotspot-safepoint-saferegion/</loc>
     
-    <lastmod>2019-10-20T01:34:03.983Z</lastmod>
+    <lastmod>2019-10-20T01:43:27.457Z</lastmod>
     
   </url>
   
@@ -660,13 +674,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2019/07/27/2019-07-27-java-how-to-stop-a-thread-correctly/</loc>
-    
-    <lastmod>2019-07-30T13:59:47.306Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2019/07/26/2019-07-26-java-nio-epoll-bug-and-netty-solution/</loc>
     
     <lastmod>2019-07-27T15:11:36.593Z</lastmod>
@@ -968,14 +975,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/categories/index.html</loc>
+    <loc>http://songkun.me/tags/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/tags/index.html</loc>
+    <loc>http://songkun.me/categories/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     

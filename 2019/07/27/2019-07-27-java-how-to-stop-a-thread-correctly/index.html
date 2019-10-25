@@ -127,7 +127,7 @@
 <meta property="og:site_name" content="随便写写">
 <meta property="og:description" content="在多线程编程中，有多种方式可以终止线程，但要“安全地”终止线程却没那么容易。 Java 没有提供 可以直接安全终止线程机制（Thread.stop 虽可直接终止线程，但并不安全），这是合理的，因为通常 只有线程自己 才知道该如何安全终止自己（资源释放、状态回滚等），因此 Java 使用协作的终止方式，即控制线程发出终止目标线程的请求，目标线程检测到该请求后，首先执行必要的 清理工作，然后安全地终止">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-30T13:59:47.306Z">
+<meta property="og:updated_time" content="2019-10-25T00:13:18.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何安全地终止线程？">
 <meta name="twitter:description" content="在多线程编程中，有多种方式可以终止线程，但要“安全地”终止线程却没那么容易。 Java 没有提供 可以直接安全终止线程机制（Thread.stop 虽可直接终止线程，但并不安全），这是合理的，因为通常 只有线程自己 才知道该如何安全终止自己（资源释放、状态回滚等），因此 Java 使用协作的终止方式，即控制线程发出终止目标线程的请求，目标线程检测到该请求后，首先执行必要的 清理工作，然后安全地终止">
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-30 21:59:47" itemprop="dateModified" datetime="2019-07-30T21:59:47+08:00">2019-07-30</time>
+                <time title="修改时间：2019-10-25 08:13:18" itemprop="dateModified" datetime="2019-10-25T08:13:18+08:00">2019-10-25</time>
               
             
           </span>
@@ -465,7 +465,7 @@
 <p>Many uses of stop should be replaced by code that simply modifies some <strong>variable</strong> to indicate that the target thread should stop running.  The target thread should <strong>check this variable regularly</strong>, and return from its run method in an orderly fashion if the variable indicates that it is to stop running.</p>
 <p>If the target thread <strong>waits for long periods</strong> (on a condition variable, for example), the interrupt method should be used to interrupt the wait.</p>
 </blockquote>
-<p>普通场景用 <strong>状态变量 + 轮询检查</strong> 即可，若线程中存在 <strong>阻塞方法</strong> 或 <strong>耗时操作</strong>，则可用 <strong>轮询 + 中断</strong>。</p>
+<p>普通场景用 <strong>状态变量 + 轮询</strong> 即可，若线程中存在 <strong>阻塞方法</strong> 或 <strong>耗时操作</strong>，则可用 <strong>中断 + 轮询</strong>。</p>
 <p>由于该状态标志必须允许多线程同时更新、读取，为保证 <strong>可见性</strong>，必须用 <code>volatile</code> 修饰，这也是 <code>volatile</code> 最典型的应用场景之一。</p>
 <h2 id="volatile-状态变量-轮询"><a href="#volatile-状态变量-轮询" class="headerlink" title="volatile 状态变量 + 轮询"></a><code>volatile</code> 状态变量 + 轮询</h2><p>该方式有两个关键点：</p>
 <ol>
@@ -485,7 +485,10 @@
 <li>存在 <strong>耗时</strong> 方法，则终止动作需要长时间才能被影响；</li>
 <li>存在 <strong>阻塞</strong> 方法，则永远无法终止；</li>
 </ol>
-<h2 id="轮询-中断"><a href="#轮询-中断" class="headerlink" title="轮询 + 中断"></a>轮询 + 中断</h2><p>轮询中存在耗时方法，没有特别好的解决方式，但对于阻塞方法，则有标准的解决方式，即中断。</p>
+<h2 id="中断-轮询"><a href="#中断-轮询" class="headerlink" title="中断 + 轮询"></a>中断 + 轮询</h2><blockquote>
+<p>与“状态变量 + 轮询”基本相同，唯一区别是用线程本身的 <strong>中断标志</strong> 取代 <strong><code>volatile</code> 状态变量</strong>。</p>
+</blockquote>
+<p>轮询中存在耗时方法，没有特别好的解决方式，但对于阻塞方法，则有标准的解决方式，即中断。</p>
 <blockquote>
 <p>在 Java 中，中断就是为线程协作而生，用于实现任务取消、线程终止等。</p>
 </blockquote>
@@ -626,7 +629,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">137</span>
+                    <span class="site-state-item-count">138</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -928,7 +931,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">124</span>
+                      
+                    
+                    <span class="site-state-item-count">125</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -978,7 +983,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#被废弃的-Thread-stop"><span class="nav-number">1.</span> <span class="nav-text">被废弃的 Thread.stop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile-状态变量-轮询"><span class="nav-number">2.</span> <span class="nav-text">volatile 状态变量 + 轮询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#轮询-中断"><span class="nav-number">3.</span> <span class="nav-text">轮询 + 中断</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#被废弃的-Thread-stop"><span class="nav-number">1.</span> <span class="nav-text">被废弃的 Thread.stop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile-状态变量-轮询"><span class="nav-number">2.</span> <span class="nav-text">volatile 状态变量 + 轮询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中断-轮询"><span class="nav-number">3.</span> <span class="nav-text">中断 + 轮询</span></a></li></ol></div>
             
 
           </div>
