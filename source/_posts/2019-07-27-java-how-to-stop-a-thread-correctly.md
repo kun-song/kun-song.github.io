@@ -51,7 +51,7 @@ private synchronized freeLockAbruptly() {
 >
 >If the target thread **waits for long periods** (on a condition variable, for example), the interrupt method should be used to interrupt the wait.
 
-普通场景用 **状态变量 + 轮询检查** 即可，若线程中存在 **阻塞方法** 或 **耗时操作**，则可用 **轮询 + 中断**。
+普通场景用 **状态变量 + 轮询** 即可，若线程中存在 **阻塞方法** 或 **耗时操作**，则可用 **中断 + 轮询**。
 
 由于该状态标志必须允许多线程同时更新、读取，为保证 **可见性**，必须用 `volatile` 修饰，这也是 `volatile` 最典型的应用场景之一。
 
@@ -115,7 +115,9 @@ public List<BigInteger> getPrimesOfOneSecond() throws InterruptedException {
 1. 存在 **耗时** 方法，则终止动作需要长时间才能被影响；
 2. 存在 **阻塞** 方法，则永远无法终止；
 
-## 轮询 + 中断
+## 中断 + 轮询
+
+>与“状态变量 + 轮询”基本相同，唯一区别是用线程本身的 **中断标志** 取代 **`volatile` 状态变量**。
 
 轮询中存在耗时方法，没有特别好的解决方式，但对于阻塞方法，则有标准的解决方式，即中断。
 
