@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/10/25/2019-10-25-java-threadlocal-principle/</loc>
+    
+    <lastmod>2019-10-26T14:17:31.254Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/10/20/2019-10-20-java-jvm-5-thread-states/</loc>
     
     <lastmod>2019-10-25T00:49:25.577Z</lastmod>
@@ -975,14 +982,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/tags/index.html</loc>
+    <loc>http://songkun.me/categories/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/categories/index.html</loc>
+    <loc>http://songkun.me/tags/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
