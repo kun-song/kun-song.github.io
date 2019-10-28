@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="既然 ThreadLocal 用以实现线程本地变量，那线程终止时，需要删除这些过期数据，否则会发生内存泄漏。">
+<meta name="keywords" content="ThreadLocal">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThreadLocal 之过期删除、内存泄漏">
+<meta property="og:url" content="http://songkun.me/2019/10/27/2019-10-27-java-threadlocal-expunge-and-memory-leak/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="既然 ThreadLocal 用以实现线程本地变量，那线程终止时，需要删除这些过期数据，否则会发生内存泄漏。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-28T06:15:17.920Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ThreadLocal 之过期删除、内存泄漏">
+<meta name="twitter:description" content="既然 ThreadLocal 用以实现线程本地变量，那线程终止时，需要删除这些过期数据，否则会发生内存泄漏。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2019/10/27/2019-10-27-java-threadlocal-expunge-and-memory-leak/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ThreadLocal 之过期删除、内存泄漏 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br>书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/10/27/2019-10-27-java-threadlocal-expunge-and-memory-leak/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ThreadLocal 之过期删除、内存泄漏
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-27 09:54:09" itemprop="dateCreated datePublished" datetime="2019-10-27T09:54:09+08:00">2019-10-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-28 14:15:17" itemprop="dateModified" datetime="2019-10-28T14:15:17+08:00">2019-10-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>既然 <code>ThreadLocal</code> 用以实现线程本地变量，那线程终止时，需要删除这些过期数据，否则会发生内存泄漏。</p>
+<a id="more"></a>
+<h2 id="过期删除"><a href="#过期删除" class="headerlink" title="过期删除"></a>过期删除</h2><p>删除过期数据分为 3 种场景：</p>
+<ol>
+<li>显式删除（推荐用法）<ol>
+<li>调用 <code>ThreadLocal.remove()</code>；</li>
+</ol>
+</li>
+<li>隐式删除<ol>
+<li>删除 key：弱引用指向的 <code>ThreadLocal</code> 实例可自动回收，从 k-v 变成 <code>null</code>-v；</li>
+<li>删除 value：<code>ThreadLocalMap</code> 使用 <code>expungeStaleEntry</code> 清除 <code>null</code>-v；</li>
+</ol>
+</li>
+<li>自动删除<ol>
+<li>线程终止时会执行 <code>exit</code> 方法，其中有删除逻辑；</li>
+</ol>
+</li>
+</ol>
+<p>显式删除不会发生内存泄漏，而隐式删除有可能。</p>
+<h3 id="显式删除"><a href="#显式删除" class="headerlink" title="显式删除"></a>显式删除</h3><p>在 <strong>线程池</strong> 场景中，线程会一直运行，除非异常终止，此时推荐任务执行结束后显式删除“本地变量”：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ThreadLocal&lt;String&gt; x = <span class="keyword">new</span> ThreadLocal();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    x.set(<span class="string">"hello"</span>);</span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    localName.remove();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>原因有两个：</p>
+<ul>
+<li>若不显式删除，则下次任务执行时可能读取到上次设置的值，即 <strong>脏读</strong>；</li>
+<li>线程一直处于运行状态，若依赖隐式删除，可能发生 <strong>内存泄漏</strong>；</li>
+</ul>
+<h3 id="隐式删除"><a href="#隐式删除" class="headerlink" title="隐式删除"></a>隐式删除</h3><p>隐式删除即不显式调用 <code>remove</code>，不考虑任何删除操作，只管 <code>get/set</code>，得益于 <code>ThreadLocal</code> 的优良设计，一般也没啥问题，但极端情况下可能发生 <strong>内存泄漏</strong>。</p>
+<p>隐式删除需要分别删除 k-v 映射中的 k 和 v：</p>
+<ol>
+<li>删除 k：弱引用做 key，GC 自动回收 k；</li>
+<li>删除 v：<code>get/set</code> 底层会调用 <code>expungeStaleEntry</code> 方法删除 <code>null</code>-v 映射中的 v；</li>
+</ol>
+<h4 id="删除-k"><a href="#删除-k" class="headerlink" title="删除 k"></a>删除 k</h4><p><code>ThreadLocalMap</code> 的元素类型为 <code>Entry</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span> <span class="keyword">extends</span> <span class="title">WeakReference</span>&lt;<span class="title">ThreadLocal</span>&lt;?&gt;&gt; </span>&#123;</span><br><span class="line">    Object value;</span><br><span class="line">    Entry(ThreadLocal&lt;?&gt; k, Object v) &#123; <span class="keyword">super</span>(k); value = v; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它是一个 <strong>弱引用</strong>（<a href="http://songkun.me/2019/10/19/2019-10-19-java-jvm-4-kind-reference/">Java 四大引用类型</a>），只被弱引用指向的对象将在下次 GC 时被回收。</p>
+<p><code>Entry</code> 指向 <code>ThreadLocal</code> 实例，因此若只有 <code>Thread.threadlocals</code> 中的某个元素指向 <code>x</code>，则 <code>x</code> 只能存活到下次 GC 之前：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ThreadLocal&lt;Student&gt; x = ThreadLocal.withInitial(() -&gt; <span class="keyword">new</span> Student());</span><br></pre></td></tr></table></figure>
+<p>不过 <code>Thread.threadlocals</code> 是一个 map，里面存储的是 k-v，<code>x</code> 仅仅是其中的 key，即使 key 变成 <code>null</code>，<code>threadlocals</code> 中还是会保存该 k-v。</p>
+<h4 id="删除-v"><a href="#删除-v" class="headerlink" title="删除 v"></a>删除 v</h4><p>得益于弱引用，待清除的 k-v 映射的 key 会自动被 GC 回收，从 k-v 变成 <code>null</code>-v，<code>ThreadLocalMap</code> 很多方法会调用 <code>expungeStaleEntry</code> 清除这些 key 为 <code>null</code> 的映射，从而完成过期数据的清除。</p>
+<p>因此只要线程 t 还有未被 GC 的 <code>ThreadLocal</code> 实例，当调用该实例的 <code>get/set</code> 时，<code>t.threadLocals</code> 中未被清除的 <code>null</code>-v 映射都会被删除。</p>
+<h3 id="自动删除"><a href="#自动删除" class="headerlink" title="自动删除"></a>自动删除</h3><p><code>Thread.exit()</code> 方法会清理当前线程的所有状态字段：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">exit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (group != <span class="keyword">null</span>) &#123;</span><br><span class="line">        group.threadTerminated(<span class="keyword">this</span>);</span><br><span class="line">        group = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* Aggressively null out all reference fields: see bug 4006245 */</span></span><br><span class="line">    target = <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">/* Speed the release of some of these resources */</span></span><br><span class="line">    threadLocals = <span class="keyword">null</span>;</span><br><span class="line">    inheritableThreadLocals = <span class="keyword">null</span>;</span><br><span class="line">    inheritedAccessControlContext = <span class="keyword">null</span>;</span><br><span class="line">    blocker = <span class="keyword">null</span>;</span><br><span class="line">    uncaughtExceptionHandler = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中包括 <code>threadLocals</code> 哈希表，它变为 <code>null</code> 后，里面的 k-v 若无其他引用路径，则被 GC 回收。</p>
+<h2 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h2><h3 id="泄漏原因"><a href="#泄漏原因" class="headerlink" title="泄漏原因"></a>泄漏原因</h3><p>前面说过隐式删除在极端场景下可能发生内存泄漏，该极端场景为：</p>
+<ol>
+<li>线程 t 一直运行，不终止（线程池）；</li>
+<li><code>null</code>-v：<code>t.threadLocals</code> 中某个 k（<code>ThreadLocal</code> 实例）无其他引用，只有此处的弱引用；</li>
+<li>线程 t 无 <strong>其他</strong> 线程本地变量操作 <code>get/set</code>；</li>
+</ol>
+<p>以上 3 点任何一点不满足，都不会发生内存泄漏，例如即使在线程池场景下出现 <code>null</code>-v 映射，但若线程 t 操作过其他 <code>ThreadLocal.get/set</code>，也会顺便把该 <code>null</code>-v 删除。</p>
+<p>其实逻辑很简单：</p>
+<ol>
+<li>线程不终止 -&gt; <code>t.threadLocals</code> 不为 <code>null</code>，从而引用其保存的 k-v；</li>
+<li>弱引用 k 被回收 -&gt; k-v 变成 <code>null</code>-v；</li>
+</ol>
+<p>以上两点导致 <code>null</code>-v 中的 v 只被 <code>t.threadLocals</code> 引用，同时由于 k 为 <code>null</code>，外部又无法真正获取 v 从而使用它，也无法执行 <code>k.remove()</code> 进行删除，即发生内存泄漏。</p>
+<h3 id="如何避免"><a href="#如何避免" class="headerlink" title="如何避免"></a>如何避免</h3><p>理论上，破坏 3 点中的任何一点都可以避免内存泄漏；实际上，第 1、3 两点很难控制，消除第 2 点比较现实。</p>
+<p><code>ThreadLocal</code> 注释有一句：</p>
+<blockquote>
+<p>ThreadLocal instances are typically private <strong>static</strong> fields in classes that wish to associate state with a thread (e.g., a user ID or Transaction ID).</p>
+</blockquote>
+<p>即推荐将其声明为 <code>static</code> 字段，这样 <code>t.threadLocals</code> 中的 key 会永远有一个外部 <strong>强引用</strong>，永远不会出现 <code>null</code>-v，任何时候都可以通过 <code>ThreadLocal.remove()</code> 删除该 k-v，从而避免内存泄漏。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>推荐使用 <code>ThreadLocal.remove()</code> 显式删除；</li>
+<li>长时间运行线程 + <code>null</code>-v + 不再执行 <code>ThreadLocal.get/set</code> 会造成内存泄漏；</li>
+<li>推荐将 <code>ThreadLocal</code> 声明为 <code>static</code> 字段，避免 <code>null</code>-v 出现，以便任何是否可通过 <code>x.remove()</code> 将其删除；</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ThreadLocal/" rel="tag"># ThreadLocal</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/26/2019-10-26-java-threadlocal-hash-clash/" rel="next" title="ThreadLocal 之哈希碰撞">
+                <i class="fa fa-chevron-left"></i> ThreadLocal 之哈希碰撞
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/28/2019-10-28-java-threadlocal-why-weak-reference/" rel="prev" title="ThreadLocal 之弱引用">
+                ThreadLocal 之弱引用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">142</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">125</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#过期删除"><span class="nav-number">1.</span> <span class="nav-text">过期删除</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#显式删除"><span class="nav-number">1.1.</span> <span class="nav-text">显式删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隐式删除"><span class="nav-number">1.2.</span> <span class="nav-text">隐式删除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#删除-k"><span class="nav-number">1.2.1.</span> <span class="nav-text">删除 k</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除-v"><span class="nav-number">1.2.2.</span> <span class="nav-text">删除 v</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动删除"><span class="nav-number">1.3.</span> <span class="nav-text">自动删除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存泄漏"><span class="nav-number">2.</span> <span class="nav-text">内存泄漏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#泄漏原因"><span class="nav-number">2.1.</span> <span class="nav-text">泄漏原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何避免"><span class="nav-number">2.2.</span> <span class="nav-text">如何避免</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
