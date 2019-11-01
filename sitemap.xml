@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/10/29/2019-10-29-java-jvm-synchronized-impl/</loc>
+    
+    <lastmod>2019-11-01T15:12:05.709Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://songkun.me/2019/08/11/2019-08-11-java-why-primitives-should-not-be-used-in-synchronized/</loc>
+    
+    <lastmod>2019-10-29T01:02:28.641Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/10/28/2019-10-28-java-threadlocal-why-weak-reference/</loc>
     
     <lastmod>2019-10-28T08:18:50.848Z</lastmod>
@@ -180,13 +194,6 @@
     <loc>http://songkun.me/2018/06/15/2018-06-15-haskell-begin-cis-194/</loc>
     
     <lastmod>2019-08-17T03:38:01.172Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/08/11/2019-08-11-java-why-primitives-should-not-be-used-in-synchronized/</loc>
-    
-    <lastmod>2019-08-17T03:34:40.415Z</lastmod>
     
   </url>
   
