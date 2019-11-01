@@ -3,6 +3,7 @@ title: 为什么原始包装类和 String 不适合用作内置锁？
 date: 2019-08-11 21:33:29
 tags:
   - 锁
+  - synchronized
 categories: Java
 ---
 
