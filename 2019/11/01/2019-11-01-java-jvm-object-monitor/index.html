@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="synchronized 加锁、解锁是通过 monitorenter、monitorexit 这两条字节码指令实现的，这两个字节码需要指定一个 对象引用 作为参数，它们底层基于 Monitor 实现加锁、解锁语义。">
+<meta name="keywords" content="Object.wait,synchronized,Monitor,Object.notify,Object.notifyAll">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM 管程介绍">
+<meta property="og:url" content="http://songkun.me/2019/11/01/2019-11-01-java-jvm-object-monitor/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="synchronized 加锁、解锁是通过 monitorenter、monitorexit 这两条字节码指令实现的，这两个字节码需要指定一个 对象引用 作为参数，它们底层基于 Monitor 实现加锁、解锁语义。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://songkun.me/images/java/jvm/monitor-entry-wait-set.png">
+<meta property="og:updated_time" content="2019-11-02T08:10:59.679Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM 管程介绍">
+<meta name="twitter:description" content="synchronized 加锁、解锁是通过 monitorenter、monitorexit 这两条字节码指令实现的，这两个字节码需要指定一个 对象引用 作为参数，它们底层基于 Monitor 实现加锁、解锁语义。">
+<meta name="twitter:image" content="http://songkun.me/images/java/jvm/monitor-entry-wait-set.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2019/11/01/2019-11-01-java-jvm-object-monitor/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>JVM 管程介绍 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br>书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/11/01/2019-11-01-java-jvm-object-monitor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JVM 管程介绍
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-01 23:15:51" itemprop="dateCreated datePublished" datetime="2019-11-01T23:15:51+08:00">2019-11-01</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-11-02 16:10:59" itemprop="dateModified" datetime="2019-11-02T16:10:59+08:00">2019-11-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>synchronized</code> 加锁、解锁是通过 <code>monitorenter</code>、<code>monitorexit</code> 这两条字节码指令实现的，这两个字节码需要指定一个 <strong>对象引用</strong> 作为参数，它们底层基于 Monitor 实现加锁、解锁语义。</p>
+<a id="more"></a>
+<h2 id="名字澄清"><a href="#名字澄清" class="headerlink" title="名字澄清"></a>名字澄清</h2><p>根据 Java 语言规范：</p>
+<blockquote>
+<p>The most basic of these methods is synchronization, which is implemented using <strong>monitors</strong>. Each object in Java is associated with a monitor, which a thread can lock or unlock.</p>
+</blockquote>
+<p>即 <code>synchronized</code> 是基于 monitor 实现的，加锁、解锁操作最终都落到对 monitor 的加锁、解锁上，并且 <strong>每个对象</strong> 都关联一个 monitor，因此每个对象都可以作为 <code>monitorenter</code> 和 <code>monitorexit</code> 的参数，这两条指令使用的是参数对象关联的 monitor，而非对象本身。</p>
+<p>monitor 也叫做管程 or 监视器，是加锁、解锁的最终实现之处，在 HotSpot 虚拟机中，使用 C++ 通过 <code>ObjectMonitor</code> 对象实现 Java 中的 monitor 语义。</p>
+<p>网上也经常遇到 <strong>内置锁</strong> 的说法，内置锁和 monitor 是什么关系呢，还是看 <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html" target="_blank" rel="noopener">官方资料</a>：</p>
+<blockquote>
+<p>Synchronization is built around an internal entity known as the <strong>intrinsic lock</strong> or <strong>monitor lock</strong>. (The API specification often refers to this entity simply as a “<strong>monitor</strong>.”)<br>…<br><strong>Every object</strong> has an intrinsic lock associated with it.</p>
+</blockquote>
+<p>内置锁即 intrinsic lock，也叫 monitor lock，简称 monitor。</p>
+<p>因此以下名字实际都是同一概念：</p>
+<ul>
+<li>内置锁</li>
+<li>监视器锁</li>
+<li>监视器</li>
+<li>管程</li>
+<li>Monitor</li>
+</ul>
+<p>理解 Monitor 对于理解 Java 语言中的同步是非常重要的，它是以下语义的实现之处：</p>
+<ol>
+<li>多线程互斥访问</li>
+<li>内置的条件队列</li>
+<li>内置锁加锁、解锁的 happens-before 关系</li>
+</ol>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>根据维基百科，管程有两种理解方式：</p>
+<ul>
+<li>同步机制（synchronization construct）</li>
+<li>线程安全的类、对象 or 模块（通过 mutex 实现）</li>
+</ul>
+<h3 id="同步机制"><a href="#同步机制" class="headerlink" title="同步机制"></a>同步机制</h3><p>管程作为一种同步机制，可赋予线程以下能力：</p>
+<ol>
+<li>mutual exclusion</li>
+<li>the ability to <strong>wait</strong> (block) for a certain <strong>condition</strong> to become true</li>
+</ol>
+<p>线程进入 BLOCKED 状态等待 <strong>条件变量</strong> 后，还需要有机制能够 <strong>唤醒</strong> 它们：</p>
+<ul>
+<li>Monitors also have a mechanism for <strong>signaling</strong> other threads that their <strong>condition</strong> has been met.</li>
+</ul>
+<p>因此管程有 3 大能力：</p>
+<ol>
+<li>互斥访问</li>
+<li>线程协作：等待 + 唤醒</li>
+</ol>
+<p>线程如何实现 <strong>互斥</strong>，如何在条件变量不满足时进行 <strong>等待</strong>，如何在条件变量满足时被 <strong>唤醒</strong> 以继续运行，这些都是管程实现需要解决的问题，对于用户而言，管程就是一个提供 3 大功能的黑盒。</p>
+<blockquote>
+<p>基于等待-唤醒的线程协作最典型的例子是生产者-消费者模型：</p>
+<ul>
+<li>生产者 <strong>等待</strong> <strong>队列非满</strong> 条件，并 <strong>唤醒</strong> 等待 <strong>队列非空</strong> 条件的消费者；</li>
+<li>消费者 <strong>等待</strong> <strong>队列非空</strong> 条件，并 <strong>唤醒</strong> 等待 <strong>队列非满</strong> 条件的生产者；</li>
+</ul>
+</blockquote>
+<h3 id="线程安全的类"><a href="#线程安全的类" class="headerlink" title="线程安全的类"></a>线程安全的类</h3><p>除了将管程视为 <em>抽象</em> 的同步机制外，还可以将管程视为该机制的 <em>具体实现</em>，表现为线程安全的类 or 对象，它同样提供 3 大能力：</p>
+<ol>
+<li>对该类方法的互斥访问；</li>
+<li>等待 &amp; 唤醒</li>
+</ol>
+<h2 id="Monitor-概念模型"><a href="#Monitor-概念模型" class="headerlink" title="Monitor 概念模型"></a>Monitor 概念模型</h2><p>使用 <code>synchronized</code> 时，就是使用 Monitor，<code>synchronized</code> 是一个非常简洁的接口，让我们无需关注如何实现互斥、等待、唤醒等，JVM 封装了这些枯燥、容易出错的实现细节。</p>
+<p>对应管程的 3 大能力，JVM 中的 Monitor 提供：</p>
+<ul>
+<li>互斥访问：接口为 <code>synchronized</code></li>
+<li>线程协作：接口为 <code>Object.wait</code> 和 <code>Object.notify/notifyAll</code></li>
+</ul>
+<p>针对 Monitor 的操作有：</p>
+<ol>
+<li>获取 Monitor</li>
+<li>持有 Monitor</li>
+<li>释放 Monitor</li>
+</ol>
+<p>每个对象都与一个 monitor 关联，每个 monitor 都包含：</p>
+<ol>
+<li>entry set：排队获取 Monitor 的队列；</li>
+<li>wait set：等待 <em>特定条件</em> 为真的队列；</li>
+</ol>
+<h3 id="互斥访问：entry-set"><a href="#互斥访问：entry-set" class="headerlink" title="互斥访问：entry set"></a>互斥访问：entry set</h3><p>互斥访问借助 entry set 实现：</p>
+<ol>
+<li>线程 t 请求 Monitor 时，若该 Monitor 已经被其他线程持有，则 t 进入 entry set 等待；</li>
+<li>当持有线程释放 Monitor 后，t 需要与 entry set 中的其他等待线程 <strong>一起竞争</strong> 获取 Monitor；</li>
+<li>只有其中一个线程会成功，其余竞争失败的线程在 entry set 继续等待；</li>
+</ol>
+<h3 id="线程协作：wait-set"><a href="#线程协作：wait-set" class="headerlink" title="线程协作：wait set"></a>线程协作：wait set</h3><p>线程协作借助 wait set 实现：</p>
+<ol>
+<li>当前 <strong>持有</strong> Monitor 的线程 t 检测到某条件 c 为假，执行 <code>Object.wait()</code>，使 t 自己 <strong>立即</strong>：<ol>
+<li>自动 <strong>释放</strong> Monitor</li>
+<li>进入 wait set，挂起自己，让出 CPU</li>
+</ol>
+</li>
+<li>线程 s 获取 Monitor，do some work，使 t 依赖的条件 c 变为真后，执行 <code>Object.notify()</code>，使：<ol>
+<li>s 继续正常执行，直到正常 <strong>释放</strong> Monitor 或执行 <code>Object.wait()</code> 挂起自己</li>
+<li>s 释放 Monitor 后，wait set 中的线程 <strong>重新竞争</strong> 获取 Monitor；</li>
+</ol>
+</li>
+<li>只有其中一个线程会成功，其余竞争失败的线程在 wait set 继续等待；</li>
+</ol>
+<p>在等待-通知机制中，共享资源被 Monitor 保护，以提供互斥访问，线程 t 需要的条件会被线程 s 满足，因此 t 和 s 之间一个需要 <em>等待</em> 条件被满足，一个需要 <em>通知</em> 条件已经满足。</p>
+<p>s 发出的 <code>notify</code> 通知就 <strong>一定</strong> 能保证条件已经满足了吗？</p>
+<p>当然不是，原因有两点：</p>
+<ol>
+<li>s 执行 <code>notify</code> 后，并不会立即停止执行，并释放 Monitor，而是会继续运行，期间 s 可能继续修改共享状态，从而导致 t 等待的条件不再为真；</li>
+<li>s 释放 Monitor 后，wait set 中的线程会一起竞争获取 Monitor，竞争成功的线程 x 可能会修改 t 等待的条件，使其不为真；</li>
+</ol>
+<p>因此 s 发出的 <code>notify</code> 仅仅是一种 <strong>条件可能满足</strong> 的提示，t 线程被唤醒后，需要循环检查条件是否为真，若不为真，需要继续 <code>wait</code> 等待。</p>
+<h3 id="entry-set、wait-set-是否有序？"><a href="#entry-set、wait-set-是否有序？" class="headerlink" title="entry set、wait set 是否有序？"></a>entry set、wait set 是否有序？</h3><p>它们可能实现为 FIFO 或 FILO 的队列，也可能实现为无序或有序的 set，这属于 JVM 实现细节，各个厂商可以自由选择。</p>
+<h3 id="状态转换图"><a href="#状态转换图" class="headerlink" title="状态转换图"></a>状态转换图</h3><p><img src="/images/java/jvm/monitor-entry-wait-set.png" alt="Monitor 图示" style="width: 450px;"></p>
+<p>上图将 Monitor 相关线程分为 3 类：</p>
+<ol>
+<li>entry set：<strong>从未</strong> 获取过 Monitor 的线程，排队竞争 Monitor；</li>
+<li>owner：同一时刻，只有一个线程持有 Monitor；</li>
+<li>wait set：<strong>曾经持有</strong> Monitor 的线程，通过 <code>Object.wait()</code> 主动进入 wait set；</li>
+</ol>
+<h4 id="首次进入"><a href="#首次进入" class="headerlink" title="首次进入"></a>首次进入</h4><p>要获取 Monitor，通道只有一条，即 entry set，若线程 t 进入 entry set 后发现：</p>
+<ol>
+<li>Monitor 当前未被持有；</li>
+<li>entry set 只有自己一个线程在等待；</li>
+</ol>
+<p>则 t 可立即获取 Monitor。</p>
+<h4 id="释放-Monitor"><a href="#释放-Monitor" class="headerlink" title="释放 Monitor"></a>释放 Monitor</h4><p>若 Monitor 当前被线程 t 持有，根据 t 释放 Monitor 前是否执行 <code>notify</code>：</p>
+<ol>
+<li>执行过 <code>notify</code>，则 entry set 和 wait set 中的线程一起竞争 Monitor；</li>
+<li>未执行 <code>notify</code>，则只有 entry set 中的线程一起竞争 Monitor；</li>
+</ol>
+<h4 id="超时版-wait-t"><a href="#超时版-wait-t" class="headerlink" title="超时版 wait(t)"></a>超时版 <code>wait(t)</code></h4><p>若线程 t 使用带超时参数的 <code>wait(t)</code>，则超过 t 时间后，即使没有线程执行 <code>notify</code>，t 也会自动从 wait set 中被环境，从而竞争 Monitor，这里超时相当于隐式的 <code>notify</code>。</p>
+<h4 id="notify-vs-notifyAll"><a href="#notify-vs-notifyAll" class="headerlink" title="notify vs notifyAll"></a><code>notify</code> vs <code>notifyAll</code></h4><p><code>notify</code> 只会从 wait set <strong>随机</strong> 选取一个线程唤醒；而 <code>notifyAll</code> 会唤醒 wait set 中的所有线程，不过最多只有一个能成功获取 Monitor，其余会再次进入 wait set。</p>
+<h2 id="HotSpot-实现"><a href="#HotSpot-实现" class="headerlink" title="HotSpot 实现"></a>HotSpot 实现</h2><p>HotSpot 虚拟机通过 <a href="https://hg.openjdk.java.net/jdk/jdk/file/896e80158d35/src/hotspot/share/runtime/objectMonitor.hpp" target="_blank" rel="noopener">ObjectMonitor</a> 实现 monitor，与前面的概念模型相似，<code>ObjectMonitor</code> 类包含如下关键字段：</p>
+<ol>
+<li>_EntryList：对应 entry set</li>
+<li>_WaitSet：对应 wait set</li>
+<li>_owner：指向持有 Monitor 线程的指针</li>
+<li>_recursions：重入次数</li>
+<li>_count：近似等于 |_EntryList| + |_WaitSet|</li>
+</ol>
+<p>除 entry set 和 wait set 外，为支持内置锁的 <strong>重入语义</strong>，添加了 <code>_recursions</code> 字段，用于记录线程重入次数：</p>
+<ol>
+<li>每次获取同一 Monitor，<code>_recursions</code> 加 1；</li>
+<li>每次释放同一 Monitor，<code>_recursions</code> 减 1；</li>
+</ol>
+<p>当 <code>_recursions</code> 为 0 时，说明可以释放 Monitor 了，否则是重入场景，继续持有 Monitor。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>内置锁、监视器锁、监视器、管程、Monitor 是同一回事；</li>
+<li>Monitor 功能：<ul>
+<li>互斥访问：通过 entry set 实现</li>
+<li>线程协作：等待 + 唤醒，通过 wait set 实现</li>
+</ul>
+</li>
+<li>HotSpot 通过 <code>ObjectMonitor</code> 类实现 Monitor 机制，支持重入；</li>
+</ul>
+<hr>
+<p>参考：</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/specs/jls/se10/html/jls-17.html#jls-17.1" target="_blank" rel="noopener">Java Language Specification 17.1. Synchronization</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Monitor_(synchronization" target="_blank" rel="noopener">维基百科 Monitor (synchronization)</a>)</li>
+<li><a href="https://www.artima.com/insidejvm/ed2/threadsynch.html" target="_blank" rel="noopener">Thread Synchronization（好）</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Object-wait/" rel="tag"># Object.wait</a>
+          
+            <a href="/tags/synchronized/" rel="tag"># synchronized</a>
+          
+            <a href="/tags/Monitor/" rel="tag"># Monitor</a>
+          
+            <a href="/tags/Object-notify/" rel="tag"># Object.notify</a>
+          
+            <a href="/tags/Object-notifyAll/" rel="tag"># Object.notifyAll</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/29/2019-10-29-java-jvm-synchronized-impl/" rel="next" title="synchronized 原理（一）：重量级锁">
+                <i class="fa fa-chevron-left"></i> synchronized 原理（一）：重量级锁
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">144</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">129</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#名字澄清"><span class="nav-number">1.</span> <span class="nav-text">名字澄清</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步机制"><span class="nav-number">2.1.</span> <span class="nav-text">同步机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程安全的类"><span class="nav-number">2.2.</span> <span class="nav-text">线程安全的类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Monitor-概念模型"><span class="nav-number">3.</span> <span class="nav-text">Monitor 概念模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#互斥访问：entry-set"><span class="nav-number">3.1.</span> <span class="nav-text">互斥访问：entry set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程协作：wait-set"><span class="nav-number">3.2.</span> <span class="nav-text">线程协作：wait set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#entry-set、wait-set-是否有序？"><span class="nav-number">3.3.</span> <span class="nav-text">entry set、wait set 是否有序？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态转换图"><span class="nav-number">3.4.</span> <span class="nav-text">状态转换图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#首次进入"><span class="nav-number">3.4.1.</span> <span class="nav-text">首次进入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#释放-Monitor"><span class="nav-number">3.4.2.</span> <span class="nav-text">释放 Monitor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#超时版-wait-t"><span class="nav-number">3.4.3.</span> <span class="nav-text">超时版 wait(t)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#notify-vs-notifyAll"><span class="nav-number">3.4.4.</span> <span class="nav-text">notify vs notifyAll</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HotSpot-实现"><span class="nav-number">4.</span> <span class="nav-text">HotSpot 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

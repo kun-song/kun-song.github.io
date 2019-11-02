@@ -330,6 +330,182 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/18/2018-05-18-scala-case-class/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/18/2018-05-18-scala-case-class/" itemprop="url">
+                  Scala | case 类
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-18 00:17:13" itemprop="dateCreated datePublished" datetime="2018-05-18T00:17:13+08:00">2018-05-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:19:02" itemprop="dateModified" datetime="2019-07-30T22:19:02+08:00">2019-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>case 类适合对 <strong>不可变数据</strong>（immutable data）建模，主要用于模式匹配。</p>
+<p>例如 JSON：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">JSON</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">JSeq</span>(<span class="params">elements: <span class="type">List</span>[<span class="type">JSON</span>]</span>)           <span class="keyword">extends</span> <span class="title">JSON</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">JObject</span>(<span class="params">mappings: <span class="type">Map</span>[<span class="type">String</span>, <span class="type">JSON</span>]</span>) <span class="keyword">extends</span> <span class="title">JSON</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">JNumber</span>(<span class="params">value: <span class="type">Double</span></span>)               <span class="keyword">extends</span> <span class="title">JSON</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">JString</span>(<span class="params">value: <span class="type">String</span></span>)               <span class="keyword">extends</span> <span class="title">JSON</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">JBool</span>(<span class="params">value: <span class="type">Double</span></span>)                 <span class="keyword">extends</span> <span class="title">JSON</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">object</span> <span class="title">JNull</span>                               <span class="keyword">extends</span> <span class="title">JSON</span></span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/18/2018-05-18-scala-case-class/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1913,182 +2089,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-variance/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/15/scala-variance/" itemprop="url">
-                  Scala | 型变
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-15 00:39:34" itemprop="dateCreated datePublished" datetime="2018-05-15T00:39:34+08:00">2018-05-15</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-30 22:17:02" itemprop="dateModified" datetime="2019-07-30T22:17:02+08:00">2019-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。</p>
-<p>Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 <strong>参数多态</strong> 遇上 <strong>类继承</strong> 时，出现了一个有趣的问题：</p>
-<p>若类型 <code>S</code> 是 <code>T</code> 的子类，那么 <code>List[S]</code> 与 <code>List[T]</code> 是什么关系呢？（<code>List</code> 泛指泛型容器）</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/15/scala-variance/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2136,7 +2136,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">143</span>
+                    <span class="site-state-item-count">144</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2442,7 +2442,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">126</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">129</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
