@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Java 1.6 之前，synchronized 等价于重量级锁，为提升 synchronized 的性能，1.6 新增了偏向锁、轻量级锁，因此目前 synchronized 对应 3 种锁：">
+<meta name="keywords" content="synchronized">
+<meta property="og:type" content="article">
+<meta property="og:title" content="synchronized 原理（三）：偏向锁、轻量级锁">
+<meta property="og:url" content="http://songkun.me/2019/11/02/2019-11-02-java-jvm-synchronized-impl-3/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="Java 1.6 之前，synchronized 等价于重量级锁，为提升 synchronized 的性能，1.6 新增了偏向锁、轻量级锁，因此目前 synchronized 对应 3 种锁：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://songkun.me/images/java/jvm/lightweight-locking.png">
+<meta property="og:image" content="http://songkun.me/images/java/jvm/lock-state-change.png">
+<meta property="og:updated_time" content="2019-11-02T15:22:21.516Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="synchronized 原理（三）：偏向锁、轻量级锁">
+<meta name="twitter:description" content="Java 1.6 之前，synchronized 等价于重量级锁，为提升 synchronized 的性能，1.6 新增了偏向锁、轻量级锁，因此目前 synchronized 对应 3 种锁：">
+<meta name="twitter:image" content="http://songkun.me/images/java/jvm/lightweight-locking.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2019/11/02/2019-11-02-java-jvm-synchronized-impl-3/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>synchronized 原理（三）：偏向锁、轻量级锁 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br>书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/11/02/2019-11-02-java-jvm-synchronized-impl-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">synchronized 原理（三）：偏向锁、轻量级锁
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-02 17:14:25 / 修改时间：23:22:21" itemprop="dateCreated datePublished" datetime="2019-11-02T17:14:25+08:00">2019-11-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Java 1.6 之前，<code>synchronized</code> 等价于重量级锁，为提升 <code>synchronized</code> 的性能，1.6 新增了偏向锁、轻量级锁，因此目前 <code>synchronized</code> 对应 3 种锁：</p>
+<a id="more"></a>
+<ol>
+<li>偏向锁</li>
+<li>轻量级锁</li>
+<li>重量级锁</li>
+</ol>
+<p>重量级锁与之前相同，基于 Monitor 机制实现；偏向锁、轻量级锁 <strong>不涉及</strong> Monitor 和操作系统，不会导致线程在 <strong>内核态</strong> 和 <strong>用户态</strong> 的切换，通过 Mark Word 在 JVM 维度实现。</p>
+<blockquote>
+<p>本文将同步代码块、同步方法统称为“同步块”；将 <code>synchronized</code> 用作内置锁的对象称为“锁对象”，包含 <code>this</code>、<code>this.Class</code>、任意对象 3 种情况。</p>
+</blockquote>
+<h2 id="优化依据-amp-适用场景"><a href="#优化依据-amp-适用场景" class="headerlink" title="优化依据 &amp; 适用场景"></a>优化依据 &amp; 适用场景</h2><p>偏向锁、轻量级锁优化同步性能的依据相同，都是基于经验：</p>
+<blockquote>
+<p>绝大部分锁，在整个同步期间都 <strong>不存在竞争</strong>，即 <strong>只有一个</strong> 线程会进入同步块。</p>
+</blockquote>
+<p>它们优化的手段不同：</p>
+<ul>
+<li>偏向锁：既然无竞争，消除整个同步；</li>
+<li>轻量级锁：既然无竞争，用 CAS 替代互斥量；</li>
+</ul>
+<p>偏向锁更加激进，它消除了整个同步，同步块就像没有用 <code>synchronized</code> 修饰一样。</p>
+<p>实际上，二者适用的场景也不同：</p>
+<ul>
+<li>偏向锁：锁在整个执行期间，仅被同一个线程持有；</li>
+<li>轻量级锁：锁在整个执行期间，会被多个线程持有，但它们是在 <strong>不同时间段</strong> 分别请求锁，不存在竞争；</li>
+</ul>
+<h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><p>若 JVM 开启了偏向锁，当锁对象被线程 t 第一次获取时，JVM 将：</p>
+<ol>
+<li>将锁对象的锁标志位设为 01，即偏向模式；</li>
+<li>通过 CAS 操作将线程 t 的 <strong>线程 ID</strong> 更新到锁对象的 Mark Word 中<ol>
+<li>更新成功，则线程 t 再次进入被该锁对象保护的同步块，JVM 不执行任何同步操作，如加锁、解锁等；</li>
+</ol>
+</li>
+</ol>
+<p>若有其他线程尝试获取该锁对象，则偏向模式结束，撤销偏向，并根据锁对象的当前锁定状态，分别：</p>
+<ul>
+<li>未偏向锁定：撤销偏向后，进入未锁定状态，锁标志位为 01；</li>
+<li>偏向锁定：撤销偏向后，进入轻量级锁定，锁标志位为 00；</li>
+</ul>
+<h2 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h2><p>既然不存在竞争，轻量级锁用 <strong>CAS 操作</strong> 替代操作系统 <strong>互斥量</strong> 可以避免内核态、用户态切换，效率更高。</p>
+<p>若存在竞争，甚至存在剧烈竞争，轻量级锁会膨胀为重量级锁。</p>
+<h3 id="加锁"><a href="#加锁" class="headerlink" title="加锁"></a>加锁</h3><p><img src="/images/java/jvm/lightweight-locking.png" alt="轻量级锁加锁" style="width: 700px;"></p>
+<p>线程 t 执行到同步块时，若锁对象的 <strong>锁标志位</strong> 为 01，即处于 <strong>未锁定</strong> 状态，则 JVM 加锁过程为：</p>
+<ol>
+<li>在线程 t 的 <strong>栈帧</strong> 中创建一个名为 <strong>锁记录</strong>（Lock Record）的空间，用于存储锁对象当前 Mark Word 的拷贝；</li>
+<li>使用 CAS 操作尝试将锁对象的 Mark Word 修改为指向栈帧中 Lock Record 的指针<ol>
+<li>修改成功，则：<ol>
+<li>锁对象的锁标志位变为 00，表示处于轻量级锁定状态；</li>
+<li>线程 t 拥有该锁；</li>
+</ol>
+</li>
+<li>修改失败，则检查锁对象的 Mark Word 是否指向线程 t 的栈帧：<ol>
+<li>若指向，说明 t 已经成功获取锁，直接进入同步快执行；</li>
+<li>不指向，说明该锁对象已经被其他线程抢占，由于有 <strong>两个以上</strong> 线程竞争该锁，所以：<ol>
+<li>轻量级锁 <strong>膨胀</strong> 为重量级锁，锁标志位变为 10；</li>
+<li>锁对象 Mark Word 存储指向重量级锁，即 Monitor 的指针；</li>
+<li>线程 t 进入阻塞状态；</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>注意，通过 CAS 修改 Mark Word 时，失败原因只有两种可能：</p>
+<ul>
+<li>该线程重复获取轻量级锁：删除刚刚在栈帧中重复创建的 Lock Record</li>
+<li>其他线程已经成功获取锁：轻量级锁膨胀为重量级锁</li>
+</ul>
+<h3 id="解锁"><a href="#解锁" class="headerlink" title="解锁"></a>解锁</h3><p>若 t 离开同步块时，锁对象依旧处于轻量级锁定状态，则 JVM 解锁过程为：</p>
+<ul>
+<li>若锁对象的 Mark Word 仍然指向线程 t 栈帧中的 Lock Record，则借助 CAS 操作将锁对象的 Mark Word 替换为栈帧中复制的 Lock Record：<ul>
+<li>替换成功，则解锁成功，线程 t 离开同步块；</li>
+<li>替换失败，说明有其他线程竞争过该锁，锁已经 <strong>膨胀</strong> 为重量级锁，需：<ul>
+<li>释放 Monitor；</li>
+<li>唤醒 Monitor entry set 中被挂起的线程；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="锁状态转换"><a href="#锁状态转换" class="headerlink" title="锁状态转换"></a>锁状态转换</h2><p><img src="/images/java/jvm/lock-state-change.png" alt="偏向锁、轻量级锁、重量级锁转换图" style="width: 700px;"></p>
+<p>根据是否开启偏向锁，<code>synchronized</code> 锁膨胀顺序如下，锁膨胀以后无法“瘦”回来：</p>
+<ul>
+<li>偏向锁 -&gt; 轻量级锁 -&gt; 重量级锁</li>
+<li>轻量级锁 -&gt; 重量级锁</li>
+</ul>
+<p>锁转换的时机：</p>
+<ul>
+<li>偏向锁定时，若有其他线程尝试获取锁，即使原偏向线程 <strong>目前并未持有锁</strong>，偏向也会结束；</li>
+<li>有两个线程 <strong>同时</strong> 竞争轻量级锁时，膨胀为重量级锁；</li>
+</ul>
+<p>结合偏向锁、轻量级锁的设计目标场景，这两个时机很容易理解：</p>
+<ul>
+<li>偏向锁假设整个运行期间 <strong>只有一个</strong> 线程会获取锁，当出现第二个线程时，打破了改假设，自然偏向结束；</li>
+<li>轻量级锁假设多个线程 <strong>分时间段</strong> 获取锁，当两个线程 <strong>同时</strong> 竞争锁时，打破了改假设，自然需要膨胀；</li>
+</ul>
+<p>不同锁状态下，Mark Word 存储的数据不同：</p>
+<ul>
+<li>未锁定：哈希码、GC 分代年龄</li>
+<li>偏向锁：线程 ID + epoch</li>
+<li>轻量级锁：指向栈帧 Lock Record 的指针</li>
+<li>重量级锁：指向 Monitor 的指针</li>
+</ul>
+<hr>
+<p>参考：</p>
+<ul>
+<li><a href="https://time.geekbang.org/column/article/13530" target="_blank" rel="noopener">极客时间：14 | Java虚拟机是怎么实现synchronized的？</a></li>
+<li><a href="https://www.artima.com/insidejvm/ed2/threadsynch.html" target="_blank" rel="noopener">Thread Synchronization（好）</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/synchronized/" rel="tag"># synchronized</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/02/2019-11-02-java-jvm-synchronized-impl-2/" rel="next" title="synchronized 原理（二）：再谈重量级锁">
+                <i class="fa fa-chevron-left"></i> synchronized 原理（二）：再谈重量级锁
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">146</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">129</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#优化依据-amp-适用场景"><span class="nav-number">1.</span> <span class="nav-text">优化依据 &amp; 适用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#偏向锁"><span class="nav-number">2.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#轻量级锁"><span class="nav-number">3.</span> <span class="nav-text">轻量级锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加锁"><span class="nav-number">3.1.</span> <span class="nav-text">加锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解锁"><span class="nav-number">3.2.</span> <span class="nav-text">解锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁状态转换"><span class="nav-number">4.</span> <span class="nav-text">锁状态转换</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
