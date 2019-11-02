@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/11/02/2019-11-02-java-jvm-synchronized-impl-2/</loc>
+    
+    <lastmod>2019-11-02T09:10:49.075Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/11/01/2019-11-01-java-jvm-object-monitor/</loc>
     
     <lastmod>2019-11-02T08:10:59.679Z</lastmod>
@@ -1017,14 +1024,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/categories/index.html</loc>
+    <loc>http://songkun.me/tags/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/tags/index.html</loc>
+    <loc>http://songkun.me/categories/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     

@@ -330,6 +330,174 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/11/02/2019-11-02-java-jvm-synchronized-impl-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/02/2019-11-02-java-jvm-synchronized-impl-2/" itemprop="url">
+                  synchronized 原理（二）：再谈重量级锁
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-02 16:15:05 / 修改时间：17:10:49" itemprop="dateCreated datePublished" datetime="2019-11-02T16:15:05+08:00">2019-11-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>关于重量级锁的实现原理，前面有 3 篇相关文章：</p>
+<ul>
+<li><a href="http://songkun.me/2019/10/29/2019-10-29-java-jvm-synchronized-impl/">synchronized 原理（一）：重量级锁</a>：从 Javac 编译器、字节码和 JVM 执行引擎等方面介绍了重量级锁的实现原理；</li>
+<li><a href="http://songkun.me/2019/11/01/2019-11-01-java-jvm-object-monitor/">JVM 管程介绍</a>：介绍了重量级锁底层依赖的 Monitor 机制；</li>
+<li><a href="http://songkun.me/2019/10/13/2019-10-13-java-jvm-object-meomory-layout/">对象的内存布局</a>：介绍对象头中 Mark Word 部分的内容；</li>
+</ul>
+<p>本文介绍重量级锁如何与 Monitor 关联起来。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/11/02/2019-11-02-java-jvm-synchronized-impl-2/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/11/01/2019-11-01-java-jvm-object-monitor/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1886,168 +2054,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/10/19/2019-10-19-java-jvm-4-kind-reference/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/19/2019-10-19-java-jvm-4-kind-reference/" itemprop="url">
-                  Java 四大引用类型
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-10-19 10:19:21 / 修改时间：10:57:01" itemprop="dateCreated datePublished" datetime="2019-10-19T10:19:21+08:00">2019-10-19</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>使用可达性分析算法判断对象是否存活时，涉及到“引用”的概念，实际上现代 Java 有 4 种引用类型，不同引用类型对垃圾回收的影响不同，有时即使存在到 GC root 的 <strong>引用链</strong>，但由于引用类型的原因，该对象也可能被垃圾回收。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/10/19/2019-10-19-java-jvm-4-kind-reference/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2095,7 +2101,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">144</span>
+                    <span class="site-state-item-count">145</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2148,8 +2154,6 @@
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
-                    
-                      
                     
                       
                     
