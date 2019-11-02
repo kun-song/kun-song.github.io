@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/11/02/2019-11-02-java-jvm-synchronized-impl-4/</loc>
+    
+    <lastmod>2019-11-02T16:49:16.746Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/11/02/2019-11-02-java-jvm-synchronized-impl-3/</loc>
     
     <lastmod>2019-11-02T15:22:21.516Z</lastmod>
