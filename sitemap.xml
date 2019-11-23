@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/11/23/2019-11-23-java-jvm-class-load-when/</loc>
+    
+    <lastmod>2019-11-23T08:37:09.182Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/11/03/2019-11-03-java-jvm-class-load-intro/</loc>
     
     <lastmod>2019-11-23T07:44:35.500Z</lastmod>
