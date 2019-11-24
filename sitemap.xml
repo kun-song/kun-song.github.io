@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-what-each-step-does/</loc>
+    
+    <lastmod>2019-11-24T03:48:12.243Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/11/23/2019-11-23-java-jvm-class-load-singleton/</loc>
     
     <lastmod>2019-11-24T02:38:28.970Z</lastmod>
