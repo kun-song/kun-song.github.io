@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-7-violation-spi/</loc>
+    
+    <lastmod>2019-11-24T13:05:10.594Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-6-parents-classloader/</loc>
     
     <lastmod>2019-11-24T08:42:30.685Z</lastmod>
