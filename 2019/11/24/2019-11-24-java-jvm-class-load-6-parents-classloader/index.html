@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="HotSpot 虚拟机默认提供 3 个类加载器：  启动类加载器（Bootstrap ClassLoader）：HotSpot 内置，属于虚拟机的一部分，C++ 实现； 扩展类加载器（Extension ClassLoader）：JDK 内置，Java 实现； 应用类加载器（Application ClassLoader）：JDK 内置，Java 实现；">
+<meta name="keywords" content="类加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类加载（六）：双亲委派模型">
+<meta property="og:url" content="http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-6-parents-classloader/index.html">
+<meta property="og:site_name" content="随便写写">
+<meta property="og:description" content="HotSpot 虚拟机默认提供 3 个类加载器：  启动类加载器（Bootstrap ClassLoader）：HotSpot 内置，属于虚拟机的一部分，C++ 实现； 扩展类加载器（Extension ClassLoader）：JDK 内置，Java 实现； 应用类加载器（Application ClassLoader）：JDK 内置，Java 实现；">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-24T08:42:30.685Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="类加载（六）：双亲委派模型">
+<meta name="twitter:description" content="HotSpot 虚拟机默认提供 3 个类加载器：  启动类加载器（Bootstrap ClassLoader）：HotSpot 内置，属于虚拟机的一部分，C++ 实现； 扩展类加载器（Extension ClassLoader）：JDK 内置，Java 实现； 应用类加载器（Application ClassLoader）：JDK 内置，Java 实现；">
+
+
+
+
+
+
+  <link rel="canonical" href="http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-6-parents-classloader/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>类加载（六）：双亲委派模型 | 随便写写</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?846ea2c0fbfe48d1fc36a417a790a68c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/satansk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Follow me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随便写写</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-books">
+    <a href="/books" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-book"></i> <br>书单</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-6-parents-classloader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">类加载（六）：双亲委派模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-24 14:15:42 / 修改时间：16:42:30" itemprop="dateCreated datePublished" datetime="2019-11-24T14:15:42+08:00">2019-11-24</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>HotSpot 虚拟机默认提供 3 个类加载器：</p>
+<ul>
+<li>启动类加载器（Bootstrap ClassLoader）：HotSpot 内置，属于虚拟机的一部分，C++ 实现；</li>
+<li>扩展类加载器（Extension ClassLoader）：JDK 内置，Java 实现；</li>
+<li>应用类加载器（Application ClassLoader）：JDK 内置，Java 实现；</li>
+</ul>
+<a id="more"></a>
+<p>除启动类加载器外，其他所有类加载器（包括用户自定义的类加载器）都是 <code>java.lang.ClassLoader</code> 的子类，都由 Java 实现。</p>
+<blockquote>
+<p>应用类加载器是 <code>ClassLoader.getSystemClassLoader()</code> 方法的返回值，所以又被称为 <strong>系统类加载器</strong>。</p>
+</blockquote>
+<h2 id="默认类加载器"><a href="#默认类加载器" class="headerlink" title="默认类加载器"></a>默认类加载器</h2><p><code>Class.getClassLoader()</code> 方法可获取加载目标类的类加载器。 </p>
+<h3 id="启动类加载器"><a href="#启动类加载器" class="headerlink" title="启动类加载器"></a>启动类加载器</h3><p>所有 Java 类都由类加载器加载，类加载器本身也是 Java 类，所以需要一个“独特”的类加载器迈出第一步，即启动类加载器。</p>
+<p>它负责加载 JDK 核心类库，即以下路径中的类：</p>
+<ul>
+<li><code>$JAVA_HOME/jre/lib</code>（主要是 <code>rt.jar</code>）</li>
+<li><code>-Xbootclasspath</code> 参数指定的路径</li>
+</ul>
+<blockquote>
+<p>仅加载目标路径中，可被识别的类文件，若文件无法被 HotSpot 识别，直接忽略。</p>
+</blockquote>
+<p>集合类包含在 <code>rt.jar</code> 文件中，因此 <code>ArrayList</code> 由启动类加载器加载：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(ArrayList.class.getClassLoader());</span><br><span class="line"><span class="keyword">null</span>  <span class="comment">// 输出</span></span><br></pre></td></tr></table></figure>
+<p>可见 <code>getClassLoader</code> 返回 <code>null</code> 即表示该类为启动类加载器加载。</p>
+<blockquote>
+<p>启动类加载器属于虚拟机 <strong>实现</strong> 的一部分，不属于 JDK 类库，因此不同 JVM 实现中的启动类加载器并不相同。</p>
+</blockquote>
+<h3 id="扩展类加载器"><a href="#扩展类加载器" class="headerlink" title="扩展类加载器"></a>扩展类加载器</h3><p>加载 Java 核心类库的扩展，即以下路径中的类：</p>
+<ul>
+<li><code>$JAVA_HOME/lib/ext</code></li>
+<li><code>java.ext.dirs</code> 系统变量指定的路径</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Logging.class.getClassLoader());</span><br><span class="line">sun.misc.Launcher$ExtClassLoader@<span class="number">2</span>c7b84de  <span class="comment">// 输出</span></span><br></pre></td></tr></table></figure>
+<h3 id="系统类加载器"><a href="#系统类加载器" class="headerlink" title="系统类加载器"></a>系统类加载器</h3><p>加载应用自己定义的类，即：</p>
+<ul>
+<li><code>classpath</code> 环境变量指定的路径</li>
+<li><code>-classpath</code>/<code>-cp</code> 参数指定的路径</li>
+<li><code>java.class.path</code> 系统变量指定的路径</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Logging.class.getClassLoader());</span><br><span class="line">sun.misc.Launcher$AppClassLoader@<span class="number">18</span>b4aac2  <span class="comment">// 输出</span></span><br></pre></td></tr></table></figure>
+<h2 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h2><h3 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h3><p>类加载器之间具备 <strong>层次关系</strong>，除启动类加载器外，其余每个类加载器都有一个 <strong>父类加载器</strong>，这种父子关系通过 <strong>组合</strong> 而非 <strong>继承</strong> 实现。</p>
+<p>双亲委派模型下，类的加载过程如下：</p>
+<ul>
+<li><strong>向上</strong> 委托加载请求：类加载器接收到类加载请求后，不会自己尝试加载，而是将加载请求向上委托给自己的 <strong>父类加载器</strong>，最终 <strong>所有</strong> 加载请求都会到达启动类加载器；</li>
+<li><strong>向下</strong> 反馈加载结果：父类加载器在自己的 <strong>搜索范围</strong> 内搜索目标类：<ul>
+<li>发现：加载该类，并返回给子类加载器；</li>
+<li>未发现：向子类加载器反馈自己无法加载该类；</li>
+</ul>
+</li>
+</ul>
+<p>只有当父类加载器反馈自己 <strong>无法加载</strong> 时，子类加载器才会尝试自己加载，若子类加载器也无法加载，则抛出异常。</p>
+<h3 id="价值"><a href="#价值" class="headerlink" title="价值"></a>价值</h3><p>JVM 中类的唯一性由两点决定：</p>
+<ul>
+<li>类本身</li>
+<li>该类的类加载器</li>
+</ul>
+<p>因此若无双亲委派模型，Java <strong>核心类库</strong> 可能被不同类加载器加载，它们会被认为是不同的类，因此不同应用中 <code>ArrayList</code> 可能被认为是完全不同的多个类，造成很大混乱。</p>
+<p>通过双亲委派模型，Java 类之间形成了一种 <strong>层次关系</strong>，类似 <code>ArrayList</code> 的核心类无论最初被什么加载器加载，<strong>最终</strong> 都会被启动类加载器加载。</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>自定义一个 <strong>遵守双亲委派模型</strong> 的类加载器很简单，只需：</p>
+<ol>
+<li>继承 <code>ClassLoader</code> 抽象类；</li>
+<li>实现 <code>findClass(String name)</code>； </li>
+</ol>
+<p><code>findClass</code> 注释如下：</p>
+<blockquote>
+<p>This method should be overridden by class loader implementations that follow the <strong>delegation model</strong> for loading classes, and will be invoked by <code>loadClass</code> method after checking the parent class loader for the requested class.  The default implementation throws a <code>ClassNotFoundException</code>.</p>
+</blockquote>
+<p><code>ClassLoader</code> 内置了 <strong>双亲委派的实现逻辑</strong>，该逻辑在 <code>loadClass</code> 方法中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// First, check if the class has already been loaded</span></span><br><span class="line">Class&lt;?&gt; c = findLoadedClass(name);</span><br><span class="line"><span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 向上委托加载请求，让父类加载器 or 启动类加载器加载</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">            c = parent.loadClass(name, <span class="keyword">false</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            c = findBootstrapClassOrNull(name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        <span class="comment">// ClassNotFoundException thrown if class not found</span></span><br><span class="line">        <span class="comment">// from the non-null parent class loader</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 父类加载器无法加载，则使用当前加载器的 findClass 加载</span></span><br><span class="line">    <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">        c = findClass(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>parent</code> 字段代表的类加载器，前面说过启动类加载器是 C++ 实现，JDK 中用 <code>null</code> 表示，因此若 <code>parent</code> 为 <code>null</code>，则表示当前类加载器的父类加载器就是启动类加载器。</p>
+<h3 id="违反"><a href="#违反" class="headerlink" title="违反"></a>违反</h3><p>双亲委派模型在 Java 1.2 引入，是官方推荐的类加载实现方式，并非一种强制约束，有充足理由时，也可以违反：</p>
+<ul>
+<li>基础类调用用户代码：SPI 机制</li>
+<li>动态性：OSGI</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/类加载/" rel="tag"># 类加载</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/24/2019-11-24-java-jvm-class-load-class-equality/" rel="next" title="类加载（五）：类加载器与类的唯一性">
+                <i class="fa fa-chevron-left"></i> 类加载（五）：类加载器与类的唯一性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Song Kun</p>
+              <p class="site-description motion-element" itemprop="description">Java for living, Scala for fun!</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">154</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">130</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/satansk" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:songkun.fp@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#默认类加载器"><span class="nav-number">1.</span> <span class="nav-text">默认类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动类加载器"><span class="nav-number">1.1.</span> <span class="nav-text">启动类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展类加载器"><span class="nav-number">1.2.</span> <span class="nav-text">扩展类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统类加载器"><span class="nav-number">1.3.</span> <span class="nav-text">系统类加载器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">2.</span> <span class="nav-text">双亲委派模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内容"><span class="nav-number">2.1.</span> <span class="nav-text">内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#价值"><span class="nav-number">2.2.</span> <span class="nav-text">价值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">2.3.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#违反"><span class="nav-number">2.4.</span> <span class="nav-text">违反</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Song Kun</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
