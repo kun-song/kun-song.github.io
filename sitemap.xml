@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/11/23/2019-11-23-java-jvm-class-load-singleton/</loc>
+    
+    <lastmod>2019-11-24T02:38:28.970Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/11/23/2019-11-23-java-jvm-class-load-when/</loc>
     
-    <lastmod>2019-11-23T08:37:09.182Z</lastmod>
+    <lastmod>2019-11-23T09:06:55.481Z</lastmod>
     
   </url>
   
