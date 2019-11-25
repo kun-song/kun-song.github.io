@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2019/11/25/2019-11-25-java-jvm-class-load-forName-vs-loadClass/</loc>
+    
+    <lastmod>2019-11-25T16:12:12.384Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-7-violation-spi/</loc>
     
-    <lastmod>2019-11-24T13:05:10.594Z</lastmod>
+    <lastmod>2019-11-25T15:55:26.246Z</lastmod>
     
   </url>
   
