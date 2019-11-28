@@ -3,6 +3,7 @@ title: 类加载（七）：SPI 与线程上下文类加载器
 date: 2019-11-24 16:53:10
 tags:
   - 类加载
+  - SPI
 categories: JVM
 ---
 
