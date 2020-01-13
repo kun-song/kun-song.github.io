@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/2020/01/02/2020-01-01-summary-of-2019/</loc>
+    
+    <lastmod>2020-01-13T04:00:14.214Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2019/11/27/2019-11-27-java-ConcurrentModificationException-intro/</loc>
     
     <lastmod>2019-11-28T15:38:24.730Z</lastmod>
