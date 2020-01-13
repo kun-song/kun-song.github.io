@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://songkun.me/about/index.html</loc>
+    
+    <lastmod>2020-01-13T04:08:34.514Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://songkun.me/2020/01/02/2020-01-01-summary-of-2019/</loc>
     
     <lastmod>2020-01-13T04:00:14.214Z</lastmod>
@@ -1090,13 +1097,6 @@
     <loc>http://songkun.me/2018/10/06/2018-10-06-reading-the-docker-book/</loc>
     
     <lastmod>2018-10-21T12:41:19.123Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/about/index.html</loc>
-    
-    <lastmod>2018-10-06T14:57:11.839Z</lastmod>
     
   </url>
   
