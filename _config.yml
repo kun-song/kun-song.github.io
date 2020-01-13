@@ -74,7 +74,7 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/satansk/satansk.github.io.git
+  repo: https://github.com/kun-song/kun-song.github.io.git
   branch: master
 
 douban:

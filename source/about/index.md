@@ -11,6 +11,6 @@ type: "about"
 
 你可以在这里找到我：
 
-* [Github](https://github.com/satansk)
+* [Github](https://github.com/kun-song)
 * 邮箱：songkun.fp@gmail.com
 * [知乎](https://www.zhihu.com/people/kkta/activities)
