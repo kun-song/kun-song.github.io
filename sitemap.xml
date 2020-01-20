@@ -16,13 +16,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2019/11/27/2019-11-27-java-ConcurrentModificationException-intro/</loc>
-    
-    <lastmod>2019-11-28T15:38:24.730Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2019/11/25/2019-11-25-java-jvm-class-load-forName-vs-loadClass/</loc>
     
     <lastmod>2019-11-25T16:12:12.384Z</lastmod>
