@@ -30,34 +30,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2019/10/28/2019-10-28-java-threadlocal-why-weak-reference/</loc>
-    
-    <lastmod>2019-10-28T08:18:50.848Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/27/2019-10-27-java-threadlocal-expunge-and-memory-leak/</loc>
-    
-    <lastmod>2019-10-28T06:15:17.920Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/26/2019-10-26-java-threadlocal-hash-clash/</loc>
-    
-    <lastmod>2019-10-27T01:46:12.555Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/25/2019-10-25-java-threadlocal-principle/</loc>
-    
-    <lastmod>2019-10-26T14:17:31.254Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2019/07/27/2019-07-27-java-how-to-stop-a-thread-correctly/</loc>
     
     <lastmod>2019-10-25T00:13:18.791Z</lastmod>
