@@ -330,7 +330,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/02/2018-12-2-java-hashmap-hash-collision/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -349,8 +349,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/" itemprop="url">
-                  译 | 不同类型的事件可以放到同一主题中吗？
+                <a class="post-title-link" href="/2018/12/02/2018-12-2-java-hashmap-hash-collision/" itemprop="url">
+                  HashMap | 哈希碰撞
                 </a>
               
             
@@ -376,7 +376,7 @@
                 
               
 
-              <time title="创建时间：2018-12-17 23:35:25" itemprop="dateCreated datePublished" datetime="2018-12-17T23:35:25+08:00">2018-12-17</time>
+              <time title="创建时间：2018-12-02 23:20:59" itemprop="dateCreated datePublished" datetime="2018-12-02T23:20:59+08:00">2018-12-02</time>
             
 
             
@@ -393,7 +393,886 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-13 11:19:13" itemprop="dateModified" datetime="2019-07-13T11:19:13+08:00">2019-07-13</time>
+                <time title="修改时间：2019-07-30 22:10:09" itemprop="dateModified" datetime="2019-07-30T22:10:09+08:00">2019-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>密码学中有哈希碰撞的说法，而 <code>HashMap</code> 中也有哈希碰撞的叫法，两者是否相同？可能不少同学有过类似的疑问，本文将简单解答该问题。</p>
+<p>首先看下维基百科对<a href="https://en.wikipedia.org/wiki/Collision_(computer_science" target="_blank" rel="noopener">碰撞</a>的定义：</p>
+<blockquote>
+<p>In computer science, a collision or clash is a situation that occurs when two distinct pieces of data have the same hash value, checksum, fingerprint, or cryptographic digest.</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/02/2018-12-2-java-hashmap-hash-collision/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/02/2018-12-2-source-code-reading-hashmap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/02/2018-12-2-source-code-reading-hashmap/" itemprop="url">
+                  源码分析 | HashMap
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-02 20:51:06" itemprop="dateCreated datePublished" datetime="2018-12-02T20:51:06+08:00">2018-12-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:10:05" itemprop="dateModified" datetime="2019-07-30T22:10:05+08:00">2019-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码分析/" itemprop="url" rel="index"><span itemprop="name">源码分析</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><code>HashMap</code> 是最常用的数据结构之一，也是面试的常客，了解 <code>HashMap</code> 的实现原理对正确、高效地的使用它是非常重要的，本文将细致分析 Java 8 <code>HashMap</code> 实现的所有细节。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/02/2018-12-2-source-code-reading-hashmap/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/11/26/2018-11-26-java-thread-primitive-deprecation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/26/2018-11-26-java-thread-primitive-deprecation/" itemprop="url">
+                  译 | Java Thread Primitive Deprecation
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-26 22:59:23" itemprop="dateCreated datePublished" datetime="2018-11-26T22:59:23+08:00">2018-11-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:09:13" itemprop="dateModified" datetime="2019-07-30T22:09:13+08:00">2019-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><a href="https://docs.oracle.com/javase/8/docs/technotes/guides/concurrency/threadPrimitiveDeprecation.html" target="_blank" rel="noopener">原文</a></p>
+<h2 id="为何废弃-Thread-stop-？"><a href="#为何废弃-Thread-stop-？" class="headerlink" title="为何废弃 Thread.stop ？"></a>为何废弃 <code>Thread.stop</code> ？</h2><p>因为它本质上是不安全的。</p>
+<p><code>stop</code> 线程将导致释放其持有的全部 monitor（<code>ThreadDeath</code> 异常在栈中传播时，monitor 被解锁），若在当前线程中，这些 monitor 保护的对象处于 <strong>不一致状态</strong>，则 <code>stop</code> 后这种不一致状态对其他线程可见。</p>
+<p>我们称处于不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它们可能非常微妙且难以检测，与其他非检查异常不同，<code>ThreadDeath</code> 悄悄杀死线程，用户无法收到任何警告，用户可能到几个小时，或几天会才能发现问题。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/26/2018-11-26-java-thread-primitive-deprecation/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/11/21/2018-11-21-scala-tut-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/21/2018-11-21-scala-tut-introduction/" itemprop="url">
+                  tut -- 简单的 Scala 文档检查工具
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-21 09:00:39" itemprop="dateCreated datePublished" datetime="2018-11-21T09:00:39+08:00">2018-11-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:16:20" itemprop="dateModified" datetime="2019-07-30T22:16:20+08:00">2019-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程工具/" itemprop="url" rel="index"><span itemprop="name">编程工具</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>我们写技术文档时常常需要贴代码片段，但这类代码的正确性却很难保证，可能在 IDE 中跑的好好的，但粘贴时缺胳膊少腿，最后对读者造成一定的阅读障碍。</p>
+<p>Scala 是一门静态强类型语言，编译时即可发现很多问题，深受老夫喜爱，而 tut 则是 Scala 平台解决上述问题的小工具。</p>
+<p>tut 使用非常广泛，很多知名 Scala 项目用它编写文档，例如 Cats、Akka 等，其原理非常简单，读取 markdown 文件中用 <code>tut</code> 修饰的代码片段，编译执行，将结果作为注释插入代码片段中，通过这种方式，可以保证文档中所有代码都可以正常运行，完美解决开篇的问题。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/21/2018-11-21-scala-tut-introduction/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/11/20/2018-11-20-troubleshooting-mongodb-authentication/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/20/2018-11-20-troubleshooting-mongodb-authentication/" itemprop="url">
+                  Troubleshooting | MongoDB 安全认证的小坑
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-20 08:26:20" itemprop="dateCreated datePublished" datetime="2018-11-20T08:26:20+08:00">2018-11-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-10 15:24:08" itemprop="dateModified" datetime="2019-08-10T15:24:08+08:00">2019-08-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据库/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>最近上线遇到一个蛋疼的问题，代码中需要对 <code>admin</code> 进行鉴权，在测试环境没有任何问题，但一上灰度就报错，报错信息也有点误导人，提示当前用户名、密码无法通过校验，本来以为是配置错误，后来发现同样的用户名、密码可以在 cli 鉴权通过，这就比较奇怪了。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/20/2018-11-20-troubleshooting-mongodb-authentication/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/11/15/2018-11-15-kafka-kip-62-allow-consumer-to-send-heartbeats-from-a-background-thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/15/2018-11-15-kafka-kip-62-allow-consumer-to-send-heartbeats-from-a-background-thread/" itemprop="url">
+                  译 | KIP62 Allow consumer to send heartbeats from a background thread
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-15 08:32:30" itemprop="dateCreated datePublished" datetime="2018-11-15T08:32:30+08:00">2018-11-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-20 08:25:40" itemprop="dateModified" datetime="2018-11-20T08:25:40+08:00">2018-11-20</time>
               
             
           </span>
@@ -445,365 +1324,16 @@
 
       
         
-          <p>原文地址在 <a href="http://martin.kleppmann.com/2018/01/18/event-types-in-kafka-topic.html" target="_blank" rel="noopener">这里</a>，InfoQ 已经翻译成中文，本文仅总结个人所得。</p>
-<p>使用 Kafka 时，若有多种不同类型的事件，应该把它们放到同一个 topic 中，还是放到多个不同 topic 中呢？</p>
-<p>首先，topic 的首要作用为：</p>
-<blockquote>
-<p>allow a consumer to specify which subset of messages it wants to consume.</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/17/2018-12-17-kafka-event-types-in-kafka-topic/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/16/2018-12-16-java-jenv-intro/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/16/2018-12-16-java-jenv-intro/" itemprop="url">
-                  使用 jenv 进行 JDK 版本管理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-16 12:37:48" itemprop="dateCreated datePublished" datetime="2018-12-16T12:37:48+08:00">2018-12-16</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-30 22:10:12" itemprop="dateModified" datetime="2019-07-30T22:10:12+08:00">2019-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程工具/" itemprop="url" rel="index"><span itemprop="name">编程工具</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>很多框架（比如 Dubbo）需要兼容多个 JDK 版本，开发、测试时需要不断切换版本，通过 <code>JAVA_HOME</code> 手动修改让人痛苦不堪。</p>
-<p>据我了解 Node.js 有很多版本管理工具，例如 nvm，通过 nvm 切换 Node.js 版本只需要一个命令，非常方便高效，幸运的是 Java 也有类似工具，即 jenv。</p>
-<p>因为我的 mac os 已经装了 Java 11，所以直接安装 jenv：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install jenv</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/16/2018-12-16-java-jenv-intro/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/15/2018-12-15-ml-overfitting/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/15/2018-12-15-ml-overfitting/" itemprop="url">
-                  机器学习 | overfitting
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-15 21:13:43 / 修改时间：22:29:08" itemprop="dateCreated datePublished" datetime="2018-12-15T21:13:43+08:00">2018-12-15</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>监督算法通过训练集训练算法，然后借助训练出的算法预测新数据，因此算法表现可以是：</p>
+          <p>原文在 <a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-62%3A+Allow+consumer+to+send+heartbeats+from+a+background+thread" target="_blank" rel="noopener">这里</a>。</p>
+<h2 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h2><p>本提案已经被接受，邮件讨论在 <a href="https://markmail.org/message/oeg63goh3ed3qdap" target="_blank" rel="noopener">这里</a>，本修改在 Kafka 0.10.1.0 首次发布。</p>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>新 Kafka consumer 有个很蛋疼的设计问题：</p>
 <ul>
-<li>训练集、新数据上都非常差</li>
-<li>训练集、新数据都表现良好</li>
-<li>训练集上表现优异，但预测新数据时效果非常差</li>
-</ul>
-<p>理想的算法应该是第二种。</p>
-<p>第一种算法被称为 underfitting/high bias，常见原因为：</p>
-<ul>
-<li>过于简单的 hypothesis 函数</li>
-<li>hypothesis 函数使用的特征过少</li>
+<li>consumer 是 <strong>单线程</strong>，同时</li>
+<li>consumer 需要向 coordinator 发送 <strong>心跳</strong> 以保持活跃；</li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/15/2018-12-15-ml-overfitting/#更多" rel="contents">
+            <a class="btn" href="/2018/11/15/2018-11-15-kafka-kip-62-allow-consumer-to-send-heartbeats-from-a-background-thread/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -859,7 +1389,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/15/2018-12-15-emacs-ag/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/11/14/2018-11-14-round-robin/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -878,8 +1408,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/15/2018-12-15-emacs-ag/" itemprop="url">
-                  emacs | 使用 ag 搜索代码
+                <a class="post-title-link" href="/2018/11/14/2018-11-14-round-robin/" itemprop="url">
+                  基本概念 | Round Robin
                 </a>
               
             
@@ -905,7 +1435,7 @@
                 
               
 
-              <time title="创建时间：2018-12-15 19:02:27 / 修改时间：19:37:27" itemprop="dateCreated datePublished" datetime="2018-12-15T19:02:27+08:00">2018-12-15</time>
+              <time title="创建时间：2018-11-14 21:56:52 / 修改时间：22:21:09" itemprop="dateCreated datePublished" datetime="2018-11-14T21:56:52+08:00">2018-11-14</time>
             
 
             
@@ -927,7 +1457,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程工具/" itemprop="url" rel="index"><span itemprop="name">编程工具</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
 
                 
                 
@@ -962,194 +1492,16 @@
 
       
         
-          <p>首先 ag 真正的名字是 <a href="https://geoff.greer.fm/ag/" target="_blank" rel="noopener">The Silver Searche</a>，简介如下：</p>
-<blockquote>
-<p>A tool for searching code. Faster than Ack. Better than grep.</p>
-</blockquote>
-<p>ag 是一款代码搜索工具，开始是 Geoff Greer fork 了 Ack 的分支，后面改进越来越大，索性改名叫 ag，现在是 github 上 <a href="https://github.com/search?l=C&amp;o=desc&amp;p=1&amp;q=stars%3A%3E4000&amp;ref=advsearch&amp;s=stars&amp;type=Repositories" target="_blank" rel="noopener">排名第九</a> 的超级明星项目 ~~</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/15/2018-12-15-emacs-ag/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/14/2018-12-14-ml-intro/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/14/2018-12-14-ml-intro/" itemprop="url">
-                  机器学习 | ML 算法介绍
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-14 08:59:34" itemprop="dateCreated datePublished" datetime="2018-12-14T08:59:34+08:00">2018-12-14</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-15 18:57:02" itemprop="dateModified" datetime="2018-12-15T18:57:02+08:00">2018-12-15</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>机器学习算法很多，大略可分为以下两类：</p>
+          <p>平时看英文文档的时候，经常遇到 round robin 的说法，比如：</p>
 <ul>
-<li>监督学习（supervised learning）</li>
-<li>非监督学习（unsupervised learning）</li>
+<li>Akka 中的 <a href="https://doc.akka.io/docs/akka/current/routing.html#roundrobinpool-and-roundrobingroup" target="_blank" rel="noopener">RoundRobinPool 和 RoundRobinGroup</a></li>
+<li>Kafka 中的 <a href="https://kafka.apache.org/documentation/" target="_blank" rel="noopener">roundrobin 分区策略</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Round-robin_DNS" target="_blank" rel="noopener">Round-robin DNS</a></li>
 </ul>
-<p>其他的还有加强学习（reinforcement learning）等。</p>
-<p>不管是监督学习，还是非监督学习，都需要使用训练集对算法进行训练，如果训练集中的每个训练样本（tranning example）具备标记，则该称该算法为监督学习。</p>
+<p>从字面意思上可以猜测，round robin 有“轮流”、“轮换”的含义，如果只是为了表达轮流，直接用 round 不就完了，为啥非要用 round robin 呢？</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/14/2018-12-14-ml-intro/#更多" rel="contents">
+            <a class="btn" href="/2018/11/14/2018-11-14-round-robin/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1205,7 +1557,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/11/2018-12-11-emacs-evil-intro/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -1224,8 +1576,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/11/2018-12-11-emacs-evil-intro/" itemprop="url">
-                  emacs | Evil 插件
+                <a class="post-title-link" href="/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/" itemprop="url">
+                  译 | How to choose the number of partitions in a Kafka cluster?
                 </a>
               
             
@@ -1251,7 +1603,7 @@
                 
               
 
-              <time title="创建时间：2018-12-11 23:08:54" itemprop="dateCreated datePublished" datetime="2018-12-11T23:08:54+08:00">2018-12-11</time>
+              <time title="创建时间：2018-10-28 23:44:39" itemprop="dateCreated datePublished" datetime="2018-10-28T23:44:39+08:00">2018-10-28</time>
             
 
             
@@ -1268,7 +1620,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-15 21:39:19" itemprop="dateModified" datetime="2018-12-15T21:39:19+08:00">2018-12-15</time>
+                <time title="修改时间：2018-12-18 00:00:45" itemprop="dateModified" datetime="2018-12-18T00:00:45+08:00">2018-12-18</time>
               
             
           </span>
@@ -1285,7 +1637,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程工具/" itemprop="url" rel="index"><span itemprop="name">编程工具</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
 
                 
                 
@@ -1320,530 +1672,17 @@
 
       
         
-          <p>很多 emacs 用户其实非常眼馋 vim 的强大编辑能力，包括我，好在有 Evil，它在 emacs 中几乎完全“模拟”了 vim 的编辑功能，在 emacs 中模拟 vim，的确非常“邪恶”。</p>
-<p>通过 <code>M-x</code> 从 MELPA 安装 Evil，安装完成后通过 <code>C-h i</code> 可查看 Evil 的文档：</p>
-<p><img src="/images/emacs/evil/evil-doc-1.png" alt="evil doc"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/11/2018-12-11-emacs-evil-intro/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/11/2018-12-11-emacs-themes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/11/2018-12-11-emacs-themes/" itemprop="url">
-                  emacs | 主题设置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-11 00:50:20 / 修改时间：01:09:20" itemprop="dateCreated datePublished" datetime="2018-12-11T00:50:20+08:00">2018-12-11</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程工具/" itemprop="url" rel="index"><span itemprop="name">编程工具</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>N 年前我安装完 emacs，打开的默认界面是这样的：</p>
-<p><img src="/images/emacs/themes/emacs-raw.png" alt="shell mode"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/11/2018-12-11-emacs-themes/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/10/2018-12-10-emacs-run-shell/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/10/2018-12-10-emacs-run-shell/" itemprop="url">
-                  emacs | 在 emacs 中运行 shell
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-10 23:38:41" itemprop="dateCreated datePublished" datetime="2018-12-10T23:38:41+08:00">2018-12-10</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-11 00:34:53" itemprop="dateModified" datetime="2018-12-11T00:34:53+08:00">2018-12-11</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程工具/" itemprop="url" rel="index"><span itemprop="name">编程工具</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>我自己使用 emacs 时常常需要运行 shell 脚本，这时可以切换到 terminal 窗口，操作完成后再切换回 emacs，这样当然可以，但更好的方式是在 emacs 中直接运行 shell。</p>
-<p>emacs 中有 3 种运行 shell 的方式，下面一一介绍。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/10/2018-12-10-emacs-run-shell/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/09/2018-12-9-emacs-counsel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/09/2018-12-9-emacs-counsel/" itemprop="url">
-                  emacs | counsel 插件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-09 23:16:11" itemprop="dateCreated datePublished" datetime="2018-12-09T23:16:11+08:00">2018-12-09</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-11 00:41:46" itemprop="dateModified" datetime="2018-12-11T00:41:46+08:00">2018-12-11</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程工具/" itemprop="url" rel="index"><span itemprop="name">编程工具</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>虽然题目只提到 counsel，但实际是 Ivy、Counsel、Swiper 三个插件的组合，它们在 <a href="https://github.com/abo-abo/swiper/tree/f87962631101d3db12c86de3f71f0b21c85896c0" target="_blank" rel="noopener">同一个 github 仓库</a> 中，各自角色如下：</p>
+          <p><a href="https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster" target="_blank" rel="noopener">原文链接</a></p>
+<p>很多 Kafka 用户都有同样的疑问，本文将讲解释分区数量选择的几个重要影响因素，并提供简单的计算公式。</p>
+<h2 id="分区越多，吞吐量越高"><a href="#分区越多，吞吐量越高" class="headerlink" title="分区越多，吞吐量越高"></a>分区越多，吞吐量越高</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>首先需要明确，主题分区（topic partition）是 Kafka 中的 <strong>并行单元</strong>（the unit of parallelism）。</p>
 <ul>
-<li>Ivy, a generic completion mechanism for Emacs.</li>
-<li>Counsel, a collection of Ivy-enhanced versions of common Emacs commands.</li>
-<li>Swiper, an Ivy-enhanced alternative to isearch.</li>
+<li>在 producer 端和 broker 端，对不同分区的写操作可以 <strong>完全并行执行</strong>，因此耗时操作（如压缩）可以更好地利用硬件资源；</li>
+<li>在 consumer 端，Kafka 会把单个分区分配给一个 consumer 线程（即分区与 consumer 是 1 : N 的关系），因此 consumer 端的并行度上限受（该 consumer group 消费的）分区数量限制。</li>
 </ul>
-<p>简单说 Ivy 是 emacs 的一种通用补全机制，Counsel 和 Swiper 建立在 Ivy 之上，提供 emacs 默认命令的增强版本。</p>
+<p>所以，总体而言，Kafka 集群中分区越多，则可达的吞吐量越高。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/09/2018-12-9-emacs-counsel/#更多" rel="contents">
+            <a class="btn" href="/2018/10/28/2018-10-28-How-to-choose-the-number-of-partitions-in-a-Kafka-cluster/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1899,7 +1738,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/12/05/2018-12-5-emacs-c-h-kvf/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/10/21/2018-10-21-reading-designing-data-intensive-applications/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -1918,8 +1757,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/05/2018-12-5-emacs-c-h-kvf/" itemprop="url">
-                  emacs | 三个常用快捷键
+                <a class="post-title-link" href="/2018/10/21/2018-10-21-reading-designing-data-intensive-applications/" itemprop="url">
+                  读书 | Designing Data-Intensive Applications
                 </a>
               
             
@@ -1945,7 +1784,7 @@
                 
               
 
-              <time title="创建时间：2018-12-05 22:58:01" itemprop="dateCreated datePublished" datetime="2018-12-05T22:58:01+08:00">2018-12-05</time>
+              <time title="创建时间：2018-10-21 20:39:06" itemprop="dateCreated datePublished" datetime="2018-10-21T20:39:06+08:00">2018-10-21</time>
             
 
             
@@ -1962,7 +1801,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-10 09:02:25" itemprop="dateModified" datetime="2018-12-10T09:02:25+08:00">2018-12-10</time>
+                <time title="修改时间：2018-10-28 23:40:11" itemprop="dateModified" datetime="2018-10-28T23:40:11+08:00">2018-10-28</time>
               
             
           </span>
@@ -1979,7 +1818,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编程工具/" itemprop="url" rel="index"><span itemprop="name">编程工具</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/读书/" itemprop="url" rel="index"><span itemprop="name">读书</span></a></span>
 
                 
                 
@@ -2014,16 +1853,193 @@
 
       
         
-          <p>作为“神的编辑器”，emacs 以快捷键繁多著称，但即使资深用户也很难记清所有快捷键，不过好在 emacs 是 self-documenting 的，即 emacs 本身提供所有使用所需文档，当然也包括快捷键文档了。</p>
-<p>重点在于三个快捷键：</p>
+          <p>豆瓣：<a href="https://book.douban.com/subject/26197294/" target="_blank" rel="noopener">Designing Data-Intensive Applications</a></p>
+<p>我刚毕业到公司做项目时，遇到问题经常想找到最合理的处理方式，但以当时的知识储备，对有些问题完全没有头绪。</p>
+<p>比如我们有一个应用需要解析设备日志从而生成设备配置拓扑，日志中涉及配置的信息很多（部分日志 10M 以上），因此一般根据需求分批次解析，这就带来一个问题：每次添加新解析项时，以前已经解析过的设备是没有该新项的，只有用户再次上传设备日志才能再次触发解析，从而得到完整的解析结果。更符合用户期望的行为是新解析项添加后，所有设备的配置信息全部随之更新，但这应该怎么实现呢？</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/10/21/2018-10-21-reading-designing-data-intensive-applications/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/10/14/2018-10-14-source-code-reading-AtomicInteger/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/14/2018-10-14-source-code-reading-AtomicInteger/" itemprop="url">
+                  源码分析 | AtomicInteger
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-14 22:47:35" itemprop="dateCreated datePublished" datetime="2018-10-14T22:47:35+08:00">2018-10-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:07:55" itemprop="dateModified" datetime="2019-07-30T22:07:55+08:00">2019-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/源码分析/" itemprop="url" rel="index"><span itemprop="name">源码分析</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>J.U.C 新增的原子类用 CAS 操作替代锁，更加高效，而且异步，J.U.C 大多数并发类都基于原子类实现，所以理解原子类对于理解整个并发包是非常重要的。</p>
+<p>原子类共有 12 个，可以分为以下 4 类：</p>
 <ul>
-<li><code>C-h k</code></li>
-<li><code>C-h f</code></li>
-<li><code>C-h v</code></li>
+<li>标量类（<code>AtomicInteger</code>、<code>AtomicLong</code>、<code>AtomicReference</code>、<code>AtomicBoolean</code>）</li>
+<li>数组类（<code>AtomicIntegerArray</code>、<code>AtomicLongArray</code>、<code>AtomicReferenceArray</code>）</li>
+<li>更新器类（<code>AtomicIntegerFieldUpdater</code>、<code>AtomicLongFieldUpdater</code>、<code>AtomicReferenceFieldUpdater</code>）</li>
+<li>复合变量类（<code>AtomicMarkableReference</code>、<code>AtomicStampedReference</code>）</li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/05/2018-12-5-emacs-c-h-kvf/#更多" rel="contents">
+            <a class="btn" href="/2018/10/14/2018-10-14-source-code-reading-AtomicInteger/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2068,7 +2084,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2111,7 +2127,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">134</span>
+                    <span class="site-state-item-count">123</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2415,11 +2431,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">127</span>
+                    <span class="site-state-item-count">125</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

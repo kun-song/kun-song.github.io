@@ -23,86 +23,9 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2019/08/11/2019-08-11-java-why-primitives-should-not-be-used-in-synchronized/</loc>
-    
-    <lastmod>2019-10-29T01:02:28.641Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/07/27/2019-07-27-java-how-to-stop-a-thread-correctly/</loc>
-    
-    <lastmod>2019-10-25T00:13:18.791Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/19/2019-10-19-java-jvm-hotspot-safepoint-saferegion/</loc>
-    
-    <lastmod>2019-10-20T01:43:27.457Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/19/2019-10-19-java-jvm-hotspot-how-to-find-gc-roots/</loc>
-    
-    <lastmod>2019-10-19T14:31:31.178Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/19/2019-10-19-java-jvm-reachability-analysis/</loc>
-    
-    <lastmod>2019-10-19T03:18:38.303Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/19/2019-10-19-java-jvm-4-kind-reference/</loc>
-    
-    <lastmod>2019-10-19T02:57:01.373Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/15/2019-10-15-java-jvm-object-gc-algorithms/</loc>
-    
-    <lastmod>2019-10-19T01:09:49.608Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/17/2019-10-17-java-jvm-why-generational-collection/</loc>
-    
-    <lastmod>2019-10-19T01:06:51.864Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/13/2019-10-13-java-jvm-object-meomory-layout/</loc>
-    
-    <lastmod>2019-10-13T13:39:25.784Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/10/2019-10-10-java-how-to-create-an-object/</loc>
-    
-    <lastmod>2019-10-13T12:59:32.431Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2019/10/13/2019-10-13-java-jvm-special-methods/</loc>
     
     <lastmod>2019-10-13T12:48:05.787Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/10/03/2019-10-03-java-run-time-data-areas/</loc>
-    
-    <lastmod>2019-10-07T16:49:39.728Z</lastmod>
     
   </url>
   
@@ -947,14 +870,14 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/categories/index.html</loc>
+    <loc>http://songkun.me/tags/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://songkun.me/tags/index.html</loc>
+    <loc>http://songkun.me/categories/index.html</loc>
     
     <lastmod>2018-05-22T15:06:49.000Z</lastmod>
     

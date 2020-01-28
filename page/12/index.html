@@ -330,7 +330,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/25/2018-05-25-pessimistic-optimistic-lock/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/17/2018-05-17-call-by-value-call-by-name/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -349,8 +349,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/25/2018-05-25-pessimistic-optimistic-lock/" itemprop="url">
-                  基本概念 | 乐观锁、悲观锁
+                <a class="post-title-link" href="/2018/05/17/2018-05-17-call-by-value-call-by-name/" itemprop="url">
+                  传值调用 vs 传名调用
                 </a>
               
             
@@ -376,7 +376,7 @@
                 
               
 
-              <time title="创建时间：2018-05-25 20:39:49" itemprop="dateCreated datePublished" datetime="2018-05-25T20:39:49+08:00">2018-05-25</time>
+              <time title="创建时间：2018-05-17 22:00:17" itemprop="dateCreated datePublished" datetime="2018-05-17T22:00:17+08:00">2018-05-17</time>
             
 
             
@@ -393,7 +393,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-30 22:06:08" itemprop="dateModified" datetime="2019-07-30T22:06:08+08:00">2019-07-30</time>
+                <time title="修改时间：2019-07-30 22:13:36" itemprop="dateModified" datetime="2019-07-30T22:13:36+08:00">2019-07-30</time>
               
             
           </span>
@@ -410,7 +410,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a></span>
 
                 
                 
@@ -445,370 +445,15 @@
 
       
         
-          <p>乐观锁和悲观锁并非特定框架或技术实现，它们是两种并发控制思想，在不同领域中，它们往往披着掩人耳目的、各不相同的外衣，容易让人忽略它们的本质。</p>
-<p>本文将介绍并发控制的背景，乐观锁、悲观锁的基本概念，以及它们在数据库和 Java 并发编程中的实际应用。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/25/2018-05-25-pessimistic-optimistic-lock/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/24/2018-05-24-java-happen-before-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/24/2018-05-24-java-happen-before-1/" itemprop="url">
-                  基本概念 | 重排序、内存可见性、happen-before 关系
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-24 23:13:44" itemprop="dateCreated datePublished" datetime="2018-05-24T23:13:44+08:00">2018-05-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-30 22:21:04" itemprop="dateModified" datetime="2019-07-30T22:21:04+08:00">2019-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Java 内存模型其实是 <strong>一组规则</strong>，这些规则规定了线程对内存的访问排序、内存对线程的可见性等。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/24/2018-05-24-java-happen-before-1/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/24/2018-05-24-java-volatile-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/24/2018-05-24-java-volatile-1/" itemprop="url">
-                  volatile 初探
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-24 21:41:45" itemprop="dateCreated datePublished" datetime="2018-05-24T21:41:45+08:00">2018-05-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-30 22:21:12" itemprop="dateModified" datetime="2019-07-30T22:21:12+08:00">2019-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>并发编程中的 <strong>同步机制</strong> 可以实现：</p>
-<ol>
-<li>对共享状态的排他访问</li>
-<li>内存可见性</li>
-</ol>
-<p>Java 保证 <strong>共享变量</strong> 一致性的方式有：</p>
+          <p>要理解传值调用和传名调用到底是什么，以及他们有什么区别，首先要懂一点理论。</p>
+<h2 id="求值策略"><a href="#求值策略" class="headerlink" title="求值策略"></a>求值策略</h2><p>编程语言的求值策略决定：</p>
 <ul>
-<li><code>synchronized</code>（监视器锁）</li>
-<li><code>volatile</code> 变量</li>
-<li>CAS（如 <code>AtomicInteger</code>）</li>
-<li>并发包中的高级抽象</li>
+<li>什么值可以传递给函数（what kind of value to pass to the function）；</li>
+<li>什么时候对函数调用的 <strong>参数求值</strong>（when to evaluate the argument(s) of a function call）；</li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/05/24/2018-05-24-java-volatile-1/#更多" rel="contents">
+            <a class="btn" href="/2018/05/17/2018-05-17-call-by-value-call-by-name/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -864,7 +509,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/23/2018-05-23-list-in-scala-racket/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/16/2018-05-16-summary-of-2017/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -883,8 +528,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/23/2018-05-23-list-in-scala-racket/" itemprop="url">
-                  天下 List 是一家
+                <a class="post-title-link" href="/2018/05/16/2018-05-16-summary-of-2017/" itemprop="url">
+                  2017 年总结
                 </a>
               
             
@@ -910,7 +555,7 @@
                 
               
 
-              <time title="创建时间：2018-05-23 21:12:07" itemprop="dateCreated datePublished" datetime="2018-05-23T21:12:07+08:00">2018-05-23</time>
+              <time title="创建时间：2018-05-16 23:19:55" itemprop="dateCreated datePublished" datetime="2018-05-16T23:19:55+08:00">2018-05-16</time>
             
 
             
@@ -927,7 +572,181 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-30 22:14:23" itemprop="dateModified" datetime="2019-07-30T22:14:23+08:00">2019-07-30</time>
+                <time title="修改时间：2019-02-19 20:01:21" itemprop="dateModified" datetime="2019-02-19T20:01:21+08:00">2019-02-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/随笔/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>将原本放在 Github 上的 <a href="https://github.com/satansk/my-blog/issues/30" target="_blank" rel="noopener">2017 年总结</a> 搬运上来，原文写于 2017 年 1 月 14 日。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/16/2018-05-16-summary-of-2017/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/16/2018-05-16-tail-recursion/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/16/2018-05-16-tail-recursion/" itemprop="url">
+                  为什么需要尾递归？
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-16 22:58:23" itemprop="dateCreated datePublished" datetime="2018-05-16T22:58:23+08:00">2018-05-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:22:03" itemprop="dateModified" datetime="2019-07-30T22:22:03+08:00">2019-07-30</time>
               
             
           </span>
@@ -979,12 +798,15 @@
 
       
         
-          <p>几乎所有编程语言都有 <code>List</code> 数据结构，尤其在函数式编程语言中，<code>List</code> 更是举足轻重，Lisp 甚至只用 <code>List</code> 就能一力降十会，可见其威力之无穷。</p>
-<p>函数式编程语言中的 <code>List</code> 用法大同小异，本文简单对比 Racket 和 Scala 中 <code>List</code> 的使用，同时欣赏一下 <code>List</code> 的优美之处。</p>
-<p>Racket 是动态函数式语言，Scala 是静态函数式语言，两者语言特性差别很大，但核心思想惊人的一致。</p>
+          <h2 id="尾调用"><a href="#尾调用" class="headerlink" title="尾调用"></a>尾调用</h2><p>若函数 <strong>最后一步</strong> 操作为函数调用，则称之为尾调用（tail call）。</p>
+<p>尾调用的关键是最后一步必须是“纯粹”的函数调用，不能有任何其他操作，例如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(xs: <span class="type">List</span>[<span class="type">Int</span>]): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (xs.isEmpty) <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span> xs.head + sum(xs.tail)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>sum</code> 函数最后一步 <code>xs.head + sum(xs.tail)</code> 中除调用 <code>sum</code> 函数外，还做了加法，因此不是尾调用</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/05/23/2018-05-23-list-in-scala-racket/#更多" rel="contents">
+            <a class="btn" href="/2018/05/16/2018-05-16-tail-recursion/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1040,7 +862,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/22/2018-05-22-racket-lazy-evaluation/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/16/2018-05-16-first-class-function/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -1059,8 +881,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/22/2018-05-22-racket-lazy-evaluation/" itemprop="url">
-                  Racket | 拨开延迟计算的迷雾
+                <a class="post-title-link" href="/2018/05/16/2018-05-16-first-class-function/" itemprop="url">
+                  头等函数
                 </a>
               
             
@@ -1086,7 +908,7 @@
                 
               
 
-              <time title="创建时间：2018-05-22 23:18:10" itemprop="dateCreated datePublished" datetime="2018-05-22T23:18:10+08:00">2018-05-22</time>
+              <time title="创建时间：2018-05-16 20:38:12" itemprop="dateCreated datePublished" datetime="2018-05-16T20:38:12+08:00">2018-05-16</time>
             
 
             
@@ -1103,181 +925,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-30 22:22:06" itemprop="dateModified" datetime="2019-07-30T22:22:06+08:00">2019-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <a href="/2018/05/17/2018-05-17-call-by-value-call-by-name/" title="传值调用 vs 传名调用">传值调用 vs 传名调用</a> 这篇文章简单介绍了 Scala 的传名调用，并提到可以通过无参函数手动实现传名调用。<br><br>实际上 Scala 的传名调用符号 <code>=&gt;</code> 仅仅是语法糖，为探寻事实的真相，本文用另一种函数式编程语言 Racket 手动实现延迟计算（传名调用仅仅是延迟计算的一种），以破除大家心中的迷雾。<br><br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/22/2018-05-22-racket-lazy-evaluation/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/21/2018-05-21-scala-list-concatenation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/21/2018-05-21-scala-list-concatenation/" itemprop="url">
-                  Scala | List 拼接考古
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-21 23:42:24" itemprop="dateCreated datePublished" datetime="2018-05-21T23:42:24+08:00">2018-05-21</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-30 22:14:13" itemprop="dateModified" datetime="2019-07-30T22:14:13+08:00">2019-07-30</time>
+                <time title="修改时间：2019-07-30 22:18:33" itemprop="dateModified" datetime="2019-07-30T22:18:33+08:00">2019-07-30</time>
               
             
           </span>
@@ -1329,12 +977,18 @@
 
       
         
-          <p>Scala 存在两个列表拼接函数：<code>:::</code> 和 <code>++</code>，初学者很容易迷惑，本文简单介绍下两者的来历。</p>
-<p>如果读者有其他函数式编程语言基础（例如 Standard ML），肯定对用于创建 <code>List</code> 的 <code>::</code> 函数非常熟悉：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> xs = <span class="number">1</span> :: <span class="number">2</span> :: <span class="type">Nil</span></span><br></pre></td></tr></table></figure>
+          <p>若在某编程语言中：</p>
+<ul>
+<li>函数可以作为 <strong>函数参数</strong></li>
+<li>函数可以作为 <strong>函数返回值</strong></li>
+<li>可以将函数 <strong>赋值</strong> 给变量</li>
+<li>可以将函数 <strong>存储</strong> 在数据结构（<code>List</code> <code>Map</code> 等）中</li>
+<li>支持匿名函数/函数字面值（部分编程语言专家这样认为）</li>
+</ul>
+<p>则称该语言具有头等函数（first-class function），具备头等函数的语言中，函数值与 <strong>普通值</strong>（如 <code>Int</code> <code>String</code> 值）无任何区别，它们仅仅是函数类型（在 Scala 中，函数类型为 <code>FunctionN</code>）的值而已。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/05/21/2018-05-21-scala-list-concatenation/#更多" rel="contents">
+            <a class="btn" href="/2018/05/16/2018-05-16-first-class-function/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1390,7 +1044,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/20/2018-05-20-java7-objects/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/16/scala-anonymous-function/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -1409,8 +1063,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/20/2018-05-20-java7-objects/" itemprop="url">
-                  Objects 工具类
+                <a class="post-title-link" href="/2018/05/16/scala-anonymous-function/" itemprop="url">
+                  匿名函数
                 </a>
               
             
@@ -1436,7 +1090,7 @@
                 
               
 
-              <time title="创建时间：2018-05-20 22:46:15" itemprop="dateCreated datePublished" datetime="2018-05-20T22:46:15+08:00">2018-05-20</time>
+              <time title="创建时间：2018-05-16 08:42:18" itemprop="dateCreated datePublished" datetime="2018-05-16T08:42:18+08:00">2018-05-16</time>
             
 
             
@@ -1453,356 +1107,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-30 22:11:53" itemprop="dateModified" datetime="2019-07-30T22:11:53+08:00">2019-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Java 7 引入了 <code>java.util.Objects</code> 类。</p>
-<p>就像 <code>Arrays</code> 是 <code>Array</code> 的工具类，<code>Collections</code> 是 <code>Collection</code> 的工具类，<code>Objects</code> 即为 <code>Object</code> 的工具类，包含 <strong>对象操作</strong> 的方法，其中大部分方法是 <strong>空指针安全</strong> 的。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/20/2018-05-20-java7-objects/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/20/2018-05-20-variable-arguments/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/20/2018-05-20-variable-arguments/" itemprop="url">
-                  变长参数
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-20 22:27:44" itemprop="dateCreated datePublished" datetime="2018-05-20T22:27:44+08:00">2018-05-20</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-30 22:05:53" itemprop="dateModified" datetime="2019-07-30T22:05:53+08:00">2019-07-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>变长参数是很常见的语言特性，Java 和 Scala 都支持，使用很简单，本文介绍其在 Java 和 Scala 中的基本用法。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/20/2018-05-20-variable-arguments/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/20/2018-05-20-why-option/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/20/2018-05-20-why-option/" itemprop="url">
-                  我们为什么需要 Option ？
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-05-20 21:43:42" itemprop="dateCreated datePublished" datetime="2018-05-20T21:43:42+08:00">2018-05-20</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-30 22:14:05" itemprop="dateModified" datetime="2019-07-30T22:14:05+08:00">2019-07-30</time>
+                <time title="修改时间：2019-07-30 22:16:34" itemprop="dateModified" datetime="2019-07-30T22:16:34+08:00">2019-07-30</time>
               
             
           </span>
@@ -1854,16 +1159,12 @@
 
       
         
-          <p>Java 代码中，若方法无法返回有意义的值，有时贪图方便，会直接返回 <code>null</code>，并期待调用者自行对返回值判空。</p>
-<p>这样做存在两个弊端：</p>
-<ol>
-<li>调用者无从得知方法是否会返回 <code>null</code></li>
-<li>Java 不强制 <code>null</code> 检查</li>
-<li>空指针检查是样板代码，会增加代码噪声</li>
-</ol>
+          <p>匿名函数（anonymous function），也称函数字面值（function literal）、lambda 抽象、lambda 表达式，顾名思义，就是没有名字的函数值。</p>
+<p>本文主要讲解 Scala 中的匿名函数，最后简单介绍 Java 对匿名函数的支持。</p>
+<h2 id="字面值"><a href="#字面值" class="headerlink" title="字面值"></a>字面值</h2><p>在继续讲解匿名函数之前，先回顾一下字面值（literal）的概念。虽然我们工作中几乎每时每刻都在跟字面值打交道，但大家对这个习以为常的概念却并一定清楚。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/05/20/2018-05-20-why-option/#更多" rel="contents">
+            <a class="btn" href="/2018/05/16/scala-anonymous-function/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1919,7 +1220,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/19/2018-05-19-scala-pattern-matching/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/16/scala-partialfunction-partially-applied-function-currying/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -1938,8 +1239,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/19/2018-05-19-scala-pattern-matching/" itemprop="url">
-                  Scala | 模式匹配
+                <a class="post-title-link" href="/2018/05/16/scala-partialfunction-partially-applied-function-currying/" itemprop="url">
+                  偏函数 vs 部分应用函数 vs 柯里化
                 </a>
               
             
@@ -1965,7 +1266,7 @@
                 
               
 
-              <time title="创建时间：2018-05-19 22:16:37" itemprop="dateCreated datePublished" datetime="2018-05-19T22:16:37+08:00">2018-05-19</time>
+              <time title="创建时间：2018-05-16 00:19:56" itemprop="dateCreated datePublished" datetime="2018-05-16T00:19:56+08:00">2018-05-16</time>
             
 
             
@@ -1982,7 +1283,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-30 22:13:50" itemprop="dateModified" datetime="2019-07-30T22:13:50+08:00">2019-07-30</time>
+                <time title="修改时间：2019-07-30 22:16:56" itemprop="dateModified" datetime="2019-07-30T22:16:56+08:00">2019-07-30</time>
               
             
           </span>
@@ -2034,11 +1335,720 @@
 
       
         
-          <p>模式匹配是一种将值（value）与模式（pattern）进行匹配的机制，匹配成功还可以对值进行 <strong>析构</strong>，非常强大。</p>
-<p>模式匹配在函数式编程语言中广泛存在，例如 Haskell、ML、OCaml、Erlang 和 Elixir 等，Scala 也不例外。</p>
+          <p>三者的英文名字分别为：</p>
+<ul>
+<li>偏函数：partial function</li>
+<li>部分应用函数：partially applied function</li>
+<li>柯里化：currying</li>
+</ul>
+<p>其中偏函数、部分应用函数容易被混淆，部分应用函数、柯里化也容易被混淆，本文先介绍他们各自的概念，然后解释它们之间的区别。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/05/19/2018-05-19-scala-pattern-matching/#更多" rel="contents">
+            <a class="btn" href="/2018/05/16/scala-partialfunction-partially-applied-function-currying/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-partialfunction-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/15/scala-partialfunction-1/" itemprop="url">
+                  Scala | 偏函数
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-15 23:08:20" itemprop="dateCreated datePublished" datetime="2018-05-15T23:08:20+08:00">2018-05-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:16:47" itemprop="dateModified" datetime="2019-07-30T22:16:47+08:00">2019-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>偏函数，即 partial function，是一个数学上的概念，与 total function 对应，详细定义可以参考维基百科 <a href="https://en.wikipedia.org/wiki/Partial_function" target="_blank" rel="noopener">Partial Function</a> 条目。</p>
+<p>简单地说，对于类型为 <code>A =&gt; B</code> 的函数 <code>f</code> 而言：</p>
+<ul>
+<li>若 <code>f</code> 能处理所有类型 <code>A</code> 的值，则 <code>f</code> 为 total function；</li>
+<li>若 <code>f</code> 仅能处理类型为 <code>A</code> 的值的 <strong>子集</strong>，则 <code>f</code> 为 partial function；</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/15/scala-partialfunction-1/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-case-use-cases/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/15/scala-case-use-cases/" itemprop="url">
+                  Scala | case 关键字的 4 种用法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-15 22:44:37" itemprop="dateCreated datePublished" datetime="2018-05-15T22:44:37+08:00">2018-05-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:19:22" itemprop="dateModified" datetime="2019-07-30T22:19:22+08:00">2019-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在 Scala 中 <code>case</code> 关键字主要有 4 种使用场景，分别是：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/15/scala-case-use-cases/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/expression-oriented-programming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/15/expression-oriented-programming/" itemprop="url">
+                  面向表达式编程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-15 08:35:13" itemprop="dateCreated datePublished" datetime="2018-05-15T08:35:13+08:00">2018-05-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-10 15:22:52" itemprop="dateModified" datetime="2019-08-10T15:22:52+08:00">2019-08-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>维基百科有对 <a href="https://en.wikipedia.org/wiki/Expression-oriented_programming_language" target="_blank" rel="noopener">面向表达式编程语言</a> 的介绍，而面向表达式编程（expression oriented programming）也由此而来。</p>
+<p>EOP 语言褒贬不一，我们不做评价，而了解面向表达式编程对理解函数式编程大有裨益，因为 <strong>所有</strong> 函数式语言都是 <strong>面向表达式</strong> 的。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/15/expression-oriented-programming/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2018/05/15/scala-variance/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/15/scala-variance/" itemprop="url">
+                  Scala | 型变
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-05-15 00:39:34" itemprop="dateCreated datePublished" datetime="2018-05-15T00:39:34+08:00">2018-05-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:17:02" itemprop="dateModified" datetime="2019-07-30T22:17:02+08:00">2019-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Scala 是一门多范式编程语言，融合了面向对象与函数式编程两种范式。</p>
+<p>Scala 通过类型参数实现了参数多态，而作为 OOP 语言，又必然允许类的继承，当 <strong>参数多态</strong> 遇上 <strong>类继承</strong> 时，出现了一个有趣的问题：</p>
+<p>若类型 <code>S</code> 是 <code>T</code> 的子类，那么 <code>List[S]</code> 与 <code>List[T]</code> 是什么关系呢？（<code>List</code> 泛指泛型容器）</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/15/scala-variance/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2083,7 +2093,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2126,7 +2136,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">134</span>
+                    <span class="site-state-item-count">123</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2430,11 +2440,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">127</span>
+                    <span class="site-state-item-count">125</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

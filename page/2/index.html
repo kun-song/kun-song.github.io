@@ -330,7 +330,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/10/10/2019-10-10-java-how-to-create-an-object/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/07/12/2019-07-12-java-locksupport-vs-suspend-resume/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -349,8 +349,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/10/10/2019-10-10-java-how-to-create-an-object/" itemprop="url">
-                  对象创建时发生了什么？
+                <a class="post-title-link" href="/2019/07/12/2019-07-12-java-locksupport-vs-suspend-resume/" itemprop="url">
+                  谈谈 LockSupport 对 suspend/resume 的改进
                 </a>
               
             
@@ -376,7 +376,7 @@
                 
               
 
-              <time title="创建时间：2019-10-10 02:06:53" itemprop="dateCreated datePublished" datetime="2019-10-10T02:06:53+08:00">2019-10-10</time>
+              <time title="创建时间：2019-07-12 08:45:20" itemprop="dateCreated datePublished" datetime="2019-07-12T08:45:20+08:00">2019-07-12</time>
             
 
             
@@ -393,7 +393,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-13 20:59:32" itemprop="dateModified" datetime="2019-10-13T20:59:32+08:00">2019-10-13</time>
+                <time title="修改时间：2019-07-13 11:22:22" itemprop="dateModified" datetime="2019-07-13T11:22:22+08:00">2019-07-13</time>
               
             
           </span>
@@ -410,7 +410,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -445,23 +445,706 @@
 
       
         
-          <blockquote>
-<p>HostSpot 虚拟机 + 普通 Java 对象，不包括数组、Class 对象。</p>
-</blockquote>
-<p>Java 中对象创建的主要场景：</p>
+          <p><code>LockSupport</code> 是 Java 并发包中一个比较底层的类，用于实现 JUC 中的并发工具，是 JUC 的基础。</p>
+<p><code>LockSupport</code> 提供的 <code>park</code>/<code>unpark</code> 方法，是对 <code>Thread.suspend</code>/<code>Thread.resume</code> 的改进，解决了 <code>suspend</code>/<code>resume</code> 方法的缺陷，提供更加强大的功能。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/12/2019-07-12-java-locksupport-vs-suspend-resume/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/07/07/2019-07-07-java-try-with-resource/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/07/2019-07-07-java-try-with-resource/" itemprop="url">
+                  try-with-resource 全面解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-07 10:23:29 / 修改时间：19:08:48" itemprop="dateCreated datePublished" datetime="2019-07-07T10:23:29+08:00">2019-07-07</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>程序中不可避免使用各种资源，如文件句柄（文件、Socket）、IO 流、数据库连接等，资源使用完后，必须及时 <strong>关闭</strong>，否则会发生资源泄漏，资源占用达到操作系统上限后将无法获取新资源，只能重启应用才能解决。</p>
+<p>Java 7 之前使用 try-catch-finally 管理资源，Java 7 新增了可以自动管理资源的 try-with-resource，它本质上是个语法糖，但也不仅仅是语法糖，它还解决了 Java 存在已久的异常屏蔽问题。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/07/2019-07-07-java-try-with-resource/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/06/15/2019-06-15-why-replication/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/15/2019-06-15-why-replication/" itemprop="url">
+                  为何需要复制？
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-15 20:58:26 / 修改时间：21:22:51" itemprop="dateCreated datePublished" datetime="2019-06-15T20:58:26+08:00">2019-06-15</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/分布式/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在分布式系统中，复制是指在多个节点上保存同一数据的副本，节点之间通过网络进行通信，复制带来的好处有：</p>
+<ul>
+<li>容错</li>
+<li>水平扩展（吞吐量）</li>
+<li>降时延</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/06/15/2019-06-15-why-replication/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/05/13/2019-05-13-k8s-why-single-node-app-should-be-divided-into-containers/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/13/2019-05-13-k8s-why-single-node-app-should-be-divided-into-containers/" itemprop="url">
+                  为什么单机应用有时也“应该”拆分为多个容器？
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-13 23:18:08" itemprop="dateCreated datePublished" datetime="2019-05-13T23:18:08+08:00">2019-05-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-14 08:47:06" itemprop="dateModified" datetime="2019-05-14T08:47:06+08:00">2019-05-14</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/容器/" itemprop="url" rel="index"><span itemprop="name">容器</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>分布式系统容器化为多个容器容易理解，但为什么单机应用有时也需要拆分为多个容器呢，直接放到一个容器中不行吗？</p>
+<p>首先，明确下应用容器化目的：</p>
 <ol>
-<li><code>new</code> 关键字</li>
-<li>反射<ol>
-<li>只能通过 <code>Class.newInstance()</code> 调用 <strong>无参构造方法</strong>，如果要调用其他构造方法，需要用 <code>Class.getConstructor(参数列表)</code> 先获取构造方法，然后再调用；</li>
-<li><code>Class.newInstance()</code> 返回类型为 <code>Object</code>，需要强制类型转换；</li>
+<li>资源隔离（CPU &amp; 内存）</li>
+<li>管理隔离（不同镜像由不同团队负责）</li>
+<li>关注点分离（每个容器仅做一件事，并将其做好）</li>
 </ol>
+<p>因此，如果单机应用有以上需求，就需要考虑将其拆分为多个容器。</p>
+<p>当然，单机应用拆分为多个容器后，并非就变成分布式系统了，因为拆分后的容器通常借助 Kubernetes 的 Pod 运行在 <strong>同一物理节点</strong> 上，因此依然可视之为单机应用，只不过该应用现在由多个进程（容器）组成。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/05/13/2019-05-13-k8s-why-single-node-app-should-be-divided-into-containers/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/04/14/2019-04-14-scala-function-vs-method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/14/2019-04-14-scala-function-vs-method/" itemprop="url">
+                  Scala | 函数 vs 方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-14 13:50:03" itemprop="dateCreated datePublished" datetime="2019-04-14T13:50:03+08:00">2019-04-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-30 22:16:27" itemprop="dateModified" datetime="2019-07-30T22:16:27+08:00">2019-07-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Scala/" itemprop="url" rel="index"><span itemprop="name">Scala</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在 Scala 中，函数（function）和方法（method）是两个非常接近的概念，大多数场景中，可以不区分两者，如果非要区分，可查阅文末的参考文档。</p>
+<p>根据 <a href="https://docs.scala-lang.org/tour/basics.html#functions" target="_blank" rel="noopener">官方教程</a>：</p>
+<ul>
+<li>函数分两类：<ul>
+<li>实现 <code>FunctionN</code> 的对象</li>
+<li>匿名函数</li>
+</ul>
 </li>
-<li>反序列化</li>
-<li>克隆（<code>clone()</code>）</li>
-</ol>
+<li>方法：在类、对象内部用 <code>def</code> 声明</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/10/10/2019-10-10-java-how-to-create-an-object/#更多" rel="contents">
+            <a class="btn" href="/2019/04/14/2019-04-14-scala-function-vs-method/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -517,7 +1200,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/10/03/2019-10-03-java-run-time-data-areas/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/04/06/2019-04-06-kafka-streams-graceful-shutdown/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -536,8 +1219,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/10/03/2019-10-03-java-run-time-data-areas/" itemprop="url">
-                  JVM 运行时数据区域
+                <a class="post-title-link" href="/2019/04/06/2019-04-06-kafka-streams-graceful-shutdown/" itemprop="url">
+                  Kafka Streams 优雅停机
                 </a>
               
             
@@ -563,24 +1246,12 @@
                 
               
 
-              <time title="创建时间：2019-10-03 16:10:03" itemprop="dateCreated datePublished" datetime="2019-10-03T16:10:03+08:00">2019-10-03</time>
+              <time title="创建时间：2019-04-06 11:50:49 / 修改时间：13:08:31" itemprop="dateCreated datePublished" datetime="2019-04-06T11:50:49+08:00">2019-04-06</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-10-08 00:49:39" itemprop="dateModified" datetime="2019-10-08T00:49:39+08:00">2019-10-08</time>
               
             
           </span>
@@ -597,7 +1268,547 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>很多框架要求应用（正常 or 异常）退出时，显式进行“善后”处理，如释放资源、防止数据不一致、主动告知自己死亡，避免被动检测带来的时间浪费等等。</p>
+<p>下面以 Kafka Streams 为例介绍如何实现优雅停机。</p>
+<p>应用关闭后，应显式关闭 Kafka Streams 线程，以防止数据不一致、进行 task 迁移等：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// KafkaStreams#close()</span></span><br><span class="line">streams.close();</span><br></pre></td></tr></table></figure>
+<p>为实现优雅停机，以上代码应该放到 shutdown 钩子中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Runtime.getRuntime().addShutdownHook(<span class="keyword">new</span> Thread(archiveStreams::close));</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/04/06/2019-04-06-kafka-streams-graceful-shutdown/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/03/24/2019-03-24-java-singleton-double-check/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/24/2019-03-24-java-singleton-double-check/" itemprop="url">
+                  双重检查加锁错在哪里？
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-24 20:48:33" itemprop="dateCreated datePublished" datetime="2019-03-24T20:48:33+08:00">2019-03-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-07 19:12:10" itemprop="dateModified" datetime="2019-07-07T19:12:10+08:00">2019-07-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>双重检查加锁是实现（多线程版本）单例模式的典型错误：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonError</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonError instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonError <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (SingletonError.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> SingletonError();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其实把 <code>synchronized</code> 加在 <code>getInstance</code> 方法上就没有问题了，不过在早期的 JVM 上，<code>synchronized</code> 很慢，所以程序员们想方设法 <em>避免同步</em>。</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/24/2019-03-24-java-singleton-double-check/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/03/16/2019-03-16-from-monolithic-to-microservice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/16/2019-03-16-from-monolithic-to-microservice/" itemprop="url">
+                  是否应该上微服务？
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-16 15:19:31" itemprop="dateCreated datePublished" datetime="2019-03-16T15:19:31+08:00">2019-03-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-23 09:49:11" itemprop="dateModified" datetime="2019-03-23T09:49:11+08:00">2019-03-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/读书/" itemprop="url" rel="index"><span itemprop="name">读书</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>时至今日（2019 年），微服务已经飞入寻常百姓家，但关于微服务的争论却还没有停止（事实上早就该停止了），我在公司 espace 群里经常听到两种截然不同的观点：</p>
+<ol>
+<li>微服务解决了很多问题，不上微服务就是不先进，就是技术落后；</li>
+<li>微服务没有解决问题，反而引入了很多复杂性；</li>
+</ol>
+<p>这两种说法各自阐述了微服务的一面，合起来才是对它的完整描述：</p>
+<blockquote>
+<p>以增加复杂度为代价，微服务解决了很多问题。</p>
+</blockquote>
+<p>至于该不该使用微服务，则需要先了解微服务解决了什么问题，又引入了什么问题，只有明确了它的优点和缺点，才能根据实际业务需求做出理智的权衡。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/16/2019-03-16-from-monolithic-to-microservice/#更多" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/03/10/2019-03-10-quorum-based-voting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Song Kun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随便写写">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/10/2019-03-10-quorum-based-voting/" itemprop="url">
+                  基于 Quorum 的投票机制
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-10 19:54:30" itemprop="dateCreated datePublished" datetime="2019-03-10T19:54:30+08:00">2019-03-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-07 19:15:12" itemprop="dateModified" datetime="2019-07-07T19:15:12+08:00">2019-07-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/分布式/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a></span>
 
                 
                 
@@ -633,185 +1844,20 @@
       
         
           <blockquote>
-<p>Java 8 运行时数据区域 <a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5" target="_blank" rel="noopener">官方链接</a>。</p>
+<p>quorum [ˈkwɔ:rəm]，法定人数</p>
 </blockquote>
-<p>Java 源码被 Javac 编译为字节码，即 class 文件，class 文件有严格的格式限制（JVM 规范），不过大体上包含两类东西：</p>
-<ol>
-<li>JVM 虚拟机指令</li>
-<li>数据</li>
-</ol>
-<p>JVM 本身只是一个普通应用，它读取、执行 class 文件中的虚拟机指令，JVM 只是个普通进程，自然也有自己的 <strong>内存</strong>，由于执行 class 文件这件事非常复杂，JVM 将自己管理的内存按照用途划分为若干个不同的数据区域，不同区域有自己的用途，以及创建、销毁时间。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/10/03/2019-10-03-java-run-time-data-areas/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/10/03/2019-10-03-java-syntactic-sugars/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/03/2019-10-03-java-syntactic-sugars/" itemprop="url">
-                  Java 语法糖
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-10-03 14:47:31 / 修改时间：16:05:07" itemprop="dateCreated datePublished" datetime="2019-10-03T14:47:31+08:00">2019-10-03</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Wikipedia 对 <a href="https://en.wikipedia.org/wiki/Syntactic_sugar" target="_blank" rel="noopener">语法糖</a> 定义为：</p>
+<p>Quorum 机制是一种投票算法，核心思想是：</p>
 <blockquote>
-<p>In computer science, syntactic sugar is syntax within a programming language that is designed to make things easier to read or to express. It makes the language “sweeter” for human use: things can be expressed more clearly, more concisely, or in an alternative style that some may prefer.</p>
-<p>A construct in a language is called “syntactic sugar” if it can be removed from the language <strong>without any effect</strong> on what the language can do: <strong>functionality and expressive power will remain the same</strong>.</p>
+<p>执行某操作之前，必须先获取足够的票数。</p>
 </blockquote>
-<p>即语法糖对语言自身的功能、表达力没有任何影响（增强 or 减弱），它存在的意义只是“更便于”程序员使用，如更容易、清晰、准确地表达逻辑，从而增强代码的可读性，减少出错几率。</p>
-<p>Java 的语法糖全部由 Javac 编译器实现，在 <code>.java</code> 源文件 -&gt; <code>.class</code> 字节码文件的转换过程中，语法糖被“还原”为更基础、原始的语法实现，JIT 编译器执行时，完全 <strong>无法</strong> 感知语法糖的存在。</p>
+<p>在分布式系统中，Quorum 投票有两种常见用法：</p>
+<ul>
+<li>副本读写控制：保证同一数据的多个副本在每一时刻，只能用于读 or 写；</li>
+<li>事务提交协议：存在网络分区时，保证分布式事务的原子性；</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/10/03/2019-10-03-java-syntactic-sugars/#更多" rel="contents">
+            <a class="btn" href="/2019/03/10/2019-03-10-quorum-based-voting/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -867,7 +1913,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/08/11/2019-08-11-java-why-primitives-should-not-be-used-in-synchronized/">
+    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/03/10/2019-03-10-java-why-modular/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Song Kun">
@@ -886,8 +1932,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/11/2019-08-11-java-why-primitives-should-not-be-used-in-synchronized/" itemprop="url">
-                  为什么原始包装类和 String 不适合用作内置锁？
+                <a class="post-title-link" href="/2019/03/10/2019-03-10-java-why-modular/" itemprop="url">
+                  为什么 Java 9 要支持模块化？
                 </a>
               
             
@@ -913,7 +1959,7 @@
                 
               
 
-              <time title="创建时间：2019-08-11 21:33:29" itemprop="dateCreated datePublished" datetime="2019-08-11T21:33:29+08:00">2019-08-11</time>
+              <time title="创建时间：2019-03-10 19:11:16" itemprop="dateCreated datePublished" datetime="2019-03-10T19:11:16+08:00">2019-03-10</time>
             
 
             
@@ -930,7 +1976,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-10-29 09:02:28" itemprop="dateModified" datetime="2019-10-29T09:02:28+08:00">2019-10-29</time>
+                <time title="修改时间：2019-07-07 19:12:16" itemprop="dateModified" datetime="2019-07-07T19:12:16+08:00">2019-07-07</time>
               
             
           </span>
@@ -982,1069 +2028,11 @@
 
       
         
-          <p>作为 Java 中最古老的锁机制，内置锁有三种形式：</p>
-<ol>
-<li>普通 <code>synchronized</code> 方法：内置锁为 <strong>实例对象</strong>；</li>
-<li>静态 <code>synchronized</code> 方法：内置锁为 <strong>Class 对象</strong>；</li>
-<li><code>synchronized</code> 块：内置锁为 <strong>指定对象</strong>；</li>
-</ol>
-<p>前两个内置锁是 JVM 默认提供的，第三个是用户提供的，一般推荐做法是：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">priviate <span class="keyword">final</span> Object xxLock = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure>
+          <p>模块化设计是一种应对软件复杂度的有效工具，但 Java 对它支持并不理想。</p>
+<p>在 Java 9 之前，Java 只能通过 class 支持有限程度的模块化，虽然类可以通过 package 分组，但 package 无法明确声明自己对外提供的接口，package 之间也无法明确声明依赖关系，结果是孱弱的模块设计、错综复杂的依赖关系，造成软件复杂度上升过快，最后降低开发、维护效率。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/08/11/2019-08-11-java-why-primitives-should-not-be-used-in-synchronized/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/07/30/2019-07-30-java-difference-between-wait-and-sleep/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/30/2019-07-30-java-difference-between-wait-and-sleep/" itemprop="url">
-                  wait() 与 sleep() 的异同点
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-30 22:01:39" itemprop="dateCreated datePublished" datetime="2019-07-30T22:01:39+08:00">2019-07-30</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-31 08:30:11" itemprop="dateModified" datetime="2019-07-31T08:30:11+08:00">2019-07-31</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>本文列举 <code>wait()</code> 和 <code>sleep()</code> 方法的异同点，力求完整。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/07/30/2019-07-30-java-difference-between-wait-and-sleep/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/07/27/2019-07-27-java-how-to-stop-a-thread-correctly/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/27/2019-07-27-java-how-to-stop-a-thread-correctly/" itemprop="url">
-                  如何安全地终止线程？
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-27 23:18:31" itemprop="dateCreated datePublished" datetime="2019-07-27T23:18:31+08:00">2019-07-27</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-10-25 08:13:18" itemprop="dateModified" datetime="2019-10-25T08:13:18+08:00">2019-10-25</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在多线程编程中，有多种方式可以终止线程，但要“安全地”终止线程却没那么容易。</p>
-<p>Java <strong>没有提供</strong> 可以直接安全终止线程机制（<code>Thread.stop</code> 虽可直接终止线程，但并不安全），这是合理的，因为通常 <strong>只有线程自己</strong> 才知道该如何安全终止自己（资源释放、状态回滚等），因此 Java 使用协作的终止方式，即控制线程发出终止目标线程的请求，目标线程检测到该请求后，首先执行必要的 <strong>清理工作</strong>，然后安全地终止自己。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/07/27/2019-07-27-java-how-to-stop-a-thread-correctly/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/07/26/2019-07-26-java-nio-epoll-bug-and-netty-solution/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/26/2019-07-26-java-nio-epoll-bug-and-netty-solution/" itemprop="url">
-                  Java NIO epoll bug 以及 Netty 的解决之道
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-26 23:04:28" itemprop="dateCreated datePublished" datetime="2019-07-26T23:04:28+08:00">2019-07-26</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-27 23:11:36" itemprop="dateModified" datetime="2019-07-27T23:11:36+08:00">2019-07-27</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>最近学习 Netty 时，看到 Netty 宣称解决了很多 Java 原生 NIO 的很多 bug，其中之一是 epoll 空轮询导致 CPU 利用率 100%。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/07/26/2019-07-26-java-nio-epoll-bug-and-netty-solution/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/07/26/2019-07-26-java-why-some-methods-endwith-zero/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/26/2019-07-26-java-why-some-methods-endwith-zero/" itemprop="url">
-                  为什么有的 Java 方法以 0 结尾？
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-26 00:15:39 / 修改时间：00:46:58" itemprop="dateCreated datePublished" datetime="2019-07-26T00:15:39+08:00">2019-07-26</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在阅读 JDK 或框架源码的时候，常常发现部分方法是以 0 结尾的，凭直觉这并非良好的命名方式，但的确广泛存在，这是为什么呢？</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/07/26/2019-07-26-java-why-some-methods-endwith-zero/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/07/21/2019-07-21-java-AtomicXFiledUpdater-where-to-use/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/21/2019-07-21-java-AtomicXFiledUpdater-where-to-use/" itemprop="url">
-                  AtomicXFieldUpdater 使用总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-21 12:18:54" itemprop="dateCreated datePublished" datetime="2019-07-21T12:18:54+08:00">2019-07-21</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-22 08:54:15" itemprop="dateModified" datetime="2019-07-22T08:54:15+08:00">2019-07-22</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>JUC 有 3 种原子更新器：</p>
-<ol>
-<li><code>AtomicIntegerFieldUpdater</code></li>
-<li><code>AtomicLongFieldUpdater</code></li>
-<li><code>AtomicReferenceFieldUpdater</code></li>
-</ol>
-<p>它们的用途、实现非常相似，以 <code>AtomicIntegerFieldUpdater</code> 为例，它的用途是：</p>
-<blockquote>
-<p>A reflection-based utility that enables <strong>atomic updates</strong> to designated<br><strong>volatile int</strong> fields of designated classes.</p>
-</blockquote>
-<p>即通过 <strong>反射</strong> 实现对 <code>volatile int</code> 类型的字段的 <strong>原子更新</strong>。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/07/21/2019-07-21-java-AtomicXFiledUpdater-where-to-use/#更多" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://songkun.me/2019/07/14/2019-07-14-mongodb-timeout-classify/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Song Kun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="随便写写">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/14/2019-07-14-mongodb-timeout-classify/" itemprop="url">
-                  MongoDB 超时配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-14 10:27:02" itemprop="dateCreated datePublished" datetime="2019-07-14T10:27:02+08:00">2019-07-14</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-08-10 15:19:57" itemprop="dateModified" datetime="2019-08-10T15:19:57+08:00">2019-08-10</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据库/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>MongoDB 有很多超时配置，虽然它们都有各自的默认值，但为了提升应用的及时响应性、性能等，有时需根据实际情况进行修改。</p>
-<blockquote>
-<p>不同语言、同一语言不同版本的驱动，对同一配置可能采用不同的默认值，细节需要查阅文档。</p>
-</blockquote>
-<p>以下是比较常用的 3 个：</p>
-<ol>
-<li>服务器选择超时；</li>
-<li>连接超时；</li>
-<li>Socket 超时；</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/07/14/2019-07-14-mongodb-timeout-classify/#更多" rel="contents">
+            <a class="btn" href="/2019/03/10/2019-03-10-java-why-modular/#更多" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2089,7 +2077,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2132,7 +2120,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">134</span>
+                    <span class="site-state-item-count">123</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2436,11 +2424,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">127</span>
+                    <span class="site-state-item-count">125</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
