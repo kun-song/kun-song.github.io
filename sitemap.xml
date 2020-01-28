@@ -16,62 +16,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2019/11/25/2019-11-25-java-jvm-class-load-forName-vs-loadClass/</loc>
-    
-    <lastmod>2019-11-25T16:12:12.384Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-7-violation-spi/</loc>
-    
-    <lastmod>2019-11-25T15:55:26.246Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-6-parents-classloader/</loc>
-    
-    <lastmod>2019-11-24T08:42:30.685Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-class-equality/</loc>
-    
-    <lastmod>2019-11-24T06:11:51.860Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/11/24/2019-11-24-java-jvm-class-load-what-each-step-does/</loc>
-    
-    <lastmod>2019-11-24T03:48:12.243Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/11/23/2019-11-23-java-jvm-class-load-singleton/</loc>
-    
-    <lastmod>2019-11-24T02:38:28.970Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/11/23/2019-11-23-java-jvm-class-load-when/</loc>
-    
-    <lastmod>2019-11-23T09:06:55.481Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/11/03/2019-11-03-java-jvm-class-load-intro/</loc>
-    
-    <lastmod>2019-11-23T07:44:35.500Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2019/11/03/2019-11-03-java-jvm-synchronized-impl-5/</loc>
     
     <lastmod>2019-11-02T16:58:02.033Z</lastmod>
