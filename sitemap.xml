@@ -107,13 +107,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/10/03/2018-10-03-olap-oltp-intro/</loc>
-    
-    <lastmod>2019-08-10T07:22:23.762Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/06/10/2018-06-10-scala-val-and-def/</loc>
     
     <lastmod>2019-08-10T07:22:05.072Z</lastmod>
@@ -194,20 +187,6 @@
     <loc>http://songkun.me/2018/05/16/2018-05-16-tail-recursion/</loc>
     
     <lastmod>2019-07-30T14:22:03.816Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/23/2018-12-23-java-jvm-jps/</loc>
-    
-    <lastmod>2019-07-30T14:21:30.245Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/23/2018-12-23-java-jvm-jinfo/</loc>
-    
-    <lastmod>2019-07-30T14:21:27.098Z</lastmod>
     
   </url>
   
@@ -439,20 +418,6 @@
     <loc>http://songkun.me/2018/12/16/2018-12-16-java-jenv-intro/</loc>
     
     <lastmod>2019-07-30T14:10:12.522Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/02/2018-12-2-java-hashmap-hash-collision/</loc>
-    
-    <lastmod>2019-07-30T14:10:09.116Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/02/2018-12-2-source-code-reading-hashmap/</loc>
-    
-    <lastmod>2019-07-30T14:10:05.613Z</lastmod>
     
   </url>
   
