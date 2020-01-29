@@ -191,20 +191,6 @@
   </url>
   
   <url>
-    <loc>http://songkun.me/2018/12/23/2018-12-23-java-guide-to-the-most-important-jvm-parameters/</loc>
-    
-    <lastmod>2019-07-30T14:21:24.263Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2018/12/20/2018-12-20-java-jvm-gc-log-meaning/</loc>
-    
-    <lastmod>2019-07-30T14:21:21.134Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://songkun.me/2018/12/19/2018-12-19-java-why-xmx-xms-should-be-same/</loc>
     
     <lastmod>2019-07-30T14:21:18.121Z</lastmod>
@@ -460,13 +446,6 @@
     <loc>http://songkun.me/2018/05/20/2018-05-20-variable-arguments/</loc>
     
     <lastmod>2019-07-30T14:05:53.727Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://songkun.me/2019/03/09/2019-03-09-ej-item-55-return-optionals-judiciously/</loc>
-    
-    <lastmod>2019-07-30T14:03:18.066Z</lastmod>
     
   </url>
   
